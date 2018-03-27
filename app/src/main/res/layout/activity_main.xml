@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.test.lsm.ui.activity.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/ll_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#fff"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:text="Today"
+                android:textColor="@color/tx_dark"
+                android:textSize="32sp" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_information" />
+
+            <ImageButton
+                android:id="@+id/ib_menu"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="#0000"
+                android:onClick="switchMenu"
+                android:src="@mipmap/ic_menu" />
+        </RelativeLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp">
+
+        <ImageView
+            android:id="@+id/iv_information"
+            style="@style/MainBottomBtn"
+            android:onClick="switchTab"
+            android:src="@mipmap/ic_information" />
+
+        <ImageView
+            android:id="@+id/iv_today"
+            style="@style/MainBottomBtn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:onClick="switchTab"
+            android:src="@mipmap/ic_today" />
+
+        <ImageView
+            android:id="@+id/iv_run"
+            style="@style/MainBottomBtn"
+            android:onClick="switchTab"
+            android:src="@mipmap/ic_run" />
+    </LinearLayout>
+
+</RelativeLayout>
