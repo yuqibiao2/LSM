@@ -3,7 +3,10 @@
     <color name="colorPrimary">#fff</color>
     <color name="colorPrimaryDark">#fff</color>
     <color name="colorAccent">#FFBB33</color>
+    <color name="colorAccentLight">#ffce6c</color>
 
+    <color name="my_trans">#0000</color>
+    <color name="my_white">#FFF</color>
     <color name="tx_dark">#000</color>
 
 </resources>

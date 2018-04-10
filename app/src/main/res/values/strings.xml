@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">LSM</string>
+
+    <string name="connect">连接</string>
+    <string name="connected">已连接</string>
+    <string name="disconnect">断开连接</string>
+    <string name="enter">进入操作</string>
+
 </resources>

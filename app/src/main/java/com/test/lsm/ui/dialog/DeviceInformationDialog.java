@@ -23,7 +23,7 @@ public class DeviceInformationDialog extends LsmBaseDialog{
 
     @Override
     protected WindowManager.LayoutParams getLayoutParams() {
-        lp.width = WindowUtils.getSize(mContext)[1] / 2;
+        lp.width = WindowUtils.getSize(mContext)[0] / 3*2;
         lp.height =  WindowUtils.getSize(mContext)[1]/2;
         return lp;
     }

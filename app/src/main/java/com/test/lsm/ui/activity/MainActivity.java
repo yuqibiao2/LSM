@@ -1,5 +1,7 @@
 package com.test.lsm.ui.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.test.lsm.R;
@@ -25,7 +29,6 @@ import com.test.lsm.ui.fragment.RunFragment;
 import com.test.lsm.ui.fragment.TodayFragment;
 import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyToast;
-import com.yyyu.baselibrary.utils.StatusBarCompat;
 import com.yyyu.baselibrary.view.CommonPopupWindow;
 
 import java.util.ArrayList;
@@ -42,6 +45,8 @@ import butterknife.BindView;
  */
 public class MainActivity extends LsmBaseActivity {
 
+    private static final String TAG = "MainActivity";
+
     @BindView(R.id.ll_top_bar)
     RelativeLayout ll_top_bar;
     @BindView(R.id.ib_menu)
@@ -50,6 +55,16 @@ public class MainActivity extends LsmBaseActivity {
     LinearLayout ll_bottom;
     @BindView(R.id.vp_content)
     ViewPager vp_content;
+    @BindView(R.id.tv_tb_today)
+    TextView tvTbToday;
+    @BindView(R.id.tv_tb_info)
+    ImageView tvTbInfo;
+    @BindView(R.id.iv_today)
+    ImageView ivToday;
+    @BindView(R.id.iv_run)
+    ImageView ivRun;
+    @BindView(R.id.activity_main)
+    RelativeLayout activityMain;
     private CommonPopupWindow menuPop;
     private MenuAdapter menuAdapter;
     private List<MenuItem> menuList;
@@ -60,16 +75,23 @@ public class MainActivity extends LsmBaseActivity {
     }
 
     @Override
+    public void beforeInit() {
+        super.beforeInit();
+    }
+
+    @Override
     protected void initView() {
 
-        StatusBarCompat.compat(this, 0xfff0f0f0);
+        vp_content.setOffscreenPageLimit(4);
 
-        menuPop = new CommonPopupWindow(this, R.layout.menu_pop_list, DimensChange.dp2px(this , 120), ViewGroup.LayoutParams.WRAP_CONTENT) {
+        menuPop = new CommonPopupWindow(this,
+                R.layout.menu_pop_list, DimensChange.dp2px(this, 120),
+                ViewGroup.LayoutParams.WRAP_CONTENT) {
             @Override
             protected void initView() {
                 menuList = new ArrayList<>();
-                menuList.add(new MenuItem(0 , "设备连接"));
-                menuList.add(new MenuItem(1 , "设备信息"));
+                menuList.add(new MenuItem(0, "设备连接"));
+                menuList.add(new MenuItem(1, "设备信息"));
                 View view = getContentView();
                 RecyclerView rvMenu = (RecyclerView) view.findViewById(R.id.rv_menu);
                 menuAdapter = new MenuAdapter(R.layout.menu_pop_item, menuList);
@@ -82,15 +104,16 @@ public class MainActivity extends LsmBaseActivity {
                 menuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        switch (position){
+                        switch (position) {
                             case 0://设备连接
+                                BleBTDeviceScanActivity.startAction(MainActivity.this);
                                 break;
                             case 1://设备信息
                                 DeviceInformationDialog deviceInformationDialog = new DeviceInformationDialog(MainActivity.this);
                                 deviceInformationDialog.show();
                                 break;
                         }
-                        MyToast.showLong(MainActivity.this , menuList.get(position).getTitle());
+                        MyToast.showLong(MainActivity.this, menuList.get(position).getTitle());
                     }
                 });
             }
@@ -122,6 +145,7 @@ public class MainActivity extends LsmBaseActivity {
                 return TabFragment.values().length;
             }
         });
+        vp_content.setCurrentItem(1);
 
     }
 
@@ -139,9 +163,8 @@ public class MainActivity extends LsmBaseActivity {
     }
 
 
-
-    public void switchMenu(View view){
-        menuPop.showAsDropDown(ib_menu, 0, DimensChange.dp2px(this , 5));
+    public void switchMenu(View view) {
+        menuPop.showAsDropDown(ib_menu, 0, DimensChange.dp2px(this, 5));
     }
 
     private enum TabFragment {
@@ -193,14 +216,20 @@ public class MainActivity extends LsmBaseActivity {
             case R.id.iv_information:
                 vp_content.setCurrentItem(0);
                 setTabIcon(ll_bottom, R.id.iv_information);
+                tvTbToday.setVisibility(View.GONE);
+                tvTbInfo.setVisibility(View.VISIBLE);
                 break;
             case R.id.iv_today:
                 vp_content.setCurrentItem(1);
                 setTabIcon(ll_bottom, R.id.iv_today);
+                tvTbToday.setVisibility(View.VISIBLE);
+                tvTbInfo.setVisibility(View.GONE);
                 break;
             case R.id.iv_run:
                 vp_content.setCurrentItem(2);
                 setTabIcon(ll_bottom, R.id.iv_run);
+                tvTbToday.setVisibility(View.GONE);
+                tvTbInfo.setVisibility(View.GONE);
                 break;
         }
     }
@@ -223,5 +252,10 @@ public class MainActivity extends LsmBaseActivity {
         }
     }
 
+
+    public static void startAction(Activity activity) {
+        Intent intent = new Intent(activity, MainActivity.class);
+        activity.startActivity(intent);
+    }
 
 }

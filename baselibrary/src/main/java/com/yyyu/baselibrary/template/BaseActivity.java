@@ -27,6 +27,7 @@ public  abstract  class BaseActivity extends AppCompatActivity {
     protected Gson mGson;
     private KProgressHUD loadingDialog;
     protected ResourceUtils resourceUtils;
+    protected Class _this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,7 +102,7 @@ public  abstract  class BaseActivity extends AppCompatActivity {
                 .show();
     }
 
-    protected  void hiddenLoadingDialog(){
+    protected  void hiddenLoadDialog(){
         if (loadingDialog!=null){
             loadingDialog.dismiss();
         }

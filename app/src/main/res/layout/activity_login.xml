@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_login"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="80dp"
+        android:paddingLeft="16sp"
+        android:paddingRight="16sp"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_tel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_user_tel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="手机号码"
+                android:inputType="textPhonetic"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+            <EditText
+                android:id="@+id/et_user_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="密码"
+                android:inputType="textPassword"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:gravity="center_vertical|left"
+                android:textStyle="bold"
+                android:textColor="@drawable/accent_color_selector"
+                android:onClick="toLogin"
+                android:text=" 登入 ＞"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:gravity="center_vertical|right"
+                android:textStyle="bold"
+                android:onClick="toRegister"
+                android:textColor="@drawable/accent_color_selector"
+                android:text="注册 "/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

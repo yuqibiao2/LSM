@@ -1,6 +1,10 @@
 package com.test.lsm;
 
 import android.app.Application;
+import android.content.Context;
+
+import com.baidu.mapapi.SDKInitializer;
+
 
 /**
  * 功能：
@@ -12,4 +16,13 @@ import android.app.Application;
 
 public class MyApplication extends Application{
 
+    public Context aContext;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        this.aContext = getApplicationContext();
+        /*百度地图配置*/
+        SDKInitializer.initialize(aContext);
+    }
 }

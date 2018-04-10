@@ -28,6 +28,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
+    //noinspection GradleCompatible
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-core-ui:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
@@ -52,6 +53,12 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.3.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
 
+    //---EventBus
+    compile 'de.greenrobot:eventbus:3.0.0-beta1'
+
+    //--图片加载
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
     /**
      * Loading Dialog
      *https://github.com/liangchengcheng/android-loading-dialog
@@ -59,10 +66,25 @@ dependencies {
     compile 'com.kaopiz:kprogresshud:1.0.2'
 
     /**
+     * 万能RecyclerView适配器
      *https://github.com/CymChad/BaseRecyclerViewAdapterHelper
      *https://www.jianshu.com/p/b343fcff51b0
      * 加：maven { url "https://jitpack.io" }
      */
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+
+    /**
+     * 加载动画
+     * https://github.com/ybq/Android-SpinKit
+     * */
+    compile 'com.github.ybq:Android-SpinKit:1.1.0'
+
+    /**
+     * 上拉加载、下拉刷新
+     *
+     * https://github.com/scwang90/SmartRefreshLayout
+     */
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-3'
+    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-3'
 
 }
