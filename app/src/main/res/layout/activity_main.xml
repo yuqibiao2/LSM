@@ -46,7 +46,7 @@
                 android:src="@mipmap/ic_menu" />
         </RelativeLayout>
 
-        <com.yyyu.baselibrary.view.NoScrollViewPager
+        <com.yyyu.baselibrary.ui.widget.NoScrollViewPager
             android:id="@+id/vp_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

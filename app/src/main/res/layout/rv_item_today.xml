@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <com.yyyu.baselibrary.view.RoundImageView
+    <com.yyyu.baselibrary.ui.widget.RoundImageView
         android:id="@+id/iv_msg_icon"
         android:layout_width="match_parent"
         android:layout_height="150dp"

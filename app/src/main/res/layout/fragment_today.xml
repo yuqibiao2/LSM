@@ -11,5 +11,6 @@
         android:id="@+id/rv_today"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
         android:overScrollMode="never" />
 </com.scwang.smartrefresh.layout.SmartRefreshLayout>

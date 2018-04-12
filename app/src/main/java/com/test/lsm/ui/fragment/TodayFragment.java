@@ -42,16 +42,21 @@ public class TodayFragment extends LsmBaseFragment {
     protected void beforeInit() {
         super.beforeInit();
         msgBeanList = new ArrayList<>();
-        msgBeanList.add(new PushMsgBean("https://y.zdmimg.com/201701/18/587edeb3f1ba22791.jpg_e600.jpg" ,"你已经很久没有运动了，赶紧起来动一下吧!" , "今天"));
-        msgBeanList.add(new PushMsgBean("https://y.zdmimg.com/201701/18/587edeb4d51ed4397.jpg_e600.jpg" ,"刚才心跳过快，先休息一下吧！" , "昨天"));
-        msgBeanList.add(new PushMsgBean("https://goss.vcg.com/creative/vcg/800/version23/VCG41174409760.jpg" ,"今天表现良好哦，继续努力！" , "4月3日"));
-        msgBeanList.add(new PushMsgBean("https://goss.vcg.com/creative/vcg/800/version23/VCG41174409760.jpg" ,"今天表现良好哦，继续努力！" , "4月2日"));
-        msgBeanList.add(new PushMsgBean("https://goss.vcg.com/creative/vcg/800/version23/VCG41174409760.jpg" ,"今天表现良好哦，继续努力！" , "4月1日"));
+        msgBeanList.add(new PushMsgBean("https://raw.githubusercontent.com/yuqibiao2/LSM/master/img/01.png" ,"" , "今天"));
+        msgBeanList.add(new PushMsgBean("https://raw.githubusercontent.com/yuqibiao2/LSM/master/img/02.png" ,"" , "今天"));
+        msgBeanList.add(new PushMsgBean("https://raw.githubusercontent.com/yuqibiao2/LSM/master/img/03.png" ,"" , "今天"));
+        msgBeanList.add(new PushMsgBean("https://raw.githubusercontent.com/yuqibiao2/LSM/master/img/04.png" ,"" , "今天"));
+        msgBeanList.add(new PushMsgBean("https://raw.githubusercontent.com/yuqibiao2/LSM/master/img/05.png" ,"" , "今天"));
+        msgBeanList.add(new PushMsgBean("https://raw.githubusercontent.com/yuqibiao2/LSM/master/img/06.png" ,"" , "今天"));
+        msgBeanList.add(new PushMsgBean("https://raw.githubusercontent.com/yuqibiao2/LSM/master/img/07.png" ,"" , "今天"));
+        msgBeanList.add(new PushMsgBean("https://raw.githubusercontent.com/yuqibiao2/LSM/master/img/08.png" ,"" , "今天"));
+        msgBeanList.add(new PushMsgBean("https://raw.githubusercontent.com/yuqibiao2/LSM/master/img/09.png" ,"" , "今天"));
+        msgBeanList.add(new PushMsgBean("https://raw.githubusercontent.com/yuqibiao2/LSM/master/img/10.png" ,"" , "今天"));
     }
 
     @Override
     protected void initView() {
-        PushMsgAdapter pushMsgAdapter = new PushMsgAdapter(getContext() ,R.layout.rv_item_today ,msgBeanList);
+        PushMsgAdapter pushMsgAdapter = new PushMsgAdapter(getContext() ,R.layout.rv_item_today_test ,msgBeanList);
         rvToday.setLayoutManager(new LinearLayoutManager(getContext()));
         rvToday.setAdapter(pushMsgAdapter);
     }

@@ -29,7 +29,7 @@ import com.test.lsm.ui.fragment.RunFragment;
 import com.test.lsm.ui.fragment.TodayFragment;
 import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyToast;
-import com.yyyu.baselibrary.view.CommonPopupWindow;
+import com.yyyu.baselibrary.ui.widget.CommonPopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;

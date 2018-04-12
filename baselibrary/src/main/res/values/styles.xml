@@ -13,4 +13,23 @@
         <item name="android:windowExitAnimation">@anim/modal_out</item>
     </style>
 
+    <!--图片选择pop动画-->
+    <style name="pic_choice">
+        <item name="android:windowEnterAnimation">@anim/pic_choice_pop_hidden</item>
+        <item name="android:windowExitAnimation">@anim/pic_choice_pop_show</item>
+    </style>
+
+    <!--DatePickerPop对应的动画-->
+    <style name="pop_date_picker">
+        <item name="android:windowEnterAnimation">@anim/expand_show</item>
+        <item name="android:windowExitAnimation">@anim/expand_hidden</item>
+    </style>
+
+    <!--gray line-->
+    <style name="gray_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/my_gray</item>
+    </style>
+
 </resources>

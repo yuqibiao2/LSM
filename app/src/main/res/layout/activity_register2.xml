@@ -43,7 +43,7 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_tel"
+            android:id="@+id/til_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -59,7 +59,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_pwd"
+            android:id="@+id/til_birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp">
@@ -69,7 +69,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="生日"
-                android:inputType="textPassword"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
                 android:textSize="16sp" />
@@ -91,7 +90,7 @@
                     android:id="@+id/et_user_height"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="身高                                             cm"
+                    android:hint="身高                                      cm"
                     android:inputType="number"
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp"
@@ -110,7 +109,7 @@
                     android:id="@+id/et_user_weight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="体重                  kg"
+                    android:hint="体重                kg"
                     android:inputType="number"
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp"

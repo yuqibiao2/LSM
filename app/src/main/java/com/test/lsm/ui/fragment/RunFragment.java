@@ -16,9 +16,11 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.Polyline;
@@ -28,6 +30,7 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.test.lsm.R;
 import com.test.lsm.utils.BaiduMapUtils;
 import com.test.lsm.utils.TimeUtils;
+import com.test.lsm.utils.map.MyOrientationListener;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyToast;
 
@@ -45,7 +48,7 @@ import butterknife.OnClick;
  * @date 2018/3/23
  */
 
-public class RunFragment extends LsmBaseFragment implements SensorEventListener {
+public class RunFragment extends LsmBaseFragment{
 
     private static final String TAG = "RunFragment";
 
@@ -73,10 +76,8 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
     MapStatus.Builder builder;
     List<LatLng> points = new ArrayList<>();//位置点集合
     LatLng last = new LatLng(0, 0);//上一个定位点
-    private double mCurrentLat = 0.0;
-    private double mCurrentLon = 0.0;
     private MyLocationData locData;
-    float mCurrentZoom = 17f;//默认地图缩放比例值
+    float mCurrentZoom = 18f;//默认地图缩放比例值
     private int mCurrentDirection = 0;
     private boolean isFirstLoc = true;
 
@@ -92,15 +93,27 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
         return R.layout.fragment_run;
     }
 
+
     @Override
     protected void initView() {
         initMap();
         initLocation();
     }
 
+    float mLastX;
+
     @Override
     protected void initListener() {
-
+        MyOrientationListener myOrientationListener = new MyOrientationListener(getContext());
+        myOrientationListener.start();
+        myOrientationListener.setOnOrientationListener(new MyOrientationListener.OnOrientationListener() {
+            @Override
+            public void onOrientationChanged(float x) {
+                //将获取的x轴方向赋值给全局变量
+                mLastX = x;
+                //MyLog.e(TAG ,"onOrientationChanged："+ x);
+            }
+        });
     }
 
 
@@ -114,13 +127,23 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
         map_run.showZoomControls(false);
         //---得到 baidu map对象
         mBaiduMap = map_run.getMap();
+        // 改变地图状态，使地图显示在恰当的缩放大小
+        MapStatus mMapStatus = new MapStatus.Builder().zoom(18f).build();
+        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+        mBaiduMap.setMapStatus(mMapStatusUpdate);
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
+        mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+                com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.FOLLOWING, true, null));
+        initZoom();
+    }
 
-        /**
-         * 添加地图缩放状态变化监听，当手动放大或缩小地图时，拿到缩放后的比例，然后获取到下次定位，
-         *  给地图重新设置缩放比例，否则地图会重新回到默认的mCurrentZoom缩放比例
-         */
+    /**
+     * 添加地图缩放状态变化监听，当手动放大或缩小地图时，拿到缩放后的比例，然后获取到下次定位，
+     *  给地图重新设置缩放比例，否则地图会重新回到默认的mCurrentZoom缩放比例
+     */
+    private void initZoom() {
+
         mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
 
             @Override
@@ -132,6 +155,7 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
             @Override
             public void onMapStatusChangeFinish(MapStatus arg0) {
                 mCurrentZoom = arg0.zoom;
+                MyLog.i(TAG , "mCurrentZoom："+mCurrentZoom);
             }
 
             @Override
@@ -140,7 +164,6 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
 
             }
         });
-
     }
 
     /**
@@ -157,38 +180,9 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
         option.setCoorType("bd09ll");//坐标类型
         option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
         option.setOpenGps(true);//打开Gps
-        option.setScanSpan(1000);//10s定位一次
+        option.setScanSpan(2000);//2s定位一次
         option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
         mLocationClient.setLocOption(option);
-    }
-
-
-    double lastX;
-
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        double x = sensorEvent.values[SensorManager.DATA_X];
-
-        if (Math.abs(x - lastX) > 1.0) {
-            mCurrentDirection = (int) x;
-
-            if (isFirstLoc) {
-                lastX = x;
-                return;
-            }
-
-            locData = new MyLocationData.Builder().accuracy(0)
-                    // 此处设置开发者获取到的方向信息，顺时针0-360
-                    .direction(mCurrentDirection).latitude(mCurrentLat).longitude(mCurrentLon).build();
-            mBaiduMap.setMyLocationData(locData);
-        }
-        lastX = x;
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
     }
 
     /**
@@ -202,6 +196,7 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
             MyLocationData data = new MyLocationData.Builder()
                     .accuracy(location.getRadius())
                     .latitude(location.getLatitude())
+                    .direction(mLastX)
                     .longitude(location.getLongitude())
                     .build();
             mBaiduMap.setMyLocationData(data);
@@ -234,13 +229,14 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
             }
             //从第二个点开始
             LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-            MyLog.e(TAG, "latitude：" + ll.latitude + "  longitude：" + ll.longitude);
-            MyToast.showShort(getContext(), "latitude：" + ll.latitude + "  longitude：" + ll.longitude);
-            if (DistanceUtil.getDistance(last, ll) < 2 || DistanceUtil.getDistance(last, ll)>100) {//舍去位置太近和太远的点
+            double distance1 = DistanceUtil.getDistance(last, ll);
+            if (distance1<0.5||distance1>10) {//舍去位置太远的点(1s钟位置移动10m不现实)
                 return;
             }
 
             points.add(ll);//如果要运动完成后画整个轨迹，位置点都在这个集合中
+
+            MyToast.showShort(getContext(), "latitude：" + ll.latitude + "  longitude：" + ll.longitude);
 
             last = ll;
 
@@ -260,15 +256,13 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
             OverlayOptions ooPolyline = new PolylineOptions().width(13).color(0xAAFF0000).points(points);
             mPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline);
             double distance = BaiduMapUtils.calcDistance(points);
-            tv_run_distance.setText(""+distance);
+            tv_run_distance.setText(""+BaiduMapUtils.resolveDistance(distance));
 
         }
 
     }
 
     private void locateAndZoom(final BDLocation location, LatLng ll) {
-        mCurrentLat = location.getLatitude();
-        mCurrentLon = location.getLongitude();
         locData = new MyLocationData.Builder().accuracy(0)
                 // 此处设置开发者获取到的方向信息，顺时针0-360
                 .direction(mCurrentDirection).latitude(location.getLatitude())
@@ -378,8 +372,12 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
     public void onRunStop() {
         showLoadingDialog();
         stopTimer();
-        if (mLocationClient != null && mLocationClient.isStarted() && isRunning) {
-            mLocationClient.stop();
+        tv_run_distance.setText("0 m");
+        points.clear();
+        if (mLocationClient != null /*&& mLocationClient.isStarted()*/ && isRunning) {
+            if (mLocationClient.isStarted()) {
+                mLocationClient.stop();
+            }
             if (isFirstLoc) {
                 points.clear();
                 last = new LatLng(0, 0);
@@ -398,6 +396,9 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
             isRunning = false;
             hiddenLoadingDialog();
         }
+        //TODO 记录本次跑步的数据
+
+        isFirstLoc = true;
     }
 
 
@@ -425,15 +426,15 @@ public class RunFragment extends LsmBaseFragment implements SensorEventListener 
 
     @Override
     public void onStop() {
-        mBaiduMap.setMyLocationEnabled(false);
-        if (mLocationClient.isStarted()) {
-            mLocationClient.stop();
-        }
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
+        mBaiduMap.setMyLocationEnabled(false);
+        if (mLocationClient.isStarted()) {
+            mLocationClient.stop();
+        }
         map_run.onDestroy();
         super.onDestroy();
     }

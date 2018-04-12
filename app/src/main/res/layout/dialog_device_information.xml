@@ -7,7 +7,7 @@
     android:paddingRight="25dp"
     android:orientation="vertical">
 
-    <com.yyyu.baselibrary.view.RoundImageView
+    <com.yyyu.baselibrary.ui.widget.RoundImageView
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_gravity="center_horizontal"

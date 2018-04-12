@@ -6,8 +6,12 @@ import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
 import com.test.lsm.R;
+import com.test.lsm.bean.UserBean;
 import com.test.lsm.utils.LoginRegUtils;
+import com.yyyu.baselibrary.utils.MySPUtils;
+import com.yyyu.baselibrary.utils.MyToast;
 
 import butterknife.BindView;
 
@@ -36,7 +40,8 @@ public class LoginActivity extends LsmBaseActivity {
 
     @Override
     protected void initView() {
-
+        LoginRegUtils.checkEdit(tilTel, LoginRegUtils.CheckType.tel);
+        LoginRegUtils.checkEdit(tilPwd, LoginRegUtils.CheckType.pwd);
     }
 
     @Override
@@ -45,10 +50,25 @@ public class LoginActivity extends LsmBaseActivity {
     }
 
     public void toLogin(View view) {
-        LoginRegUtils.checkEdit(tilTel , LoginRegUtils.CheckType.tel);
-        LoginRegUtils.checkEdit(tilPwd , LoginRegUtils.CheckType.pwd);
+
+        String tel = etUserTel.getText().toString();
+        String pwd = etUserPwd.getText().toString();
+
         showLoadDialog("登录中....");
-        MainActivity.startAction(this);
+
+        String userStr = (String) MySPUtils.get(this, "register_user", "");
+        UserBean userBean = new Gson().fromJson(userStr, UserBean.class);
+        if (userBean == null) {
+            MyToast.showShort(this, "该用户不存在");
+        } else {
+            if (pwd.equals(userBean.getPassword()) && tel.equals(userBean.getTel())){
+                MainActivity.startAction(this);
+                finish();
+            }else{
+                MyToast.showShort(this, "用户名或密码错误");
+            }
+        }
+        hiddenLoadDialog();
     }
 
     public void toRegister(View view) {

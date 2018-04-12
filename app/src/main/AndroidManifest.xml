@@ -32,7 +32,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".ui.activity.MainActivity">
-            <!-- <intent-filter>
+           <!--  <intent-filter>
                  <action android:name="android.intent.action.MAIN" />
                  <category android:name="android.intent.category.LAUNCHER" />
              </intent-filter>-->
@@ -48,6 +48,12 @@
         <activity android:name=".ui.activity.LoginActivity" />
         <activity android:name=".ui.activity.RegisterActivity1" />
         <activity android:name=".ui.activity.RegisterActivity2" />
+        <activity android:name=".ui.activity.RegisterActivity3" >
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
         <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,7 +68,7 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote"/>
 
     </application>
 
