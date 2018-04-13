@@ -41,4 +41,5 @@ dependencies {
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
     compile files('libs/BaiduLBS_Android.jar')
     compile project(':FastBleLib')
+    compile project(':LsmAlgorithm')
 }

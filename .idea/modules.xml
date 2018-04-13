@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FastBleLib/FastBleLib.iml" filepath="$PROJECT_DIR$/FastBleLib/FastBleLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/LSM.iml" filepath="$PROJECT_DIR$/LSM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LsmAlgorithm/LsmAlgorithm.iml" filepath="$PROJECT_DIR$/LsmAlgorithm/LsmAlgorithm.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/baselibrary/baselibrary.iml" filepath="$PROJECT_DIR$/baselibrary/baselibrary.iml" />
     </modules>

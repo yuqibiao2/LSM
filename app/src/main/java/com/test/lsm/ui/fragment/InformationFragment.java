@@ -7,6 +7,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleNotifyCallback;
@@ -19,10 +21,12 @@ import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.bean.InfoBean;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyToast;
+import com.yyyu.lsmalgorithm.MyLib;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
@@ -38,6 +42,18 @@ import de.greenrobot.event.ThreadMode;
 public class InformationFragment extends LsmBaseFragment {
 
     private static final String TAG = "InformationFragment";
+    @BindView(R.id.tv_heart_num)
+    TextView tvHeartNum;
+    @BindView(R.id.ll_con)
+    LinearLayout llCon;
+    @BindView(R.id.tv_step_num)
+    TextView tvStepNum;
+    @BindView(R.id.ll_con2)
+    LinearLayout llCon2;
+    @BindView(R.id.ll_con3)
+    LinearLayout llCon3;
+
+    private List<Integer> con = new ArrayList<>();
 
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
@@ -46,7 +62,28 @@ public class InformationFragment extends LsmBaseFragment {
                 case 0://心电图
                     byte[] obj = (byte[]) msg.obj;
                     //TODO 处理心电图数据
-                    MyLog.e(TAG, "" + HexUtil.formatHexString(obj));
+                    String hexStr = HexUtil.encodeHexStr(obj);
+                    String substring = hexStr.substring(0, 4);
+                    int parseInt = Integer.parseInt(substring, 16);
+                    MyLog.e(TAG, "encodeHexStr===" + parseInt);
+                    int i1;
+                    i1 = MyLib.countHeartRate(parseInt);
+                    if (i1 != -1) {
+                        tvHeartNum.setText(""+(i1/10000));
+                        MyLog.e(TAG, "==countHeartRate===" + i1);
+                    }
+                    /*con.add(parseInt);
+
+                    if (con.size()>=250){
+                        int results[] = new int[con.size()];
+                        for(int i =0; i<con.size() ; i++){
+                            results[i]=obj[i];
+                        }
+                        int i = MyLib.countHeartRate(results);
+                        MyLog.e(TAG, "==countHeartRate2==2=" + i);
+                        con.clear();
+                    }*/
+
                     break;
                 case 1://动作
                     break;
@@ -54,6 +91,19 @@ public class InformationFragment extends LsmBaseFragment {
             return false;
         }
     });
+
+    //高位在前，低位在后
+    public static int bytes2int(byte[] bytes) {
+        int result = 0;
+        if (bytes.length >= 4) {
+            int a = (bytes[0] & 0xff) << 24;//说明二
+            int b = (bytes[1] & 0xff) << 16;
+            int c = (bytes[2] & 0xff) << 8;
+            int d = (bytes[3] & 0xff);
+            result = a | b | c | d;
+        }
+        return result;
+    }
 
 
     @Override
@@ -67,9 +117,9 @@ public class InformationFragment extends LsmBaseFragment {
         EventBus.getDefault().register(this);
 
         List<InfoBean> infoBeanList = new ArrayList<>();
-        infoBeanList.add(new InfoBean(0,"68"));
-        infoBeanList.add(new InfoBean(1,"23"));
-        infoBeanList.add(new InfoBean(2,"265"));
+        infoBeanList.add(new InfoBean(0, "68"));
+        infoBeanList.add(new InfoBean(1, "23"));
+        infoBeanList.add(new InfoBean(2, "265"));
 
     }
 

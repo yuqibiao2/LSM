@@ -372,8 +372,6 @@ public class RunFragment extends LsmBaseFragment{
     public void onRunStop() {
         showLoadingDialog();
         stopTimer();
-        tv_run_distance.setText("0 m");
-        points.clear();
         if (mLocationClient != null /*&& mLocationClient.isStarted()*/ && isRunning) {
             if (mLocationClient.isStarted()) {
                 mLocationClient.stop();
@@ -389,6 +387,7 @@ public class RunFragment extends LsmBaseFragment{
             mBaiduMap.addOverlay(oFinish); // 在地图上添加此图层
             //复位
             points.clear();
+            tv_run_distance.setText("0 m");
             last = new LatLng(0, 0);
             isFirstLoc = true;
             iv_run_start.setVisibility(View.VISIBLE);
