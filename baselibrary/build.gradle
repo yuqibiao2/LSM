@@ -56,8 +56,11 @@ dependencies {
     //---EventBus
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
 
-    //--图片加载
+    //---图片加载
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    
+    //---greenDao
+    compile 'org.greenrobot:greendao:3.2.0'
 
     /**
      * Loading Dialog

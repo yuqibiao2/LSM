@@ -1,6 +1,7 @@
 package com.test.lsm.ui.activity;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -20,21 +22,29 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.clj.fastble.BleManager;
+import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.MenuAdapter;
 import com.test.lsm.bean.MenuItem;
+import com.test.lsm.service.UploadHealthInfoService;
+import com.test.lsm.ui.dialog.BleBTDeviceScanDialog;
 import com.test.lsm.ui.dialog.DeviceInformationDialog;
 import com.test.lsm.ui.fragment.InformationFragment;
 import com.test.lsm.ui.fragment.RunFragment;
 import com.test.lsm.ui.fragment.TodayFragment;
-import com.yyyu.baselibrary.utils.DimensChange;
-import com.yyyu.baselibrary.utils.MyToast;
+import com.test.lsm.utils.LoginRegUtils;
 import com.yyyu.baselibrary.ui.widget.CommonPopupWindow;
+import com.yyyu.baselibrary.utils.DimensChange;
+import com.yyyu.baselibrary.utils.MyTimeUtils;
+import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 功能：首页
@@ -55,8 +65,10 @@ public class MainActivity extends LsmBaseActivity {
     LinearLayout ll_bottom;
     @BindView(R.id.vp_content)
     ViewPager vp_content;
-    @BindView(R.id.tv_tb_today)
-    TextView tvTbToday;
+    @BindView(R.id.ll_today)
+    LinearLayout llToday;
+    @BindView(R.id.tv_tb_time)
+    TextView tvTime;
     @BindView(R.id.tv_tb_info)
     ImageView tvTbInfo;
     @BindView(R.id.iv_today)
@@ -65,9 +77,13 @@ public class MainActivity extends LsmBaseActivity {
     ImageView ivRun;
     @BindView(R.id.activity_main)
     RelativeLayout activityMain;
+    @BindView(R.id.rl_run)
+    RelativeLayout rlRun;
     private CommonPopupWindow menuPop;
     private MenuAdapter menuAdapter;
     private List<MenuItem> menuList;
+    private Intent uploadHealthInfoIntent;
+    private MyApplication application;
 
     @Override
     public int getLayoutId() {
@@ -77,10 +93,14 @@ public class MainActivity extends LsmBaseActivity {
     @Override
     public void beforeInit() {
         super.beforeInit();
+        application = (MyApplication) getApplication();
     }
 
     @Override
     protected void initView() {
+
+        tvTime.setText("" + MyTimeUtils.formatDateTime("MM月dd日", new Date(System.currentTimeMillis()))
+                + " " + MyTimeUtils.getCurrentWeek());
 
         vp_content.setOffscreenPageLimit(4);
 
@@ -92,6 +112,7 @@ public class MainActivity extends LsmBaseActivity {
                 menuList = new ArrayList<>();
                 menuList.add(new MenuItem(0, "设备连接"));
                 menuList.add(new MenuItem(1, "设备信息"));
+                menuList.add(new MenuItem(2, "退出登录"));
                 View view = getContentView();
                 RecyclerView rvMenu = (RecyclerView) view.findViewById(R.id.rv_menu);
                 menuAdapter = new MenuAdapter(R.layout.menu_pop_item, menuList);
@@ -106,11 +127,16 @@ public class MainActivity extends LsmBaseActivity {
                     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                         switch (position) {
                             case 0://设备连接
-                                BleBTDeviceScanActivity.startAction(MainActivity.this);
+                                BleBTDeviceScanDialog bleBTDeviceScanDialog = new BleBTDeviceScanDialog(MainActivity.this);
+                                bleBTDeviceScanDialog.show();
+                                //BleBTDeviceScanActivity.startAction(MainActivity.this);
                                 break;
                             case 1://设备信息
                                 DeviceInformationDialog deviceInformationDialog = new DeviceInformationDialog(MainActivity.this);
                                 deviceInformationDialog.show();
+                                break;
+                            case 2://退出登录
+                                LoginRegUtils.logout(MainActivity.this);
                                 break;
                         }
                         MyToast.showLong(MainActivity.this, menuList.get(position).getTitle());
@@ -162,6 +188,12 @@ public class MainActivity extends LsmBaseActivity {
 
     }
 
+    @Override
+    protected void afterInit() {
+        super.afterInit();
+        uploadHealthInfoIntent = new Intent(this, UploadHealthInfoService.class);
+        startService(uploadHealthInfoIntent);
+    }
 
     public void switchMenu(View view) {
         menuPop.showAsDropDown(ib_menu, 0, DimensChange.dp2px(this, 5));
@@ -216,20 +248,23 @@ public class MainActivity extends LsmBaseActivity {
             case R.id.iv_information:
                 vp_content.setCurrentItem(0);
                 setTabIcon(ll_bottom, R.id.iv_information);
-                tvTbToday.setVisibility(View.GONE);
+                llToday.setVisibility(View.GONE);
                 tvTbInfo.setVisibility(View.VISIBLE);
+                rlRun.setVisibility(View.GONE);
                 break;
             case R.id.iv_today:
                 vp_content.setCurrentItem(1);
                 setTabIcon(ll_bottom, R.id.iv_today);
-                tvTbToday.setVisibility(View.VISIBLE);
+                llToday.setVisibility(View.VISIBLE);
                 tvTbInfo.setVisibility(View.GONE);
+                rlRun.setVisibility(View.GONE);
                 break;
             case R.id.iv_run:
                 vp_content.setCurrentItem(2);
                 setTabIcon(ll_bottom, R.id.iv_run);
-                tvTbToday.setVisibility(View.GONE);
+                llToday.setVisibility(View.GONE);
                 tvTbInfo.setVisibility(View.GONE);
+                rlRun.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -240,8 +275,8 @@ public class MainActivity extends LsmBaseActivity {
             int id = child.getId();
             if (clickId == id) {//当前点击的按钮
                 LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) child.getLayoutParams();
-                linearParams.width = DimensChange.dp2px(this, 80);
-                linearParams.height = DimensChange.dp2px(this, 80);
+                linearParams.width = DimensChange.dp2px(this, 60);
+                linearParams.height = DimensChange.dp2px(this, 60);
                 child.setLayoutParams(linearParams);
             } else {
                 LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) child.getLayoutParams();
@@ -252,10 +287,35 @@ public class MainActivity extends LsmBaseActivity {
         }
     }
 
+    @OnClick({R.id.iv_run_his})
+    public void toRunRecordAct() {
+        RunRecordActivity.startAction(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(uploadHealthInfoIntent);
+        //断开蓝牙设备
+        BleManager.getInstance().disconnect(application.getCurrentBleDevice());
+    }
 
     public static void startAction(Activity activity) {
         Intent intent = new Intent(activity, MainActivity.class);
         activity.startActivity(intent);
+    }
+
+    //按返回键退回主界面
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent home = new Intent(Intent.ACTION_MAIN);
+            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            home.addCategory(Intent.CATEGORY_HOME);
+            startActivity(home);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

@@ -82,7 +82,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/connected"
-                android:textColor="@color/colorPrimary"
+                android:visibility="gone"
+                android:textColor="@color/colorAccent"
                 android:textSize="14sp" />
 
             <Button
@@ -98,6 +99,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:visibility="gone"
                 android:text="@string/enter"
                 android:textSize="12sp" />
 

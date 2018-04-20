@@ -1,11 +1,18 @@
 package com.test.lsm.utils;
 
+import android.content.Context;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.test.lsm.bean.form.UserRegVo;
+import com.test.lsm.bean.json.UserLoginReturn;
+import com.yyyu.baselibrary.utils.ActivityHolder;
 import com.yyyu.baselibrary.utils.FormValidationUtils;
+import com.yyyu.baselibrary.utils.MySPUtils;
 
 /**
  * 功能：登录注册相关工具类
@@ -15,6 +22,31 @@ import com.yyyu.baselibrary.utils.FormValidationUtils;
  * @date 2018/4/8
  */
 public class LoginRegUtils {
+
+    public final static String USER_INFO ="userInfo";
+
+
+    public static void logout(Context ctx){
+        MySPUtils.remove(ctx , USER_INFO);
+        ActivityHolder.finishedAll();
+    }
+
+    public static UserLoginReturn.PdBean getLoginUser(Context ctx){
+        String userInfoStr = (String) MySPUtils.get(ctx , USER_INFO, "");
+        return new Gson().fromJson(userInfoStr , UserLoginReturn.PdBean.class);
+    }
+
+    /**
+     * 判断是否登录
+     *
+     * @param ctx
+     * @return
+     */
+    public static boolean isLogin(Context ctx){
+        String userInfoStr = (String) MySPUtils.get(ctx , USER_INFO, "");
+        return !TextUtils.isEmpty(userInfoStr);
+    }
+
 
     public enum CheckType {
         tel, pwd,height,weight

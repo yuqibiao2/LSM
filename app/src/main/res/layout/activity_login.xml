@@ -26,7 +26,7 @@
                 android:id="@+id/et_user_tel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="手机号码"
+                android:hint="用户名"
                 android:inputType="textPhonetic"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"

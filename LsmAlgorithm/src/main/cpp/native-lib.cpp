@@ -2,15 +2,20 @@
 #include <string>
 #include "temp/heartrate.h"
 #include "temp/heartrate.cpp"
+#include "temp/pedometer.h"
+#include "temp/pedometer.cpp"
 
 extern "C" {
 HeartRate *heartRate;
+Pedometer *pedometer;
+
 JNIEXPORT jint JNI_OnLoad(JavaVM *pVM, void *reserved) {
     JNIEnv *env;
     if (pVM->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
         abort();
     }
     heartRate = new HeartRate(250, 500);
+    pedometer = new Pedometer(50, 25, 2, 5);
     return JNI_VERSION_1_6;
 }
 
@@ -43,5 +48,16 @@ Java_com_yyyu_lsmalgorithm_MyLib_countHeartRate(JNIEnv *env, jclass type, jdoubl
     int result = heartRate->countHeartRate(data);
     return result;
 }
+
+
+JNIEXPORT jint JNICALL
+Java_com_yyyu_lsmalgorithm_MyLib_countStep(JNIEnv *env, jclass type, jdouble gyroX, jdouble gyroY,
+                                           jdouble gyroZ, jdouble accX, jdouble accY, jdouble accZ,
+                                           jdouble magnX, jdouble magnY, jdouble magnZ) {
+
+    int stepNum = pedometer->countStep(gyroX, gyroY, gyroZ, accX, accY, accZ, magnX, magnY, magnZ);
+return stepNum;
+}
+
 
 }

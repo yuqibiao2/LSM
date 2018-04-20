@@ -1,1 +1,1 @@
-include ':app', ':baselibrary',':FastBleLib', ':LsmAlgorithm'
+include ':app', ':baselibrary',':FastBleLib', ':LsmAlgorithm','todaystepcounterlib'

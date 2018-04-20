@@ -1,5 +1,6 @@
 package com.yyyu.baselibrary.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,9 +13,92 @@ import java.util.TimeZone;
  */
 public class MyTimeUtils {
 
+    /**
+     * 得到当前的日期
+     *
+     * @return
+     */
+    public  static  String getCurrentDateTime(){
+
+        return formatDateTime(new Date(System.currentTimeMillis()));
+    }
+
+    /**
+     * 判断两个日期是否为同一天
+     *
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public static boolean isSameDay(String t1,String t2){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal1=Calendar.getInstance();
+        Calendar cal2=Calendar.getInstance();
+        try {
+            cal1.setTime(formatter.parse(t1));
+            cal2.setTime(formatter.parse(t2));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        boolean isSameYear = cal1.get(Calendar.YEAR) == cal2
+                .get(Calendar.YEAR);
+        boolean isSameMonth = isSameYear
+                && cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
+        boolean isSameDate = isSameMonth
+                && cal1.get(Calendar.DAY_OF_MONTH) == cal2
+                .get(Calendar.DAY_OF_MONTH);
+
+        return isSameDate;
+    }
+
+    /**
+     * 两个时间比较
+     *
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public static int timeCompare(String t1,String t2){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c1=Calendar.getInstance();
+        Calendar c2=Calendar.getInstance();
+        try {
+            c1.setTime(formatter.parse(t1));
+            c2.setTime(formatter.parse(t2));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int result=c1.compareTo(c2);
+        return result;
+    }
+
+    public static Date parseDate(String pattern , String str)  {
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(pattern);
+        TimeZone TIME_ZONE = TimeZone.getTimeZone("Asia/Shanghai");
+        DATE_FORMAT.setTimeZone(TIME_ZONE);
+        try {
+            return DATE_FORMAT.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Date parseDate( String str){
+
+        return parseDate("yyyy-MM-dd HH:mm:ss" , str);
+    }
 
     public static String formatDateTime(Date date){
         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        TimeZone TIME_ZONE = TimeZone.getTimeZone("Asia/Shanghai");
+        DATE_FORMAT.setTimeZone(TIME_ZONE);
+        String dateStr = DATE_FORMAT.format(date);
+        return dateStr;
+    }
+
+    public static String formatDateTime(String pattern , Date date){
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(pattern);
         TimeZone TIME_ZONE = TimeZone.getTimeZone("Asia/Shanghai");
         DATE_FORMAT.setTimeZone(TIME_ZONE);
         String dateStr = DATE_FORMAT.format(date);
@@ -78,6 +162,21 @@ public class MyTimeUtils {
         return day;
     }
 
+
+    /**
+     * 得到当前星期几
+     *
+     * @return
+     */
+    public static  String getCurrentWeek() {
+        String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date(System.currentTimeMillis()));
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        if (w < 0)
+            w = 0;
+        return weekDays[w];
+    }
 
     /**
      * 得到当前日

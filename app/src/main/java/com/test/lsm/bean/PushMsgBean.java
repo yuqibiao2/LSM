@@ -10,6 +10,7 @@ package com.test.lsm.bean;
 public class PushMsgBean {
 
     private String imgUrl;
+    private int imgId;
     private String title;
     private String datetime;
 
@@ -19,12 +20,24 @@ public class PushMsgBean {
         this.datetime = datetime;
     }
 
+    public PushMsgBean(int imgId) {
+        this.imgId = imgId;
+    }
+
     public String getImgUrl() {
         return imgUrl;
     }
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public int getImgId() {
+        return imgId;
+    }
+
+    public void setImgId(int imgId) {
+        this.imgId = imgId;
     }
 
     public String getTitle() {

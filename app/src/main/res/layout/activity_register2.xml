@@ -71,6 +71,8 @@
                 android:hint="生日"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
+                android:inputType="datetime"
+                android:focusable="false"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 

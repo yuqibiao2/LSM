@@ -47,8 +47,8 @@ public class RegisterActivity1 extends LsmBaseActivity {
 
     @Override
     protected void initView() {
-        LoginRegUtils.checkEdit(tilTel , LoginRegUtils.CheckType.tel);
-        LoginRegUtils.checkEdit(tilPwd , LoginRegUtils.CheckType.pwd);
+        //LoginRegUtils.checkEdit(tilTel , LoginRegUtils.CheckType.tel);
+        //LoginRegUtils.checkEdit(tilPwd , LoginRegUtils.CheckType.pwd);
     }
 
     @Override

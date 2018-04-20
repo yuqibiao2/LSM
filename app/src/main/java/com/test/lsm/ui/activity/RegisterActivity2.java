@@ -1,12 +1,15 @@
 package com.test.lsm.ui.activity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
@@ -14,9 +17,12 @@ import com.clj.fastble.utils.HexUtil;
 import com.google.gson.Gson;
 import com.test.lsm.R;
 import com.test.lsm.bean.UserBean;
+import com.test.lsm.bean.form.UserRegVo;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyToast;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import de.greenrobot.event.EventBus;
@@ -31,6 +37,8 @@ import de.greenrobot.event.ThreadMode;
  * @date 2018/4/8
  */
 public class RegisterActivity2 extends LsmBaseActivity {
+
+    private static final String TAG = "RegisterActivity2";
 
     @BindView(R.id.rg_sex)
     RadioGroup rgSex;
@@ -53,6 +61,12 @@ public class RegisterActivity2 extends LsmBaseActivity {
 
     private String tel;
     private String pwd;
+    private Gson mGson;
+
+    private int year, month, day;
+    private Calendar cal;
+    private DatePickerDialog datePickerDialog;
+    private UserRegVo userRegVo;
 
     @Override
     public int getLayoutId() {
@@ -64,17 +78,57 @@ public class RegisterActivity2 extends LsmBaseActivity {
     public void beforeInit() {
         super.beforeInit();
         Intent intent = getIntent();
+        mGson = new Gson();
         tel = intent.getStringExtra("tel");
         pwd = intent.getStringExtra("pwd");
+        getDate();
+        userRegVo = new UserRegVo();
     }
 
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
+
+        DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker arg0, int year, int month, int day) {
+                etUserBirthday.setText(year + "-" + (++month) + "-" + day);      //将选择的日期显示到TextView中,因为之前获取month直接使用，所以不需要+1，这个地方需要显示，所以+1
+            }
+        };
+        //后边三个参数为显示dialog时默认的日期，月份从0开始，0-11对应1-12个月
+        datePickerDialog = new DatePickerDialog(RegisterActivity2.this, 0, listener, year, month, day);
+    }
+
+    //获取当前日期
+    private void getDate() {
+        cal = Calendar.getInstance();
+        year = cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day = cal.get(Calendar.DAY_OF_MONTH);
     }
 
     @Override
     protected void initListener() {
+        etUserBirthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePickerDialog.show();
+            }
+        });
+        rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i) {
+                    case 1://男
+                        userRegVo.setUSER_SEX(0+"");
+                        break;
+                    case 2://女
+                        userRegVo.setUSER_SEX(1+"");
+                        break;
+                }
+            }
+        });
 
     }
 
@@ -84,37 +138,35 @@ public class RegisterActivity2 extends LsmBaseActivity {
         String height = etUserHeight.getText().toString();
         String weight = etUserWeight.getText().toString();
 
-        if (TextUtils.isEmpty(username)){
-            MyToast.showShort(this , "用户名不能为空");
+        if (TextUtils.isEmpty(username)) {
+            MyToast.showShort(this, "用户名不能为空");
             return;
-        }else if (TextUtils.isEmpty(birthday)){
-            MyToast.showShort(this , "生日不能为空");
+        } else if (TextUtils.isEmpty(birthday)) {
+            MyToast.showShort(this, "生日不能为空");
             return;
-        }else if (TextUtils.isEmpty(birthday)){
-            MyToast.showShort(this , "身高不能为空");
+        } else if (TextUtils.isEmpty(birthday)) {
+            MyToast.showShort(this, "身高不能为空");
             return;
-        }else if (TextUtils.isEmpty(birthday)){
-            MyToast.showShort(this , "体重不能为空");
+        } else if (TextUtils.isEmpty(birthday)) {
+            MyToast.showShort(this, "体重不能为空");
             return;
         }
 
-        UserBean user = new UserBean();
-        user.setTel(tel);
-        user.setPassword(pwd);
-        user.setUsername(username);
-        user.setBirthday(birthday);
-        user.setHeight(height);
-        user.setWeight(weight);
+        userRegVo.setUSERNAME(username);
+        userRegVo.setPASSWORD(pwd);
+        userRegVo.setPHONE(tel);
+        userRegVo.setUSER_SEX(0 + "");//TODO
+        userRegVo.setBIRTHDAY(birthday);
+        userRegVo.setUSER_HEIGHT(height);
+        userRegVo.setUSER_WEIGHT(weight);
 
-        MySPUtils.put(this , "register_user" , new Gson().toJson(user));
-
-        RegisterActivity3.startAction(this);
+        RegisterActivity3.startAction(this, mGson.toJson(userRegVo));
 
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void helloEventBus(String message) {
-        if ("register_finished".equals(message)){
+        if ("register_finished".equals(message)) {
             finish();
         }
     }

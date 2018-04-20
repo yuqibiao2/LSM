@@ -1,7 +1,11 @@
 apply plugin: 'com.android.application'
 
+/*butternife*/
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.jakewharton.butterknife'
+
+/*greenDao*/
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 25
@@ -25,10 +29,19 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    /*greenDao*/
+    greendao {
+        schemaVersion 1
+        daoPackage 'com.test.lsm.db'
+        targetGenDir 'src/main/java'
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.android.support.constraint:constraint-layout:1.1.0'
+    compile 'com.android.support:design:25.4.0'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -42,4 +55,5 @@ dependencies {
     compile files('libs/BaiduLBS_Android.jar')
     compile project(':FastBleLib')
     compile project(':LsmAlgorithm')
+    compile project(':todaystepcounterlib')
 }

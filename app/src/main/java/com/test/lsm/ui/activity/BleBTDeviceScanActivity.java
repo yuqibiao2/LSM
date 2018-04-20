@@ -38,8 +38,6 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
 
     private static final String TAG = "BleBTDeviceScanActivity";
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.btn_scan)
     Button btnScan;
     @BindView(R.id.list_device)
@@ -58,7 +56,7 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
     @Override
     public void beforeInit() {
         super.beforeInit();
-        initBleBT();
+        //initBleBT();
     }
 
     @Override
@@ -96,16 +94,7 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
         });
     }
 
-    /**
-     * 初始化Ble
-     */
-    private void initBleBT() {
-        BleManager.getInstance().init(getApplication());
-        BleManager.getInstance()
-                .enableLog(true)
-                .setMaxConnectCount(7)
-                .setOperateTimeout(5000);
-    }
+
 
 
     /**

@@ -12,7 +12,7 @@ public class TimeUtils {
     /**
      * 格式化计时器时间
      *
-     * @return 返回格式 00:00:01
+     * @return 返回格式 00:00:1
      */
     public static String countTimer(Long time) {
         int countTime = time.intValue();

@@ -1,5 +1,6 @@
 package com.test.lsm.ui.fragment;
 
+import android.app.Application;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -27,11 +28,19 @@ import com.baidu.mapapi.map.Polyline;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
+import com.google.gson.Gson;
+import com.test.lsm.MyApplication;
 import com.test.lsm.R;
+import com.test.lsm.bean.form.RunRecord;
+import com.test.lsm.bean.json.SaveRunRecordReturn;
+import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.net.APIMethodManager;
+import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.utils.BaiduMapUtils;
 import com.test.lsm.utils.TimeUtils;
 import com.test.lsm.utils.map.MyOrientationListener;
 import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
@@ -81,11 +90,24 @@ public class RunFragment extends LsmBaseFragment{
     private int mCurrentDirection = 0;
     private boolean isFirstLoc = true;
 
+    //第一次进入该页面（仅定位）
+    private boolean isFirstInit = true;
+
     private boolean isRunning = false;
+    private APIMethodManager apiMethodManager;
+    private UserLoginReturn.PdBean user;
+    private double distance;
+    private String startTime;
+    private String stopTime;
+    private Gson mGson;
 
     @Override
     protected void beforeInit() {
         super.beforeInit();
+        mGson = new Gson();
+        apiMethodManager = APIMethodManager.getInstance();
+        MyApplication application = (MyApplication) getActivity().getApplication();
+        user = application.getUser();
     }
 
     @Override
@@ -122,7 +144,7 @@ public class RunFragment extends LsmBaseFragment{
      */
     private void initMap() {
         //---不显示百度logo
-        map_run.removeViewAt(1);
+        //map_run.removeViewAt(1);
         //---取消缩放按钮
         map_run.showZoomControls(false);
         //---得到 baidu map对象
@@ -200,6 +222,16 @@ public class RunFragment extends LsmBaseFragment{
                     .longitude(location.getLongitude())
                     .build();
             mBaiduMap.setMyLocationData(data);
+
+            if (isFirstInit){
+                mBaiduMap.setMyLocationEnabled(false);
+                if (mLocationClient.isStarted()) {
+                    mLocationClient.stop();
+                }
+                isFirstInit = false;
+                return;
+            }
+
             //获取经纬度
             //LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
           /*  MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(ll);
@@ -236,7 +268,7 @@ public class RunFragment extends LsmBaseFragment{
 
             points.add(ll);//如果要运动完成后画整个轨迹，位置点都在这个集合中
 
-            MyToast.showShort(getContext(), "latitude：" + ll.latitude + "  longitude：" + ll.longitude);
+            //MyToast.showShort(getContext(), "latitude：" + ll.latitude + "  longitude：" + ll.longitude);
 
             last = ll;
 
@@ -255,7 +287,7 @@ public class RunFragment extends LsmBaseFragment{
             //将points集合中的点绘制轨迹线条图层，显示在地图上
             OverlayOptions ooPolyline = new PolylineOptions().width(13).color(0xAAFF0000).points(points);
             mPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline);
-            double distance = BaiduMapUtils.calcDistance(points);
+            distance = BaiduMapUtils.calcDistance(points);
             tv_run_distance.setText(""+BaiduMapUtils.resolveDistance(distance));
 
         }
@@ -356,6 +388,7 @@ public class RunFragment extends LsmBaseFragment{
 
     @OnClick(R.id.iv_run_start)
     public void onRunStart() {
+        startTime = MyTimeUtils.getCurrentDateTime();
         showLoadingDialog();
         if (mLocationClient != null && !isRunning) {
             if (!mLocationClient.isStarted()) {
@@ -370,6 +403,14 @@ public class RunFragment extends LsmBaseFragment{
      */
     @OnClick(R.id.iv_run_stop)
     public void onRunStop() {
+
+        stopTime = MyTimeUtils.getCurrentDateTime();
+        //TODO 记录本次跑步的数据
+        saveRunRecord();
+
+        String toJson = new Gson().toJson(points);
+        MyLog.e(TAG , toJson);
+
         showLoadingDialog();
         stopTimer();
         if (mLocationClient != null /*&& mLocationClient.isStarted()*/ && isRunning) {
@@ -395,25 +436,52 @@ public class RunFragment extends LsmBaseFragment{
             isRunning = false;
             hiddenLoadingDialog();
         }
-        //TODO 记录本次跑步的数据
-
         isFirstLoc = true;
+    }
+
+    /**
+     * 保存跑步记录
+     *
+     */
+    private void saveRunRecord() {
+        if (points.size()<2){
+            MyToast.showLong(getContext() , "您移动的距离太小，记录数据失败！");
+            return;
+        }
+        RunRecord runRecord = new RunRecord();
+        runRecord.setUserId(user.getUSER_ID());
+        runRecord.setStartTime(startTime);
+        runRecord.setStopTime(stopTime);
+        runRecord.setDistance(distance);
+        runRecord.setCoordinateInfo(mGson.toJson(points));
+        runRecord.setRunTime(""+TimeUtils.countTimer(second));
+        apiMethodManager.saveRunRecord(runRecord, new IRequestCallback<SaveRunRecordReturn>() {
+            @Override
+            public void onSuccess(SaveRunRecordReturn result) {
+                MyLog.d(TAG , "saveRunRecord==成功=="+result);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                MyLog.e(TAG , "saveRunRecord==异常=="+throwable.getMessage());
+            }
+        });
     }
 
 
     @Override
     public void onStart() {
         super.onStart();
-        //---开启定位
-        mBaiduMap.setMyLocationEnabled(true);
-       /* if (!mLocationClient.isStarted()) {
-            mLocationClient.start();
-        }*/
     }
 
     @Override
     public void onResume() {
         map_run.onResume();
+        //---开启定位
+        mBaiduMap.setMyLocationEnabled(true);
+        if (!mLocationClient.isStarted()) {
+            mLocationClient.start();
+        }
         super.onResume();
     }
 

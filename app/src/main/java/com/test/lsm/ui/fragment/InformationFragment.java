@@ -1,12 +1,20 @@
 package com.test.lsm.ui.fragment;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteException;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,9 +24,14 @@ import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
+import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.bean.InfoBean;
+import com.test.lsm.bean.PushMsgBean;
+import com.today.step.lib.ISportStepInterface;
+import com.today.step.lib.SportStepJsonUtils;
+import com.today.step.lib.TodayStepService;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyToast;
 import com.yyyu.lsmalgorithm.MyLib;
@@ -52,57 +65,77 @@ public class InformationFragment extends LsmBaseFragment {
     LinearLayout llCon2;
     @BindView(R.id.ll_con3)
     LinearLayout llCon3;
+    @BindView(R.id.tv_calorie)
+    TextView tvCalorie;
 
-    private List<Integer> con = new ArrayList<>();
+    private Activity mAct;
+    private MyApplication application;
 
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
-                case 0://心电图
+                case 0: {//心电图
                     byte[] obj = (byte[]) msg.obj;
                     //TODO 处理心电图数据
                     String hexStr = HexUtil.encodeHexStr(obj);
                     String substring = hexStr.substring(0, 4);
                     int parseInt = Integer.parseInt(substring, 16);
-                    MyLog.e(TAG, "encodeHexStr===" + parseInt);
+                    //MyLog.e(TAG, "encodeHexStr===" + hexStr);
+                    short[] data = new short[]{getECGValue(1,obj),
+                            getECGValue(2,obj),
+                            getECGValue(3,obj),
+                            getECGValue(4,obj),
+                            getECGValue(5,obj)};
+
                     int i1;
-                    i1 = MyLib.countHeartRate(parseInt);
+                    i1 = MyLib.countHeartRate(data);
                     if (i1 != -1) {
-                        tvHeartNum.setText(""+(i1/10000));
+                        int heartNum = i1;//i1 / 10000 < 60 ? 60 : (i1 / 10000);
+                        tvHeartNum.setText(" " + heartNum);
                         MyLog.e(TAG, "==countHeartRate===" + i1);
+                        application.setHeartNum(heartNum);
+                        EventBus.getDefault().post(new PushMsgBean(R.mipmap.msg1));
                     }
-                    /*con.add(parseInt);
-
-                    if (con.size()>=250){
-                        int results[] = new int[con.size()];
-                        for(int i =0; i<con.size() ; i++){
-                            results[i]=obj[i];
-                        }
-                        int i = MyLib.countHeartRate(results);
-                        MyLog.e(TAG, "==countHeartRate2==2=" + i);
-                        con.clear();
-                    }*/
-
                     break;
-                case 1://动作
+                }
+                case 1: {
+                    byte[] obj = (byte[]) msg.obj;
+                    String hexStr = HexUtil.encodeHexStr(obj);
+                    MyLog.e(TAG, hexStr);
+                    int gyroX = Integer.parseInt(hexStr.substring(0, 4), 16);
+                    int gyroY = Integer.parseInt(hexStr.substring(4, 8), 16);
+                    int gyroZ = Integer.parseInt(hexStr.substring(8, 12), 16);
+                    int accX = Integer.parseInt(hexStr.substring(12, 16), 16);
+                    int accY = Integer.parseInt(hexStr.substring(16, 20), 16);
+                    int accZ = Integer.parseInt(hexStr.substring(20, 24), 16);
+                    int magX = Integer.parseInt(hexStr.substring(24, 28), 16);
+                    int magY = Integer.parseInt(hexStr.substring(28, 32), 16);
+                    int magZ = Integer.parseInt(hexStr.substring(32, 36), 16);
+                    int stepNum = MyLib.countStep(gyroX, gyroY, gyroZ, accX, accY, accZ, magX, magY, magZ);
+                    MyLog.e(TAG, "stepNum：" + stepNum);
+                    tvStepNum.setText("" + stepNum);
                     break;
+                }
             }
             return false;
         }
     });
 
-    //高位在前，低位在后
-    public static int bytes2int(byte[] bytes) {
-        int result = 0;
-        if (bytes.length >= 4) {
-            int a = (bytes[0] & 0xff) << 24;//说明二
-            int b = (bytes[1] & 0xff) << 16;
-            int c = (bytes[2] & 0xff) << 8;
-            int d = (bytes[3] & 0xff);
-            result = a | b | c | d;
+
+    /**
+     * 得到数据转成short
+     *
+     * @param n     1、2、3、4、5
+     * @param value
+     * @return
+     */
+    public short getECGValue(int n, byte[] value) {
+        if (n <= 0 || n > 5) {
+            throw new IndexOutOfBoundsException();
         }
-        return result;
+
+        return (short) (((value[(n - 1) * 2 + 1] & 0xFF) << 8) | (value[(n - 1) * 2] & 0xFF));
     }
 
 
@@ -115,6 +148,8 @@ public class InformationFragment extends LsmBaseFragment {
     protected void beforeInit() {
         super.beforeInit();
         EventBus.getDefault().register(this);
+        mAct = getActivity();
+        application = (MyApplication) getActivity().getApplication();
 
         List<InfoBean> infoBeanList = new ArrayList<>();
         infoBeanList.add(new InfoBean(0, "68"));
@@ -130,6 +165,87 @@ public class InformationFragment extends LsmBaseFragment {
 
     @Override
     protected void initListener() {
+
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        initStepCount();
+    }
+
+    private static final int REFRESH_STEP_WHAT = 1000;
+    //循环取当前时刻的步数中间的间隔时间
+    private long TIME_INTERVAL_REFRESH = 500;
+    private Handler mDelayHandler = new Handler(new TodayStepCounterCall());
+    private int mStepSum;
+    private ISportStepInterface iSportStepInterface;
+    ServiceConnection stepServiceConnect;
+
+    private void initStepCount() {
+        //开启计步Service，同时绑定Activity进行aidl通信
+        Intent intent = new Intent(mAct, TodayStepService.class);
+        mAct.startService(intent);
+        mAct.bindService(intent, stepServiceConnect = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                //Activity和Service通过aidl进行通信
+                iSportStepInterface = ISportStepInterface.Stub.asInterface(service);
+                try {
+                    mStepSum = iSportStepInterface.getCurrentTimeSportStep();
+                    updateStepCount();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                mDelayHandler.sendEmptyMessageDelayed(REFRESH_STEP_WHAT, TIME_INTERVAL_REFRESH);
+
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        }, Context.BIND_AUTO_CREATE);
+    }
+
+    class TodayStepCounterCall implements Handler.Callback {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case REFRESH_STEP_WHAT: {
+                    //每隔500毫秒获取一次计步数据刷新UI
+                    if (null != iSportStepInterface) {
+                        int step = 0;
+                        try {
+                            step = iSportStepInterface.getCurrentTimeSportStep();
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                        if (mStepSum != step) {
+                            mStepSum = step;
+                            updateStepCount();
+                        }
+                    }
+                    mDelayHandler.sendEmptyMessageDelayed(REFRESH_STEP_WHAT, TIME_INTERVAL_REFRESH);
+
+                    break;
+                }
+            }
+            return false;
+        }
+    }
+
+    private void updateStepCount() {
+        Log.e(TAG, "updateStepCount : " + mStepSum);
+        tvStepNum.setText(mStepSum + "");
+        tvCalorie.setText(SportStepJsonUtils.getCalorieByStep(mStepSum) + "");
+        String distanceByStep = SportStepJsonUtils.getDistanceByStep(mStepSum);
+        String caloriesValue = SportStepJsonUtils.getCalorieByStep(mStepSum);
+        application.setStepNum(mStepSum);
+        application.setStepDistance(Double.parseDouble(distanceByStep));
+        application.setCalorieValue(Double.parseDouble(caloriesValue));
+        EventBus.getDefault().post(new PushMsgBean(R.mipmap.msg1));
 
     }
 
@@ -166,7 +282,7 @@ public class InformationFragment extends LsmBaseFragment {
             if (serviceUUID.contains("AA70") || serviceUUID.contains("aa70")) {//心电图service
                 handleHeartService(characteristics, bleDevice);
             } else if (serviceUUID.contains("AA80") || serviceUUID.contains("aa80")) {//动作service
-                handleMotionService(characteristics, bleDevice);
+                //handleMotionService(characteristics, bleDevice);
             }
         }
 
@@ -179,8 +295,66 @@ public class InformationFragment extends LsmBaseFragment {
      *
      * @param characteristics
      */
-    private void handleMotionService(List<BluetoothGattCharacteristic> characteristics, BleDevice bleDevice) {
+    private void handleMotionService(final List<BluetoothGattCharacteristic> characteristics, final BleDevice bleDevice) {
+        for (final BluetoothGattCharacteristic characteristic : characteristics) {
+            String serviceUUID = characteristic.getService().getUuid().toString();
+            String characteristicUUID = characteristic.getUuid().toString();
+            if (characteristicUUID.contains("AA82") || characteristicUUID.contains("aa82")) {
+                //发送01使设备处于工作状态 00 是休眠状态
+                BleManager.getInstance().write(
+                        bleDevice,
+                        serviceUUID,
+                        characteristicUUID,
+                        HexUtil.hexStringToBytes("1"),
+                        new BleWriteCallback() {
+                            @Override
+                            public void onWriteSuccess(final int current, final int total, final byte[] justWrite) {
+                                startNotify();
+                            }
 
+                            @Override
+                            public void onWriteFailure(final BleException exception) {
+                                MyToast.showLong(getContext(), "AA82指令写入失败" + exception);
+                                MyLog.e(TAG, "AA82指令写入失败" + exception);
+                            }
+
+                            //开启通知
+                            private void startNotify() {
+                                for (final BluetoothGattCharacteristic characteristic : characteristics) {
+                                    String serviceUUID = characteristic.getService().getUuid().toString();
+                                    String characteristicUUID = characteristic.getUuid().toString();
+                                    if (characteristicUUID.contains("AA81") || characteristicUUID.contains("aa81")) {
+                                        BleManager.getInstance().notify(
+                                                bleDevice,
+                                                serviceUUID,
+                                                characteristicUUID,
+                                                new BleNotifyCallback() {
+                                                    @Override
+                                                    public void onNotifySuccess() {
+                                                        MyLog.d(TAG, "AA81通知开始成功===============");
+                                                    }
+
+                                                    @Override
+                                                    public void onNotifyFailure(final BleException exception) {
+                                                        MyLog.e(TAG, "AA81通知开始失败===============");
+                                                    }
+
+                                                    @Override
+                                                    public void onCharacteristicChanged(byte[] data) {
+                                                        Message message = new Message();
+                                                        message.what = 1;
+                                                        message.obj = characteristic.getValue();
+                                                        mHandler.sendMessage(message);
+                                                    }
+                                                });
+                                    }
+
+                                }
+                            }
+                        });
+            }
+
+        }
     }
 
     /**
@@ -210,7 +384,7 @@ public class InformationFragment extends LsmBaseFragment {
 
                             @Override
                             public void onWriteFailure(final BleException exception) {
-                                MyToast.showShort(getContext(), "AA72指令写入失败" + exception);
+                                MyToast.showLong(getContext(), "AA72指令写入失败" + exception);
                                 MyLog.e(TAG, "AA72指令写入失败" + exception);
                             }
 
@@ -258,6 +432,9 @@ public class InformationFragment extends LsmBaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mHandler.removeMessages(0);
+        mHandler.removeMessages(1);
         EventBus.getDefault().unregister(this);
+        mAct.unbindService(stepServiceConnect);
     }
 }

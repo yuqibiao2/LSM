@@ -25,7 +25,7 @@ public abstract class BaseDialog extends Dialog implements View.OnClickListener 
 
     protected Context mContext;
     protected WindowManager.LayoutParams lp;
-    private View rootView;
+    protected View rootView;
 
     /**
      * View的容器

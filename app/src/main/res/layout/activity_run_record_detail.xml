@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.RunRecordDetailActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_scan"
+        style="@style/base_tb">
+
+        <ImageButton
+            android:id="@+id/ib_nav_lit"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@color/my_trans"
+            android:onClick="back"
+            android:src="@mipmap/ic_back" />
+
+        <TextView
+            style="@style/base_tv"
+            android:text="跑步详情"
+            android:textColor="#707070"
+            android:textSize="14sp" />
+    </android.support.v7.widget.Toolbar>
+
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/map_run"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="15dp"
+        android:clickable="true" />
+
+</LinearLayout>

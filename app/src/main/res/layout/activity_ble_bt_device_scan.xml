@@ -2,14 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/radius_white_bg"
     android:orientation="vertical">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorAccent"
-        app:titleTextColor="@android:color/white" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,12 +11,30 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
+        <TextView
+            android:id="@+id/tv_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textColor="#FF1DE9B6"
+            android:text="扫描设备"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:layout_centerInParent="true"
+            android:textColor="@color/tx_dark"
+            android:text="设备连接"/>
+
         <Button
             android:id="@+id/btn_scan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:onClick="startScan"
+            android:visibility="gone"
             android:text="开始扫描" />
 
         <ImageView

@@ -3,41 +3,167 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/radius_white_bg"
+    android:orientation="vertical"
     android:paddingLeft="25dp"
-    android:paddingRight="25dp"
-    android:orientation="vertical">
+    android:paddingRight="25dp">
 
     <com.yyyu.baselibrary.ui.widget.RoundImageView
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
-        android:src="@mipmap/avril"/>
+        android:src="@mipmap/avril" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Hank Max"
             android:textColor="@color/tx_dark"
-            android:textSize="18sp"
-            android:text="Hank Max"/>
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/tv_height"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/tx_dark"
             android:layout_below="@+id/tv_username"
             android:layout_marginTop="5dp"
-            android:textSize="18sp"
-            android:text="172cm"/>
+            android:text="172cm"
+            android:textColor="@color/tx_dark"
+            android:textSize="18sp" />
+
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_female_checked"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_female_checked" />
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_add" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:text="紧急联系人"
+            android:textColor="@color/my_red"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_urgent_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="1233123"
+        android:textColor="@color/my_red"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_urgent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:src="@mipmap/ic_phone" />
+
+        <TextView
+            android:id="@+id/tv_urgent_tel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="15dp"
+            android:text="123123"
+            android:textColor="@color/my_red"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_arrow" />
+    </LinearLayout>
+
+    <View
+        style="@style/gray_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/ic_bluetooth"/>
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/tx_dark"
+        android:textSize="18sp"
+        android:text="  装置"/>
+        <TextView
+            android:id="@+id/tv_device_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/tx_dark"
+            android:textSize="18sp"
+            android:layout_marginRight="5dp"
+            android:gravity="right"
+            android:text=" CCM10"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/ic_battery"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tx_dark"
+            android:textSize="18sp"
+            android:text="  电量"/>
+        <TextView
+            android:id="@+id/tv_electric_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/tx_dark"
+            android:textSize="18sp"
+            android:layout_marginRight="5dp"
+            android:gravity="right"
+            android:text=" 50%"/>
+    </LinearLayout>
 
 </LinearLayout>
