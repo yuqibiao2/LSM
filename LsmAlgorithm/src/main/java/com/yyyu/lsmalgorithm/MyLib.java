@@ -27,7 +27,7 @@ public class MyLib {
     private static CircularFifoQueue<Integer> queue = new CircularFifoQueue<>(ONE_MINUTE);
 
 
-    public static int countHeartRate(short[] ecg) {
+    public static int countHeartRate(short [] ecg) {
         // to storage signal to buffer, and the buffer storage a second size signal.
         for (int i = 0; i < ecg.length; i++) {
             signal[i + bufferIndex * ecg.length] = ecg[i];

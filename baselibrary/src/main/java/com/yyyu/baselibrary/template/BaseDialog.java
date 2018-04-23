@@ -66,6 +66,7 @@ public abstract class BaseDialog extends Dialog implements View.OnClickListener 
         initView();
         initListener();
         initData();
+        afterInit();
     }
 
     @Override
@@ -95,6 +96,10 @@ public abstract class BaseDialog extends Dialog implements View.OnClickListener 
      * 初始化数据
      */
     protected void initData() {
+
+    }
+
+    protected void afterInit(){
 
     }
 

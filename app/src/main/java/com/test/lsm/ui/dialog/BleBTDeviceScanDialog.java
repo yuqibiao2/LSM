@@ -1,5 +1,7 @@
 package com.test.lsm.ui.dialog;
 
+import android.app.Activity;
+import android.app.Application;
 import android.bluetooth.BluetoothGatt;
 import android.content.Context;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.clj.fastble.callback.BleGattCallback;
 import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
+import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.BleDeviceAdapter;
 import com.test.lsm.bean.BleConnectMessage;
@@ -44,6 +47,7 @@ public class BleBTDeviceScanDialog extends LsmBaseDialog {
 
     private Animation operatingAnim;
     private BleDeviceAdapter mDeviceAdapter;
+    private MyApplication application;
 
     public BleBTDeviceScanDialog(Context context) {
         super(context);
@@ -65,6 +69,7 @@ public class BleBTDeviceScanDialog extends LsmBaseDialog {
     @Override
     public void beforeInit() {
         super.beforeInit();
+        application = (MyApplication) ((Activity) mContext).getApplication();
         operatingAnim = AnimationUtils.loadAnimation(mContext, R.anim.rotate);
         operatingAnim.setInterpolator(new LinearInterpolator());
     }
@@ -178,6 +183,7 @@ public class BleBTDeviceScanDialog extends LsmBaseDialog {
                 mDeviceAdapter.notifyDataSetChanged();
                 BleBTUtils.saveConnectDevice(mContext , bleDevice.getMac());
                 EventBus.getDefault().post(new BleConnectMessage(1, bleDevice));
+                application.setCurrentBleDevice(bleDevice);
                 imgLoading.clearAnimation();
                 imgLoading.setVisibility(View.INVISIBLE);
             }

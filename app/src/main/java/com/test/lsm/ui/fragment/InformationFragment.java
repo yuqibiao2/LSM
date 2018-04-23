@@ -88,7 +88,19 @@ public class InformationFragment extends LsmBaseFragment {
                             getECGValue(4,obj),
                             getECGValue(5,obj)};
 
+                 /*  int[] data = new int[]{
+                           Integer.parseInt(hexStr.substring(0, 4), 16),
+                           Integer.parseInt(hexStr.substring(4, 8), 16),
+                           Integer.parseInt(hexStr.substring(8, 12), 16),
+                           Integer.parseInt(hexStr.substring(12, 16), 16),
+                           Integer.parseInt(hexStr.substring(16, 20), 16)
+                   };*/
+
                     int i1;
+                    //MyLog.e("hexStr===="+hexStr);
+
+                    //MyLog.e(""+data[0]+","+data[1]+","+data[2]+","+data[3]+","+data[4]+",");
+
                     i1 = MyLib.countHeartRate(data);
                     if (i1 != -1) {
                         int heartNum = i1;//i1 / 10000 < 60 ? 60 : (i1 / 10000);
@@ -276,17 +288,39 @@ public class InformationFragment extends LsmBaseFragment {
     private void handleService(List<BluetoothGattService> services, BleDevice bleDevice) {
 
         for (BluetoothGattService service : services) {
-            String serviceUUID = service.getUuid().toString();
+            String serviceUUID = service.getUuid().toString().toLowerCase();
             //MyLog.e(TAG, "serviceUUID：" + serviceUUID);
             List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
-            if (serviceUUID.contains("AA70") || serviceUUID.contains("aa70")) {//心电图service
+            if (serviceUUID.contains("aa70")) {//心电图service
                 handleHeartService(characteristics, bleDevice);
-            } else if (serviceUUID.contains("AA80") || serviceUUID.contains("aa80")) {//动作service
+            } else if (serviceUUID.contains("aa80")) {//动作service
                 //handleMotionService(characteristics, bleDevice);
+            }else if (serviceUUID.contains("180f")){//电量service
+                MyLog.e(TAG , "180f=="+serviceUUID);
+                //handleBatteryService(characteristics, bleDevice);
             }
         }
 
     }
+
+    /**
+     * 处理电量service
+     *
+     * F000180F-0451-4000-B000-000000000000
+     *
+     * @param characteristics
+     * @param bleDevice
+     */
+    private void handleBatteryService(List<BluetoothGattCharacteristic> characteristics, BleDevice bleDevice) {
+        for (final BluetoothGattCharacteristic characteristic : characteristics) {
+            String characteristicUUID = characteristic.getUuid().toString().toLowerCase();
+            if (characteristicUUID.contains("2A19")) {//
+
+            }
+
+        }
+    }
+
 
     /**
      * 处理动作service
@@ -426,7 +460,16 @@ public class InformationFragment extends LsmBaseFragment {
 
         }
 
+    }
 
+    @Override
+    protected void afterInit() {
+        super.afterInit();
+        BleDevice currentBleDevice = application.getCurrentBleDevice();
+        if (currentBleDevice!=null &&
+                BleManager.getInstance().isConnected(currentBleDevice)){
+            EventBus.getDefault().post(new BleConnectMessage(1, currentBleDevice));
+        }
     }
 
     @Override

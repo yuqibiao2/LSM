@@ -158,6 +158,7 @@ public class RunFragment extends LsmBaseFragment{
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
                 com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.FOLLOWING, true, null));
         initZoom();
+
     }
 
     /**
@@ -205,6 +206,12 @@ public class RunFragment extends LsmBaseFragment{
         option.setScanSpan(2000);//2s定位一次
         option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
         mLocationClient.setLocOption(option);
+
+        //---开启定位
+        mBaiduMap.setMyLocationEnabled(true);
+        if (!mLocationClient.isStarted()) {
+            mLocationClient.start();
+        }
     }
 
     /**
@@ -409,7 +416,7 @@ public class RunFragment extends LsmBaseFragment{
         saveRunRecord();
 
         String toJson = new Gson().toJson(points);
-        MyLog.e(TAG , toJson);
+        //MyLog.e(TAG , toJson);
 
         showLoadingDialog();
         stopTimer();
@@ -437,6 +444,15 @@ public class RunFragment extends LsmBaseFragment{
             hiddenLoadingDialog();
         }
         isFirstLoc = true;
+    }
+
+
+    private void startLocation(){
+
+    }
+
+    private void stopLocation(){
+
     }
 
     /**
@@ -477,11 +493,6 @@ public class RunFragment extends LsmBaseFragment{
     @Override
     public void onResume() {
         map_run.onResume();
-        //---开启定位
-        mBaiduMap.setMyLocationEnabled(true);
-        if (!mLocationClient.isStarted()) {
-            mLocationClient.start();
-        }
         super.onResume();
     }
 

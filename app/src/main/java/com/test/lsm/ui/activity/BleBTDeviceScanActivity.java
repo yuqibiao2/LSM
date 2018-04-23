@@ -15,6 +15,7 @@ import com.clj.fastble.callback.BleGattCallback;
 import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
+import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.BleDeviceAdapter;
 import com.test.lsm.bean.BleConnectMessage;
@@ -47,6 +48,7 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
 
     private Animation operatingAnim;
     private BleDeviceAdapter mDeviceAdapter;
+    private MyApplication application;
 
     @Override
     public int getLayoutId() {
@@ -56,6 +58,7 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
     @Override
     public void beforeInit() {
         super.beforeInit();
+        application = (MyApplication) getApplication();
         //initBleBT();
     }
 
@@ -95,8 +98,6 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
     }
 
 
-
-
     /**
      * 开始扫描
      *
@@ -104,7 +105,7 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
      */
     public void startScan(View view) {
 
-        MyLog.e(TAG , "startScan");
+        MyLog.e(TAG, "startScan");
 
         BleManager.getInstance().scan(new BleScanCallback() {
             @Override
@@ -121,8 +122,8 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
             @Override
             public void onScanning(BleDevice bleDevice) {
                 String dName = bleDevice.getDevice().getName();
-                if (dName!=null){
-                    if (dName.contains("CC")||dName.contains("Sensor")||dName.contains("Tag")){
+                if (dName != null) {
+                    if (dName.contains("CC") || dName.contains("Sensor") || dName.contains("Tag")) {
                         mDeviceAdapter.addDevice(bleDevice);
                         mDeviceAdapter.notifyDataSetChanged();
                     }
@@ -159,7 +160,8 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
                 MyToast.showShort(BleBTDeviceScanActivity.this, "连接成功");
                 hiddenLoadDialog();
                 mDeviceAdapter.notifyDataSetChanged();
-                EventBus.getDefault().post(new BleConnectMessage(1 ,bleDevice));
+                EventBus.getDefault().post(new BleConnectMessage(1, bleDevice));
+                application.setCurrentBleDevice(bleDevice);
             }
 
             @Override
@@ -174,7 +176,6 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
 
     /**
      * 显示已连接的ble设备
-     *
      */
     private void showConnectedDevice() {
         List<BleDevice> deviceList = BleManager.getInstance().getAllConnectedDevice();
@@ -200,7 +201,7 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
 
 
     public static void startAction(Activity activity) {
-        Intent intent = new Intent(activity,BleBTDeviceScanActivity.class);
+        Intent intent = new Intent(activity, BleBTDeviceScanActivity.class);
         activity.startActivity(intent);
     }
 

@@ -6,17 +6,26 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.clj.fastble.BleManager;
+import com.clj.fastble.callback.BleReadCallback;
 import com.clj.fastble.data.BleDevice;
+import com.clj.fastble.exception.BleException;
+import com.clj.fastble.utils.HexUtil;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.utils.LoginRegUtils;
+import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MyToast;
 import com.yyyu.baselibrary.utils.WindowUtils;
 
 import butterknife.BindView;
 
+import static com.chad.library.adapter.base.listener.SimpleClickListener.TAG;
 import static com.test.lsm.utils.LoginRegUtils.getLoginUser;
 
 /**
@@ -44,8 +53,11 @@ public class DeviceInformationDialog extends LsmBaseDialog {
     TextView tvDeviceName;
     @BindView(R.id.tv_electric_quantity)
     TextView tvElectricQuantity;
+    @BindView(R.id.iv_female)
+    ImageView ivFemale;
     private UserLoginReturn.PdBean loginUser;
     private MyApplication application;
+    private BleDevice currentBleDevice;
 
     public DeviceInformationDialog(Context context) {
         super(context);
@@ -63,6 +75,7 @@ public class DeviceInformationDialog extends LsmBaseDialog {
         super.beforeInit();
         loginUser = getLoginUser(getContext());
         application = (MyApplication) ((Activity) mContext).getApplication();
+        currentBleDevice = application.getCurrentBleDevice();
     }
 
     @Override
@@ -76,10 +89,19 @@ public class DeviceInformationDialog extends LsmBaseDialog {
         tvHeight.setText(loginUser.getUSER_HEIGHT() + " cm");
         tvUrgentUsername.setText(loginUser.getURGENT_USER());
         tvUrgentTel.setText(loginUser.getURGENT_PHONE());
-        BleDevice currentBleDevice = application.getCurrentBleDevice();
         if (currentBleDevice != null) {
             String name = currentBleDevice.getDevice().getName();
-            tvDeviceName.setText(""+name);
+            tvDeviceName.setText("" + name);
+        } else {
+            tvDeviceName.setText("未连接");
+        }
+        if (LoginRegUtils.isLogin(mContext)) {
+            String user_sex = application.getUser().getUSER_SEX();
+            if ("0".equals(user_sex)) {
+                ivFemale.setImageResource(R.drawable.ic_male_checked1);
+            } else if ("1".equals(user_sex)) {
+                ivFemale.setImageResource(R.drawable.ic_female_checked);
+            }
         }
     }
 
@@ -95,5 +117,35 @@ public class DeviceInformationDialog extends LsmBaseDialog {
                 mContext.startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void afterInit() {
+        super.afterInit();
+
+        if (currentBleDevice == null || !BleManager.getInstance().isConnected(currentBleDevice)) {
+            MyToast.showLong(mContext, "蓝牙设备未连接");
+        } else {
+            BleManager.getInstance().read(
+                    currentBleDevice,
+                    "0000180f-0000-1000-8000-00805f9b34fb".toLowerCase(),
+                    "00002a19-0000-1000-8000-00805f9b34fb".toLowerCase(),
+                    new BleReadCallback() {
+                        @Override
+                        public void onReadSuccess(byte[] data) {
+                            // 读特征值数据成功
+                            String hexStr = HexUtil.encodeHexStr(data);
+                            int ecgValue = Integer.parseInt(hexStr.substring(0, 2), 16);
+                            tvElectricQuantity.setText("" + ecgValue + "%");
+                            MyLog.e(TAG, "ecgValue=" + ecgValue);
+                        }
+
+                        @Override
+                        public void onReadFailure(BleException exception) {
+                            // 读特征值数据失败
+                            MyLog.e(TAG, "读取电量特性信息失败：" + exception.getDescription());
+                        }
+                    });
+        }
     }
 }

@@ -36,4 +36,19 @@ public class BleBTUtils {
         MySPUtils.put(context ,CONNECTED_DEVICE , mac);
     }
 
+
+    /**
+     * 得到数据转成short
+     *
+     * @param n     1、2、3、4、5
+     * @param value
+     * @return
+     */
+    public static int getECGValue(int n, byte[] value) {
+        if (n <= 0 || n > 5) {
+            throw new IndexOutOfBoundsException();
+        }
+        return (((value[(n - 1) * 2 + 1] & 0xFF) << 8) | (value[(n - 1) * 2] & 0xFF));
+    }
+
 }
