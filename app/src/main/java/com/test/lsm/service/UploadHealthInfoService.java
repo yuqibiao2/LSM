@@ -44,6 +44,7 @@ public class UploadHealthInfoService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        //---TODO 判断设备是否连接、连接时才上传数据
         String tel = phone.trim();
         if ("0937999127".equals(tel)
                 ||"0930583683".equals(tel)
@@ -75,7 +76,7 @@ public class UploadHealthInfoService extends Service{
                                             MyLog.e(TAG , "==userHealthInfo=提交数据失败"+throwable.getMessage());
                                         }
                                     });
-                                    Thread.sleep(60*1000);
+                                    Thread.sleep(2*1000);
                                 }
                             }
                         } catch (InterruptedException e) {
@@ -95,8 +96,9 @@ public class UploadHealthInfoService extends Service{
     private boolean isRightTime(){
         String currentDateTime = MyTimeUtils.getCurrentDateTime();
         //MyLog.d(TAG , "currentDateTime："+currentDateTime);
-        return MyTimeUtils.timeCompare(currentDateTime,"2018-05-01 23:59:59")>0
-                && MyTimeUtils.timeCompare(currentDateTime,"2018-05-05 23:59:59")<0;
+       /* return MyTimeUtils.timeCompare(currentDateTime,"2018-05-01 23:59:59")>0
+                && MyTimeUtils.timeCompare(currentDateTime,"2018-05-05 23:59:59")<0;*/
+       return true;
     }
 
     @Override

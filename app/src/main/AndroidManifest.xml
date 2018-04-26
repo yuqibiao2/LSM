@@ -55,6 +55,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.activity.RunRecordDetailActivity"></activity>
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="vjTe28gWUxqDk0HpU8nTaMSV92eYBl9R" />
@@ -64,8 +66,8 @@
             android:enabled="true"
             android:process=":remote" />
         <service android:name=".service.UploadHealthInfoService" />
+        <service android:name=".service.CheckBleIsConnectService"/>
 
-        <activity android:name=".ui.activity.RunRecordDetailActivity"></activity>
     </application>
 
 </manifest>

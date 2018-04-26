@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.bluetooth.BluetoothGatt;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -21,6 +23,8 @@ import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.BleDeviceAdapter;
 import com.test.lsm.bean.BleConnectMessage;
+import com.test.lsm.service.CheckBleIsConnectService;
+import com.test.lsm.ui.activity.MainActivity;
 import com.test.lsm.utils.bt.ble.BleBTUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 import com.yyyu.baselibrary.utils.WindowUtils;
@@ -165,7 +169,7 @@ public class BleBTDeviceScanDialog extends LsmBaseDialog {
      * @param bleDevice
      */
     private void connect(final BleDevice bleDevice) {
-        BleManager.getInstance().connect(bleDevice, new BleGattCallback() {
+        BleManager.getInstance().connectWapper(bleDevice, new BleGattCallback() {
             @Override
             public void onStartConnect() {
             }

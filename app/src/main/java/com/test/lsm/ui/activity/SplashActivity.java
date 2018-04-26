@@ -116,7 +116,7 @@ public class SplashActivity extends LsmBaseActivity {
                     if (dName.contains("CC") || dName.contains("Sensor") || dName.contains("Tag")) {
                         String connectDeviceMac = BleBTUtils.getConnectDevice(SplashActivity.this);
                         if (!TextUtils.isEmpty(mac) && mac.equals(connectDeviceMac)) {//已经配对过的设备
-                            BleManager.getInstance().connect(bleDevice, new BleGattCallback() {
+                            BleManager.getInstance().connectWapper(bleDevice, new BleGattCallback() {
                                 @Override
                                 public void onStartConnect() {
                                     MyLog.d(TAG, "onStartConnect===");

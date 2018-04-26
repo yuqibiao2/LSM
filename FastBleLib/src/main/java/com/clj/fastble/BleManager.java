@@ -28,6 +28,7 @@ import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleConnectState;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.data.BleScanState;
+import com.clj.fastble.exception.BleException;
 import com.clj.fastble.exception.OtherException;
 import com.clj.fastble.scan.BleScanRuleConfig;
 import com.clj.fastble.scan.BleScanner;
@@ -290,6 +291,45 @@ public class BleManager {
         }
 
         return null;
+    }
+
+    public void connectWapper(BleDevice bleDevice , final BleGattCallback bleGattCallback){
+
+        connect(bleDevice , new BleGattCallback() {
+            @Override
+            public void onStartConnect() {
+                bleGattCallback.onStartConnect();
+            }
+
+            @Override
+            public void onConnectFail(BleException exception) {
+                bleGattCallback.onConnectFail(exception);
+            }
+
+            @Override
+            public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                bleGattCallback.onConnectSuccess(bleDevice , gatt , status);
+            }
+
+            @Override
+            public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
+                bleGattCallback.onDisConnected(isActiveDisConnected , device , gatt , status);
+                if (mOnConnectDismiss!=null){
+                    mOnConnectDismiss.dismiss();
+                }
+            }
+        });
+    }
+
+
+    private OnConnectDismiss mOnConnectDismiss;
+
+    public void  setOnConnectDismissListener(OnConnectDismiss onConnectDismiss){
+        this.mOnConnectDismiss = onConnectDismiss;
+    }
+
+    public interface OnConnectDismiss{
+        void dismiss();
     }
 
     /**

@@ -2,12 +2,14 @@ package com.test.lsm.ui.activity;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -27,6 +29,7 @@ import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.MenuAdapter;
 import com.test.lsm.bean.MenuItem;
+import com.test.lsm.service.CheckBleIsConnectService;
 import com.test.lsm.service.UploadHealthInfoService;
 import com.test.lsm.ui.dialog.BleBTDeviceScanDialog;
 import com.test.lsm.ui.dialog.DeviceInformationDialog;
@@ -45,6 +48,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import de.greenrobot.event.ThreadMode;
 
 /**
  * 功能：首页
@@ -98,6 +104,7 @@ public class MainActivity extends LsmBaseActivity {
 
     @Override
     protected void initView() {
+
 
         tvTime.setText("" + MyTimeUtils.formatDateTime("MM月dd日", new Date(System.currentTimeMillis()))
                 + " " + MyTimeUtils.getCurrentWeek());
@@ -172,7 +179,6 @@ public class MainActivity extends LsmBaseActivity {
             }
         });
         vp_content.setCurrentItem(1);
-
     }
 
     @Override
@@ -183,6 +189,37 @@ public class MainActivity extends LsmBaseActivity {
             public void onPageSelected(int position) {
                 int tabId = TabFragment.values()[position].tabId;
                 setTabIcon(ll_bottom, tabId);
+            }
+        });
+
+        BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
+            @Override
+            public void dismiss() {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("蓝牙断开")
+                        .setMessage("是否需要重新连接蓝牙设备？")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                BleBTDeviceScanDialog bleBTDeviceScanDialog = new BleBTDeviceScanDialog(MainActivity.this);
+                                bleBTDeviceScanDialog.show();
+                            }
+                        })
+                        /*.setNeutralButton("不再检测", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })*/
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setCancelable(false)
+                        .create()
+                        .show();
             }
         });
 
