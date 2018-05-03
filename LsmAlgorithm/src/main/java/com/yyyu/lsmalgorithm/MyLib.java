@@ -65,4 +65,6 @@ public class MyLib {
 
     public static native int countStep(double gyroX, double gyroY, double gyroZ, double accX, double accY, double accZ, double magnX, double magnY, double magnZ);
 
+    public static native int countHeartRateWrapper(short ecg[] , int length);
+
 }

@@ -10,5 +10,6 @@ package com.test.lsm.global;
 
 public class Constant {
 
+    public static StringBuffer sbHeartData = new StringBuffer();
 
 }

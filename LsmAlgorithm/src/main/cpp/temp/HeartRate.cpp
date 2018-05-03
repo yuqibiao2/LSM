@@ -5,6 +5,8 @@
 #include "HeartRate.h"
 #include "signal_processor.h"
 #include "signal_processor.cpp"
+#include<cstdlib>
+#include "list"
 
 using namespace std;
 
@@ -15,6 +17,12 @@ HeartRate::HeartRate(int sr, int buffer_size) {
 	signal = new double[m];
 	g_decThreshold = 0;
     signalProcessor = new SignalProcessor();
+
+	SAMPLE_RATE = 250;
+	ONE_MINUTE = 60;
+	bufferIndex = 0;
+    signal1 =  new double[m];
+
 }
 
 HeartRate::~HeartRate() {
@@ -141,3 +149,45 @@ double *HeartRate::RpeakDetection(double *fx, double *ECGdata, int length) {
 	free(buffer);
 	return output;// Rpeak
 }
+
+list<int> bufferQ;
+
+int HeartRate::countHeartRateWrapper(short ecg[], int length) {
+	for (int i = 0; i < length; i++) {
+		signal[i + bufferIndex * length] = ecg[i];
+	}
+	bufferIndex++;
+	// Loading one second Signal.
+	if (SAMPLE_RATE == bufferIndex * length) {
+		bufferIndex = 0;
+		int currentRPeaks =DetectRPeakWrapper(signal, 250);
+
+        if (bufferQ.size()>=60){
+            bufferQ.erase(bufferQ.begin());
+        }
+        bufferQ.push_back(currentRPeaks);
+
+		float sum = 0;
+        list<int>::iterator iter;
+		for (iter = bufferQ.begin() ; iter != bufferQ.end() ; iter++) {
+            sum+= *iter;
+		}
+		sum = sum * 60;
+		int hr = (int) sum / bufferQ.size();
+		return hr < 40 ? 0 : hr > 250 ? 0 : hr;
+	}
+	return -1;
+}
+
+int HeartRate::DetectRPeakWrapper(double *signal, int length) {
+	double *rPeaks = DetectRPeak(signal, length);
+	int hr = 0;
+	for (int i = 0; i < length; i++) {
+		if (rPeaks[i] != 0) {
+			hr++;
+		}
+	}
+	return hr;
+}
+
+

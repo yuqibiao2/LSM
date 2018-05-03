@@ -163,6 +163,7 @@ public class APIMethodManager {
         paras.put("heartNum", "" + userHealthInfo.getHeartNum());
         paras.put("calorieValue", "" + userHealthInfo.getCalorieValue());
         paras.put("stepNum", "" + userHealthInfo.getStepNum());
+        paras.put("rawData", "" + userHealthInfo.getRawData());
         final Subscription subscribe = lsmApi.saveUserHealthInfo(paras)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

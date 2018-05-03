@@ -10,6 +10,7 @@ import com.test.lsm.MyApplication;
 import com.test.lsm.bean.form.UserHealthInfo;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.global.Constant;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.yyyu.baselibrary.utils.MyLog;
@@ -64,6 +65,8 @@ public class UploadHealthInfoService extends Service{
                                     userHealthInfo.setHeartNum(heartNum);
                                     userHealthInfo.setStepNum(stepNum);
                                     userHealthInfo.setCalorieValue(calorieValue);
+                                    userHealthInfo.setRawData(Constant.sbHeartData.toString());
+                                    Constant.sbHeartData = new StringBuffer();
                                     //TODO 提交数据
                                     apiMethodManager.saveUserHealthInfo(userHealthInfo, new IRequestCallback<SaveUserHealthInfoReturn>() {
                                         @Override

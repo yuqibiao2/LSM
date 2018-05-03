@@ -1,9 +1,9 @@
 #include <jni.h>
 #include <string>
-#include "temp/heartrate.h"
-#include "temp/heartrate.cpp"
-#include "temp/pedometer.h"
-#include "temp/pedometer.cpp"
+#include "temp/HeartRate.h"
+#include "temp/HeartRate.cpp"
+#include "temp/Pedometer.h"
+#include "temp/Pedometer.cpp"
 
 extern "C" {
 HeartRate *heartRate;
@@ -57,6 +57,18 @@ Java_com_yyyu_lsmalgorithm_MyLib_countStep(JNIEnv *env, jclass type, jdouble gyr
 
     int stepNum = pedometer->countStep(gyroX, gyroY, gyroZ, accX, accY, accZ, magnX, magnY, magnZ);
 return stepNum;
+}
+
+JNIEXPORT jint JNICALL
+Java_com_yyyu_lsmalgorithm_MyLib_countHeartRateWrapper(JNIEnv *env, jclass type, jshortArray ecg_,
+                                                      jint length) {
+    jshort *ecg = env->GetShortArrayElements(ecg_, NULL);
+
+    int result = heartRate->countHeartRateWrapper(ecg , length);
+
+    env->ReleaseShortArrayElements(ecg_, ecg, 0);
+
+    return result;
 }
 
 

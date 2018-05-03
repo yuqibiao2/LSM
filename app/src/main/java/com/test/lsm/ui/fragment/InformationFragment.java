@@ -29,6 +29,7 @@ import com.test.lsm.R;
 import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.bean.InfoBean;
 import com.test.lsm.bean.PushMsgBean;
+import com.test.lsm.global.Constant;
 import com.today.step.lib.ISportStepInterface;
 import com.today.step.lib.SportStepJsonUtils;
 import com.today.step.lib.TodayStepService;
@@ -98,10 +99,13 @@ public class InformationFragment extends LsmBaseFragment {
 
                     int i1;
                     //MyLog.e("hexStr===="+hexStr);
+                   String epcData =  ""+data[0]+","+data[1]+","+data[2]+","+data[3]+","+data[4]+",";
+                    //MyLog.e(TAG , epcData);
 
-                    //MyLog.e(""+data[0]+","+data[1]+","+data[2]+","+data[3]+","+data[4]+",");
+                    Constant.sbHeartData.append(epcData);
 
                     i1 = MyLib.countHeartRate(data);
+                    //i1 = MyLib.countHeartRateWrapper(data , data.length);
                     if (i1 != -1) {
                         int heartNum = i1;//i1 / 10000 < 60 ? 60 : (i1 / 10000);
                         tvHeartNum.setText(" " + heartNum);

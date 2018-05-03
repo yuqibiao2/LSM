@@ -13,6 +13,7 @@ public class UserHealthInfo {
     private int heartNum;
     private double calorieValue;
     private int stepNum;
+    private String rawData;
 
     public int getUserId() {
         return userId;
@@ -44,5 +45,13 @@ public class UserHealthInfo {
 
     public void setStepNum(int stepNum) {
         this.stepNum = stepNum;
+    }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
     }
 }

@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothGatt;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -25,7 +26,9 @@ import com.test.lsm.adapter.BleDeviceAdapter;
 import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.service.CheckBleIsConnectService;
 import com.test.lsm.ui.activity.MainActivity;
+import com.test.lsm.ui.activity.SplashActivity;
 import com.test.lsm.utils.bt.ble.BleBTUtils;
+import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyToast;
 import com.yyyu.baselibrary.utils.WindowUtils;
 
@@ -43,6 +46,8 @@ import de.greenrobot.event.EventBus;
  * @date 2018/4/20
  */
 public class BleBTDeviceScanDialog extends LsmBaseDialog {
+
+    private static final String TAG = "BleBTDeviceScanDialog";
 
     @BindView(R.id.list_device)
     ListView listDevice;
@@ -149,6 +154,35 @@ public class BleBTDeviceScanDialog extends LsmBaseDialog {
                     if (dName.contains("CC") || dName.contains("Sensor") || dName.contains("Tag")) {
                         mDeviceAdapter.addDevice(bleDevice);
                         mDeviceAdapter.notifyDataSetChanged();
+/*                        String mac = bleDevice.getMac();
+                        String connectDeviceMac = BleBTUtils.getConnectDevice(getContext());
+                        if (!TextUtils.isEmpty(mac) && mac.equals(connectDeviceMac)) {//已经配对过的设备
+                            BleManager.getInstance().connectWapper(bleDevice, new BleGattCallback() {
+                                @Override
+                                public void onStartConnect() {
+                                    MyLog.d(TAG, "onStartConnect===");
+                                }
+
+                                @Override
+                                public void onConnectFail(BleException exception) {
+                                    MyLog.e(TAG, "onConnectFail===" + exception.getDescription());
+                                    MyToast.showShort(mContext, "连接失败" + exception.getDescription());
+                                }
+
+                                @Override
+                                public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                                    application.setCurrentBleDevice(bleDevice);
+                                    mDeviceAdapter.notifyDataSetChanged();
+                                    MyLog.d(TAG, "onConnectSuccess===");
+                                }
+
+                                @Override
+                                public void onDisConnected(boolean isActiveDisConnected, BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                                    MyLog.d(TAG, "onDisConnected===");
+                                }
+                            });
+                        }*/
+
                     }
                 }
             }

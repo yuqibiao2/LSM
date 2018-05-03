@@ -231,7 +231,6 @@ public class RunFragment extends LsmBaseFragment{
             mBaiduMap.setMyLocationData(data);
 
             if (isFirstInit){
-                mBaiduMap.setMyLocationEnabled(false);
                 if (mLocationClient.isStarted()) {
                     mLocationClient.stop();
                 }

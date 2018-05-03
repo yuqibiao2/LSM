@@ -315,7 +315,7 @@ public class BleManager {
             public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
                 bleGattCallback.onDisConnected(isActiveDisConnected , device , gatt , status);
                 if (mOnConnectDismiss!=null){
-                    mOnConnectDismiss.dismiss();
+                    mOnConnectDismiss.dismiss(device);
                 }
             }
         });
@@ -329,7 +329,7 @@ public class BleManager {
     }
 
     public interface OnConnectDismiss{
-        void dismiss();
+        void dismiss(BleDevice device);
     }
 
     /**
