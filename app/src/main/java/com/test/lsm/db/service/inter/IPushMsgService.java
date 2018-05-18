@@ -1,4 +1,4 @@
-package com.test.lsm.db.service;
+package com.test.lsm.db.service.inter;
 
 import com.test.lsm.db.bean.PushMsg;
 

@@ -6,12 +6,12 @@
     android:background="@mipmap/ic_bg_map">
 
     <LinearLayout
+        android:id="@+id/ll_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -24,60 +24,82 @@
             app:cardCornerRadius="15dp"
             app:cardElevation="1dp">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@color/my_white"
-                android:padding="16dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_heart" />
+                <RelativeLayout
+                    android:id="@+id/rl_heart"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@color/my_white"
+                    android:padding="16dp">
 
-                <LinearLayout
-                    android:id="@+id/ll_con"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true">
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="40dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_heart" />
 
                     <LinearLayout
+                        android:id="@+id/ll_con"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true">
 
-                        <TextView
-                            android:id="@+id/tv_heart_num"
+                        <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="#000"
-                            android:textSize="30sp" />
+                            android:layout_height="wrap_content">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text=" bpm"
-                            android:textColor="#000"
-                            android:textSize="18sp" />
+                            <TextView
+                                android:id="@+id/tv_heart_num"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#000"
+                                android:textSize="30sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text=" bpm"
+                                android:textColor="#000"
+                                android:textSize="18sp" />
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/ll_con"
+                        android:layout_below="@+id/ll_con"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="20dp"
+                        android:text="目前状态"
+                        android:textSize="10sp" />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_heart"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/ll_con"
-                    android:layout_below="@+id/ll_con"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="20dp"
-                    android:textSize="10sp"
-                    android:text="目前状态" />
+                    android:visibility="gone">
 
-            </RelativeLayout>
+                    <fragment
+                        android:id="@+id/frag_heart_detail"
+                        android:name="com.test.lsm.ui.fragment.information_detail.HeartDetailFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+
+            </LinearLayout>
+
 
         </android.support.v7.widget.CardView>
 
@@ -96,60 +118,172 @@
             app:cardCornerRadius="15dp"
             app:cardElevation="1dp">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:padding="16dp"
-                android:background="@color/my_white">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_step" />
+                <RelativeLayout
+                    android:id="@+id/rl_step"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@color/my_white"
+                    android:padding="16dp">
 
-                <LinearLayout
-                    android:id="@+id/ll_con2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true">
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="40dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_step" />
 
                     <LinearLayout
+                        android:id="@+id/ll_con2"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true">
 
-                        <TextView
-                            android:id="@+id/tv_step_num"
+                        <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="#000"
-                            android:textSize="30sp" />
+                            android:layout_height="wrap_content">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="步"
-                            android:textColor="#000"
-                            android:textSize="18sp" />
+                            <TextView
+                                android:id="@+id/tv_step_num"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#000"
+                                android:textSize="30sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="步"
+                                android:textColor="#000"
+                                android:textSize="18sp" />
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/ll_con2"
+                        android:layout_below="@+id/ll_con2"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="20dp"
+                        android:text="今日累计"
+                        android:textSize="10sp" />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_step"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/ll_con2"
-                    android:layout_below="@+id/ll_con2"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="20dp"
-                    android:textSize="10sp"
-                    android:text="今日累计" />
+                    android:visibility="gone">
 
-            </RelativeLayout>
+                    <fragment
+                        android:id="@+id/frag_step_detail"
+                        android:name="com.test.lsm.ui.fragment.information_detail.StepDetailFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cv_calorie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="16dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rl_calorie"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@color/my_white"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="40dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_calorie" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_con3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_calorie"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#000"
+                                android:textSize="30sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="大卡"
+                                android:textColor="#000"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/ll_con3"
+                        android:layout_below="@+id/ll_con3"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="20dp"
+                        android:text="目前状态"
+                        android:textSize="10sp" />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_calorie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <fragment
+                        android:id="@+id/frag_calorie"
+                        android:name="com.test.lsm.ui.fragment.information_detail.CalorieDetailFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
@@ -162,64 +296,80 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
             android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground" android:padding="16dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="16dp"
             app:cardCornerRadius="15dp"
             app:cardElevation="1dp">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:padding="16dp"
-                android:background="@color/my_white">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_calorie" />
+                <RelativeLayout
+                    android:id="@+id/rl_ecg"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@color/my_white"
+                    android:padding="16dp">
 
-                <LinearLayout
-                    android:id="@+id/ll_con3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true">
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="40dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_ecg" />
 
                     <LinearLayout
+                        android:id="@+id/ll_con4"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true">
 
-                        <TextView
-                            android:id="@+id/tv_calorie"
+                        <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="#000"
-                            android:textSize="30sp" />
+                            android:layout_height="wrap_content">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="大卡"
-                            android:textColor="#000"
-                            android:textSize="18sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textColor="#000"
+                                android:textSize="30sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="生理讯号"
+                                android:textColor="#000"
+                                android:textSize="18sp" />
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/ll_con3"
+                        android:layout_below="@+id/ll_con3"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="20dp"
+                        android:text="目前状态"
+                        android:visibility="invisible"
+                        android:textSize="10sp" />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_ecg"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/ll_con3"
-                    android:layout_below="@+id/ll_con3"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="20dp"
-                    android:textSize="10sp"
-                    android:text="目前状态" />
+                    android:visibility="gone">
 
-            </RelativeLayout>
+                </FrameLayout>
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 

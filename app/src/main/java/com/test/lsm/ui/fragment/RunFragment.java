@@ -231,9 +231,11 @@ public class RunFragment extends LsmBaseFragment{
             mBaiduMap.setMyLocationData(data);
 
             if (isFirstInit){
-                if (mLocationClient.isStarted()) {
+                mLocationClient.stop();
+              /*  if (mLocationClient.isStarted()) {
                     mLocationClient.stop();
-                }
+                    MyLog.e(TAG , "mLocationClient.stop()=================================");
+                }*/
                 isFirstInit = false;
                 return;
             }
@@ -295,7 +297,6 @@ public class RunFragment extends LsmBaseFragment{
             mPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline);
             distance = BaiduMapUtils.calcDistance(points);
             tv_run_distance.setText(""+BaiduMapUtils.resolveDistance(distance));
-
         }
 
     }

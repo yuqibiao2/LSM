@@ -1,6 +1,9 @@
 package com.test.lsm.net.api;
 
+import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
+import com.test.lsm.bean.json.GetMsgDetail;
+import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
@@ -15,6 +18,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import rx.Observable;
 
 /**
@@ -27,6 +31,15 @@ import rx.Observable;
 
 public interface LsmApi {
 
+
+    @GET("getPushRecordDtl")
+    Observable<GetMsgDetail> getMsgDetail(@Query("id") Integer id);
+
+    @GET("queryUserPushRecord")
+    Observable<GetMsgListReturn> getMsgList(@Query("userId") Integer userId , @Query("page")Integer page , @Query("pageSize")Integer pageSize );
+
+    @GET("https://apws.unisage.com.tw/APIWS/HRV/HRVRangeIndex")
+    Observable<GetHRVInfoReturn> getHRVInfo(@QueryMap Map<String, String> map);
 
     @GET("getHealthInfoDtl")
     Observable<GetHealthInfoDtlReturn>  getHealthInfoDtl(@Query("id") String id);

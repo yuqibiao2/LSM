@@ -1,26 +1,26 @@
 package com.test.lsm.ui.activity;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.jpushdemo.TagAliasOperatorHelper;
 import com.google.gson.Gson;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
-import com.test.lsm.bean.UserBean;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.utils.LoginRegUtils;
-import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyToast;
-import com.yyyu.lsmalgorithm.MyLib;
 
 import butterknife.BindView;
+
+import static com.example.jpushdemo.TagAliasOperatorHelper.ACTION_SET;
+import static com.example.jpushdemo.TagAliasOperatorHelper.sequence;
 
 /**
  * 功能：登录界面
@@ -93,6 +93,9 @@ public class LoginActivity extends LsmBaseActivity {
                 String code = result.getResult();
                if ("01".equals(code)){//登录成功
                    UserLoginReturn.PdBean pd = result.getPd();
+
+                   setJPushAlias(""+pd.getUSER_ID());
+
                    String pdStr = mGson.toJson(pd);
                    //保存用户信息
                    MySPUtils.put(LoginActivity.this , LoginRegUtils.USER_INFO , pdStr);
@@ -112,6 +115,14 @@ public class LoginActivity extends LsmBaseActivity {
             }
         });
 
+    }
+
+    private void setJPushAlias(String userId) {
+        TagAliasOperatorHelper.TagAliasBean tagAliasBean = new TagAliasOperatorHelper.TagAliasBean();
+        tagAliasBean.action = ACTION_SET;
+        tagAliasBean.isAliasAction = true;
+        tagAliasBean.alias =userId ;
+        TagAliasOperatorHelper.getInstance().handleAction(getApplicationContext(),1,tagAliasBean);
     }
 
     public void toRegister(View view) {

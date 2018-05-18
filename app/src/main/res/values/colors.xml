@@ -8,7 +8,15 @@
     <color name="my_trans">#0000</color>
     <color name="my_white">#FFF</color>
     <color name="my_blue">#4A90E2</color>
+    <color name="my_dark">#000</color>
     <color name="my_red">#CA2A3D</color>
     <color name="tx_dark">#000</color>
+    <color name="chart_bar">#4573C6</color>
+
+    <color name="hrv_status1">#6DB432</color>
+    <color name="hrv_status2">#33B593</color>
+    <color name="hrv_status3">#FFD900</color>
+    <color name="hrv_status4">#F89737</color>
+    <color name="hrv_status5">#BE2034</color>
 
 </resources>

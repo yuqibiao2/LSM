@@ -3,6 +3,7 @@ package com.test.lsm.db.service;
 import com.test.lsm.MyApplication;
 import com.test.lsm.db.PushMsgDao;
 import com.test.lsm.db.bean.PushMsg;
+import com.test.lsm.db.service.inter.IPushMsgService;
 
 import java.util.List;
 

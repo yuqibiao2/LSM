@@ -24,7 +24,8 @@ public class MyLib {
 
     private  static double[] signal = new double[SAMPLE_RATE];
     private static int bufferIndex = 0;
-    private static CircularFifoQueue<Integer> queue = new CircularFifoQueue<>(ONE_MINUTE);
+    public static CircularFifoQueue<Integer> queue = new CircularFifoQueue<>(ONE_MINUTE);
+    public static CircularFifoQueue<Integer> queue2= new CircularFifoQueue<>();
 
 
     public static int countHeartRate(short [] ecg) {

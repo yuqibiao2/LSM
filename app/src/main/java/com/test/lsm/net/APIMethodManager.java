@@ -1,10 +1,14 @@
 package com.test.lsm.net;
 
+import com.test.lsm.bean.form.QueryHRVInfo;
 import com.test.lsm.bean.form.QueryRunInfoVo;
 import com.test.lsm.bean.form.RunRecord;
 import com.test.lsm.bean.form.UserHealthInfo;
 import com.test.lsm.bean.form.UserRegVo;
+import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
+import com.test.lsm.bean.json.GetMsgDetail;
+import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
@@ -15,6 +19,8 @@ import com.test.lsm.net.api.LsmApi;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.greenrobot.event.Subscribe;
+import retrofit2.http.Field;
 import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
@@ -32,10 +38,12 @@ import rx.schedulers.Schedulers;
 public class APIMethodManager {
 
     private LsmApi lsmApi;
+    private final LsmApi lsmApiWithoutBaseURL;
 
     private APIMethodManager() {
         APIFactory apiFactory = APIFactory.getInstance();
         lsmApi = apiFactory.createLsmApi();
+        lsmApiWithoutBaseURL = apiFactory.createLsmApiWithoutBaseURL();
     }
 
     private static class SingletonHolder {
@@ -44,6 +52,113 @@ public class APIMethodManager {
 
     public static APIMethodManager getInstance() {
         return SingletonHolder.INSTANCE;
+    }
+
+    /**
+     * 得到消息详情
+     *
+     * @param id
+     * @param callback
+     * @return
+     */
+    public Subscription getMsgDetail(Integer id, final IRequestCallback<GetMsgDetail> callback) {
+        Subscription subscribe = lsmApi.getMsgDetail(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<GetMsgDetail>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetMsgDetail getMsgDetail) {
+                        callback.onSuccess(getMsgDetail);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 根据用户Id得到历史推送消息
+     *
+     * @param userId
+     * @param page
+     * @param pageSize
+     * @param callback
+     * @return
+     */
+    public Subscription getMsgList(Integer userId, Integer page, Integer pageSize, final IRequestCallback<GetMsgListReturn> callback) {
+        Subscription subscribe = lsmApi.getMsgList(userId, page, pageSize)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<GetMsgListReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetMsgListReturn getMsgListReturn) {
+                        callback.onSuccess(getMsgListReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 得到HRV值
+     *
+     * @param hrvInfo
+     * @param callback
+     * @return
+     */
+    public Subscription getHRVInfo(QueryHRVInfo hrvInfo, final IRequestCallback<GetHRVInfoReturn> callback) {
+        Map<String, String> paras = new HashMap<>();
+        paras.put("serverId", hrvInfo.getServerId());
+        paras.put("deviceMacAddress", hrvInfo.getDeviceMacAddress());
+        paras.put("gender", hrvInfo.getGender());
+        paras.put("age", "" + hrvInfo.getAge());
+        paras.put("height", "" + hrvInfo.getHeight());
+        paras.put("weight", "" + hrvInfo.getWeight());
+        paras.put("rrInterval", hrvInfo.getRrInterval());
+        paras.put("resIndex", hrvInfo.getResIndex());
+        paras.put("measureTime", hrvInfo.getMeasureTime());
+        paras.put("account", hrvInfo.getAccount());
+        paras.put("token", hrvInfo.getToken());
+        Subscription subscribe = lsmApiWithoutBaseURL
+                .getHRVInfo(paras)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<GetHRVInfoReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetHRVInfoReturn getHRVInfoReturn) {
+                        callback.onSuccess(getHRVInfoReturn);
+                    }
+                });
+        return subscribe;
     }
 
     /**

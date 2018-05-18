@@ -13,6 +13,8 @@ import com.test.lsm.db.DaoMaster;
 import com.test.lsm.db.DaoSession;
 import com.today.step.lib.TodayStepManager;
 
+import cn.jpush.android.api.JPushInterface;
+
 
 /**
  * 功能：
@@ -49,6 +51,9 @@ public class MyApplication extends Application{
         SDKInitializer.initialize(aContext);
         /*初始化计步库*/
         TodayStepManager.init(this);
+        /*初始化Jpush推送*/
+        JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);
     }
 
     private void setupDateBase() {

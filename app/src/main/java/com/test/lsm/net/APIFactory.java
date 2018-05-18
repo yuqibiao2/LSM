@@ -55,6 +55,9 @@ public class APIFactory {
         httpClientBuild.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.MINUTES);
         httpClientBuild.readTimeout(DEFAULT_TIMEOUT, TimeUnit.MINUTES);
         httpClientBuild.writeTimeout(DEFAULT_TIMEOUT, TimeUnit.MINUTES);
+        //忽略https证书验证
+        httpClientBuild.sslSocketFactory(SSLSocketClient.getSSLSocketFactory());
+        httpClientBuild.hostnameVerifier(SSLSocketClient.getHostnameVerifier());
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder
                 .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -85,6 +88,12 @@ public class APIFactory {
 
     public LsmApi createLsmApi() {
         Retrofit retrofit = builder.baseUrl(BASE_URL).build();
+        LsmApi lsmApi = retrofit.create(LsmApi.class);
+        return lsmApi;
+    }
+
+    public LsmApi createLsmApiWithoutBaseURL(){
+        Retrofit retrofit = builder.build();
         LsmApi lsmApi = retrofit.create(LsmApi.class);
         return lsmApi;
     }

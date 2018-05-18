@@ -14,6 +14,30 @@ import java.util.TimeZone;
 public class MyTimeUtils {
 
     /**
+     * 得到当前小时
+     *
+     * @return
+     */
+    public static int getCurrentHour(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        return calendar.get(Calendar.HOUR_OF_DAY);
+    }
+
+    /**
+     * 得到当前日期
+     *
+     * @return
+     */
+    public static long getCurrentDate(){
+
+        String format = "yyyy-MM-dd";
+        String dateStr = formatDateTime(format,new Date(System.currentTimeMillis()));
+
+        return parseDate(format , dateStr).getTime();
+    }
+
+    /**
      * 得到当前的日期
      *
      * @return

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/my_dark"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_scan"
+        style="@style/base_tb"
+        android:background="@color/my_dark">
+
+        <ImageButton
+            android:id="@+id/ib_nav_lit"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@color/my_trans"
+            android:onClick="back"
+            android:src="@mipmap/ic_back" />
+
+        <TextView
+            style="@style/base_tv"
+            android:text="心率图"
+            android:textColor="#707070"
+            android:textSize="14sp" />
+    </android.support.v7.widget.Toolbar>
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lc_egc"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="right"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:text="record"/>
+    </LinearLayout>
+
+</LinearLayout>

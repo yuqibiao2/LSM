@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:src="@mipmap/ic_tb_run" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <View
+                    android:id="@+id/v_status3"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:enabled="false"
+                    android:layout_gravity="right|center_vertical"
+                    android:background="@drawable/step_detail_status_bg3" />
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <View
+                    android:id="@+id/v_status2"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:enabled="false"
+                    android:layout_gravity="center|center_vertical"
+                    android:background="@drawable/step_detail_status_bg2" />
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <View
+                    android:id="@+id/v_status1"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:background="@drawable/step_detail_status_bg1" />
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:paddingRight="10dp"
+        android:text="今天你的步数能量"
+        android:textSize="12sp" />
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="420dp"
+            android:layout_height="wrap_content">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/bc_step_num"
+                android:layout_width="420dp"
+                android:layout_height="250dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp" />
+        </FrameLayout>
+
+    </HorizontalScrollView>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="每小时的步数"
+        android:textSize="12sp" />
+
+</LinearLayout>

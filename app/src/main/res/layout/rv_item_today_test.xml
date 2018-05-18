@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/iv_msg_icon"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="240dp"
         android:scaleType="fitXY"/>
     <TextView
         android:id="@+id/tv_msg_title"
@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:text="你已经好久没有活动了"
         android:textSize="20sp"
-        android:visibility="gone"
         android:textColor="#000"
         android:layout_margin="10dp"/>
     <TextView

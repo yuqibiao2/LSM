@@ -19,6 +19,19 @@ add_library( # Sets the name of the library.
              # Provides a relative path to your source file(s).
              src/main/cpp/native-lib.cpp )
 
+add_library( # Specifies the name of the library.
+             swm_ecg_algo
+
+             # Sets the library as a shared library.
+             SHARED
+
+             # Provides a relative path to your source file(s).
+             src/main/cpp/ecg/swm_ecg_algo_jni.cpp
+             src/main/cpp/ecg/SWM_ECG_ALGO.cpp
+             src/main/cpp/ecg/SWM_Filter.cpp
+            )
+
+
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
 # default, you only need to specify the name of the public NDK library

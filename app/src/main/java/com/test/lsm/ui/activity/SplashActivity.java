@@ -14,6 +14,7 @@ import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.scan.BleScanRuleConfig;
+import com.example.jpushdemo.TagAliasOperatorHelper;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.BleConnectMessage;
@@ -28,6 +29,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import de.greenrobot.event.EventBus;
+
+import static com.example.jpushdemo.TagAliasOperatorHelper.ACTION_SET;
 
 /**
  * 功能：启动页
@@ -69,6 +72,7 @@ public class SplashActivity extends LsmBaseActivity {
     protected void afterInit() {
         super.afterInit();
 
+        //resolveSkip();
         toConnectLsm();
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.splash_anime);
@@ -80,7 +84,7 @@ public class SplashActivity extends LsmBaseActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-               /* if(LoginRegUtils.isLogin(SplashActivity.this)){//登录了
+              /*  if(LoginRegUtils.isLogin(SplashActivity.this)){//登录了
                     UserLoginReturn.PdBean loginUser = LoginRegUtils.getLoginUser(SplashActivity.this);
                     ((MyApplication)getApplication()).setUser(loginUser);
                     MainActivity.startAction(SplashActivity.this);
@@ -162,12 +166,21 @@ public class SplashActivity extends LsmBaseActivity {
     private void resolveSkip() {
         if (LoginRegUtils.isLogin(SplashActivity.this)) {//登录了
             UserLoginReturn.PdBean loginUser = LoginRegUtils.getLoginUser(SplashActivity.this);
+            setJPushAlias(""+loginUser.getUSER_ID());
             ((MyApplication) getApplication()).setUser(loginUser);
             MainActivity.startAction(SplashActivity.this);
         } else {
             LoginActivity.startAction(SplashActivity.this);
         }
         finish();
+    }
+
+    private void setJPushAlias(String userId) {
+        TagAliasOperatorHelper.TagAliasBean tagAliasBean = new TagAliasOperatorHelper.TagAliasBean();
+        tagAliasBean.action = ACTION_SET;
+        tagAliasBean.isAliasAction = true;
+        tagAliasBean.alias =userId ;
+        TagAliasOperatorHelper.getInstance().handleAction(getApplicationContext(),1,tagAliasBean);
     }
 
     @Override

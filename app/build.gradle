@@ -12,7 +12,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.test.lsm"
-        minSdkVersion 18
+        minSdkVersion 21
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -35,10 +35,16 @@ android {
         daoPackage 'com.test.lsm.db'
         targetGenDir 'src/main/java'
     }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile(name: 'swmalgolib-debug', ext: 'aar')
     compile 'com.android.support:appcompat-v7:25.4.0'
     compile 'com.android.support.constraint:constraint-layout:1.1.0'
     compile 'com.android.support:design:25.4.0'
@@ -54,6 +60,10 @@ dependencies {
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
     compile files('libs/BaiduLBS_Android.jar')
     compile project(':FastBleLib')
-    compile project(':LsmAlgorithm')
-    compile project(':todaystepcounterlib')
+    compile project(path:':todaystepcounterlib')
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    compile project(':jpush')
+   /* compile project(':LsmAlgorithm')*/
+    debugCompile project(path: ':LsmAlgorithm', configuration: 'debug')
+    releaseCompile project(path: ':LsmAlgorithm', configuration: 'release')
 }
