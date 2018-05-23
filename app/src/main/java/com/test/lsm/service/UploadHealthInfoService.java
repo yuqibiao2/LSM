@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.clj.fastble.BleManager;
+import com.clj.fastble.data.BleDevice;
 import com.test.lsm.MyApplication;
 import com.test.lsm.bean.form.UserHealthInfo;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
@@ -45,7 +47,6 @@ public class UploadHealthInfoService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //---TODO 判断设备是否连接、连接时才上传数据
         String tel = phone.trim();
         if ("0937999127".equals(tel)
                 ||"0930583683".equals(tel)
@@ -56,6 +57,9 @@ public class UploadHealthInfoService extends Service{
                     public void run() {
                         try {
                             while (isUpload){
+                                if (!application.isBleConnected()){
+                                    continue;
+                                }
                                 if (isRightTime()){
                                     int heartNum = application.getHeartNum();
                                     int stepNum = application.getStepNum();

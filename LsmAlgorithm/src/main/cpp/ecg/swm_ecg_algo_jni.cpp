@@ -17,6 +17,7 @@ extern "C" {
     Java_com_swm_core_HeartRateService_GetRtoRIntervalData(JNIEnv *env, jobject thiz, jdoubleArray jrriCount, jdoubleArray jrriTime) {
         double *rriCount = new double[HRV_RRI_MAX_BUF];
         double *rriTime = new double[HRV_RRI_MAX_BUF];
+        //APPS_ECG_InitialForModeChange(1);
         APPS_ECG_RRI_DATA(rriCount, rriTime);
         rriTime[0] = 1;
         rriTime[500] = 123;
@@ -29,11 +30,11 @@ extern "C" {
     }
 
 JNIEXPORT void JNICALL
-Java_com_swm_core_HeartRateService_getHistoryRRI(JNIEnv *env, jclass type,
-                                                 jshortArray historyRRI_) {
+Java_com_swm_core_HeartRateService_getCurrentRRI(JNIEnv *env, jclass type,
+                                                 jshortArray currentRRI_) {
 
-    short *temp = GET_HISTORY_RRI_BUF();
-    env->SetShortArrayRegion(historyRRI_ , 0 , HRV_RRI_MAX_BUF , temp);
+    short *temp = GET_CURRENT_RRI_BUF();
+    env->SetShortArrayRegion(currentRRI_ , 0 , HRV_RRI_MAX_BUF , temp);
 
 }
 

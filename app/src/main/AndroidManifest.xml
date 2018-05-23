@@ -31,7 +31,8 @@
         android:label="BeatInfo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.MainActivity">
+        <activity android:name=".ui.activity.MainActivity"
+            android:launchMode="singleTask">
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,8 +57,7 @@
         </activity>
 
         <activity android:name=".ui.activity.RunRecordDetailActivity"/>
-        <activity android:name=".ui.activity.ECGShowActivity"
-            android:screenOrientation="landscape"/>
+        <activity android:name=".ui.activity.ECGShowActivity" android:screenOrientation="landscape"/>
         <activity android:name=".ui.activity.MsgDetailActivity"/>
 
         <meta-data

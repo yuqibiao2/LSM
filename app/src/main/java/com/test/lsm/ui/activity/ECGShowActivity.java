@@ -3,7 +3,6 @@ package com.test.lsm.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -11,14 +10,14 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.swm.algorithm.Algorithm;
+import com.swm.algorithm.support.IirFilter;
 import com.test.lsm.R;
 import com.test.lsm.global.Constant;
-import com.yyyu.baselibrary.utils.MyLog;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import singularwings.com.swmalgolib.ble.filter.IirFilter;
 
 /**
  * 功能：心电图展示
@@ -43,7 +42,8 @@ public class ECGShowActivity extends LsmBaseActivity {
     @Override
     public void beforeInit() {
         super.beforeInit();
-        iirFilter = new IirFilter();
+
+        iirFilter = Algorithm.newIirFilterInstance();
     }
 
     @Override
@@ -118,7 +118,8 @@ public class ECGShowActivity extends LsmBaseActivity {
         ArrayList<Entry> yVals2 = new ArrayList<Entry>();
         for (int i = 0; i <Constant.egcDataCon.size(); i++) {
             Short aShort = Constant.egcDataCon.get(i);
-            yVals2.add(new Entry(i, aShort));
+            Integer filter = iirFilter.filter(Integer.valueOf(aShort));
+            yVals2.add(new Entry(i, filter));
         }
 
        /* short[] data1 = new short[]{

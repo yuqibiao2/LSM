@@ -21,6 +21,6 @@ public class HeartRateService {
 
     public static native double[] GetRtoRIntervalData2();
 
-    public static native void getHistoryRRI(short[] historyRRI);
+    public static native void getCurrentRRI(short[] currentRRI);
 
 }

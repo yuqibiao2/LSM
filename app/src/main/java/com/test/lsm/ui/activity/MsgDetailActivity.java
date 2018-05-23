@@ -7,8 +7,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.test.lsm.R;
 import com.test.lsm.bean.json.GetMsgDetail;
+import com.test.lsm.bean.json.PushExtra;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
@@ -40,6 +42,7 @@ public class MsgDetailActivity extends LsmBaseActivity {
     private String title;
     private String content;
     private APIMethodManager apiMethodManager;
+    private PushExtra pushExtra;
 
     @Override
     public void beforeInit() {
@@ -47,6 +50,8 @@ public class MsgDetailActivity extends LsmBaseActivity {
         Bundle bundle = getIntent().getExtras();
         title = bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE);
         content = bundle.getString(JPushInterface.EXTRA_ALERT);
+        String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
+        pushExtra = new Gson().fromJson(extra, PushExtra.class);
         apiMethodManager = APIMethodManager.getInstance();
     }
 
@@ -57,12 +62,12 @@ public class MsgDetailActivity extends LsmBaseActivity {
 
     @Override
     protected void initView() {
-        tvContent.setText("title：" + title + "    content：" + content);
+        //tvContent.setText("title：" + title + "    content：" + content);
     }
 
     @Override
     protected void initListener() {
-        apiMethodManager.getMsgDetail(Integer.parseInt(content), new IRequestCallback<GetMsgDetail>() {
+        apiMethodManager.getMsgDetail(Integer.parseInt(pushExtra.getMsgId()), new IRequestCallback<GetMsgDetail>() {
             @Override
             public void onSuccess(GetMsgDetail result) {
                 GetMsgDetail.PdBean.RecordBean record = result.getPd().getRecord();

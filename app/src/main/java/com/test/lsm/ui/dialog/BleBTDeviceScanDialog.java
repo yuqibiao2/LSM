@@ -211,8 +211,10 @@ public class BleBTDeviceScanDialog extends LsmBaseDialog {
             @Override
             public void onConnectFail(BleException exception) {
                 MyToast.showShort(mContext, "连接失败" + exception.getDescription());
-                imgLoading.clearAnimation();
-                imgLoading.setVisibility(View.INVISIBLE);
+                if (imgLoading!=null){
+                    imgLoading.clearAnimation();
+                    imgLoading.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -222,8 +224,10 @@ public class BleBTDeviceScanDialog extends LsmBaseDialog {
                 BleBTUtils.saveConnectDevice(mContext , bleDevice.getMac());
                 EventBus.getDefault().post(new BleConnectMessage(1, bleDevice));
                 application.setCurrentBleDevice(bleDevice);
-                imgLoading.clearAnimation();
-                imgLoading.setVisibility(View.INVISIBLE);
+                if (imgLoading!=null){
+                    imgLoading.clearAnimation();
+                    imgLoading.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override

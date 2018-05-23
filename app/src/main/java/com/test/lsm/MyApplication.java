@@ -77,6 +77,14 @@ public class MyApplication extends Application{
                 .setOperateTimeout(5000);
     }
 
+    public boolean isBleConnected(){
+        if (currentBleDevice!=null && BleManager.getInstance().isConnected(currentBleDevice)){
+            return true;
+        }else{
+            return  false;
+        }
+    }
+
     public UserLoginReturn.PdBean getUser() {
         return user;
     }

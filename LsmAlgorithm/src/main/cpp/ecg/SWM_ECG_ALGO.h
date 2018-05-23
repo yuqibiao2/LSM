@@ -100,6 +100,6 @@ void MY_RemoveFalseQRSComplex(short	i16TotalCount, short i16SigmaThreshold, shor
 void MY_FindECGWave(long i32StartPoint, long  i32EndPoint, long* pi32DynamicRSSlopeThreshold, long* pi32QRSIndex, short* pi16Mean, short* pi16Sigma, short* pi16Count, long* pi32SrcBuf, long* pi32WorkBuf, QRS_PARAM* psQRSArray);
 short MY_ECG_ALGO_EXAMPLE(long *FIR_out_buff);
 
-short* GET_HISTORY_RRI_BUF();
+short* GET_CURRENT_RRI_BUF();
 #endif
 

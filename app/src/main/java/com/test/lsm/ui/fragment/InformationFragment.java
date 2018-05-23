@@ -31,10 +31,9 @@ import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
+import com.swm.algorithm.Algorithm;
+import com.swm.algorithm.support.heartrate.HeartRate;
 import com.swm.core.HeartRateService;
-import com.swm.core.temp.BleData;
-import com.swm.core.temp.EcgData;
-import com.swm.core.temp.FirFilter;
 import com.swm.core.temp.IirFilter;
 import com.swm.core.temp.SwmFilter;
 import com.test.lsm.MyApplication;
@@ -68,7 +67,6 @@ import butterknife.Unbinder;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
-import singularwings.com.swmalgolib.EcgAlgo;
 
 /**
  * 功能：数据信息界面
@@ -114,9 +112,13 @@ public class InformationFragment extends LsmBaseFragment {
 
     double[] rriArray = new double[700];
     double[] timeArray = new double[700];
-    short[] historyArray = new short[700];
+    short[] currentRriArray = new short[700];
+
+    private int index = 0;
 
     SwmFilter swmFilter = new IirFilter(0.992);//new FirFilter(250);
+
+    HeartRate hrImpl = Algorithm.newHeartRateInstance();
 
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
@@ -129,7 +131,8 @@ public class InformationFragment extends LsmBaseFragment {
                     String substring = hexStr.substring(0, 4);
                     int parseInt = Integer.parseInt(substring, 16);
                     //MyLog.e(TAG, "encodeHexStr===" + hexStr);
-                    short[] data = new short[]{getECGValue(1, obj),
+                    short[] data = new short[]{
+                            getECGValue(1, obj),
                             getECGValue(2, obj),
                             getECGValue(3, obj),
                             getECGValue(4, obj),
@@ -147,21 +150,33 @@ public class InformationFragment extends LsmBaseFragment {
                     //MyLog.e("hexStr===="+hexStr);
                     String epcData = "" + data[0] + "," + data[1] + "," + data[2] + "," + data[3] + "," + data[4] + ",";
 
-                    short[] ecgData = EcgAlgo.getEcgByte2Short(obj);
+                    short[] ecgData = Algorithm.getEcgByte2Short(obj);
+                    int heartNum = hrImpl.countHeartRate(ecgData, getShort(obj, 12));
+                    if (heartNum!=-1){
+                        tvHeartNum.setText("" + heartNum);
+                        MyLog.e(TAG, "tvHeartNum：" + heartNum);
+                    }
+
                     String epcData2 = "" + ecgData[0] + "," + ecgData[1] + "," + ecgData[2] + "," + ecgData[3] + "," + ecgData[4] + ",";
                     //MyLog.e(TAG , epcData);
 
                     Constant.sbHeartData.append(epcData);
                     //Constant.sbHeartData2.append(epcData2);
 
-                  /*  Constant.egcDataCon.add(ecgData[0]);
+                    Constant.egcDataCon.add(ecgData[0]);
                     Constant.egcDataCon.add(ecgData[1]);
                     Constant.egcDataCon.add(ecgData[2]);
                     Constant.egcDataCon.add(ecgData[3]);
                     Constant.egcDataCon.add(ecgData[4]);
 
+                    List<Long> rri = hrImpl.countRRI(ecgData, getShort(obj, 12));
+                    for (Long value : rri){
+                        Constant.rriBuffer.add(value);
+                        MyLog.e(TAG , "rri====value"+value);
+                    }
 
-                    i1 = MyLib.countHeartRate(data);
+
+                /*    i1 = MyLib.countHeartRate(data);
                     //i1 = MyLib.countHeartRateWrapper(data , data.length);
                     if (i1 != -1) {
                         int heartNum = i1;//i1 / 10000 < 60 ? 60 : (i1 / 10000);
@@ -170,35 +185,35 @@ public class InformationFragment extends LsmBaseFragment {
                         application.setHeartNum(heartNum);
                     }*/
 
-                    BleData bleData = new BleData(obj);
+                  /*  BleData bleData = new BleData(obj);
                     EcgData ecgData1 = EcgData.fromBle(bleData);
                     swmFilter.filter(ecgData1);
                     for (double ecg :ecgData1.samples){
-                        //MyLog.e(TAG , "ecg======================"+ecg);
+                        MyLog.e(TAG , "ecg======================"+ecg);
                         Constant.egcDataCon.add((short) ecg);
-                    }
+                    }*/
 
-
-
-                    if (Constant.egcDataCon.size() == 1500) {
+                  /*  index = index + 5;
+                    if (index == 1500) {
+                        index = 0;
                         int[] values = new int[1500];
                         for (int i = 0; i < Constant.egcDataCon.size(); i++) {
                             values[i] = Constant.egcDataCon.get(i).intValue();
                         }
                         heartNum = HeartRateService.CalculateHeartRate(values);
-                        HeartRateService.GetRtoRIntervalData(rriArray , timeArray);
-                        MyLog.e(TAG, "timeArray：" + timeArray[0] + "   " + timeArray[500]+"   "+timeArray[600]);
-                       // MyLog.e(TAG, "rIntervalData2：" + rIntervalData2[0] + "   " + rIntervalData2[500]+"   "+rIntervalData2[600]);
                         tvHeartNum.setText(" " + heartNum);
-                        Constant.egcDataCon.clear();
+                        MyLog.e(TAG, "tvHeartNum：" + heartNum);
+                        //Constant.egcDataCon.clear();
 
-                        HeartRateService.getHistoryRRI(historyArray);
-                        MyLog.e(TAG, "historyArray：" + historyArray[0] + "   " + historyArray[500]+"   "+historyArray[600]);
-
-                        float sdnn = HeartRateService.GetSdnn();
-                        MyLog.e(TAG , "sdnn："+sdnn);
-
-                    }
+                        HeartRateService.getCurrentRRI(currentRriArray);
+                        for (int i = 0; i < 20; i++) {
+                            short value = currentRriArray[i];
+                            if (value > 0) {
+                                Constant.rriBuffer.add(value);
+                            }
+                        }
+                        MyLog.e(TAG, "rriBuffer：" + Constant.rriBuffer.toString());
+                    }*/
 
                     break;
                 }
@@ -243,6 +258,18 @@ public class InformationFragment extends LsmBaseFragment {
         return (short) (((value[(n - 1) * 2 + 1] & 0xFF) << 8) | (value[(n - 1) * 2] & 0xFF));
     }
 
+    /**
+     * 通过byte数组取到short
+     *
+     * @param b
+     * @param index
+     *            第几位开始取
+     * @return
+     */
+    public static short getShort(byte[] b, int index) {
+        return (short) (((b[index + 1] << 8) | b[index + 0] & 0xff));
+    }
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_information;
@@ -283,11 +310,15 @@ public class InformationFragment extends LsmBaseFragment {
     @OnClick({R.id.rl_heart, R.id.rl_step, R.id.rl_calorie, R.id.rl_ecg})
     public void onItemClick(View view) {
 
-        TransitionManager.beginDelayedTransition(llContainer);
+       // TransitionManager.beginDelayedTransition(llContainer);
 
         switch (view.getId()) {
             case R.id.rl_heart:
                 if (flHeart.getVisibility() == View.GONE) {
+                    if (Constant.rriBuffer.size() < 250) {
+                        MyToast.showLong(getContext(), "还没有足够的数据请耐心等待");
+                        return;
+                    }
                     EventBus.getDefault().post(new HeartChgEvent(heartNum, "心跳值变了"));
                     flHeart.setVisibility(View.VISIBLE);
                 } else {
@@ -318,8 +349,11 @@ public class InformationFragment extends LsmBaseFragment {
                 }
                 break;
             case R.id.rl_ecg:
-                //TODO 判断蓝牙设备是否链接
-                ECGShowActivity.startAction(getActivity());
+                if (!application.isBleConnected()){
+                    MyToast.showLong(getContext() , "蓝牙设备未连接");
+                }else{
+                    ECGShowActivity.startAction(getActivity());
+                }
                 break;
         }
         view.setVisibility(View.VISIBLE);

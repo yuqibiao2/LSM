@@ -16,4 +16,6 @@ public class Constant {
     //public static StringBuffer sbHeartData2 = new StringBuffer();
     public static CircularFifoQueue<Short> egcDataCon = new CircularFifoQueue(1500);
 
+    public static CircularFifoQueue<Long> rriBuffer = new CircularFifoQueue(250);
+
 }

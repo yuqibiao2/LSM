@@ -47,6 +47,8 @@ public class SplashActivity extends LsmBaseActivity {
     ImageView iv_splash;
     private MyApplication application;
 
+    private boolean connected = false;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_splash;
@@ -135,6 +137,7 @@ public class SplashActivity extends LsmBaseActivity {
                                 @Override
                                 public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
                                     application.setCurrentBleDevice(bleDevice);
+                                    connected = true;
                                     resolveSkip();
                                     MyLog.d(TAG, "onConnectSuccess===");
                                 }
@@ -152,10 +155,9 @@ public class SplashActivity extends LsmBaseActivity {
 
             @Override
             public void onScanFinished(List<BleDevice> scanResultList) {
-                BleDevice currentBleDevice = application.getCurrentBleDevice();
-                if (currentBleDevice == null || !BleManager.getInstance().isConnected(currentBleDevice)) {//没有连接上设备
-                    resolveSkip();
+                if (!connected) {//没有连接上设备
                     MyToast.showLong(SplashActivity.this, "蓝牙设备连接失败，请在主界面再次连接！");
+                    resolveSkip();
                 }
                 // 扫描结束，列出所有扫描到的符合扫描规则的BLE设备（主线程）
                 MyLog.e(TAG, "扫描完成==");

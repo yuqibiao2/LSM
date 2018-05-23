@@ -160,6 +160,7 @@ public class MainActivity extends LsmBaseActivity {
                                 LoginRegUtils.logout(MainActivity.this);
                                 break;
                         }
+                        mInstance.dismiss();
                         MyToast.showLong(MainActivity.this, menuList.get(position).getTitle());
                     }
                 });

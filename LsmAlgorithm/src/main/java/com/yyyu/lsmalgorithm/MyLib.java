@@ -25,7 +25,7 @@ public class MyLib {
     private  static double[] signal = new double[SAMPLE_RATE];
     private static int bufferIndex = 0;
     public static CircularFifoQueue<Integer> queue = new CircularFifoQueue<>(ONE_MINUTE);
-    public static CircularFifoQueue<Integer> queue2= new CircularFifoQueue<>();
+    public static CircularFifoQueue<Integer> queue2= new CircularFifoQueue<>(250);
 
 
     public static int countHeartRate(short [] ecg) {
@@ -40,13 +40,14 @@ public class MyLib {
             bufferIndex = 0;
             int currentRPeaks =countRPeaks(signal, signal.length);
             queue.add(currentRPeaks);
+            queue2.add(currentRPeaks);
 
             float sum = 0;
             for (int i = 0; i < queue.size(); i++) {
                 sum += queue.get(i);
             }
             sum = sum * 60;
-            Log.d("queue", queue.toString());
+            Log.d("queue2", queue2.toString());
             int hr = (int) sum / queue.size();
             return hr < 40 ? 0 : hr > 250 ? 0 : hr;
         }

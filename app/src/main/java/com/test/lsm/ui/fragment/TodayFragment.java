@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -16,6 +17,7 @@ import com.test.lsm.R;
 import com.test.lsm.adapter.PushMsgAdapter;
 import com.test.lsm.bean.PushMsgBean;
 import com.test.lsm.bean.json.GetMsgListReturn;
+import com.test.lsm.bean.json.PushExtra;
 import com.test.lsm.db.bean.PushMsg;
 import com.test.lsm.db.service.inter.IPushMsgService;
 import com.test.lsm.db.service.PushMsgService;
@@ -62,6 +64,7 @@ public class TodayFragment extends LsmBaseFragment {
     private int page = 1;
 
     private int pageSize = 10;
+    private Gson mGson;
 
     @Override
     public int getLayoutId() {
@@ -71,6 +74,7 @@ public class TodayFragment extends LsmBaseFragment {
     @Override
     protected void beforeInit() {
         super.beforeInit();
+        mGson = new Gson();
         application = (MyApplication) getActivity().getApplication();
         apiMethodManager = APIMethodManager.getInstance();
 
@@ -108,6 +112,9 @@ public class TodayFragment extends LsmBaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, "ttttt");
                 bundle.putString(JPushInterface.EXTRA_ALERT, mData.get(position).getID());
+                PushExtra extra = new PushExtra();
+                extra.setMsgId(mData.get(position).getID());
+                bundle.putString( JPushInterface.EXTRA_EXTRA, mGson.toJson(extra));
                 MsgDetailActivity.startAction(getContext(), bundle);
             }
         });

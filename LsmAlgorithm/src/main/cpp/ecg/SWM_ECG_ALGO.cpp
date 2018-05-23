@@ -1492,9 +1492,9 @@ void APPS_ECG_RRI_DATA(double *rriAry, double *timeAry) {
 	}
 }
 
-short* GET_HISTORY_RRI_BUF(){
+short* GET_CURRENT_RRI_BUF(){
 
-	return g_i16HistoryRRIBuf;
+	return g_i16CurrentRRIBuf;
 }
 
 #if 0

@@ -44,7 +44,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile(name: 'swmalgolib-debug', ext: 'aar')
+    compile(name: 'algorithm-release', ext: 'aar')
     compile 'com.android.support:appcompat-v7:25.4.0'
     compile 'com.android.support.constraint:constraint-layout:1.1.0'
     compile 'com.android.support:design:25.4.0'
