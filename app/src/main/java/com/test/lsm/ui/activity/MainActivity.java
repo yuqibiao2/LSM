@@ -1,11 +1,9 @@
 package com.test.lsm.ui.activity;
 
 import android.app.Activity;
-import android.app.Application;
 import android.bluetooth.BluetoothGatt;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.annotation.IdRes;
@@ -13,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -40,7 +37,6 @@ import com.test.lsm.R;
 import com.test.lsm.adapter.MenuAdapter;
 import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.bean.MenuItem;
-import com.test.lsm.service.CheckBleIsConnectService;
 import com.test.lsm.service.UploadHealthInfoService;
 import com.test.lsm.ui.dialog.BleBTDeviceScanDialog;
 import com.test.lsm.ui.dialog.DeviceInformationDialog;
@@ -50,6 +46,7 @@ import com.test.lsm.ui.fragment.TodayFragment;
 import com.test.lsm.utils.LoginRegUtils;
 import com.test.lsm.utils.bt.ble.BleBTUtils;
 import com.yyyu.baselibrary.ui.widget.CommonPopupWindow;
+import com.yyyu.baselibrary.utils.ActivityHolder;
 import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
@@ -62,8 +59,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
-import de.greenrobot.event.Subscribe;
-import de.greenrobot.event.ThreadMode;
 
 /**
  * 功能：首页

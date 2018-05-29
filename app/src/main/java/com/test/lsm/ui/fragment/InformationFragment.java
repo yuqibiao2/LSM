@@ -15,7 +15,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.support.annotation.RequiresApi;
-import android.support.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +31,8 @@ import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
 import com.swm.algorithm.Algorithm;
+import com.swm.algorithm.support.IirFilter;
 import com.swm.algorithm.support.heartrate.HeartRate;
-import com.swm.core.HeartRateService;
-import com.swm.core.temp.IirFilter;
-import com.swm.core.temp.SwmFilter;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.BleConnectMessage;
@@ -116,9 +113,10 @@ public class InformationFragment extends LsmBaseFragment {
 
     private int index = 0;
 
-    SwmFilter swmFilter = new IirFilter(0.992);//new FirFilter(250);
 
     HeartRate hrImpl = Algorithm.newHeartRateInstance();
+
+    private IirFilter iirFilter  =  Algorithm.newIirFilterInstance();
 
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
@@ -153,14 +151,26 @@ public class InformationFragment extends LsmBaseFragment {
                     short[] ecgData = Algorithm.getEcgByte2Short(obj);
                     int heartNum = hrImpl.countHeartRate(ecgData, getShort(obj, 12));
                     if (heartNum!=-1){
+                        Constant.oneMinHeart.add(heartNum);
                         tvHeartNum.setText("" + heartNum);
+                        application.setHeartNum(heartNum);
                         MyLog.e(TAG, "tvHeartNum：" + heartNum);
                     }
 
-                    String epcData2 = "" + ecgData[0] + "," + ecgData[1] + "," + ecgData[2] + "," + ecgData[3] + "," + ecgData[4] + ",";
                     //MyLog.e(TAG , epcData);
-
-                    Constant.sbHeartData.append(epcData);
+                    if (Constant.sbHeartData.length()<500){
+                        Short ecg0 = ecgData[0];
+                        Short ecg1 = ecgData[1];
+                        Short ecg2 = ecgData[2];
+                        Short ecg3 = ecgData[3];
+                        Short ecg4 = ecgData[4];
+                        String epcData2 = "" + iirFilter.filter(ecg0.intValue()) + ","
+                                + iirFilter.filter(ecg1.intValue()) + ","
+                                + iirFilter.filter(ecg2.intValue()) + ","
+                                + iirFilter.filter(ecg3.intValue()) + ","
+                                +iirFilter.filter(ecg4.intValue()) + ",";
+                        Constant.sbHeartData.append(epcData2);
+                    }
                     //Constant.sbHeartData2.append(epcData2);
 
                     Constant.egcDataCon.add(ecgData[0]);
@@ -171,8 +181,10 @@ public class InformationFragment extends LsmBaseFragment {
 
                     List<Long> rri = hrImpl.countRRI(ecgData, getShort(obj, 12));
                     for (Long value : rri){
-                        Constant.rriBuffer.add(value);
-                        MyLog.e(TAG , "rri====value"+value);
+                        if (value>200&&value<2000){
+                            Constant.rriBuffer.add(value);
+                        }
+                        //MyLog.e(TAG , "rri====value"+value);
                     }
 
 
@@ -231,7 +243,7 @@ public class InformationFragment extends LsmBaseFragment {
                     int magY = Integer.parseInt(hexStr.substring(28, 32), 16);
                     int magZ = Integer.parseInt(hexStr.substring(32, 36), 16);
                     int stepNum = MyLib.countStep(gyroX, gyroY, gyroZ, accX, accY, accZ, magX, magY, magZ);
-                    MyLog.e(TAG, "stepNum：" + stepNum);
+                    //MyLog.e(TAG, "stepNum：" + stepNum);
                     tvStepNum.setText("" + stepNum);
                     break;
                 }
@@ -316,7 +328,7 @@ public class InformationFragment extends LsmBaseFragment {
             case R.id.rl_heart:
                 if (flHeart.getVisibility() == View.GONE) {
                     if (Constant.rriBuffer.size() < 250) {
-                        MyToast.showLong(getContext(), "还没有足够的数据请耐心等待");
+                        MyToast.showLong(getContext(), "还没有足够的数据请耐心等待"+Constant.rriBuffer.size());
                         return;
                     }
                     EventBus.getDefault().post(new HeartChgEvent(heartNum, "心跳值变了"));

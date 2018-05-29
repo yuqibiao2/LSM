@@ -3,13 +3,16 @@ package com.test.lsm.net;
 import com.test.lsm.bean.form.QueryHRVInfo;
 import com.test.lsm.bean.form.QueryRunInfoVo;
 import com.test.lsm.bean.form.RunRecord;
+import com.test.lsm.bean.form.SaveHeartByMinVo;
 import com.test.lsm.bean.form.UserHealthInfo;
 import com.test.lsm.bean.form.UserRegVo;
+import com.test.lsm.bean.json.GetActiveUser;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
 import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
+import com.test.lsm.bean.json.SaveHeartByMin;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
@@ -52,6 +55,78 @@ public class APIMethodManager {
 
     public static APIMethodManager getInstance() {
         return SingletonHolder.INSTANCE;
+    }
+
+
+    /**
+     * 一分钟上传一次身体信息
+     *
+     * @param saveHeartByMinVo
+     * @param callback
+     * @return
+     */
+    public Subscription saveHeartByMin(SaveHeartByMinVo saveHeartByMinVo , final IRequestCallback<SaveHeartByMin> callback){
+
+        Map<String , String> map = new HashMap<>();
+        map.put("userId" , ""+saveHeartByMinVo.getUserId());
+        map.put("heartNum" , ""+saveHeartByMinVo.getHeartNum());
+        map.put("calorieValue" , ""+saveHeartByMinVo.getCalorieValue());
+        map.put("stepNum" , ""+saveHeartByMinVo.getStepNum());
+        map.put("currentTime" , ""+saveHeartByMinVo.getCurrentTime());
+
+        Subscription subscribe = lsmApi.saveHeartByMin(map)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<SaveHeartByMin>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(SaveHeartByMin saveHeartByMin) {
+                        callback.onSuccess(saveHeartByMin);
+                    }
+                });
+
+        return subscribe;
+    }
+
+
+    /**
+     * 得到需要特别上传数据的用户
+     *
+     * @param callback
+     * @return
+     */
+    public Subscription getActiveUserList(final IRequestCallback<GetActiveUser> callback){
+
+        Subscription subscribe = lsmApi.getGetActiveUserList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<GetActiveUser>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetActiveUser getActiveUser) {
+                        callback.onSuccess(getActiveUser);
+                    }
+                });
+
+        return subscribe;
     }
 
     /**

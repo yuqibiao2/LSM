@@ -49,6 +49,8 @@ public class SplashActivity extends LsmBaseActivity {
 
     private boolean connected = false;
 
+    private boolean finished = false;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_splash;
@@ -116,6 +118,7 @@ public class SplashActivity extends LsmBaseActivity {
 
             @Override
             public void onScanning(BleDevice bleDevice) {
+                if (finished) {return;}
                 String dName = bleDevice.getDevice().getName();
                 String mac = bleDevice.getMac();
                 if (dName != null) {
@@ -155,6 +158,7 @@ public class SplashActivity extends LsmBaseActivity {
 
             @Override
             public void onScanFinished(List<BleDevice> scanResultList) {
+                if (finished) {return;}
                 if (!connected) {//没有连接上设备
                     MyToast.showLong(SplashActivity.this, "蓝牙设备连接失败，请在主界面再次连接！");
                     resolveSkip();
@@ -187,6 +191,7 @@ public class SplashActivity extends LsmBaseActivity {
 
     @Override
     protected void onDestroy() {
+        finished = true;
         super.onDestroy();
     }
 }

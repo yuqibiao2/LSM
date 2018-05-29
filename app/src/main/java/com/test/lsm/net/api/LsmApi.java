@@ -1,10 +1,12 @@
 package com.test.lsm.net.api;
 
+import com.test.lsm.bean.json.GetActiveUser;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
 import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
+import com.test.lsm.bean.json.SaveHeartByMin;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
@@ -31,6 +33,12 @@ import rx.Observable;
 
 public interface LsmApi {
 
+    @FormUrlEncoded
+    @POST("saveHeartByMin")
+    Observable<SaveHeartByMin> saveHeartByMin(@FieldMap Map<String, String> map);
+
+    @GET("getActiveUserList")
+    Observable<GetActiveUser> getGetActiveUserList();
 
     @GET("getPushRecordDtl")
     Observable<GetMsgDetail> getMsgDetail(@Query("id") Integer id);
