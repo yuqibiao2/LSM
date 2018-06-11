@@ -150,10 +150,12 @@ public class InformationFragment extends LsmBaseFragment {
 
                     short[] ecgData = Algorithm.getEcgByte2Short(obj);
                     int heartNum = hrImpl.countHeartRate(ecgData, getShort(obj, 12));
-                    if (heartNum!=-1){
+                    if (heartNum>0){
                         Constant.oneMinHeart.add(heartNum);
+                        Constant.hrBuffer.add(heartNum);
                         tvHeartNum.setText("" + heartNum);
                         application.setHeartNum(heartNum);
+                        EventBus.getDefault().post(new HeartChgEvent(heartNum , "心跳变化了"));
                         MyLog.e(TAG, "tvHeartNum：" + heartNum);
                     }
 
@@ -454,7 +456,6 @@ public class InformationFragment extends LsmBaseFragment {
         step.setDate(MyTimeUtils.getCurrentDate());
         step.setHour(MyTimeUtils.getCurrentHour());
         stepService.addCurrentDayStep(step);
-        EventBus.getDefault().post(new StepChgEvent(mStepSum, "步数值更新"));
 
         Log.e(TAG, "updateStepCount : " + mStepSum);
         tvStepNum.setText(mStepSum + "");
@@ -464,9 +465,10 @@ public class InformationFragment extends LsmBaseFragment {
         application.setStepNum(mStepSum);
         application.setStepDistance(Double.parseDouble(distanceByStep));
         application.setCalorieValue(Double.parseDouble(caloriesValue));
-        EventBus.getDefault().post(new PushMsgBean(R.mipmap.msg1));
+        EventBus.getDefault().post(new StepChgEvent(mStepSum, "步数值更新"));
+        //EventBus.getDefault().post(new PushMsgBean(R.mipmap.msg1));
 
-        EventBus.getDefault().post(new CalorieChgEvent(Float.parseFloat(caloriesValue), "步数值更新"));
+        //EventBus.getDefault().post(new CalorieChgEvent(Float.parseFloat(caloriesValue), "步数值更新"));
 
     }
 

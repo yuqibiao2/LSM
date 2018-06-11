@@ -60,10 +60,10 @@ dependencies {
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
     compile files('libs/BaiduLBS_Android.jar')
     compile project(':FastBleLib')
-    compile project(path:':todaystepcounterlib')
+    compile project(path: ':todaystepcounterlib')
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     compile project(':jpush')
-   /* compile project(':LsmAlgorithm')*/
+    /* compile project(':LsmAlgorithm')*/
     debugCompile project(path: ':LsmAlgorithm', configuration: 'debug')
     releaseCompile project(path: ':LsmAlgorithm', configuration: 'release')
 }

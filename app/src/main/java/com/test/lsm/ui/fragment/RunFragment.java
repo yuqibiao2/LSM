@@ -1,12 +1,14 @@
 package com.test.lsm.ui.fragment;
 
-import android.app.Application;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -31,12 +33,15 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.google.gson.Gson;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
+import com.test.lsm.bean.event.RunStartEvent;
+import com.test.lsm.bean.event.RunStopEvent;
 import com.test.lsm.bean.form.RunRecord;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
-import com.test.lsm.utils.BaiduMapUtils;
+import com.test.lsm.ui.fragment.run_bottom.RunBottomFragment1;
+import com.test.lsm.ui.fragment.run_bottom.RunBottomFragment2;
 import com.test.lsm.utils.TimeUtils;
 import com.test.lsm.utils.map.MyOrientationListener;
 import com.yyyu.baselibrary.utils.MyLog;
@@ -48,6 +53,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
+import me.relex.circleindicator.CircleIndicator;
 
 /**
  * 功能：跑步界面
@@ -57,7 +64,7 @@ import butterknife.OnClick;
  * @date 2018/3/23
  */
 
-public class RunFragment extends LsmBaseFragment{
+public class RunFragment extends LsmBaseFragment {
 
     private static final String TAG = "RunFragment";
 
@@ -71,15 +78,26 @@ public class RunFragment extends LsmBaseFragment{
     TextView tv_time;
     @BindView(R.id.tv_run_distance)
     TextView tv_run_distance;
+    @BindView(R.id.vp_run_btm)
+    ViewPager vpRunBtm;
+    @BindView(R.id.ci_run_btm)
+    CircleIndicator ciRunBtm;
+    @BindView(R.id.iv_location_rtn)
+    ImageView ivLocationRtn;
+    @BindView(R.id.rl_run_bottom)
+    RelativeLayout rlRunBottom;
 
     private BaiduMap mBaiduMap;
     private LocationClient mLocationClient;
     private MyLocationListener mLocationListener;
 
     BitmapDescriptor startBD = BitmapDescriptorFactory
-            .fromResource(R.mipmap.ic_me_history_startpoint);
+            .fromResource(R.mipmap.ic_map_circle);
     BitmapDescriptor finishBD = BitmapDescriptorFactory
-            .fromResource(R.mipmap.ic_me_history_finishpoint);
+            .fromResource(R.mipmap.ic_map_circle);
+
+    BitmapDescriptor pointer = BitmapDescriptorFactory
+            .fromResource(R.mipmap.ic_map_pointer);
 
     Polyline mPolyline;
     MapStatus.Builder builder;
@@ -100,6 +118,8 @@ public class RunFragment extends LsmBaseFragment{
     private String startTime;
     private String stopTime;
     private Gson mGson;
+    private List<Fragment> frgList;
+    private BDLocation crtLocation;
 
     @Override
     protected void beforeInit() {
@@ -118,6 +138,7 @@ public class RunFragment extends LsmBaseFragment{
 
     @Override
     protected void initView() {
+        initBottom();
         initMap();
         initLocation();
     }
@@ -136,6 +157,74 @@ public class RunFragment extends LsmBaseFragment{
                 //MyLog.e(TAG ,"onOrientationChanged："+ x);
             }
         });
+
+        /**
+         * 定位到当前位置
+         */
+        ivLocationRtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //将获取的location信息给百度map
+                MyLocationData data = new MyLocationData.Builder()
+                        .accuracy(crtLocation.getRadius())
+                        .latitude(crtLocation.getLatitude())
+                        .direction(mLastX)
+                        .longitude(crtLocation.getLongitude())
+                        .build();
+                mBaiduMap.setMyLocationData(data);
+            }
+        });
+
+    }
+
+    private void initBottom() {
+        frgList = new ArrayList<>();
+        frgList.add(new RunBottomFragment1());
+        frgList.add(new RunBottomFragment2());
+        vpRunBtm.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return frgList.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return frgList.size();
+            }
+        });
+        ciRunBtm.setViewPager(vpRunBtm);
+
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(rlRunBottom);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+         bottomSheetBehavior.setPeekHeight(340);
+        bottomSheetBehavior.setHideable(false);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                //MyLog.e(TAG, "onStateChanged===newState===" + newState);
+                switch (newState){
+                    case BottomSheetBehavior.STATE_COLLAPSED:{
+
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                if (slideOffset<0.01){
+                    rlRunBottom.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+                    vpRunBtm.setVisibility(View.INVISIBLE);
+                }else{
+                    rlRunBottom.setBackgroundColor(Color.parseColor("#DDFFFFFF"));
+                    vpRunBtm.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
     }
 
 
@@ -156,14 +245,14 @@ public class RunFragment extends LsmBaseFragment{
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
-                com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.FOLLOWING, true, null));
+                MyLocationConfiguration.LocationMode.FOLLOWING, true, pointer));
         initZoom();
 
     }
 
     /**
      * 添加地图缩放状态变化监听，当手动放大或缩小地图时，拿到缩放后的比例，然后获取到下次定位，
-     *  给地图重新设置缩放比例，否则地图会重新回到默认的mCurrentZoom缩放比例
+     * 给地图重新设置缩放比例，否则地图会重新回到默认的mCurrentZoom缩放比例
      */
     private void initZoom() {
 
@@ -178,7 +267,7 @@ public class RunFragment extends LsmBaseFragment{
             @Override
             public void onMapStatusChangeFinish(MapStatus arg0) {
                 mCurrentZoom = arg0.zoom;
-                MyLog.i(TAG , "mCurrentZoom："+mCurrentZoom);
+                MyLog.i(TAG, "mCurrentZoom：" + mCurrentZoom);
             }
 
             @Override
@@ -221,6 +310,7 @@ public class RunFragment extends LsmBaseFragment{
         @Override
         public void onReceiveLocation(BDLocation location) {
 
+            crtLocation = location;
             //将获取的location信息给百度map
             MyLocationData data = new MyLocationData.Builder()
                     .accuracy(location.getRadius())
@@ -230,7 +320,7 @@ public class RunFragment extends LsmBaseFragment{
                     .build();
             mBaiduMap.setMyLocationData(data);
 
-            if (isFirstInit){
+            if (isFirstInit) {
                 mLocationClient.stop();
               /*  if (mLocationClient.isStarted()) {
                     mLocationClient.stop();
@@ -260,7 +350,7 @@ public class RunFragment extends LsmBaseFragment{
                 oStart.position(points.get(0));// 覆盖物位置点，第一个点为起点
                 oStart.icon(startBD);// 设置覆盖物图片
                 mBaiduMap.addOverlay(oStart); // 在地图上添加此图层
-                startTimer();//开始计时
+                EventBus.getDefault().post(new RunStartEvent());
                 isRunning = true;
                 hiddenLoadingDialog();
                 iv_run_start.setVisibility(View.GONE);
@@ -270,7 +360,7 @@ public class RunFragment extends LsmBaseFragment{
             //从第二个点开始
             LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
             double distance1 = DistanceUtil.getDistance(last, ll);
-            if (distance1<0.5||distance1>10) {//舍去位置太远的点(1s钟位置移动10m不现实)
+            if (distance1 < 0.5 || distance1 > 10) {//舍去位置太远的点(1s钟位置移动10m不现实)
                 return;
             }
 
@@ -293,10 +383,10 @@ public class RunFragment extends LsmBaseFragment{
             mBaiduMap.addOverlay(oStart);
 
             //将points集合中的点绘制轨迹线条图层，显示在地图上
-            OverlayOptions ooPolyline = new PolylineOptions().width(13).color(0xAAFF0000).points(points);
+            OverlayOptions ooPolyline = new PolylineOptions().width(8).color(0xFF9E41EA).points(points);
             mPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline);
-            distance = BaiduMapUtils.calcDistance(points);
-            tv_run_distance.setText(""+BaiduMapUtils.resolveDistance(distance));
+         /*   distance = BaiduMapUtils.calcDistance(points);
+            tv_run_distance.setText("" + BaiduMapUtils.resolveDistance(distance));*/
         }
 
     }
@@ -323,7 +413,7 @@ public class RunFragment extends LsmBaseFragment{
      */
     private LatLng getMostAccuracyLocation(BDLocation location) {
 
-        MyLog.e(TAG, "location.getRadius()：" + location.getRadius());
+        //MyLog.e(TAG, "location.getRadius()：" + location.getRadius());
 
 
       /*  if (location.getRadius() > 50) {//gps位置精度大于40米的点直接弃用
@@ -331,7 +421,7 @@ public class RunFragment extends LsmBaseFragment{
         }*/
 
         LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-        MyLog.e(TAG, "latitude：" + ll.latitude + "  longitude：" + ll.longitude);
+        // MyLog.e(TAG, "latitude：" + ll.latitude + "  longitude：" + ll.longitude);
 
         if (DistanceUtil.getDistance(last, ll) > 10) {
             last = ll;
@@ -351,43 +441,6 @@ public class RunFragment extends LsmBaseFragment{
 
     private boolean isStartTimer = false;
     private long second = 0;
-
-    /**
-     * 开始计时
-     */
-    private void startTimer() {
-        isStartTimer = true;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (isStartTimer) {
-                    try {
-                        second++;
-                        tv_time.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (tv_time!=null){
-                                    tv_time.setText(TimeUtils.countTimer(second));
-                                }
-                            }
-                        });
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-    }
-
-    /**
-     * 结束计时
-     */
-    private void stopTimer(){
-        second = 0;
-        isStartTimer = false;
-        tv_time.setText(TimeUtils.countTimer(0L));
-    }
 
     /**
      * 开始跑步
@@ -419,7 +472,7 @@ public class RunFragment extends LsmBaseFragment{
         //MyLog.e(TAG , toJson);
 
         showLoadingDialog();
-        stopTimer();
+        EventBus.getDefault().post(new RunStopEvent());
         if (mLocationClient != null /*&& mLocationClient.isStarted()*/ && isRunning) {
             if (mLocationClient.isStarted()) {
                 mLocationClient.stop();
@@ -447,21 +500,20 @@ public class RunFragment extends LsmBaseFragment{
     }
 
 
-    private void startLocation(){
+    private void startLocation() {
 
     }
 
-    private void stopLocation(){
+    private void stopLocation() {
 
     }
 
     /**
      * 保存跑步记录
-     *
      */
     private void saveRunRecord() {
-        if (points.size()<2){
-            MyToast.showLong(getContext() , "您移动的距离太小，记录数据失败！");
+        if (points.size() < 2) {
+            MyToast.showLong(getContext(), "您移动的距离太小，记录数据失败！");
             return;
         }
         RunRecord runRecord = new RunRecord();
@@ -470,16 +522,16 @@ public class RunFragment extends LsmBaseFragment{
         runRecord.setStopTime(stopTime);
         runRecord.setDistance(distance);
         runRecord.setCoordinateInfo(mGson.toJson(points));
-        runRecord.setRunTime(""+TimeUtils.countTimer(second));
+        runRecord.setRunTime("" + TimeUtils.countTimer(second));
         apiMethodManager.saveRunRecord(runRecord, new IRequestCallback<SaveRunRecordReturn>() {
             @Override
             public void onSuccess(SaveRunRecordReturn result) {
-                MyLog.d(TAG , "saveRunRecord==成功=="+result);
+                MyLog.d(TAG, "saveRunRecord==成功==" + result);
             }
 
             @Override
             public void onFailure(Throwable throwable) {
-                MyLog.e(TAG , "saveRunRecord==异常=="+throwable.getMessage());
+                MyLog.e(TAG, "saveRunRecord==异常==" + throwable.getMessage());
             }
         });
     }

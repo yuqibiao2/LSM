@@ -1,61 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/map_run"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="15dp"
-        android:clickable="true" />
-
-    <ImageView
-        android:id="@+id/iv_run_start"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@mipmap/ic_run_start"
-        android:layout_centerInParent="true"/>
-
-    <ImageView
-        android:id="@+id/iv_run_stop"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:src="@mipmap/ic_run_stop"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="150dp"
-        android:visibility="gone"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:minWidth="150dp"
-        android:gravity="center"
-        android:layout_margin="20dp"
-        android:background="@drawable/radius_white_trans_bg"
         android:orientation="vertical">
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/map_run"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:clickable="true" />
+
+        <ImageView
+            android:id="@+id/iv_run_start"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginLeft="20dp"
+            android:src="@mipmap/ic_run_start" />
+
+        <ImageView
+            android:id="@+id/iv_run_stop"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="85dp"
+            android:layout_marginLeft="25dp"
+            android:src="@mipmap/ic_run_stop"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/iv_location_rtn"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="85dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/ic_location_rtn"/>
+
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/tv_run_distance"
+            android:layout_height="150dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/radius_white_trans_bg"
+            android:gravity="center"
+            android:minWidth="150dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="50sp"
-                android:textColor="#00f"
-                android:text="0 m"/>
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_run_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 m"
+                    android:textColor="#00f"
+                    android:textSize="50sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00:00"
+                android:textColor="#f00"
+                android:textSize="30sp" />
         </LinearLayout>
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textColor="#f00"
-            android:text="00:00:00"/>
-    </LinearLayout>
 
+    </RelativeLayout>
 
-</RelativeLayout>
+    <include layout="@layout/pt_run_bottom" />
+
+</android.support.design.widget.CoordinatorLayout>

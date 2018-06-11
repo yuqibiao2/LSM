@@ -141,4 +141,10 @@ public class BottomSheetDialogWrapper extends BottomSheetDialog {
         public void onSlide(@NonNull View bottomSheet, float slideOffset) {
         }
     };
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+    }
+
 }

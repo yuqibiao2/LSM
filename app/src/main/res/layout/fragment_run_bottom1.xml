@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!--体力-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/ic_strong" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_physical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="正常范围"
+                android:textColor="#4A90E2"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_physical"
+                android:layout_width="150dp"
+                android:layout_height="15dp"
+                android:src="@mipmap/ic_bar15" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="体力"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <!--脑力-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/ic_brain" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_mental"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="正常范围"
+                android:textColor="#4A90E2"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_mental"
+                android:layout_width="150dp"
+                android:layout_height="15dp"
+                android:src="@mipmap/ic_bar21" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="0dp"
+            android:text="脑力"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <!--紧张-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/ic_emotion" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_emotion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="正常范围"
+                android:textColor="#4A90E2"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_emotion"
+                android:layout_width="150dp"
+                android:layout_height="15dp"
+                android:src="@mipmap/ic_bar21" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="紧张"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="身体疲脑"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_down1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:text="正常范围"
+                android:textColor="#4A90E2"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_down1"
+                android:layout_width="120dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="5dp"
+                android:src="@mipmap/ic_bar21" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="top"
+            android:layout_weight="0"
+            android:src="@mipmap/ic_down" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="身体疲脑"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_down2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:text="正常范围"
+                android:textColor="#4A90E2"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_down2"
+                android:layout_width="120dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="5dp"
+                android:src="@mipmap/ic_bar21" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

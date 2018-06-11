@@ -3,7 +3,11 @@ package com.test.lsm.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -14,6 +18,9 @@ import com.swm.algorithm.Algorithm;
 import com.swm.algorithm.support.IirFilter;
 import com.test.lsm.R;
 import com.test.lsm.global.Constant;
+import com.yyyu.baselibrary.utils.StatusBarCompat;
+
+import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.util.ArrayList;
 
@@ -32,7 +39,49 @@ public class ECGShowActivity extends LsmBaseActivity {
 
     @BindView(R.id.lc_egc)
     LineChart mChart;
+    @BindView(R.id.ib_nav_lit)
+    ImageButton ibNavLit;
+    @BindView(R.id.tv_max_hr)
+    TextView tvMaxHr;
+    @BindView(R.id.tv_min_hr)
+    TextView tvMinHr;
+    @BindView(R.id.tv_avg_hr)
+    TextView tvAvgHr;
     private IirFilter iirFilter;
+
+    private int minHeart = Integer.MAX_VALUE;
+    private int maxHeart = Integer.MIN_VALUE;
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (flag){
+                CircularFifoQueue<Integer> oneMinHeart = Constant.hrBuffer;
+                int total = 0;
+                for (Integer heartNum : oneMinHeart) {
+                    if (heartNum>maxHeart){
+                        maxHeart = heartNum;
+                    }
+                    if (heartNum<minHeart){
+                        minHeart = heartNum;
+                    }
+                    total += heartNum;
+                }
+                int size = oneMinHeart.size();
+                int avgHearNum =size>0? total /size : 0;
+                tvAvgHr.setText(""+avgHearNum);
+                if (minHeart<Integer.MAX_VALUE){
+                    tvMinHr.setText(""+minHeart);
+                }
+                if (maxHeart>Integer.MIN_VALUE){
+                    tvMaxHr.setText(""+maxHeart);
+                }
+                setData();
+            }
+            mHandler.sendEmptyMessageDelayed(0 , 2*1000);
+        }
+    };
 
     @Override
     public int getLayoutId() {
@@ -44,6 +93,12 @@ public class ECGShowActivity extends LsmBaseActivity {
         super.beforeInit();
 
         iirFilter = Algorithm.newIirFilterInstance();
+    }
+
+    @Override
+    protected boolean setDefaultStatusBarCompat() {
+        StatusBarCompat.compat(this, 0xff000000);
+        return false;
     }
 
     @Override
@@ -63,63 +118,32 @@ public class ECGShowActivity extends LsmBaseActivity {
     protected void initData() {
 
         super.initData();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (flag) {
-                    try {
-                        mChart.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                setData();
-                                mChart.animateXY(2000, 0);
-                                mChart.invalidate();
-                            }
-                        });
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
+        setData();
+        mHandler.sendEmptyMessageDelayed(0 , 2*1000);
+
 
     }
 
     private void initChart() {
-        mChart.setTouchEnabled(true);
-        mChart.setScaleEnabled(true);
-        mChart.getXAxis().setEnabled(true);
-        mChart.getXAxis().setDrawGridLines(true);//不显示网格
-        mChart.getAxisRight().setEnabled(true);//右侧不显示Y轴
-        mChart.getAxisLeft().setEnabled(true);//左不显示Y轴
+        mChart.setTouchEnabled(false);
+        mChart.setScaleEnabled(false);
+        mChart.getXAxis().setEnabled(false);
+        mChart.getXAxis().setDrawGridLines(false);//不显示网格
+        mChart.getAxisRight().setEnabled(false);//右侧不显示Y轴
+        mChart.getAxisLeft().setEnabled(false);//左不显示Y轴
         mChart.getDescription().setEnabled(false);//不设置描述
         mChart.getLegend().setEnabled(false);
+
     }
 
 
     private void setData() {
-        //String epcStr = Constant.sbHeartData2.toString();
-        //MyLog.e(TAG , "epcStr1："+Constant.sbHeartData.toString());
-       // MyLog.e(TAG , "epcStr2："+epcStr);
-       /* if (TextUtils.isEmpty(epcStr)) {
-            return;
-        }*/
-       // String[] split = epcStr.split(",");
         ArrayList<Entry> yVals = new ArrayList<Entry>();
-       /* for (int i = 0; i <Constant.egcDataCon.size(); i++) {
-            Short aShort = Constant.egcDataCon.get(i);
-           Integer canDrawValue = iirFilter.filter(Integer.valueOf(aShort));
-
-            yVals.add(new Entry(i, canDrawValue));
-            MyLog.e("aShort::"+aShort);
-        }*/
-
-        ArrayList<Entry> yVals2 = new ArrayList<Entry>();
-        for (int i = 0; i <Constant.egcDataCon.size(); i++) {
-            Short aShort = Constant.egcDataCon.get(i);
+        CircularFifoQueue<Short> egcDataCon = Constant.egcDataCon;
+        for (int i = 0; i < egcDataCon.size(); i++) {
+            Short aShort = egcDataCon.get(i);
             Integer filter = iirFilter.filter(Integer.valueOf(aShort));
-            yVals2.add(new Entry(i, filter));
+            yVals.add(new Entry(i, filter));
         }
 
        /* short[] data1 = new short[]{
@@ -128,59 +152,26 @@ public class ECGShowActivity extends LsmBaseActivity {
             yVals.add(new Entry(i, data1[i]));
         }*/
 
-       ArrayList<ILineDataSet> dataSetList = new ArrayList<>();
+        ArrayList<ILineDataSet> dataSetList = new ArrayList<>();
 
         LineDataSet set1;
-        LineDataSet set2;
 
-      /*  if (mChart.getData() != null &&
-                mChart.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
-            set1.setValues(yVals);
-
-            mChart.getData().notifyDataChanged();
-            mChart.notifyDataSetChanged();
-        } else {
-
-
-            set1 = new LineDataSet(yVals, "");
-            set1.setDrawCircles(false);
-            set1.setLineWidth(1.8f);
-            set1.setColor(Color.WHITE);
-            dataSetList.add(set1);
-
-            set2 = new LineDataSet(yVals, "");
-            set2.setDrawCircles(false);
-            set2.setLineWidth(1.8f);
-            set2.setColor(Color.WHITE);
-            dataSetList.add(set2);
-
-
-            LineData data = new LineData(dataSetList);
-            data.setValueTextSize(9f);
-            data.setDrawValues(false);
-            mChart.setData(data);
-        }*/
         set1 = new LineDataSet(yVals, "");
         set1.setDrawCircles(false);
         set1.setLineWidth(1.8f);
         set1.setColor(Color.WHITE);
+        set1.setColor(Color.parseColor("#3CFF00"));
         dataSetList.add(set1);
-
-        set2 = new LineDataSet(yVals2, "");
-        set2.setDrawCircles(false);
-        set2.setLineWidth(1.8f);
-        set2.setColor(Color.WHITE);
-        dataSetList.add(set2);
-
 
         LineData data = new LineData(dataSetList);
         data.setValueTextSize(9f);
         data.setDrawValues(false);
         mChart.setData(data);
+        mChart.animateXY(2000, 0);
+        mChart.invalidate();
     }
 
-    public void back(View view){
+    public void back(View view) {
         finish();
     }
 

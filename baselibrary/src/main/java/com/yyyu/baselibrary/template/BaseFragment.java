@@ -32,8 +32,13 @@ public abstract class BaseFragment extends Fragment {
         rootView = inflater.from(getActivity()).inflate(getLayoutId(), container, false);
         mGson = new Gson();
         resourceUtils = ResourceUtils.getInstance(getContext());
-        init();
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        init();
     }
 
     private void init() {

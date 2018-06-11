@@ -14,11 +14,12 @@ public class Constant {
 
     public static StringBuffer sbHeartData = new StringBuffer();
     //public static StringBuffer sbHeartData2 = new StringBuffer();
-    public static CircularFifoQueue<Short> egcDataCon = new CircularFifoQueue(1500);
+    public static CircularFifoQueue<Short> egcDataCon = new CircularFifoQueue(2000);
 
     public static CircularFifoQueue<Long> rriBuffer = new CircularFifoQueue(300);
 
     //一分钟的心跳值
     public static CircularFifoQueue<Integer> oneMinHeart = new CircularFifoQueue<>(60);
+    public static CircularFifoQueue<Integer> hrBuffer = new CircularFifoQueue<>(120);
 
 }

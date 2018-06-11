@@ -4,6 +4,7 @@ import com.test.lsm.bean.form.QueryHRVInfo;
 import com.test.lsm.bean.form.QueryRunInfoVo;
 import com.test.lsm.bean.form.RunRecord;
 import com.test.lsm.bean.form.SaveHeartByMinVo;
+import com.test.lsm.bean.form.SaveUserHRVVo;
 import com.test.lsm.bean.form.UserHealthInfo;
 import com.test.lsm.bean.form.UserRegVo;
 import com.test.lsm.bean.json.GetActiveUser;
@@ -14,10 +15,12 @@ import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.bean.json.SaveHeartByMin;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
+import com.test.lsm.bean.json.SaveUserHRV;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.json.UserRegReturn;
 import com.test.lsm.net.api.LsmApi;
+import com.yyyu.baselibrary.utils.MyTimeUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +59,44 @@ public class APIMethodManager {
     public static APIMethodManager getInstance() {
         return SingletonHolder.INSTANCE;
     }
+
+
+    public Subscription saveUserHRV(SaveUserHRVVo saveUserHRVVo , final IRequestCallback<SaveUserHRV> callback){
+
+        Map<String , String> map = new HashMap<>();
+        map.put("userId" , ""+saveUserHRVVo.getUserId());
+        map.put("MINDFITNESS" , ""+saveUserHRVVo.getMINDFITNESS());
+        map.put("BODYFITNESS" , ""+saveUserHRVVo.getBODYFITNESS());
+        map.put("MOODSTABILITY" , ""+saveUserHRVVo.getMOODSTABILITY());
+        map.put("STRESSTENSION" , ""+saveUserHRVVo.getSTRESSTENSION());
+        map.put("MINDFATIGUE" , ""+saveUserHRVVo.getMINDFATIGUE());
+        map.put("BODYFATIGUE" , ""+saveUserHRVVo.getBODYFATIGUE());
+        map.put("currentTime" , ""+ MyTimeUtils.getCurrentDateTime());
+
+
+        Subscription subscribe = lsmApi.saveUserHRV(map)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<SaveUserHRV>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(SaveUserHRV saveUserHRV) {
+                        callback.onSuccess(saveUserHRV);
+                    }
+                });
+
+        return subscribe;
+    }
+
 
 
     /**

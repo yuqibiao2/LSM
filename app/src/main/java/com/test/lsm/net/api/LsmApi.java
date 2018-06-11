@@ -8,6 +8,7 @@ import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.bean.json.SaveHeartByMin;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
+import com.test.lsm.bean.json.SaveUserHRV;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.json.UserRegReturn;
@@ -32,6 +33,11 @@ import rx.Observable;
  */
 
 public interface LsmApi {
+
+
+    @FormUrlEncoded
+    @POST("saveUserHRV")
+    Observable<SaveUserHRV> saveUserHRV(@FieldMap Map<String, String> map);
 
     @FormUrlEncoded
     @POST("saveHeartByMin")

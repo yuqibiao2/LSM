@@ -25,7 +25,14 @@ public abstract class LsmBaseActivity extends BaseActivity {
         super.beforeInit();
         mUnbind = ButterKnife.bind(this);
         loadingDialog = new LoadingDialog(this);
-        StatusBarCompat.compat(this, 0xfff0f0f0);
+        if (setDefaultStatusBarCompat()){
+            StatusBarCompat.compat(this, 0xfff0f0f0);
+        }
+    }
+
+    protected  boolean setDefaultStatusBarCompat(){
+
+        return true;
     }
 
     @Override

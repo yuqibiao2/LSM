@@ -9,10 +9,14 @@ import android.support.annotation.Nullable;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.data.BleDevice;
 import com.test.lsm.MyApplication;
+import com.test.lsm.bean.form.QueryHRVInfo;
 import com.test.lsm.bean.form.SaveHeartByMinVo;
+import com.test.lsm.bean.form.SaveUserHRVVo;
 import com.test.lsm.bean.form.UserHealthInfo;
 import com.test.lsm.bean.json.GetActiveUser;
+import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.SaveHeartByMin;
+import com.test.lsm.bean.json.SaveUserHRV;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.global.Constant;
@@ -64,8 +68,90 @@ public class UploadHealthInfoService extends Service {
 
         toUploadSpecified(phone);
         toUploadUsual();
+        toUploadUserHRV();
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    /**
+     * 上传用户HRV（每十分钟上传一次）
+     *
+     */
+    private void toUploadUserHRV(){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    try {
+                        Thread.sleep(10*60*1000);
+
+                        CircularFifoQueue<Long> rriBuffer = Constant.rriBuffer;
+                        if (!application.isBleConnected()|| rriBuffer.size()<200) {
+                            continue;
+                        }
+                        StringBuffer rrlIntervalSb = new StringBuffer();
+                        for (int i=0 ; i<rriBuffer.size() ; i++){
+                            Long rriValue = rriBuffer.get(i);
+                            if (i==rriBuffer.size()-1){
+                                rrlIntervalSb.append(rriValue+"");
+                            }else{
+                                rrlIntervalSb.append(rriValue+",");
+                            }
+                        }
+                        QueryHRVInfo hrvInfo = new QueryHRVInfo();
+                        hrvInfo.setRrInterval(rrlIntervalSb.toString());
+                        apiMethodManager.getHRVInfo(hrvInfo, new IRequestCallback<GetHRVInfoReturn>() {
+                            @Override
+                            public void onSuccess(GetHRVInfoReturn result) {
+                                List<GetHRVInfoReturn.HRVIndexBean> hrvIndex = result.getHRVIndex();
+                                if (hrvIndex != null && hrvIndex.size() > 0) {
+                                    GetHRVInfoReturn.HRVIndexBean hrvIndexBean = hrvIndex.get(0);
+                                    //---体力状态
+                                    Integer bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());
+                                    //---身体疲劳
+                                    Integer bodyFatigue = Integer.parseInt(hrvIndexBean.getBodyFatigue());
+                                    //---压力紧张
+                                    Integer stressTension = Integer.parseInt(hrvIndexBean.getStressTension());
+                                    //---心情稳定
+                                    Integer moodStability = Integer.parseInt(hrvIndexBean.getMoodStability());
+                                    SaveUserHRVVo saveUserHRVVo = new SaveUserHRVVo();
+                                    saveUserHRVVo.setUserId(user_id);
+                                    saveUserHRVVo.setBODYFITNESS(""+hrvIndexBean.getBodyFitness());
+                                    saveUserHRVVo.setBODYFATIGUE(""+hrvIndexBean.getBodyFatigue());
+                                    saveUserHRVVo.setSTRESSTENSION(""+hrvIndexBean.getStressTension());
+                                    saveUserHRVVo.setMOODSTABILITY(""+hrvIndexBean.getMoodStability());
+                                    saveUserHRVVo.setMINDFITNESS(""+hrvIndexBean.getMindFitness());
+                                    saveUserHRVVo.setMINDFATIGUE(""+hrvIndexBean.getBodyFatigue());
+
+                                    apiMethodManager.saveUserHRV(saveUserHRVVo, new IRequestCallback<SaveUserHRV>() {
+                                        @Override
+                                        public void onSuccess(SaveUserHRV result) {
+                                            String code = result.getResult();
+                                            MyLog.e(TAG , "==code="+code);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Throwable throwable) {
+                                            MyLog.e(TAG , ""+throwable.getMessage());
+                                        }
+                                    });
+
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Throwable throwable) {
+                                MyLog.e(TAG, "getHRVInfo异常：" + throwable.getMessage());
+                            }
+                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
     }
 
     /**
@@ -111,7 +197,7 @@ public class UploadHealthInfoService extends Service {
                             }
                         });
 
-                        Constant.oneMinHeart = new CircularFifoQueue<>();
+                        Constant.oneMinHeart = new CircularFifoQueue<>(60);
 
                     }
                 } catch (InterruptedException e) {

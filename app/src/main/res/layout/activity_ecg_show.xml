@@ -8,7 +8,8 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_scan"
         style="@style/base_tb"
-        android:background="@color/my_dark">
+        android:background="@color/my_dark"
+        android:fitsSystemWindows="true">
 
         <ImageButton
             android:id="@+id/ib_nav_lit"
@@ -16,33 +17,75 @@
             android:layout_height="match_parent"
             android:background="@color/my_trans"
             android:onClick="back"
-            android:src="@mipmap/ic_back" />
+            android:src="@mipmap/ic_back_blue" />
+
+
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:src="@mipmap/ic_red_heart" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_max_hr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/my_white" />
+
+            <TextView
+                android:id="@+id/tv_min_hr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/my_white" />
+        </LinearLayout>
 
         <TextView
-            style="@style/base_tv"
-            android:text="心率图"
-            android:textColor="#707070"
-            android:textSize="14sp" />
+            android:id="@+id/tv_avg_hr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="0"
+            android:textColor="@color/my_white"
+            android:textSize="30sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" bpm"
+            android:textColor="@color/my_white"
+            android:textSize="20sp" />
+
     </android.support.v7.widget.Toolbar>
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lc_egc"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp" />
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_weight="2" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="right"
+        android:gravity="center"
         android:orientation="horizontal">
+
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:text="record"/>
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/green_circle"
+            android:text="record"
+            android:textColor="@color/my_white" />
     </LinearLayout>
 
 </LinearLayout>

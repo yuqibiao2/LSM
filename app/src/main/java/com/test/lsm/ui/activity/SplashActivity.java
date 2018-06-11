@@ -76,8 +76,8 @@ public class SplashActivity extends LsmBaseActivity {
     protected void afterInit() {
         super.afterInit();
 
-        //resolveSkip();
-        toConnectLsm();
+        resolveSkip();
+        //toConnectLsm();
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.splash_anime);
         iv_splash.setAnimation(animation);
