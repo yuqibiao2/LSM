@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.test.lsm.R;
 import com.test.lsm.bean.event.HeartChgEvent;
+import com.test.lsm.bean.event.RefreshHearthInfoEvent;
 import com.test.lsm.bean.form.QueryHRVInfo;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.global.Constant;
@@ -82,8 +83,7 @@ public class HeartDetailFragment extends LsmBaseFragment {
 
 
     @Subscribe(threadMode = ThreadMode.MainThread)
-    public void updateHeart(HeartChgEvent heartChgEvent) {
-        int heartNum = heartChgEvent.getHeartNUm();
+    public void updateHeart(RefreshHearthInfoEvent heartChgEvent) {
 
        /* CircularFifoQueue<Integer> queue = MyLib.queue;
         List<Integer> rriList = new ArrayList<>();

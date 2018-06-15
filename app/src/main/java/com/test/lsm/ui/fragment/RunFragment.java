@@ -179,8 +179,8 @@ public class RunFragment extends LsmBaseFragment {
 
     private void initBottom() {
         frgList = new ArrayList<>();
-        frgList.add(new RunBottomFragment1());
         frgList.add(new RunBottomFragment2());
+        frgList.add(new RunBottomFragment1());
         vpRunBtm.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {

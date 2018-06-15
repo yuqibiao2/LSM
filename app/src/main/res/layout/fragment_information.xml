@@ -355,8 +355,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/ll_con3"
-                        android:layout_below="@+id/ll_con3"
+                        android:layout_alignRight="@+id/ll_con4"
+                        android:layout_below="@+id/ll_con4"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="20dp"
                         android:text="目前状态"
@@ -371,6 +371,97 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone">
 
+                </FrameLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="16dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rl_hr_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@color/my_white"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="40dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_ecg" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_con5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textColor="#000"
+                                android:textSize="30sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="心率记录"
+                                android:textColor="#000"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/ll_con5"
+                        android:layout_below="@+id/ll_con5"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="20dp"
+                        android:text="目前状态"
+                        android:visibility="invisible"
+                        android:textSize="10sp" />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_hr_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <fragment
+                        android:id="@+id/frag_hr_chart"
+                        android:name="com.test.lsm.ui.fragment.information_detail.HRChartDetailFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
                 </FrameLayout>
             </LinearLayout>
 

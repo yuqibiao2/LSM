@@ -20,6 +20,12 @@ public class Constant {
 
     //一分钟的心跳值
     public static CircularFifoQueue<Integer> oneMinHeart = new CircularFifoQueue<>(60);
+
     public static CircularFifoQueue<Integer> hrBuffer = new CircularFifoQueue<>(120);
+
+    public static CircularFifoQueue<Integer> hrBuffer2 = new CircularFifoQueue<>(200);
+
+    public static boolean isHRChartDetailShow = false;
+
 
 }

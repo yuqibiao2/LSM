@@ -14,6 +14,18 @@ import java.util.TimeZone;
 public class MyTimeUtils {
 
     /**
+     * 忽略时分秒
+     *
+     * @param datetime
+     * @return
+     */
+    public static long parseDateTimeToDate(String datetime){
+
+        return parseDate("yyyy-MM-dd" ,datetime ).getTime();
+    }
+
+
+    /**
      * 得到当前小时
      *
      * @return
@@ -193,14 +205,26 @@ public class MyTimeUtils {
      * @return
      */
     public static  String getCurrentWeek() {
+
+        return getWeek(System.currentTimeMillis());
+    }
+
+    /**
+     * 得到传入时间的星期
+     *
+     * @param datetime
+     * @return
+     */
+    public static String getWeek(long datetime){
         String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date(System.currentTimeMillis()));
+        cal.setTime(new Date(datetime));
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
         if (w < 0)
             w = 0;
         return weekDays[w];
     }
+
 
     /**
      * 得到当前日

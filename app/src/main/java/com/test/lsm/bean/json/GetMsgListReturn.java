@@ -35,6 +35,7 @@ public class GetMsgListReturn {
         private String PUSH_IMAGE_URL;
         private String ID;
         private String PUSH_TITLE;
+        private String PUSH_TIME;
 
         public String getPUSH_IMAGE_URL() {
             return PUSH_IMAGE_URL;
@@ -54,6 +55,14 @@ public class GetMsgListReturn {
 
         public String getPUSH_TITLE() {
             return PUSH_TITLE;
+        }
+
+        public String getPUSH_TIME() {
+            return PUSH_TIME;
+        }
+
+        public void setPUSH_TIME(String PUSH_TIME) {
+            this.PUSH_TIME = PUSH_TIME;
         }
 
         public void setPUSH_TITLE(String PUSH_TITLE) {

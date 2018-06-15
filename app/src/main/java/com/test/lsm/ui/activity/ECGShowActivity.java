@@ -17,6 +17,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.swm.algorithm.Algorithm;
 import com.swm.algorithm.support.IirFilter;
 import com.test.lsm.R;
+import com.test.lsm.bean.event.HeartChgEvent;
 import com.test.lsm.global.Constant;
 import com.yyyu.baselibrary.utils.StatusBarCompat;
 
@@ -25,6 +26,9 @@ import org.apache.commons.collections4.queue.CircularFifoQueue;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import de.greenrobot.event.ThreadMode;
 
 /**
  * 功能：心电图展示
@@ -70,7 +74,7 @@ public class ECGShowActivity extends LsmBaseActivity {
                 }
                 int size = oneMinHeart.size();
                 int avgHearNum =size>0? total /size : 0;
-                tvAvgHr.setText(""+avgHearNum);
+                tvMinHr.setText(""+avgHearNum);
                 if (minHeart<Integer.MAX_VALUE){
                     tvMinHr.setText(""+minHeart);
                 }
@@ -91,7 +95,7 @@ public class ECGShowActivity extends LsmBaseActivity {
     @Override
     public void beforeInit() {
         super.beforeInit();
-
+        EventBus.getDefault().register(this);
         iirFilter = Algorithm.newIirFilterInstance();
     }
 
@@ -125,8 +129,8 @@ public class ECGShowActivity extends LsmBaseActivity {
     }
 
     private void initChart() {
-        mChart.setTouchEnabled(false);
-        mChart.setScaleEnabled(false);
+        mChart.setTouchEnabled(true);
+        mChart.setScaleEnabled(true);
         mChart.getXAxis().setEnabled(false);
         mChart.getXAxis().setDrawGridLines(false);//不显示网格
         mChart.getAxisRight().setEnabled(false);//右侧不显示Y轴
@@ -175,6 +179,11 @@ public class ECGShowActivity extends LsmBaseActivity {
         finish();
     }
 
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void updateHeart(HeartChgEvent heartChgEvent) {
+        tvAvgHr.setText(""+heartChgEvent.getHeartNUm());
+    }
+
     public static void startAction(Activity activity) {
         activity.startActivity(new Intent(activity, ECGShowActivity.class));
     }
@@ -183,5 +192,6 @@ public class ECGShowActivity extends LsmBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         flag = false;
+        EventBus.getDefault().unregister(this);
     }
 }

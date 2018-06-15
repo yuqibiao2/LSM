@@ -95,6 +95,7 @@ public class TodayFragment extends LsmBaseFragment {
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 page = 1;
                 mData.clear();
+                PushMsgAdapter.tipHolder.clear();
                 initData();
             }
         });
@@ -106,9 +107,9 @@ public class TodayFragment extends LsmBaseFragment {
             }
         });
 
-        pushMsgAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        pushMsgAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 Bundle bundle = new Bundle();
                 bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, "ttttt");
                 bundle.putString(JPushInterface.EXTRA_ALERT, mData.get(position).getID());

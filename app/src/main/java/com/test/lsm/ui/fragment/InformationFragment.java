@@ -9,16 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,15 +34,17 @@ import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.bean.InfoBean;
-import com.test.lsm.bean.PushMsgBean;
 import com.test.lsm.bean.event.CalorieChgEvent;
+import com.test.lsm.bean.event.ECGChgEvent;
 import com.test.lsm.bean.event.HeartChgEvent;
+import com.test.lsm.bean.event.RefreshHearthInfoEvent;
 import com.test.lsm.bean.event.StepChgEvent;
 import com.test.lsm.db.bean.Step;
 import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.global.Constant;
 import com.test.lsm.ui.activity.ECGShowActivity;
+import com.test.lsm.ui.activity.ECGShowActivity2;
 import com.today.step.lib.ISportStepInterface;
 import com.today.step.lib.SportStepJsonUtils;
 import com.today.step.lib.TodayStepService;
@@ -58,7 +57,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.greenrobot.event.EventBus;
@@ -103,6 +101,8 @@ public class InformationFragment extends LsmBaseFragment {
     RelativeLayout rlCalorie;
     @BindView(R.id.ll_container)
     LinearLayout llContainer;
+    @BindView(R.id.fl_hr_chart)
+    FrameLayout flHrChart;
 
     private Activity mAct;
     private MyApplication application;
@@ -116,7 +116,7 @@ public class InformationFragment extends LsmBaseFragment {
 
     HeartRate hrImpl = Algorithm.newHeartRateInstance();
 
-    private IirFilter iirFilter  =  Algorithm.newIirFilterInstance();
+    private IirFilter iirFilter = Algorithm.newIirFilterInstance();
 
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
@@ -149,18 +149,23 @@ public class InformationFragment extends LsmBaseFragment {
                     String epcData = "" + data[0] + "," + data[1] + "," + data[2] + "," + data[3] + "," + data[4] + ",";
 
                     short[] ecgData = Algorithm.getEcgByte2Short(obj);
-                    int heartNum = hrImpl.countHeartRate(ecgData, getShort(obj, 12));
-                    if (heartNum>0){
+
+                    //EventBus.getDefault().post(new ECGChgEvent(ecgData, "得到ECG的值了==="));
+
+                    int heartNum = hrImpl.countHeartRate(ecgData, getShort(obj, 11));
+                    //MyLog.e(TAG , "epcData=="+epcData);
+                    if (heartNum > 0) {
                         Constant.oneMinHeart.add(heartNum);
                         Constant.hrBuffer.add(heartNum);
+                        Constant.hrBuffer2.add(heartNum);
                         tvHeartNum.setText("" + heartNum);
                         application.setHeartNum(heartNum);
-                        EventBus.getDefault().post(new HeartChgEvent(heartNum , "心跳变化了"));
+                        EventBus.getDefault().post(new HeartChgEvent(heartNum, "心跳变化了"));
                         MyLog.e(TAG, "tvHeartNum：" + heartNum);
                     }
 
                     //MyLog.e(TAG , epcData);
-                    if (Constant.sbHeartData.length()<500){
+                    if (Constant.sbHeartData.length() < 500) {
                         Short ecg0 = ecgData[0];
                         Short ecg1 = ecgData[1];
                         Short ecg2 = ecgData[2];
@@ -170,7 +175,7 @@ public class InformationFragment extends LsmBaseFragment {
                                 + iirFilter.filter(ecg1.intValue()) + ","
                                 + iirFilter.filter(ecg2.intValue()) + ","
                                 + iirFilter.filter(ecg3.intValue()) + ","
-                                +iirFilter.filter(ecg4.intValue()) + ",";
+                                + iirFilter.filter(ecg4.intValue()) + ",";
                         Constant.sbHeartData.append(epcData2);
                     }
                     //Constant.sbHeartData2.append(epcData2);
@@ -182,8 +187,8 @@ public class InformationFragment extends LsmBaseFragment {
                     Constant.egcDataCon.add(ecgData[4]);
 
                     List<Long> rri = hrImpl.countRRI(ecgData, getShort(obj, 12));
-                    for (Long value : rri){
-                        if (value>200&&value<2000){
+                    for (Long value : rri) {
+                        if (value > 200 && value < 2000) {
                             Constant.rriBuffer.add(value);
                         }
                         //MyLog.e(TAG , "rri====value"+value);
@@ -255,6 +260,7 @@ public class InformationFragment extends LsmBaseFragment {
     });
     private int heartNum;
     private IStepService stepService;
+    private List<FrameLayout> itemContainer;
 
 
     /**
@@ -276,8 +282,7 @@ public class InformationFragment extends LsmBaseFragment {
      * 通过byte数组取到short
      *
      * @param b
-     * @param index
-     *            第几位开始取
+     * @param index 第几位开始取
      * @return
      */
     public static short getShort(byte[] b, int index) {
@@ -303,6 +308,12 @@ public class InformationFragment extends LsmBaseFragment {
 
         stepService = new StepService();
 
+        itemContainer = new ArrayList<>();
+        itemContainer.add(flHeart);
+        itemContainer.add(flStep);
+        itemContainer.add(flCalorie);
+        itemContainer.add(flHrChart);
+
     }
 
     @Override
@@ -321,56 +332,67 @@ public class InformationFragment extends LsmBaseFragment {
         initStepCount();
     }
 
-    @OnClick({R.id.rl_heart, R.id.rl_step, R.id.rl_calorie, R.id.rl_ecg})
+    @OnClick({R.id.rl_heart, R.id.rl_step, R.id.rl_calorie, R.id.rl_ecg , R.id.rl_hr_chart})
     public void onItemClick(View view) {
 
-       // TransitionManager.beginDelayedTransition(llContainer);
+        // TransitionManager.beginDelayedTransition(llContainer);
 
         switch (view.getId()) {
             case R.id.rl_heart:
-                if (flHeart.getVisibility() == View.GONE) {
-                    if (Constant.rriBuffer.size() < 250) {
-                        MyToast.showLong(getContext(), "还没有足够的数据请耐心等待"+Constant.rriBuffer.size());
-                        return;
-                    }
-                    EventBus.getDefault().post(new HeartChgEvent(heartNum, "心跳值变了"));
-                    flHeart.setVisibility(View.VISIBLE);
-                } else {
-                    flHeart.setVisibility(View.GONE);
+                if (Constant.rriBuffer.size() < 250) {
+                    MyToast.showLong(getContext(), "还没有足够的数据请耐心等待" + Constant.rriBuffer.size());
+                    return;
                 }
-                flStep.setVisibility(View.GONE);
-                flCalorie.setVisibility(View.GONE);
+                openItem(0);
+                if (flHeart.getVisibility() == View.VISIBLE) {
+                    EventBus.getDefault().post(new RefreshHearthInfoEvent());
+                }
                 break;
             case R.id.rl_step:
-                flHeart.setVisibility(View.GONE);
-                if (flStep.getVisibility() == View.GONE) {
+                openItem(1);
+                if (flStep.getVisibility() == View.VISIBLE) {
                     EventBus.getDefault().post(new StepChgEvent(mStepSum, "步数值更新"));
-                    flStep.setVisibility(View.VISIBLE);
-                } else {
-                    flStep.setVisibility(View.GONE);
                 }
-                flCalorie.setVisibility(View.GONE);
                 break;
             case R.id.rl_calorie:
-                flHeart.setVisibility(View.GONE);
-                flStep.setVisibility(View.GONE);
-                if (flCalorie.getVisibility() == View.GONE) {
+                openItem(2);
+                if (flCalorie.getVisibility() == View.VISIBLE) {
                     String calorieByStep = SportStepJsonUtils.getCalorieByStep(mStepSum);
                     EventBus.getDefault().post(new CalorieChgEvent(Float.parseFloat(calorieByStep), "步数值更新"));
-                    flCalorie.setVisibility(View.VISIBLE);
-                } else {
-                    flCalorie.setVisibility(View.GONE);
                 }
                 break;
             case R.id.rl_ecg:
-                if (!application.isBleConnected()){
-                    MyToast.showLong(getContext() , "蓝牙设备未连接");
-                }else{
+                if (!application.isBleConnected()) {
+                    MyToast.showLong(getContext(), "蓝牙设备未连接");
+                } else {
                     ECGShowActivity.startAction(getActivity());
+                }
+                break;
+            case R.id.rl_hr_chart:
+                openItem(3);
+                MyLog.e(TAG , "==============");
+                if (flHrChart.getVisibility() == View.VISIBLE){
+                    Constant.isHRChartDetailShow = true;
                 }
                 break;
         }
         view.setVisibility(View.VISIBLE);
+    }
+
+    private void openItem(int position){
+        Constant.isHRChartDetailShow = false;
+        for (int i = 0; i < itemContainer.size(); i++) {
+            FrameLayout item = itemContainer.get(i);
+            if (position==i){
+                if (item.getVisibility() == View.VISIBLE){
+                    item.setVisibility(View.GONE);
+                }else{
+                    item.setVisibility(View.VISIBLE);
+                }
+            }else{
+                item.setVisibility(View.GONE);
+            }
+        }
     }
 
     private static final int REFRESH_STEP_WHAT = 1000;
@@ -405,14 +427,6 @@ public class InformationFragment extends LsmBaseFragment {
 
             }
         }, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
     }
 
     @Override

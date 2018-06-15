@@ -44,6 +44,7 @@ public class GetMsgDetail {
 
             private String PUSH_DESC;
             private String PUSH_IMAGE_URL;
+            private String FILE_ICON_URL;
             private String PUSH_TIME;
             private String USER_ID;
             private int ID;
@@ -63,6 +64,14 @@ public class GetMsgDetail {
 
             public void setPUSH_IMAGE_URL(String PUSH_IMAGE_URL) {
                 this.PUSH_IMAGE_URL = PUSH_IMAGE_URL;
+            }
+
+            public String getFILE_ICON_URL() {
+                return FILE_ICON_URL;
+            }
+
+            public void setFILE_ICON_URL(String FILE_ICON_URL) {
+                this.FILE_ICON_URL = FILE_ICON_URL;
             }
 
             public String getPUSH_TIME() {
