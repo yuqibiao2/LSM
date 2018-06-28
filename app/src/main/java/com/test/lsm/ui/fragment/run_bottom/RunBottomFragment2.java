@@ -7,6 +7,7 @@ import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.HeartChgEvent;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
+import com.test.lsm.bean.event.RefreshRunHRVEvent;
 import com.test.lsm.bean.event.RunStartEvent;
 import com.test.lsm.bean.event.RunStopEvent;
 import com.test.lsm.bean.event.StepChgEvent;
@@ -92,7 +93,7 @@ public class RunBottomFragment2 extends LsmBaseFragment {
     public void runStop(RunStopEvent runStopEvent) {
         isStartRun = false;
         stopTimer();
-        EventBus.getDefault().post(new RefreshHearthInfoEvent());
+        EventBus.getDefault().post(new RefreshRunHRVEvent());
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)

@@ -43,8 +43,8 @@ import com.test.lsm.db.bean.Step;
 import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.global.Constant;
-import com.test.lsm.ui.activity.ECGShowActivity;
-import com.test.lsm.ui.activity.ECGShowActivity2;
+import com.test.lsm.ui.activity.ECGShowActivity3;
+import com.test.lsm.utils.AlgorithmWrapper;
 import com.today.step.lib.ISportStepInterface;
 import com.today.step.lib.SportStepJsonUtils;
 import com.today.step.lib.TodayStepService;
@@ -53,7 +53,10 @@ import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 import com.yyyu.lsmalgorithm.MyLib;
 
+import org.apache.commons.collections4.queue.CircularFifoQueue;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -92,7 +95,6 @@ public class InformationFragment extends LsmBaseFragment {
     FrameLayout flStep;
     @BindView(R.id.fl_calorie)
     FrameLayout flCalorie;
-    Unbinder unbinder;
     @BindView(R.id.rl_heart)
     RelativeLayout rlHeart;
     @BindView(R.id.rl_step)
@@ -107,14 +109,17 @@ public class InformationFragment extends LsmBaseFragment {
     private Activity mAct;
     private MyApplication application;
 
-    double[] rriArray = new double[700];
-    double[] timeArray = new double[700];
-    short[] currentRriArray = new short[700];
+    CircularFifoQueue<Integer> ecgBuffer = new CircularFifoQueue(2500);
 
-    private int index = 0;
+    private int index= 0;
 
+    private int rriIndex = 0;
 
-    HeartRate hrImpl = Algorithm.newHeartRateInstance();
+    //HeartRate hrImpl = Algorithm.newHeartRateInstance();
+
+    double[] rriAry = new double[196000];
+    double[] timeAry = new double[196000];
+
 
     private IirFilter iirFilter = Algorithm.newIirFilterInstance();
 
@@ -124,8 +129,8 @@ public class InformationFragment extends LsmBaseFragment {
             switch (msg.what) {
                 case 0: {//心电图
                     byte[] obj = (byte[]) msg.obj;
-                    //TODO 处理心电图数据
-                    String hexStr = HexUtil.encodeHexStr(obj);
+                    // 处理心电图数据
+                    /*String hexStr = HexUtil.encodeHexStr(obj);
                     String substring = hexStr.substring(0, 4);
                     int parseInt = Integer.parseInt(substring, 16);
                     //MyLog.e(TAG, "encodeHexStr===" + hexStr);
@@ -134,7 +139,7 @@ public class InformationFragment extends LsmBaseFragment {
                             getECGValue(2, obj),
                             getECGValue(3, obj),
                             getECGValue(4, obj),
-                            getECGValue(5, obj)};
+                            getECGValue(5, obj)};*/
 
                  /*  int[] data = new int[]{
                            Integer.parseInt(hexStr.substring(0, 4), 16),
@@ -144,24 +149,54 @@ public class InformationFragment extends LsmBaseFragment {
                            Integer.parseInt(hexStr.substring(16, 20), 16)
                    };*/
 
-                    int i1;
-                    //MyLog.e("hexStr===="+hexStr);
-                    String epcData = "" + data[0] + "," + data[1] + "," + data[2] + "," + data[3] + "," + data[4] + ",";
 
                     short[] ecgData = Algorithm.getEcgByte2Short(obj);
 
-                    //EventBus.getDefault().post(new ECGChgEvent(ecgData, "得到ECG的值了==="));
+                    EventBus.getDefault().post(new ECGChgEvent(ecgData, "得到ECG的值了==="));
+                    for (short ecg: ecgData) {
+                        ecgBuffer.add(Integer.valueOf(ecg));
+                    }
 
-                    int heartNum = hrImpl.countHeartRate(ecgData, getShort(obj, 11));
-                    //MyLog.e(TAG , "epcData=="+epcData);
-                    if (heartNum > 0) {
-                        Constant.oneMinHeart.add(heartNum);
-                        Constant.hrBuffer.add(heartNum);
-                        Constant.hrBuffer2.add(heartNum);
-                        tvHeartNum.setText("" + heartNum);
-                        application.setHeartNum(heartNum);
-                        EventBus.getDefault().post(new HeartChgEvent(heartNum, "心跳变化了"));
-                        MyLog.e(TAG, "tvHeartNum：" + heartNum);
+                    AlgorithmWrapper.startRRI();
+
+                    index++;
+                    if (ecgBuffer.size()>=1500 && index%200==0){
+                        index = 0;
+                        int[] ints = new int[ecgBuffer.size()];
+                        for (int i = 0; i < ecgBuffer.size(); i++) {
+                            ints[i] = ecgBuffer.get(i);
+                        }
+                        int heartNum =Algorithm.getCalculateHeartRate(ints);
+                         //int heartNum = hrImpl.countHeartRate(ecgData, getShort(obj, 11));
+                        //MyLog.e(TAG , "epcData=="+epcData);
+                        if (heartNum > 0) {
+                            Constant.oneMinHeart.add(heartNum);
+                            Constant.hrBuffer.add(heartNum);
+                            Constant.hrBuffer2.add(heartNum);
+                            tvHeartNum.setText("" + heartNum);
+                            application.setHeartNum(heartNum);
+                            EventBus.getDefault().post(new HeartChgEvent(heartNum, "心跳变化了"));
+                            MyLog.e(TAG, "tvHeartNum：" + heartNum);
+                            //Algorithm.initialForModeChange(1);
+                            Algorithm.getRtoRIntervalData(rriAry , timeAry);
+                            MyLog.e(TAG , "rriAry==111="+ Arrays.toString(rriAry));
+                            MyLog.e(TAG , "timeAry==111="+ Arrays.toString(timeAry));
+                            Constant.rriBuffer.clear();
+                            for (double value: rriAry) {
+                                if (value > 200 && value < 2000) {
+                                    Constant.rriBuffer.add(Long.valueOf(Double.valueOf(value).intValue()));
+                                    rriIndex++;
+                                }
+                            }
+                            if (rriIndex >=300){
+                                AlgorithmWrapper.stopRRI();
+                                // 通知刷新 HRV
+                                EventBus.getDefault().post(new RefreshHearthInfoEvent());
+                              rriIndex = 0;
+                            }
+                            //Algorithm.initialForModeChange(0);
+
+                        }
                     }
 
                     //MyLog.e(TAG , epcData);
@@ -186,54 +221,13 @@ public class InformationFragment extends LsmBaseFragment {
                     Constant.egcDataCon.add(ecgData[3]);
                     Constant.egcDataCon.add(ecgData[4]);
 
-                    List<Long> rri = hrImpl.countRRI(ecgData, getShort(obj, 12));
-                    for (Long value : rri) {
+                    //List<Long> rri = hrImpl.countRRI(ecgData, getShort(obj, 12));
+                 /*   for (Long value : rri) {
                         if (value > 200 && value < 2000) {
                             Constant.rriBuffer.add(value);
                         }
                         //MyLog.e(TAG , "rri====value"+value);
-                    }
-
-
-                /*    i1 = MyLib.countHeartRate(data);
-                    //i1 = MyLib.countHeartRateWrapper(data , data.length);
-                    if (i1 != -1) {
-                        int heartNum = i1;//i1 / 10000 < 60 ? 60 : (i1 / 10000);
-                        tvHeartNum.setText(" " + heartNum);
-                        MyLog.e(TAG, "==countHeartRate===" + i1);
-                        application.setHeartNum(heartNum);
                     }*/
-
-                  /*  BleData bleData = new BleData(obj);
-                    EcgData ecgData1 = EcgData.fromBle(bleData);
-                    swmFilter.filter(ecgData1);
-                    for (double ecg :ecgData1.samples){
-                        MyLog.e(TAG , "ecg======================"+ecg);
-                        Constant.egcDataCon.add((short) ecg);
-                    }*/
-
-                  /*  index = index + 5;
-                    if (index == 1500) {
-                        index = 0;
-                        int[] values = new int[1500];
-                        for (int i = 0; i < Constant.egcDataCon.size(); i++) {
-                            values[i] = Constant.egcDataCon.get(i).intValue();
-                        }
-                        heartNum = HeartRateService.CalculateHeartRate(values);
-                        tvHeartNum.setText(" " + heartNum);
-                        MyLog.e(TAG, "tvHeartNum：" + heartNum);
-                        //Constant.egcDataCon.clear();
-
-                        HeartRateService.getCurrentRRI(currentRriArray);
-                        for (int i = 0; i < 20; i++) {
-                            short value = currentRriArray[i];
-                            if (value > 0) {
-                                Constant.rriBuffer.add(value);
-                            }
-                        }
-                        MyLog.e(TAG, "rriBuffer：" + Constant.rriBuffer.toString());
-                    }*/
-
                     break;
                 }
                 case 1: {
@@ -301,6 +295,8 @@ public class InformationFragment extends LsmBaseFragment {
         mAct = getActivity();
         application = (MyApplication) getActivity().getApplication();
 
+        //Algorithm.initialForModeChange(1);
+
         List<InfoBean> infoBeanList = new ArrayList<>();
         infoBeanList.add(new InfoBean(0, "68"));
         infoBeanList.add(new InfoBean(1, "23"));
@@ -365,7 +361,7 @@ public class InformationFragment extends LsmBaseFragment {
                 if (!application.isBleConnected()) {
                     MyToast.showLong(getContext(), "蓝牙设备未连接");
                 } else {
-                    ECGShowActivity.startAction(getActivity());
+                    ECGShowActivity3.startAction(getActivity());
                 }
                 break;
             case R.id.rl_hr_chart:
@@ -432,7 +428,6 @@ public class InformationFragment extends LsmBaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
     }
 
     class TodayStepCounterCall implements Handler.Callback {

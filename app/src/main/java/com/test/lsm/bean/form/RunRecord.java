@@ -1,5 +1,7 @@
 package com.test.lsm.bean.form;
 
+import android.content.Intent;
+
 /**
  * 功能：
  *
@@ -15,6 +17,9 @@ public class RunRecord {
     private String coordinateInfo;
     private double distance;
     private String runTime;
+    private String avgHeart;
+    private String maxHeart;
+    private String calorieValue;
 
     public int getUserId() {
         return userId;
@@ -62,5 +67,29 @@ public class RunRecord {
 
     public void setRunTime(String runTime) {
         this.runTime = runTime;
+    }
+
+    public String getAvgHeart() {
+        return avgHeart;
+    }
+
+    public void setAvgHeart(String avgHeart) {
+        this.avgHeart = avgHeart;
+    }
+
+    public String getMaxHeart() {
+        return maxHeart;
+    }
+
+    public void setMaxHeart(String maxHeart) {
+        this.maxHeart = maxHeart;
+    }
+
+    public String getCalorieValue() {
+        return calorieValue;
+    }
+
+    public void setCalorieValue(String calorieValue) {
+        this.calorieValue = calorieValue;
     }
 }

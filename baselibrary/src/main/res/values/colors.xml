@@ -17,5 +17,6 @@
     <color name="my_black">#000</color>
 
     <color name="text_gray_bg">#484A4B</color>
+    <color name="swm_ecg_color">#ff00ff00</color>
 
 </resources>

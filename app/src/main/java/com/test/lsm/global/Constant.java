@@ -18,6 +18,7 @@ public class Constant {
 
     public static CircularFifoQueue<Long> rriBuffer = new CircularFifoQueue(300);
 
+
     //一分钟的心跳值
     public static CircularFifoQueue<Integer> oneMinHeart = new CircularFifoQueue<>(60);
 

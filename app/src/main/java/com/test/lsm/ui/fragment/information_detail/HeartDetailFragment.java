@@ -13,6 +13,7 @@ import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.lsmalgorithm.MyLib;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
@@ -52,6 +53,9 @@ public class HeartDetailFragment extends LsmBaseFragment {
     TextView tvStatus3;
     @BindView(R.id.tv_status4)
     TextView tvStatus4;
+    @BindView(R.id.tv_update_time)
+    TextView tvUpdateTime;
+
     private List<View> statusList;
     private APIMethodManager apiMethodManager;
 
@@ -85,27 +89,6 @@ public class HeartDetailFragment extends LsmBaseFragment {
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void updateHeart(RefreshHearthInfoEvent heartChgEvent) {
 
-       /* CircularFifoQueue<Integer> queue = MyLib.queue;
-        List<Integer> rriList = new ArrayList<>();
-        for (Integer num: queue) {
-            if (num>0){
-                int rri = 1000 / num;
-                for (int i=0 ; i<num;i++){
-                    rriList.add(rri);
-                }
-            }
-        }
-
-        StringBuffer rrlIntervalSb = new StringBuffer();
-        for (int i=0 ; i<rriList.size() ; i++){
-            Integer rriValue = rriList.get(i);
-            if (i==rriList.size()-1){
-                rrlIntervalSb.append(rriValue+"");
-            }else{
-                rrlIntervalSb.append(rriValue+",");
-            }
-        }*/
-
         CircularFifoQueue<Long> rriBuffer = Constant.rriBuffer;
         StringBuffer rrlIntervalSb = new StringBuffer();
         for (int i=0 ; i<rriBuffer.size() ; i++){
@@ -118,15 +101,13 @@ public class HeartDetailFragment extends LsmBaseFragment {
         }
         QueryHRVInfo hrvInfo = new QueryHRVInfo();
         hrvInfo.setRrInterval(rrlIntervalSb.toString());
-        //hrvInfo.setRrInterval("644,667,652,641,642,664,726,816,816,781,746,714,695,683,687,718,816,1246,921,878,781,742,710,699,664,644,656,605,648,753,941,863,804,777,714,687,675,671,667,671,726,746,753,781,820,792,757,722,726,710,695,691,738,746,714,707,734,738,726,703,687,726,738,730,695,703,753,769,730,695,687,683,679,660,660,714,808,1039,960,863,800,773,726,699,691,726,761,820,914,980,832,777,738,703,687,667,660,667,722,750,777,855,996,875,773,757,730,691,671,671,691,765,816,761,742,746,726,707,679,667,675,687,707,730,765,761,726,726,734,707,675,671,675,679,671,667,683,707,699,691,695,726,718,691,675,687,687,683,671,667,664,691,691,671,667,675,710,726,710,699,707,714,722,660,671,683,691,687,683,699,714,691,691,703,675,652,675,625,656,675,687,675,664,671,679,699,660,636,671,699,726,667,703,742,769,738,730,730,718,710,648,671,691,703,691,699,753,785,742,753,773,761,710,695,695,699,687,671,671,699,726,703,730,781,753,722,699,703,699,699,648,667,687,695,683,687,730,746,738,695,683,691,695,710,656,671,691,679");
-
-        //MyLog.e(TAG , "rrlIntervalSb："+rrlIntervalSb.toString());
 
         apiMethodManager.getHRVInfo(hrvInfo, new IRequestCallback<GetHRVInfoReturn>() {
             @Override
             public void onSuccess(GetHRVInfoReturn result) {
                 List<GetHRVInfoReturn.HRVIndexBean> hrvIndex = result.getHRVIndex();
                 if (hrvIndex != null && hrvIndex.size() > 0) {
+                    tvUpdateTime.setText("更新时间："+ MyTimeUtils.getCurrentDateTime());
                     GetHRVInfoReturn.HRVIndexBean hrvIndexBean = hrvIndex.get(0);
                     //---体力状态
                     Integer bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());

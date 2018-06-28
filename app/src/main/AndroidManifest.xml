@@ -63,6 +63,9 @@
         <activity
             android:name=".ui.activity.ECGShowActivity2"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.activity.ECGShowActivity3"
+            android:screenOrientation="landscape" />
         <activity android:name=".ui.activity.MsgDetailActivity" />
 
         <meta-data

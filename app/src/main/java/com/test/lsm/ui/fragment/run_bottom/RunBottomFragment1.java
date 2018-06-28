@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.test.lsm.R;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
+import com.test.lsm.bean.event.RefreshRunHRVEvent;
 import com.test.lsm.bean.event.RunStopEvent;
 import com.test.lsm.bean.form.QueryHRVInfo;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
@@ -134,7 +135,7 @@ public class RunBottomFragment1 extends LsmBaseFragment {
                             chgStatus1(ivPhysical, 5);
                             tvPhysical.setText("体力透支");
                         }
-                        //---身体疲劳
+                        //---脑力
                         Integer bodyFatigue = Integer.parseInt(hrvIndexBean.getBodyFatigue());
                         if (bodyFatigue <= 20) {
                             chgStatus2(ivMental, 1);
@@ -222,7 +223,7 @@ public class RunBottomFragment1 extends LsmBaseFragment {
 
 
     @Subscribe(threadMode = ThreadMode.MainThread)
-    public void refreshData(RefreshHearthInfoEvent refreshHearthInfoEvent) {
+    public void refreshData(RefreshRunHRVEvent refreshRunHRVEvent) {
      initData();
     }
 

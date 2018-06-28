@@ -72,6 +72,9 @@ public class HRChartDetailFragment extends LsmBaseFragment {
     }
 
     private void initChartData() {
+        mHandler.sendEmptyMessageDelayed(0 , 2000);
+        // 没有展开 return
+        if (!Constant.isHRChartDetailShow){ return;}
         MyLog.e(TAG , "initChartData===========");
         ArrayList<Entry> yVals = new ArrayList<Entry>();
         CircularFifoQueue<Integer> hrBuffer = Constant.hrBuffer2;
@@ -83,10 +86,7 @@ public class HRChartDetailFragment extends LsmBaseFragment {
         for (int i = 0; i < hrBuffer.size(); i++) {
             yVals.add(new Entry(i, hrBuffer.get(i)));
         }
-        mHandler.sendEmptyMessageDelayed(0 , 2000);
         if (yVals.size()==0 ){return;}
-        // 没有展开 return
-        if (!Constant.isHRChartDetailShow){ return;}
         ArrayList<ILineDataSet> dataSetList = new ArrayList<>();
 
         LineDataSet set1;

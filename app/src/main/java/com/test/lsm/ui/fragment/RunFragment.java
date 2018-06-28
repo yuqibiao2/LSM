@@ -33,6 +33,7 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.google.gson.Gson;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
+import com.test.lsm.bean.event.HeartChgEvent;
 import com.test.lsm.bean.event.RunStartEvent;
 import com.test.lsm.bean.event.RunStopEvent;
 import com.test.lsm.bean.form.RunRecord;
@@ -48,12 +49,16 @@ import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
+import org.apache.commons.collections4.queue.CircularFifoQueue;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import de.greenrobot.event.ThreadMode;
 import me.relex.circleindicator.CircleIndicator;
 
 /**
@@ -120,14 +125,18 @@ public class RunFragment extends LsmBaseFragment {
     private Gson mGson;
     private List<Fragment> frgList;
     private BDLocation crtLocation;
+    private MyApplication application;
+    private double startCalorie;
+    private double stopCalorie;
 
     @Override
     protected void beforeInit() {
         super.beforeInit();
         mGson = new Gson();
         apiMethodManager = APIMethodManager.getInstance();
-        MyApplication application = (MyApplication) getActivity().getApplication();
+        application = (MyApplication) getActivity().getApplication();
         user = application.getUser();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -439,7 +448,7 @@ public class RunFragment extends LsmBaseFragment {
     }
 
 
-    private boolean isStartTimer = false;
+    private boolean isStartRun = false;
     private long second = 0;
 
     /**
@@ -448,6 +457,8 @@ public class RunFragment extends LsmBaseFragment {
 
     @OnClick(R.id.iv_run_start)
     public void onRunStart() {
+        isStartRun = true;
+        startCalorie = application.getCalorieValue();
         startTime = MyTimeUtils.getCurrentDateTime();
         showLoadingDialog();
         if (mLocationClient != null && !isRunning) {
@@ -463,9 +474,10 @@ public class RunFragment extends LsmBaseFragment {
      */
     @OnClick(R.id.iv_run_stop)
     public void onRunStop() {
-
+        isStartRun = false;
+        stopCalorie = application.getCalorieValue();
         stopTime = MyTimeUtils.getCurrentDateTime();
-        //TODO 记录本次跑步的数据
+        // 记录本次跑步的数据
         saveRunRecord();
 
         String toJson = new Gson().toJson(points);
@@ -508,6 +520,15 @@ public class RunFragment extends LsmBaseFragment {
 
     }
 
+    List<Integer> hrBuffer = new ArrayList<>();
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onHeartChg(HeartChgEvent heartChgEvent) {
+        if (isStartRun){
+            hrBuffer.add(heartChgEvent.getHeartNUm());
+        }
+    }
+
     /**
      * 保存跑步记录
      */
@@ -523,10 +544,24 @@ public class RunFragment extends LsmBaseFragment {
         runRecord.setDistance(distance);
         runRecord.setCoordinateInfo(mGson.toJson(points));
         runRecord.setRunTime("" + TimeUtils.countTimer(second));
+        double calorie = stopCalorie - startCalorie;
+        runRecord.setCalorieValue(""+calorie);
+        int maxHr = 0;
+        int hrTotal = 0;
+        for (Integer hr: hrBuffer) {
+            if (hr>maxHr){
+                maxHr = hr;
+            }
+            hrTotal+=hr;
+        }
+        int avgHr =hrTotal/hrBuffer.size();
+        runRecord.setAvgHeart(""+avgHr);
+        runRecord.setMaxHeart(""+maxHr);
         apiMethodManager.saveRunRecord(runRecord, new IRequestCallback<SaveRunRecordReturn>() {
             @Override
             public void onSuccess(SaveRunRecordReturn result) {
                 MyLog.d(TAG, "saveRunRecord==成功==" + result);
+                hrBuffer.clear();
             }
 
             @Override
@@ -566,6 +601,7 @@ public class RunFragment extends LsmBaseFragment {
             mLocationClient.stop();
         }
         map_run.onDestroy();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
