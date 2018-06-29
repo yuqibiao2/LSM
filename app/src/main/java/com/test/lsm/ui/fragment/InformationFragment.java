@@ -183,18 +183,17 @@ public class InformationFragment extends LsmBaseFragment {
                             MyLog.e(TAG , "timeAry==111="+ Arrays.toString(timeAry));
                             Constant.rriBuffer.clear();
                             for (double value: rriAry) {
+                                int legalCount = 0;
                                 if (value > 200 && value < 2000) {
+                                    legalCount++;
                                     Constant.rriBuffer.add(Long.valueOf(Double.valueOf(value).intValue()));
-                                    rriIndex++;
+                                    if (legalCount>300){//
+                                        AlgorithmWrapper.stopRRI();
+                                        // 通知刷新 HRV
+                                        EventBus.getDefault().post(new RefreshHearthInfoEvent());
+                                    }
                                 }
                             }
-                            if (rriIndex >=300){
-                                AlgorithmWrapper.stopRRI();
-                                // 通知刷新 HRV
-                                EventBus.getDefault().post(new RefreshHearthInfoEvent());
-                              rriIndex = 0;
-                            }
-                            //Algorithm.initialForModeChange(0);
 
                         }
                     }
