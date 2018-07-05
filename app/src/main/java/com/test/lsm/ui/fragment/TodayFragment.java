@@ -4,8 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -15,17 +20,15 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.PushMsgAdapter;
-import com.test.lsm.bean.PushMsgBean;
 import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.PushExtra;
-import com.test.lsm.db.bean.PushMsg;
-import com.test.lsm.db.service.inter.IPushMsgService;
-import com.test.lsm.db.service.PushMsgService;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.MsgDetailActivity;
+import com.test.lsm.ui.activity.SettingActivity;
+import com.test.lsm.ui.activity.UpdateUserActivity1;
 import com.test.lsm.utils.LoginRegUtils;
-import com.today.step.lib.SportStepJsonUtils;
+import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
@@ -35,10 +38,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
-import de.greenrobot.event.EventBus;
-import de.greenrobot.event.Subscribe;
-import de.greenrobot.event.ThreadMode;
 
 /**
  * 功能：今天的动态
@@ -56,6 +58,11 @@ public class TodayFragment extends LsmBaseFragment {
     RecyclerView rvToday;
     @BindView(R.id.srl_today)
     SmartRefreshLayout srlToday;
+    @BindView(R.id.tv_datetime)
+    TextView tvDatetime;
+    Unbinder unbinder;
+    @BindView(R.id.rv_user_icon)
+    RoundImageView rvUserIcon;
     private PushMsgAdapter pushMsgAdapter;
     private MyApplication application;
     private LinkedList<GetMsgListReturn.PdBean> mData = new LinkedList<>();
@@ -82,13 +89,26 @@ public class TodayFragment extends LsmBaseFragment {
 
     @Override
     protected void initView() {
+        String userImage = application.getUser().getUSER_IMAGE();
+        if (!TextUtils.isEmpty(userImage)){
+            Glide.with(this).load(userImage).into(rvUserIcon);
+        }
         pushMsgAdapter = new PushMsgAdapter(getContext(), R.layout.rv_item_today, mData);
         rvToday.setLayoutManager(new LinearLayoutManager(getContext()));
         rvToday.setAdapter(pushMsgAdapter);
+        tvDatetime.setText("" + MyTimeUtils.formatDateTime("MM月dd日", new Date(System.currentTimeMillis()))
+                + " " + MyTimeUtils.getCurrentWeek());
     }
 
     @Override
     protected void initListener() {
+
+        rvUserIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               SettingActivity.startAction(getActivity());
+            }
+        });
 
         srlToday.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -115,7 +135,7 @@ public class TodayFragment extends LsmBaseFragment {
                 bundle.putString(JPushInterface.EXTRA_ALERT, mData.get(position).getID());
                 PushExtra extra = new PushExtra();
                 extra.setMsgId(mData.get(position).getID());
-                bundle.putString( JPushInterface.EXTRA_EXTRA, mGson.toJson(extra));
+                bundle.putString(JPushInterface.EXTRA_EXTRA, mGson.toJson(extra));
                 MsgDetailActivity.startAction(getContext(), bundle);
             }
         });
@@ -133,9 +153,9 @@ public class TodayFragment extends LsmBaseFragment {
             @Override
             public void onSuccess(GetMsgListReturn result) {
                 List<GetMsgListReturn.PdBean> pd = result.getPd();
-                if (pd==null|| pd.size()==0){
-                    MyToast.showLong(getActivity() , "没有更多数据了！");
-                }else {
+                if (pd == null || pd.size() == 0) {
+                    MyToast.showLong(getActivity(), "没有更多数据了！");
+                } else {
                     pushMsgAdapter.addData(pd);
                     page++;
                 }
@@ -155,5 +175,12 @@ public class TodayFragment extends LsmBaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

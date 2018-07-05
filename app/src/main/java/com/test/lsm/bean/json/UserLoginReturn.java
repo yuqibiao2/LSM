@@ -30,6 +30,7 @@ public class UserLoginReturn {
 
     public static class PdBean {
 
+        private String USER_IMAGE;
         private String RIGHTS;
         private String USER_SEX;
         private String IP;
@@ -43,6 +44,14 @@ public class UserLoginReturn {
         private String USER_HEIGHT;
         private String USERNAME;
         private String BIRTHDAY;
+
+        public String getUSER_IMAGE() {
+            return USER_IMAGE;
+        }
+
+        public void setUSER_IMAGE(String USER_IMAGE) {
+            this.USER_IMAGE = USER_IMAGE;
+        }
 
         public String getRIGHTS() {
             return RIGHTS;

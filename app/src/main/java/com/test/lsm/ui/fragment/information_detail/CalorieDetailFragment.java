@@ -114,6 +114,9 @@ public class CalorieDetailFragment extends LsmBaseFragment {
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void updateCalorie(CalorieChgEvent calorieChgEvent) {
         Step step = stepService.getStepByHourOnCurrentDay(MyTimeUtils.getCurrentHour());
+        if(step==null){
+            return;
+        }
         String calorieByStep = SportStepJsonUtils.getCalorieByStep(step.getStepNum());
         float calorieNum = Float.parseFloat(calorieByStep);
         //float calorieNum = calorieChgEvent.getCalorieNum();

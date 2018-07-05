@@ -8,11 +8,52 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/rr_bt"
+            android:background="#fff">
+            <ImageView
+                android:id="@+id/iv_run_history"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:padding="15dp"
+                android:src="@mipmap/ic_tb_run_his" />
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/tv_tip"
+                android:layout_marginRight="5dp"
+                android:src="@mipmap/ic_run_chg" />
+            <TextView
+                android:id="@+id/tv_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="室外运动"
+                android:textColor="#4A4A4A"
+                android:layout_centerInParent="true"
+                android:textSize="18sp"/>
+
+            <com.yyyu.baselibrary.ui.widget.RoundImageView
+                android:id="@+id/rv_user_icon"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:src="@mipmap/ic_launcher"
+                android:scaleType="centerCrop" />
+        </RelativeLayout>
+
         <com.baidu.mapapi.map.MapView
             android:id="@+id/map_run"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="15dp"
+            android:layout_below="@+id/rr_bt"
             android:clickable="true" />
 
         <ImageView

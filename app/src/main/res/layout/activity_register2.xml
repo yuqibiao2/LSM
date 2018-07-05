@@ -3,15 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
+    android:background="@color/my_white"
     android:orientation="vertical"
-    android:paddingLeft="25dp"
-    android:paddingRight="25dp">
+    android:paddingLeft="35dp"
+    android:paddingRight="35dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:text="性別選擇"
+        android:textColor="#FF4A4A4A"
+        android:textSize="14sp" />
 
     <RadioGroup
         android:id="@+id/rg_sex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
@@ -45,7 +58,8 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_username"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
             <EditText
                 android:id="@+id/et_username"
@@ -69,6 +83,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="生日"
+                android:drawableRight="@mipmap/ic_et_user"
+                android:paddingRight="10dp"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
                 android:inputType="datetime"
@@ -76,7 +92,42 @@
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_height"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <EditText
+                android:id="@+id/et_user_height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="身高"
+                android:inputType="number"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <EditText
+                android:id="@+id/et_user_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="体重"
+                android:inputType="number"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+      <!--  <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -117,10 +168,10 @@
                     android:paddingTop="15dp"
                     android:textSize="16sp" />
             </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
+        </LinearLayout>-->
     </LinearLayout>
 
-    <TextView
+    <!--<TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
@@ -129,6 +180,14 @@
         android:text="Next >"
         android:onClick="toNext"
         android:textColor="@drawable/accent_color_selector"
-        android:textSize="38sp" />
+        android:textSize="38sp" />-->
+    <ImageButton
+        android:layout_width="320dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="45dp"
+        android:background="@mipmap/ic_btn_next"
+        android:onClick="toNext" />
 
 </RelativeLayout>

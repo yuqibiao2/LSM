@@ -78,5 +78,9 @@ public interface LsmApi {
     @POST("appUserReg")
     Observable<UserRegReturn> register(@FieldMap Map<String, String> map);
 
+    @FormUrlEncoded
+    @POST("modifyAppUser")
+    Observable<UserRegReturn>updateUser(@FieldMap Map<String, String> map);
+
 
 }

@@ -6,6 +6,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -30,6 +31,7 @@ import com.baidu.mapapi.map.Polyline;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
@@ -41,15 +43,17 @@ import com.test.lsm.bean.json.SaveRunRecordReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.ui.activity.RunRecordActivity;
+import com.test.lsm.ui.activity.SettingActivity;
+import com.test.lsm.ui.activity.UpdateUserActivity1;
 import com.test.lsm.ui.fragment.run_bottom.RunBottomFragment1;
 import com.test.lsm.ui.fragment.run_bottom.RunBottomFragment2;
 import com.test.lsm.utils.TimeUtils;
 import com.test.lsm.utils.map.MyOrientationListener;
+import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
-
-import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +95,10 @@ public class RunFragment extends LsmBaseFragment {
     ImageView ivLocationRtn;
     @BindView(R.id.rl_run_bottom)
     RelativeLayout rlRunBottom;
+    @BindView(R.id.iv_run_history)
+    ImageView ivRunHistory;
+    @BindView(R.id.rv_user_icon)
+    RoundImageView rvUserIcon;
 
     private BaiduMap mBaiduMap;
     private LocationClient mLocationClient;
@@ -147,6 +155,10 @@ public class RunFragment extends LsmBaseFragment {
 
     @Override
     protected void initView() {
+        String userImage = user.getUSER_IMAGE();
+        if (!TextUtils.isEmpty(userImage)){
+            Glide.with(this).load(userImage).into(rvUserIcon);
+        }
         initBottom();
         initMap();
         initLocation();
@@ -156,6 +168,14 @@ public class RunFragment extends LsmBaseFragment {
 
     @Override
     protected void initListener() {
+
+        rvUserIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SettingActivity.startAction(getActivity());
+            }
+        });
+
         MyOrientationListener myOrientationListener = new MyOrientationListener(getContext());
         myOrientationListener.start();
         myOrientationListener.setOnOrientationListener(new MyOrientationListener.OnOrientationListener() {
@@ -184,6 +204,16 @@ public class RunFragment extends LsmBaseFragment {
             }
         });
 
+        /**
+         * 查看跑步记录
+         */
+        ivRunHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RunRecordActivity.startAction(getActivity());
+            }
+        });
+
     }
 
     private void initBottom() {
@@ -207,14 +237,14 @@ public class RunFragment extends LsmBaseFragment {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-         bottomSheetBehavior.setPeekHeight(340);
+        bottomSheetBehavior.setPeekHeight(340);
         bottomSheetBehavior.setHideable(false);
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 //MyLog.e(TAG, "onStateChanged===newState===" + newState);
-                switch (newState){
-                    case BottomSheetBehavior.STATE_COLLAPSED:{
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
 
                         break;
                     }
@@ -223,10 +253,10 @@ public class RunFragment extends LsmBaseFragment {
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                if (slideOffset<0.01){
+                if (slideOffset < 0.01) {
                     rlRunBottom.setBackgroundColor(Color.parseColor("#00FFFFFF"));
                     vpRunBtm.setVisibility(View.INVISIBLE);
-                }else{
+                } else {
                     rlRunBottom.setBackgroundColor(Color.parseColor("#DDFFFFFF"));
                     vpRunBtm.setVisibility(View.VISIBLE);
                 }
@@ -524,7 +554,7 @@ public class RunFragment extends LsmBaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onHeartChg(HeartChgEvent heartChgEvent) {
-        if (isStartRun){
+        if (isStartRun) {
             hrBuffer.add(heartChgEvent.getHeartNUm());
         }
     }
@@ -545,18 +575,18 @@ public class RunFragment extends LsmBaseFragment {
         runRecord.setCoordinateInfo(mGson.toJson(points));
         runRecord.setRunTime("" + TimeUtils.countTimer(second));
         double calorie = stopCalorie - startCalorie;
-        runRecord.setCalorieValue(""+calorie);
+        runRecord.setCalorieValue("" + calorie);
         int maxHr = 0;
         int hrTotal = 0;
-        for (Integer hr: hrBuffer) {
-            if (hr>maxHr){
+        for (Integer hr : hrBuffer) {
+            if (hr > maxHr) {
                 maxHr = hr;
             }
-            hrTotal+=hr;
+            hrTotal += hr;
         }
-        int avgHr =hrTotal/hrBuffer.size();
-        runRecord.setAvgHeart(""+avgHr);
-        runRecord.setMaxHeart(""+maxHr);
+        int avgHr = hrTotal / hrBuffer.size();
+        runRecord.setAvgHeart("" + avgHr);
+        runRecord.setMaxHeart("" + maxHr);
         apiMethodManager.saveRunRecord(runRecord, new IRequestCallback<SaveRunRecordReturn>() {
             @Override
             public void onSuccess(SaveRunRecordReturn result) {

@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleNotifyCallback;
 import com.clj.fastble.callback.BleWriteCallback;
@@ -44,10 +46,12 @@ import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.global.Constant;
 import com.test.lsm.ui.activity.ECGShowActivity3;
+import com.test.lsm.ui.activity.SettingActivity;
 import com.test.lsm.utils.AlgorithmWrapper;
 import com.today.step.lib.ISportStepInterface;
 import com.today.step.lib.SportStepJsonUtils;
 import com.today.step.lib.TodayStepService;
+import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
@@ -105,6 +109,8 @@ public class InformationFragment extends LsmBaseFragment {
     LinearLayout llContainer;
     @BindView(R.id.fl_hr_chart)
     FrameLayout flHrChart;
+    @BindView(R.id.rv_user_icon)
+    RoundImageView rvUserIcon;
 
     private Activity mAct;
     private MyApplication application;
@@ -313,12 +319,20 @@ public class InformationFragment extends LsmBaseFragment {
 
     @Override
     protected void initView() {
-
+        String userImage = application.getUser().getUSER_IMAGE();
+        if (!TextUtils.isEmpty(userImage)){
+            Glide.with(this).load(userImage).into(rvUserIcon);
+        }
     }
 
     @Override
     protected void initListener() {
-
+        rvUserIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SettingActivity.startAction(getActivity());
+            }
+        });
     }
 
     @Override

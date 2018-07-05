@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/my_white">
 
 
     <LinearLayout
         android:id="@+id/ll_con"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="请选择头像" />
 
         <com.yyyu.baselibrary.ui.widget.RoundImageView
             android:id="@+id/iv_user_icon"
@@ -29,55 +27,100 @@
             android:id="@+id/tv_user_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="编辑"
-            android:textColor="@color/my_blue"
-            android:textSize="18sp" />
+            android:text="UPDATE PHOTO"
+            android:textColor="#FF555A62"
+            android:textSize="12sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:text="用戶名稱"
+            android:textColor="#FF000000"
+            android:textSize="14sp" />
 
-            <ImageView
-                android:id="@+id/iv_select_linkman1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_add" />
+        <LinearLayout
+            android:layout_width="320dp"
+            android:layout_height="93dp"
+            android:background="@mipmap/ic_register3_username"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_linkman"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/et_username"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:text="请选择紧急联系人"
-                android:textColor="@color/my_red"
-                android:textSize="18sp" />
+                android:layout_marginLeft="70dp"
+                android:layout_marginRight="66dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/trans"
+                android:hint=" Username"
+                android:inputType="textPhonetic"
+                android:textColor="#919EC4"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_select_linkman2"
+            android:id="@+id/tv_linkman"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="选择"
-            android:textColor="@color/my_blue"
-            android:textSize="18sp" />
+            android:text=" 緊急聯絡人選擇"
+            android:textColor="#FF000000"
+            android:drawableLeft="@mipmap/ic_add_cst"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="320dp"
+            android:layout_height="130dp"
+            android:background="@mipmap/ic_register3_constant"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_cst_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="75dp"
+                android:layout_marginRight="66dp"
+                android:layout_marginTop="35dp"
+                android:text=""
+                android:textColor="#FFCF2F2F"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_cst_tel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="75dp"
+                android:layout_marginRight="66dp"
+                android:layout_marginTop="3dp"
+                android:text=""
+                android:textColor="#FFCF2F2F"
+                android:textSize="14sp" />
+        </LinearLayout>
+
 
     </LinearLayout>
 
-    <TextView
+    <!-- <TextView
+         android:id="@+id/tv_to_finished"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:layout_alignParentBottom="true"
+         android:layout_marginBottom="40dp"
+         android:gravity="center"
+         android:onClick="toFinished"
+         android:text=" 完成"
+         android:textColor="@drawable/accent_color_selector"
+         android:textSize="38sp" />-->
+
+    <ImageButton
         android:id="@+id/tv_to_finished"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"
-        android:gravity="center"
-        android:onClick="toFinished"
-        android:text=" 完成"
-        android:textColor="@drawable/accent_color_selector"
-        android:textSize="38sp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="90dp"
+        android:background="@mipmap/ic_btn_finished"
+        android:onClick="toFinished" />
 
 
 </RelativeLayout>

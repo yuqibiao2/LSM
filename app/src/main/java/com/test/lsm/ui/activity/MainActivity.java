@@ -19,9 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,13 +41,14 @@ import com.test.lsm.bean.MenuItem;
 import com.test.lsm.service.UploadHealthInfoService;
 import com.test.lsm.ui.dialog.BleBTDeviceScanDialog;
 import com.test.lsm.ui.dialog.DeviceInformationDialog;
+import com.test.lsm.ui.fragment.ExerciseChoiceFragment;
 import com.test.lsm.ui.fragment.InformationFragment;
 import com.test.lsm.ui.fragment.RunFragment;
+import com.test.lsm.ui.fragment.SettingFragment;
 import com.test.lsm.ui.fragment.TodayFragment;
 import com.test.lsm.utils.LoginRegUtils;
 import com.test.lsm.utils.bt.ble.BleBTUtils;
 import com.yyyu.baselibrary.ui.widget.CommonPopupWindow;
-import com.yyyu.baselibrary.utils.ActivityHolder;
 import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
@@ -75,24 +77,28 @@ public class MainActivity extends LsmBaseActivity {
     RelativeLayout ll_top_bar;
     @BindView(R.id.ib_menu)
     ImageButton ib_menu;
-    @BindView(R.id.ll_bottom)
-    LinearLayout ll_bottom;
     @BindView(R.id.vp_content)
     ViewPager vp_content;
     @BindView(R.id.ll_today)
     LinearLayout llToday;
     @BindView(R.id.tv_tb_time)
     TextView tvTime;
-    @BindView(R.id.tv_tb_info)
-    ImageView tvTbInfo;
-    @BindView(R.id.iv_today)
-    ImageView ivToday;
-    @BindView(R.id.iv_run)
-    ImageView ivRun;
+    @BindView(R.id.rg_bottom)
+    RadioGroup rgBottom;
     @BindView(R.id.activity_main)
     RelativeLayout activityMain;
     @BindView(R.id.rl_run)
     RelativeLayout rlRun;
+    @BindView(R.id.tv_tb_today)
+    TextView tvTbToday;
+    @BindView(R.id.rb_information)
+    RadioButton rbInformation;
+    @BindView(R.id.rb_today)
+    RadioButton rbToday;
+    @BindView(R.id.rb_run)
+    RadioButton rbRun;
+    @BindView(R.id.rb_more)
+    RadioButton rbMore;
     private CommonPopupWindow menuPop;
     private MenuAdapter menuAdapter;
     private List<MenuItem> menuList;
@@ -188,52 +194,37 @@ public class MainActivity extends LsmBaseActivity {
                 return TabFragment.values().length;
             }
         });
-        vp_content.setCurrentItem(1);
+        vp_content.setCurrentItem(1 , false);
     }
 
     @Override
     protected void initListener() {
 
-        vp_content.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        rgBottom.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onPageSelected(int position) {
-                int tabId = TabFragment.values()[position].tabId;
-                setTabIcon(ll_bottom, tabId);
+            public void onCheckedChanged(RadioGroup radioGroup, int radioId) {
+                switch (radioId) {
+                    case R.id.rb_information:
+                        vp_content.setCurrentItem(0 , false);
+                        break;
+                    case R.id.rb_today:
+                        vp_content.setCurrentItem(1 , false);
+                        break;
+                    case R.id.rb_run:
+                        vp_content.setCurrentItem(2 , false);
+                        break;
+                    case R.id.rb_more:
+                        vp_content.setCurrentItem(3 , false);
+                        break;
+                }
             }
         });
+
 
         BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
             @Override
             public void dismiss(BleDevice bleDevice) {
-
                 retryConnect(bleDevice);
-
-
-                /*new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("蓝牙断开")
-                        .setMessage("是否需要重新连接蓝牙设备？")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                BleBTDeviceScanDialog bleBTDeviceScanDialog = new BleBTDeviceScanDialog(MainActivity.this);
-                                bleBTDeviceScanDialog.show();
-                            }
-                        })
-                        *//*.setNeutralButton("不再检测", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })*//*
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setCancelable(false)
-                        .create()
-                        .show();*/
             }
         });
 
@@ -252,7 +243,7 @@ public class MainActivity extends LsmBaseActivity {
                 @Override
                 public void onConnectFail(BleException exception) {
                     BleDevice currentBleDevice = application.getCurrentBleDevice();
-                    if (currentBleDevice!=null){
+                    if (currentBleDevice != null) {
                         retryConnect(currentBleDevice);
                     }
                     MyLog.e(TAG, "onConnectFail===" + exception.getDescription());
@@ -289,9 +280,10 @@ public class MainActivity extends LsmBaseActivity {
 
     private enum TabFragment {
 
-        information(R.id.iv_information, InformationFragment.class),
-        today(R.id.iv_today, TodayFragment.class),
-        run(R.id.iv_run, RunFragment.class);
+        information(R.id.rb_information, InformationFragment.class),
+        today(R.id.rb_today, TodayFragment.class),
+        run(R.id.rb_run, RunFragment.class),
+        setting(R.id.rb_more , ExerciseChoiceFragment.class);
 
         private Fragment fragment;
         private final int tabId;
@@ -327,50 +319,6 @@ public class MainActivity extends LsmBaseActivity {
         public static void onDestroy() {
             for (TabFragment fragment : values()) {
                 fragment.fragment = null;
-            }
-        }
-    }
-
-    public void switchTab(View view) {
-        switch (view.getId()) {
-            case R.id.iv_information:
-                vp_content.setCurrentItem(0);
-                setTabIcon(ll_bottom, R.id.iv_information);
-                llToday.setVisibility(View.GONE);
-                tvTbInfo.setVisibility(View.VISIBLE);
-                rlRun.setVisibility(View.GONE);
-                break;
-            case R.id.iv_today:
-                vp_content.setCurrentItem(1);
-                setTabIcon(ll_bottom, R.id.iv_today);
-                llToday.setVisibility(View.VISIBLE);
-                tvTbInfo.setVisibility(View.GONE);
-                rlRun.setVisibility(View.GONE);
-                break;
-            case R.id.iv_run:
-                vp_content.setCurrentItem(2);
-                setTabIcon(ll_bottom, R.id.iv_run);
-                llToday.setVisibility(View.GONE);
-                tvTbInfo.setVisibility(View.GONE);
-                rlRun.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
-
-    private void setTabIcon(LinearLayout viewGroup, int clickId) {
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View child = viewGroup.getChildAt(i);
-            int id = child.getId();
-            if (clickId == id) {//当前点击的按钮
-                LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) child.getLayoutParams();
-                linearParams.width = DimensChange.dp2px(this, 60);
-                linearParams.height = DimensChange.dp2px(this, 60);
-                child.setLayoutParams(linearParams);
-            } else {
-                LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) child.getLayoutParams();
-                linearParams.width = DimensChange.dp2px(this, 40);
-                linearParams.height = DimensChange.dp2px(this, 40);
-                child.setLayoutParams(linearParams);
             }
         }
     }
@@ -415,6 +363,7 @@ public class MainActivity extends LsmBaseActivity {
             }
         }
     }
+
     private void setCostomMsg(String msg) {
 
 

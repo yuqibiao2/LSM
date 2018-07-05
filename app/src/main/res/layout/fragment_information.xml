@@ -1,9 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<com.yyyu.baselibrary.ui.widget.BounceScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/ic_bg_map">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rr_bt"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#fff">
+
+        <ImageView
+            android:id="@+id/tv_tb_info"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:src="@mipmap/ic_menu_info_select" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="身体讯息"
+            android:textColor="#4A4A4A"
+            android:textSize="18sp" />
+
+        <com.yyyu.baselibrary.ui.widget.RoundImageView
+            android:id="@+id/rv_user_icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher" />
+    </RelativeLayout>
+
+<com.yyyu.baselibrary.ui.widget.BounceScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/my_white">
 
     <LinearLayout
         android:id="@+id/ll_container"
@@ -21,8 +61,8 @@
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="16dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="1dp">
+            app:cardCornerRadius="40dp"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,15 +72,16 @@
                 <RelativeLayout
                     android:id="@+id/rl_heart"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/my_white"
-                    android:padding="16dp">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="40dp"
+                        android:layout_marginLeft="10dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/ic_heart" />
 
@@ -49,6 +90,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
                         android:layout_centerVertical="true">
 
                         <LinearLayout
@@ -70,7 +112,7 @@
                                 android:layout_marginLeft="5dp"
                                 android:text=" bpm"
                                 android:textColor="#000"
-                                android:textSize="18sp" />
+                                android:textSize="24sp" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -79,9 +121,11 @@
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@+id/ll_con"
                         android:layout_below="@+id/ll_con"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginLeft="15dp"
                         android:layout_marginTop="20dp"
                         android:text="目前状态"
+                        android:textColor="@color/colorAccent"
+                        android:layout_marginBottom="5dp"
                         android:textSize="10sp" />
 
                 </RelativeLayout>
@@ -104,7 +148,6 @@
 
         </android.support.v7.widget.CardView>
 
-
         <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
@@ -116,8 +159,8 @@
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="16dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="1dp">
+            app:cardCornerRadius="40dp"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -127,15 +170,16 @@
                 <RelativeLayout
                     android:id="@+id/rl_step"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/my_white"
-                    android:padding="16dp">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="40dp"
+                        android:layout_marginLeft="10dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/ic_step" />
 
@@ -144,7 +188,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true">
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -176,7 +221,9 @@
                         android:layout_below="@+id/ll_con2"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="20dp"
+                        android:textColor="@color/colorAccent"
                         android:text="今日累计"
+                        android:layout_marginBottom="5dp"
                         android:textSize="10sp" />
 
                 </RelativeLayout>
@@ -209,8 +256,8 @@
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="16dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="1dp">
+            app:cardCornerRadius="40dp"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -220,15 +267,16 @@
                 <RelativeLayout
                     android:id="@+id/rl_calorie"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/my_white"
-                    android:padding="16dp">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="40dp"
+                        android:layout_marginLeft="10dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/ic_calorie" />
 
@@ -237,7 +285,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true">
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -270,7 +319,9 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="20dp"
                         android:text="目前状态"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/colorAccent"/>
 
                 </RelativeLayout>
 
@@ -301,8 +352,8 @@
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="16dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="1dp">
+            app:cardCornerRadius="40dp"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -312,15 +363,16 @@
                 <RelativeLayout
                     android:id="@+id/rl_ecg"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/my_white"
-                    android:padding="16dp">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="40dp"
+                        android:layout_marginLeft="10dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/ic_ecg" />
 
@@ -329,7 +381,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true">
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -361,7 +414,8 @@
                         android:layout_marginTop="20dp"
                         android:text="目前状态"
                         android:visibility="invisible"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"
+                        android:layout_marginBottom="5dp"/>
 
                 </RelativeLayout>
 
@@ -380,15 +434,15 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="16dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="1dp">
+            app:cardCornerRadius="40dp"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -398,15 +452,16 @@
                 <RelativeLayout
                     android:id="@+id/rl_hr_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/my_white"
-                    android:padding="16dp">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="40dp"
+                        android:layout_marginLeft="10dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/ic_ecg" />
 
@@ -415,7 +470,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true">
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -447,6 +503,7 @@
                         android:layout_marginTop="20dp"
                         android:text="目前状态"
                         android:visibility="invisible"
+                        android:layout_marginBottom="5dp"
                         android:textSize="10sp" />
 
                 </RelativeLayout>
@@ -470,3 +527,4 @@
     </LinearLayout>
 </com.yyyu.baselibrary.ui.widget.BounceScrollView>
 
+</LinearLayout>

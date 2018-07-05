@@ -2,8 +2,8 @@
 <resources>
     <color name="colorPrimary">#fff</color>
     <color name="colorPrimaryDark">#fff</color>
-    <color name="colorAccent">#FFBB33</color>
-    <color name="colorAccentLight">#ffce6c</color>
+    <color name="colorAccent">#F13564</color>
+    <color name="colorAccentLight">#f1597f</color>
 
     <color name="my_trans">#0000</color>
     <color name="my_white">#FFF</color>

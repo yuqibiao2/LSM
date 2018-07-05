@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.yyyu.baselibrary.ui.widget.BounceScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="身體狀態檢測:"
+                android:textColor="#FF323643"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@mipmap/ic_strong" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_physical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="正常范围"
+                        android:textColor="#4A90E2"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_physical"
+                        android:layout_width="150dp"
+                        android:layout_height="15dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="体力"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="選擇運動強度"
+                android:textColor="#FF323643"
+                android:textSize="20sp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_easy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:visibility="gone"
+                    android:src="@mipmap/ic_exe_suggestion" />
+
+                <ImageView
+                    android:id="@+id/iv_easy"
+                    android:layout_width="55dp"
+                    android:layout_height="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@mipmap/ic_easy" />
+
+                <ImageView
+                    android:id="@+id/iv_easy_selected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:visibility="gone"
+                    android:src="@mipmap/ic_exe_select" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:src="@mipmap/ic_exe_suggestion" />
+
+                <ImageView
+                    android:id="@+id/iv_normal"
+                    android:layout_width="85dp"
+                    android:layout_height="45dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@mipmap/ic_normal_selected" />
+
+                <ImageView
+                    android:id="@+id/iv_normal_selected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/ic_exe_select" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_hard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:visibility="gone"
+                    android:src="@mipmap/ic_exe_suggestion" />
+
+                <ImageView
+                    android:id="@+id/iv_hard"
+                    android:layout_width="115dp"
+                    android:layout_height="45dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@mipmap/ic_hard" />
+
+                <ImageView
+                    android:id="@+id/iv_hard_selected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:visibility="gone"
+                    android:src="@mipmap/ic_exe_select" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="320dp"
+            android:layout_height="90dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:background="@mipmap/ic_btn_next"
+            android:onClick="toNext" />
+
+    </LinearLayout>
+
+</com.yyyu.baselibrary.ui.widget.BounceScrollView>

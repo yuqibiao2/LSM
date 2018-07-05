@@ -62,6 +62,22 @@ public class StatusBarCompat {
     }
 
     /**
+     * 设置状态栏为透明
+     *
+     * @param activity
+     */
+    public static  void setTrans(Activity activity){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            View decorView = activity.getWindow().getDecorView();
+            //重点：SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            decorView.setSystemUiVisibility(option);
+            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
+
+    }
+
+    /**
      * 得到 status bar的高度
      * @param context
      * @return

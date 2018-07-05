@@ -419,6 +419,51 @@ public class APIMethodManager {
     }
 
     /**
+     * 用户修改
+     *
+     * @param userRegVo
+     * @param callback
+     * @return
+     */
+    public Subscription updateUser(UserRegVo userRegVo, final IRequestCallback<UserRegReturn> callback) {
+
+        Map<String, String> paras = new HashMap<>();
+        paras.put("USERNAME", userRegVo.getUSERNAME());
+        paras.put("PASSWORD", userRegVo.getPASSWORD());
+        paras.put("PHONE", userRegVo.getPHONE());
+        paras.put("USER_WEIGHT", userRegVo.getUSER_WEIGHT());
+        paras.put("USER_HEIGHT", userRegVo.getUSER_HEIGHT());
+        paras.put("USER_SEX", userRegVo.getUSER_SEX());
+        paras.put("BIRTHDAY", userRegVo.getBIRTHDAY());
+        paras.put("URGENT_USER", userRegVo.getURGENT_USER());
+        paras.put("URGENT_PHONE", userRegVo.getURGENT_PHONE());
+        paras.put("USER_IMAGE" , userRegVo.getUSER_IMAGE());
+
+        Subscription subscribe = lsmApi.updateUser(paras)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<UserRegReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(UserRegReturn userRegReturn) {
+                        callback.onSuccess(userRegReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+
+    /**
      * 用户注册
      *
      * @param userRegVo

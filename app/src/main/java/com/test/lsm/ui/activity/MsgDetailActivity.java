@@ -15,6 +15,7 @@ import com.test.lsm.bean.json.PushExtra;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.StatusBarCompat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +57,12 @@ public class MsgDetailActivity extends LsmBaseActivity {
         String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
         pushExtra = new Gson().fromJson(extra, PushExtra.class);
         apiMethodManager = APIMethodManager.getInstance();
+    }
+
+    @Override
+    protected boolean setDefaultStatusBarCompat() {
+        StatusBarCompat.setTrans(this);
+        return false;
     }
 
     @Override

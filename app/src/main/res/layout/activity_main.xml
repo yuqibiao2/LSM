@@ -16,15 +16,17 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@drawable/tb_bg"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/ll_today"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_horizontal"
                 android:layout_marginLeft="10dp"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/tv_tb_today"
                     android:layout_width="wrap_content"
@@ -32,12 +34,13 @@
                     android:text="Today"
                     android:textColor="@color/tx_dark"
                     android:textSize="32sp" />
+
                 <TextView
                     android:id="@+id/tv_tb_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="10sp"
-                    android:text="3月15日 星期四"/>
+                    android:text="3月15日 星期四"
+                    android:textSize="10sp" />
             </LinearLayout>
 
 
@@ -46,22 +49,22 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerInParent="true"
-                android:visibility="gone"
-                android:src="@mipmap/ic_information_dark" />
+                android:src="@mipmap/ic_information_dark"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/rl_run"
-                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/iv_run_his"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
                     android:src="@mipmap/ic_tb_run_his" />
 
                 <ImageView
@@ -88,36 +91,40 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_bottom"
+    <RadioGroup
+        android:id="@+id/rg_bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp">
+        android:background="@drawable/da_bottom_bg"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp">
 
-        <ImageView
-            android:id="@+id/iv_information"
+        <RadioButton
+            android:id="@+id/rb_information"
             style="@style/MainBottomBtn"
-            android:onClick="switchTab"
-            android:src="@mipmap/ic_information" />
+            android:drawableTop="@drawable/da_info"/>
 
-        <ImageView
-            android:id="@+id/iv_today"
+        <RadioButton
+            android:id="@+id/rb_today"
             style="@style/MainBottomBtn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:onClick="switchTab"
-            android:src="@mipmap/ic_today" />
+            android:checked="true"
+            android:drawableTop="@drawable/da_today" />
 
-        <ImageView
-            android:id="@+id/iv_run"
+        <RadioButton
+            android:id="@+id/rb_run"
             style="@style/MainBottomBtn"
-            android:onClick="switchTab"
-            android:src="@mipmap/ic_run" />
-    </LinearLayout>
+            android:drawableTop="@drawable/da_run" />
+
+        <RadioButton
+            android:id="@+id/rb_more"
+            style="@style/MainBottomBtn"
+            android:drawableTop="@drawable/da_more" />
+    </RadioGroup>
 
 </RelativeLayout>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.yyyu.baselibrary.ui.widget.BounceScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <ImageButton
+                android:id="@+id/ib_menu_setting"
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:background="@null"
+                android:src="@mipmap/ic_menu_setting" />
+
+            <com.yyyu.baselibrary.ui.widget.RoundImageView
+                android:id="@+id/rv_user_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="36dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/avril" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="36dp"
+                android:layout_marginTop="20dp"
+                android:layout_toLeftOf="@+id/rv_user_icon"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hank Lee"
+                    android:textColor="#273D52"
+                    android:textSize="23sp" />
+
+                <TextView
+                    android:id="@+id/tv_height"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:text="183 cm"
+                    android:textColor="#FF273D52"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tv_weight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:text=" 65 kg"
+                    android:textColor="#FF273D52"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/ic_female_unchecked" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="36dp">
+
+            <TextView
+                android:id="@+id/tv_waring_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="警戒心率 "
+                android:textColor="@color/colorAccent"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_waring_hr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="36dp"
+                android:layout_toRightOf="@+id/tv_waring_tip"
+                android:text="160 bpm"
+                android:textColor="#FF273D52"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <SeekBar
+            android:id="@+id/sb_waring_hr"
+            style="@style/Widget.AppCompat.SeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="25dp"
+            android:max="200"
+            android:maxHeight="4dp"
+            android:progress="160"
+            android:progressDrawable="@drawable/pro_seek_bar"
+            android:thumbTint="@color/my_white" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="30dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="藍芽裝置"
+                android:textColor="#FF273D52"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tv_bt_total"
+                android:layout_width="44dp"
+                android:layout_height="17dp"
+                android:layout_alignParentRight="true"
+                android:text="全部 (0)"
+                android:textColor="#FF273D52"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp">
+
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/srl_bt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/my_white"
+                app:srlAccentColor="@color/colorPrimary"
+                app:srlPrimaryColor="@color/colorAccent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_bt_device"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp" />
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+            <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/sv_loading"
+                style="@style/SpinKitView.Circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:SpinKit_Color="@color/colorAccent" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="10dp"
+            android:text="  緊急聯絡人"
+            android:textColor="#FFD0021B"
+            android:drawableLeft="@mipmap/ic_urgent_add"
+            android:gravity="center"
+            android:textSize="17sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="20dp">
+
+            <com.yyyu.baselibrary.ui.widget.RoundImageView
+                android:id="@+id/ri_urgent_icon"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@mipmap/avril" />
+
+            <TextView
+                android:id="@+id/tv_urgent_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nicklas Young "
+                android:layout_toRightOf="@+id/ri_urgent_icon"
+                android:textColor="#FFD0021B"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17sp" />
+            <TextView
+                android:id="@+id/tv_urgent_tel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0910234567 "
+                android:textColor="#FFD0021B"
+                android:layout_below="@+id/tv_urgent_name"
+                android:layout_alignLeft="@+id/tv_urgent_name"
+                android:layout_marginTop="15dp"
+                android:textSize="17sp"
+                />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="56dp"
+            android:layout_marginRight="56dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/btn_logout"
+            android:text="登出"
+            android:textColor="@color/my_white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</com.yyyu.baselibrary.ui.widget.BounceScrollView>

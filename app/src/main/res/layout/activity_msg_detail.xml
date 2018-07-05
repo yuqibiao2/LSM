@@ -11,17 +11,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="272dp"
-            android:clipChildren="false">
+            android:layout_height="272dp">
 
             <ImageView
                 android:id="@+id/iv_msg_icon"
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:background="@color/bg_gray"
-                android:fitsSystemWindows="true"
                 android:scaleType="centerCrop" />
 
             <TextView
@@ -50,8 +47,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:padding="10dp"
-            android:textColor="@color/my_black"
             android:text="123123123"
+            android:textColor="@color/my_black"
             android:textSize="20sp" />
 
         <WebView

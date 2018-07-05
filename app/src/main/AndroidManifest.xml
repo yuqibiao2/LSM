@@ -67,6 +67,11 @@
             android:name=".ui.activity.ECGShowActivity3"
             android:screenOrientation="landscape" />
         <activity android:name=".ui.activity.MsgDetailActivity" />
+        <activity android:name=".ui.activity.SettingActivity"/>
+        <activity android:name=".ui.activity.UpdateUserActivity1"/>
+        <activity android:name=".ui.activity.UpdateUserActivity2"/>
+        <activity android:name=".ui.activity.ExeIntensiveChoiceActivity"/>
+        <activity android:name=".ui.activity.IndoorExerciseActivity"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

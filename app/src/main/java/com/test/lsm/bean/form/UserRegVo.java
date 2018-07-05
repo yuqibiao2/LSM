@@ -17,6 +17,8 @@ public class UserRegVo {
     private String BIRTHDAY;
     private String URGENT_USER;
     private String URGENT_PHONE;
+    private String USER_IMAGE;
+
 
 
     public String getUSERNAME() {
@@ -89,5 +91,13 @@ public class UserRegVo {
 
     public void setURGENT_PHONE(String URGENT_PHONE) {
         this.URGENT_PHONE = URGENT_PHONE;
+    }
+
+    public String getUSER_IMAGE() {
+        return USER_IMAGE;
+    }
+
+    public void setUSER_IMAGE(String USER_IMAGE) {
+        this.USER_IMAGE = USER_IMAGE;
     }
 }

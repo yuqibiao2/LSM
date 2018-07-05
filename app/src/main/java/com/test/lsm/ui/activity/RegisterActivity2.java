@@ -42,8 +42,8 @@ public class RegisterActivity2 extends LsmBaseActivity {
 
     @BindView(R.id.rg_sex)
     RadioGroup rgSex;
-    @BindView(R.id.et_username)
-    EditText etUsername;
+ /*   @BindView(R.id.et_username)
+    EditText etUsername;*/
     @BindView(R.id.til_username)
     TextInputLayout tilUsername;
     @BindView(R.id.et_user_birthday)
@@ -133,15 +133,12 @@ public class RegisterActivity2 extends LsmBaseActivity {
     }
 
     public void toNext(View view) {
-        String username = etUsername.getText().toString();
+     /*   String username = etUsername.getText().toString();*/
         String birthday = etUserBirthday.getText().toString();
         String height = etUserHeight.getText().toString();
         String weight = etUserWeight.getText().toString();
 
-        if (TextUtils.isEmpty(username)) {
-            MyToast.showShort(this, "用户名不能为空");
-            return;
-        } else if (TextUtils.isEmpty(birthday)) {
+    if (TextUtils.isEmpty(birthday)) {
             MyToast.showShort(this, "生日不能为空");
             return;
         } else if (TextUtils.isEmpty(birthday)) {
@@ -152,7 +149,7 @@ public class RegisterActivity2 extends LsmBaseActivity {
             return;
         }
 
-        userRegVo.setUSERNAME(username);
+      /*  userRegVo.setUSERNAME(username);*/
         userRegVo.setPASSWORD(pwd);
         userRegVo.setPHONE(tel);
         userRegVo.setUSER_SEX(0 + "");//TODO

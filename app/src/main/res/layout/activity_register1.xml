@@ -4,20 +4,22 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_width="200dp"
+        android:layout_height="44dp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="25dp"
-        android:src="@mipmap/ic_register" />
+        android:layout_marginTop="42dp"
+        android:src="@mipmap/ic_register_logo" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="150dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="196dp"
         android:orientation="vertical"
-        android:paddingLeft="16sp"
-        android:paddingRight="16sp">
+        android:paddingLeft="26dp"
+        android:paddingRight="26dp">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_tel"
@@ -28,9 +30,11 @@
                 android:id="@+id/et_user_tel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="手机号码"
+                android:drawableRight="@mipmap/ic_et_user"
+                android:hint="Phone"
                 android:inputType="textPhonetic"
                 android:paddingBottom="15dp"
+                android:paddingRight="10dp"
                 android:paddingTop="15dp"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
@@ -39,22 +43,24 @@
             android:id="@+id/til_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp">
+            android:layout_marginTop="20dp">
 
             <EditText
                 android:id="@+id/et_user_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="密码"
+                android:drawableRight="@mipmap/ic_et_pwd"
+                android:hint="Password"
                 android:inputType="textPassword"
                 android:paddingBottom="15dp"
+                android:paddingRight="10dp"
                 android:paddingTop="15dp"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
 
-    <TextView
+<!--    <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
@@ -63,6 +69,15 @@
         android:text="Next >"
         android:onClick="toNext"
         android:textColor="@color/colorAccent"
-        android:textSize="38sp" />
+        android:textSize="38sp" />-->
+
+    <ImageButton
+        android:layout_width="320dp"
+        android:layout_height="90dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="86dp"
+        android:background="@mipmap/ic_btn_next"
+        android:onClick="toNext" />
 
 </RelativeLayout>
