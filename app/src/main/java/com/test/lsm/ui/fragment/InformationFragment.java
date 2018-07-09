@@ -46,6 +46,7 @@ import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.global.Constant;
 import com.test.lsm.ui.activity.ECGShowActivity3;
+import com.test.lsm.ui.activity.HrRecordActivity;
 import com.test.lsm.ui.activity.SettingActivity;
 import com.test.lsm.utils.AlgorithmWrapper;
 import com.today.step.lib.ISportStepInterface;
@@ -348,6 +349,9 @@ public class InformationFragment extends LsmBaseFragment {
 
         switch (view.getId()) {
             case R.id.rl_heart:
+
+                HrRecordActivity.startAction(getActivity());
+
                 if (Constant.rriBuffer.size() < 250) {
                     MyToast.showLong(getContext(), "还没有足够的数据请耐心等待" + Constant.rriBuffer.size());
                     return;

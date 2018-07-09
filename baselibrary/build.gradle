@@ -103,4 +103,9 @@ dependencies {
      */
     compile 'me.relex:circleindicator:1.2.2@aar'
 
+    /**
+     * https://github.com/prolificinteractive/material-calendarview
+     */
+    compile 'com.prolificinteractive:material-calendarview:1.4.0'
+
 }

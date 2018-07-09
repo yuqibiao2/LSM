@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/datetime_dialog_bg"
+    android:minHeight="400dp"
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/mcv_hr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/my_white"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+    <View
+        style="@style/gray_line"
+        android:layout_height="1dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/my_white"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="#FF2C3135"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="10时"
+            android:textColor="#FF2C3135"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="23"
+            android:textColor="#FF2C3135"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <SeekBar
+        android:id="@+id/sb_waring_hr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:max="23"
+        android:maxHeight="4dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:progress="10"
+        android:progressDrawable="@drawable/pro_seek_bar3"
+        android:thumbTint="@color/my_white" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:drawableLeft="@mipmap/ic_cancel"
+            android:gravity="center"
+            android:text="  取消"
+            android:textColor="#FF2C3135"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_sure"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@mipmap/ic_sure"
+            android:gravity="center"
+            android:text="  确认"
+            android:textColor="#FF2C3135"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</LinearLayout>

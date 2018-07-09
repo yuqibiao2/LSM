@@ -5,9 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,7 +24,6 @@ import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.MsgDetailActivity;
 import com.test.lsm.ui.activity.SettingActivity;
-import com.test.lsm.ui.activity.UpdateUserActivity1;
 import com.test.lsm.utils.LoginRegUtils;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MyLog;
@@ -38,8 +35,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -60,7 +55,6 @@ public class TodayFragment extends LsmBaseFragment {
     SmartRefreshLayout srlToday;
     @BindView(R.id.tv_datetime)
     TextView tvDatetime;
-    Unbinder unbinder;
     @BindView(R.id.rv_user_icon)
     RoundImageView rvUserIcon;
     private PushMsgAdapter pushMsgAdapter;
@@ -178,9 +172,4 @@ public class TodayFragment extends LsmBaseFragment {
     }
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }

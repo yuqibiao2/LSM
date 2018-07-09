@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="80dp"
-    android:layout_height="30dp"
-    android:background="@drawable/marker2" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="7dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:text=""
-        android:textSize="12dp"
-        android:textColor="@android:color/white"
+        android:layout_marginTop="7dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:text="123123"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#FFBF45"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="15dp"/>
 
-</RelativeLayout>
+ <!--   <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="16dp"
+        android:src="@mipmap/avril" />-->
+
+</LinearLayout>

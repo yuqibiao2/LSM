@@ -53,7 +53,9 @@ public abstract class BaseDialog extends Dialog implements View.OnClickListener 
      *   lp.height =  WindowUtils.getSize(mContext)[1]/2;
      * @return
      */
-    protected abstract WindowManager.LayoutParams getLayoutParams();
+    protected  WindowManager.LayoutParams getLayoutParams(){
+        return lp;
+    }
 
     public void beforeInit() {
 

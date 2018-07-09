@@ -72,6 +72,7 @@
         <activity android:name=".ui.activity.UpdateUserActivity2"/>
         <activity android:name=".ui.activity.ExeIntensiveChoiceActivity"/>
         <activity android:name=".ui.activity.IndoorExerciseActivity"/>
+        <activity android:name=".ui.activity.HrRecordActivity"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

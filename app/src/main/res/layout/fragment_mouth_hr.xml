@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:background="@drawable/datetime_dialog_bg"
+    android:paddingTop="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="心率紀錄 - 23日"
+        android:textColor="#FF121958"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textSize="18sp" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/bc_hr"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"/>
+
+</RelativeLayout>
