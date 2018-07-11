@@ -24,6 +24,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -58,8 +63,8 @@
         </activity>
         <activity android:name=".ui.activity.RunRecordDetailActivity" />
         <activity
-        android:name=".ui.activity.ECGShowActivity"
-        android:screenOrientation="landscape" />
+            android:name=".ui.activity.ECGShowActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.activity.ECGShowActivity2"
             android:screenOrientation="landscape" />
@@ -67,12 +72,12 @@
             android:name=".ui.activity.ECGShowActivity3"
             android:screenOrientation="landscape" />
         <activity android:name=".ui.activity.MsgDetailActivity" />
-        <activity android:name=".ui.activity.SettingActivity"/>
-        <activity android:name=".ui.activity.UpdateUserActivity1"/>
-        <activity android:name=".ui.activity.UpdateUserActivity2"/>
-        <activity android:name=".ui.activity.ExeIntensiveChoiceActivity"/>
-        <activity android:name=".ui.activity.IndoorExerciseActivity"/>
-        <activity android:name=".ui.activity.HrRecordActivity"/>
+        <activity android:name=".ui.activity.SettingActivity" />
+        <activity android:name=".ui.activity.UpdateUserActivity1" />
+        <activity android:name=".ui.activity.UpdateUserActivity2" />
+        <activity android:name=".ui.activity.ExeIntensiveChoiceActivity" />
+        <activity android:name=".ui.activity.IndoorExerciseActivity" />
+        <activity android:name=".ui.activity.HrRecordActivity" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -102,12 +107,17 @@
 
         <activity android:name=".ui.activity.TestActivity">
 
-          <!--  <intent-filter>
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
+        <activity
+            android:name=".ui.activity.LoginActivity2"
+            android:label="@string/title_activity_login2" />
     </application>
 
 </manifest>
