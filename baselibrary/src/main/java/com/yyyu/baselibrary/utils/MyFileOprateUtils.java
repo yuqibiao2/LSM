@@ -181,7 +181,7 @@ public class MyFileOprateUtils {
         }
         File f = new File(Constant.filePath, picName);
         if (!f.exists()){
-            f.mkdir();
+            f.getParentFile().mkdir();
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 把图片加载到输出流中

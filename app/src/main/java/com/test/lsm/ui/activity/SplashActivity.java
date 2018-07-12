@@ -1,6 +1,5 @@
 package com.test.lsm.ui.activity;
 
-import android.app.Application;
 import android.bluetooth.BluetoothGatt;
 import android.text.TextUtils;
 import android.view.animation.Animation;
@@ -8,27 +7,19 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.clj.fastble.BleManager;
-import com.clj.fastble.callback.BleGattCallback;
 import com.clj.fastble.callback.BleScanAndConnectCallback;
-import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.scan.BleScanRuleConfig;
 import com.example.jpushdemo.TagAliasOperatorHelper;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
-import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.utils.LoginRegUtils;
 import com.test.lsm.utils.bt.ble.BleBTUtils;
-import com.yyyu.baselibrary.utils.MyLog;
-import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
-import java.util.List;
-
 import butterknife.BindView;
-import de.greenrobot.event.EventBus;
 
 import static com.example.jpushdemo.TagAliasOperatorHelper.ACTION_SET;
 
@@ -76,8 +67,8 @@ public class SplashActivity extends LsmBaseActivity {
     protected void afterInit() {
         super.afterInit();
 
-        resolveSkip();
-        //toConnectLsm();
+        //resolveSkip();
+        toConnectLsm();
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.splash_anime);
         iv_splash.setAnimation(animation);
@@ -110,63 +101,58 @@ public class SplashActivity extends LsmBaseActivity {
      * @return
      */
     private void toConnectLsm() {
-        BleManager.getInstance().scan(new BleScanCallback() {
+
+        String connectDeviceMac = BleBTUtils.getConnectDevice(SplashActivity.this);
+        if (TextUtils.isEmpty(connectDeviceMac)){
+            resolveSkip();
+            return;
+        }
+        BleManager bleManager = BleManager.getInstance();
+        BleScanRuleConfig scanRuleConfig = new BleScanRuleConfig.Builder()
+                .setDeviceMac(connectDeviceMac)  // 只扫描指定mac的设备，可选
+                .setAutoConnect(true)    // 连接时的autoConnect参数，可选，默认false
+                .setScanTimeOut(5000)              // 扫描超时时间，可选，默认10秒；小于等于0表示不限制扫描时间
+                .build();
+        bleManager.initScanRule(scanRuleConfig);
+        bleManager.scanAndConnect(new BleScanAndConnectCallback() {
+            @Override
+            public void onScanFinished(BleDevice scanResult) {
+                resolveSkip();
+            }
+
+            @Override
+            public void onStartConnect() {
+
+            }
+
+            @Override
+            public void onConnectFail(BleDevice bleDevice, BleException exception) {
+                MyToast.showLong(SplashActivity.this, "蓝牙设备连接失败，请在主界面再次连接！");
+                resolveSkip();
+            }
+
+            @Override
+            public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                MyToast.showLong(SplashActivity.this, "蓝牙设备连接成功！");
+                resolveSkip();
+            }
+
+            @Override
+            public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
+
+            }
+
             @Override
             public void onScanStarted(boolean success) {
-                // 开始扫描（主线程）
+
             }
 
             @Override
             public void onScanning(BleDevice bleDevice) {
-                if (finished) {return;}
-                String dName = bleDevice.getDevice().getName();
-                String mac = bleDevice.getMac();
-                if (dName != null) {
-                    if (dName.contains("CC") || dName.contains("Sensor") || dName.contains("Tag")) {
-                        String connectDeviceMac = BleBTUtils.getConnectDevice(SplashActivity.this);
-                        if (!TextUtils.isEmpty(mac) && mac.equals(connectDeviceMac)) {//已经配对过的设备
-                            BleManager.getInstance().connectWapper(bleDevice, new BleGattCallback() {
-                                @Override
-                                public void onStartConnect() {
-                                    MyLog.d(TAG, "onStartConnect===");
-                                }
 
-                                @Override
-                                public void onConnectFail(BleException exception) {
-                                    MyLog.e(TAG, "onConnectFail===" + exception.getDescription());
-                                    //TODO 蓝牙连接失败处理
-                                }
-
-                                @Override
-                                public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
-                                    application.setCurrentBleDevice(bleDevice);
-                                    connected = true;
-                                    resolveSkip();
-                                    MyLog.d(TAG, "onConnectSuccess===");
-                                }
-
-                                @Override
-                                public void onDisConnected(boolean isActiveDisConnected, BleDevice bleDevice, BluetoothGatt gatt, int status) {
-                                    MyLog.d(TAG, "onDisConnected===");
-                                }
-                            });
-                        }
-                    }
-                }
-                // 扫描到一个符合扫描规则的BLE设备（主线程）
-            }
-
-            @Override
-            public void onScanFinished(List<BleDevice> scanResultList) {
-                if (finished) {return;}
-                if (!connected) {//没有连接上设备
-                    MyToast.showLong(SplashActivity.this, "蓝牙设备连接失败，请在主界面再次连接！");
-                    resolveSkip();
-                }
-                // 扫描结束，列出所有扫描到的符合扫描规则的BLE设备（主线程）
-                MyLog.e(TAG, "扫描完成==");
             }
         });
+
     }
 
     private void resolveSkip() {
@@ -192,6 +178,7 @@ public class SplashActivity extends LsmBaseActivity {
     @Override
     protected void onDestroy() {
         finished = true;
+        BleManager.getInstance().cancelScan();
         super.onDestroy();
     }
 }

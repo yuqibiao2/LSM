@@ -221,16 +221,16 @@ public class MainActivity extends LsmBaseActivity {
         });
 
 
-        BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
+      /*  BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
             @Override
             public void dismiss(BleDevice bleDevice) {
                 retryConnect(bleDevice);
             }
-        });
+        });*/
 
     }
 
-    private void retryConnect(BleDevice bleDevice) {
+  /*  private void retryConnect(BleDevice bleDevice) {
         String mac = bleDevice.getMac();
         String connectDeviceMac = BleBTUtils.getConnectDevice(MainActivity.this);
         if (!TextUtils.isEmpty(mac) && mac.equals(connectDeviceMac)) {//已经配对过的设备
@@ -263,7 +263,7 @@ public class MainActivity extends LsmBaseActivity {
                 }
             });
         }
-    }
+    }*/
 
     @Override
     protected void afterInit() {

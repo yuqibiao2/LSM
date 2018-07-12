@@ -150,7 +150,7 @@ public class BleBTDeviceScanActivity extends LsmBaseActivity {
             }
 
             @Override
-            public void onConnectFail(BleException exception) {
+            public void onConnectFail(BleDevice bleDevice, BleException exception) {
                 MyToast.showShort(BleBTDeviceScanActivity.this, "连接失败" + exception.getDescription());
                 hiddenLoadDialog();
             }

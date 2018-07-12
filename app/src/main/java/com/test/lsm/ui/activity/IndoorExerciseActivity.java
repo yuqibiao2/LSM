@@ -1,12 +1,15 @@
 package com.test.lsm.ui.activity;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -15,12 +18,19 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.test.lsm.MyApplication;
 import com.test.lsm.R;
+import com.test.lsm.bean.json.UserLoginReturn;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
+import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyLog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 
@@ -42,6 +52,8 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     @BindView(R.id.cc_ht)
     CombinedChart ccHt;
     private List<BarEntry> mValues;
+    private List<Entry> lineValues;
+    private UserLoginReturn.PdBean user;
 
     @Override
     public int getLayoutId() {
@@ -51,6 +63,10 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     @Override
     public void beforeInit() {
         super.beforeInit();
+
+        MyApplication application = (MyApplication) getApplication();
+        user = application.getUser();
+
         mValues = new ArrayList<>();
         mValues.add(new BarEntry(0, new float[]{0, 60}));
         mValues.add(new BarEntry(1, new float[]{0, 60}));
@@ -86,15 +102,25 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         for (int i = 0; i < 60; i++) {
             mValues.add(new BarEntry(30 + i, new float[]{0, 60}));
         }
+
+        lineValues = new ArrayList<>();
+        for (int i = 0; i < 80; i++) {
+            int nextInt = new Random().nextInt(180);
+            lineValues.add(new Entry(i, nextInt));
+        }
+
     }
 
     @Override
     protected void initView() {
+        String userImage = user.getUSER_IMAGE();
+        if (!TextUtils.isEmpty(userImage)){
+            Glide.with(this).load(userImage).into(rvUserIcon);
+        }
         initChart(ccHt);
         setChartData(ccHt, mValues);
-
         CombinedData data = ccHt.getData();
-        BarDataSet set = (BarDataSet) data.getDataSetByIndex(0);
+        BarDataSet set = (BarDataSet) data.getDataSetByIndex(1);
         data.notifyDataChanged();
         ccHt.notifyDataSetChanged();
         ccHt.setVisibleXRangeMaximum(30);
@@ -111,11 +137,17 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         });
     }
 
+    public void back(View view){
+        finish();
+    }
+
+    public void toSetting(View view){
+        SettingActivity.startAction(this);
+    }
+
     private void addEntry() {
-
-
         CombinedData data = ccHt.getData();
-        BarDataSet set = (BarDataSet) data.getDataSetByIndex(0);
+        BarDataSet set = (BarDataSet) data.getDataSetByIndex(1);
         BarEntry barEntry = new BarEntry(set.getEntryCount()+1, new float[]{120, 60});
         set.addEntry(barEntry);
         set.notifyDataSetChanged();
@@ -130,12 +162,15 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
 
     private void setChartData(CombinedChart mLineChart, List<BarEntry> mValues) {
         BarDataSet set1;
+        LineDataSet set2;
         //判断图表中原来是否有数据
         if (mLineChart.getData() != null &&
                 mLineChart.getData().getDataSetCount() > 0) {
             //获取数据1
-            set1 = (BarDataSet) mLineChart.getData().getDataSetByIndex(0);
+            set1 = (BarDataSet) mLineChart.getData().getDataSetByIndex(1);
             set1.setValues(mValues);
+            set2 = (LineDataSet) mLineChart.getData().getDataSetByIndex(0);
+            set2.setValues(lineValues);
             //刷新数据
             mLineChart.getData().notifyDataChanged();
             mLineChart.notifyDataSetChanged();
@@ -150,6 +185,21 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
             CombinedData data = new CombinedData();
             BarData barData = new BarData(set1);
             data.setData(barData);
+
+            //设置数据1  参数1：数据源 参数2：图例名称
+            set2 = new LineDataSet(lineValues, "测试数据1");
+            set2.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+            set2.setColor(Color.parseColor("#FBA165"));
+            set2.setHighLightColor(Color.WHITE);//设置点击交点后显示交高亮线的颜色
+            set2.setHighlightEnabled(true);//是否使用点击高亮线
+            set2.setDrawCircles(true);
+            set2.setValueTextColor(Color.parseColor("#FBA165"));
+            set2.setLineWidth(DimensChange.dp2px(this, 1.5f));//设置线宽
+            set2.setDrawCircles(false);//是否画焦点
+            set2.setDrawValues(false);
+            LineData lineData = new LineData(set2);
+            data.setData(lineData);
+
             mLineChart.setData(data);
             data.notifyDataChanged();
             mLineChart.notifyDataSetChanged();
@@ -158,7 +208,6 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         }
 
     }
-
 
     protected void initChart(CombinedChart mChart) {
         mChart.setNoDataText("没有数据");//没有数据时显示的文字

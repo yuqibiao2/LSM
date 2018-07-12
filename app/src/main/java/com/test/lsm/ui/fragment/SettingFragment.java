@@ -227,7 +227,33 @@ public class SettingFragment extends LsmBaseFragment {
      * @param bleDevice
      */
     private void connect(final BleDevice bleDevice) {
-        BleManager.getInstance().connectWapper(bleDevice, new BleGattCallback() {
+
+        BleManager.getInstance().connect(bleDevice, new BleGattCallback() {
+            @Override
+            public void onStartConnect() {
+
+            }
+
+            @Override
+            public void onConnectFail(BleDevice bleDevice, BleException exception) {
+                showToast("连接失败");
+            }
+
+            @Override
+            public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                showToast("连接成功");
+                BleBTUtils.saveConnectDevice(getContext(), bleDevice.getMac());
+                EventBus.getDefault().post(new BleConnectMessage(1, bleDevice));
+                application.setCurrentBleDevice(bleDevice);
+            }
+
+            @Override
+            public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
+                showToast("取消了连接");
+            }
+        });
+
+        /*BleManager.getInstance().connect(bleDevice, new BleGattCallback() {
             @Override
             public void onStartConnect() {
             }
@@ -249,7 +275,7 @@ public class SettingFragment extends LsmBaseFragment {
             public void onDisConnected(boolean isActiveDisConnected, BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 showToast("取消了连接");
             }
-        });
+        });*/
     }
 
     /**

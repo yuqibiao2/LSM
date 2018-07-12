@@ -73,7 +73,8 @@ public class MyApplication extends Application{
         BleManager.getInstance().init(this);
         BleManager.getInstance()
                 .enableLog(true)
-                .setMaxConnectCount(7)
+                .setReConnectCount(10, 1000)
+                .setConnectOverTime(5000)
                 .setOperateTimeout(5000);
     }
 

@@ -45,6 +45,7 @@ import com.test.lsm.db.bean.Step;
 import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.global.Constant;
+import com.test.lsm.net.GlidUtils;
 import com.test.lsm.ui.activity.ECGShowActivity3;
 import com.test.lsm.ui.activity.HrRecordActivity;
 import com.test.lsm.ui.activity.SettingActivity;
@@ -322,7 +323,7 @@ public class InformationFragment extends LsmBaseFragment {
     protected void initView() {
         String userImage = application.getUser().getUSER_IMAGE();
         if (!TextUtils.isEmpty(userImage)){
-            Glide.with(this).load(userImage).into(rvUserIcon);
+            GlidUtils.load(getContext()  , rvUserIcon , userImage);
         }
     }
 

@@ -21,6 +21,7 @@ import com.test.lsm.adapter.PushMsgAdapter;
 import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.PushExtra;
 import com.test.lsm.net.APIMethodManager;
+import com.test.lsm.net.GlidUtils;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.MsgDetailActivity;
 import com.test.lsm.ui.activity.SettingActivity;
@@ -85,7 +86,7 @@ public class TodayFragment extends LsmBaseFragment {
     protected void initView() {
         String userImage = application.getUser().getUSER_IMAGE();
         if (!TextUtils.isEmpty(userImage)){
-            Glide.with(this).load(userImage).into(rvUserIcon);
+            GlidUtils.load(getContext() , rvUserIcon , userImage);
         }
         pushMsgAdapter = new PushMsgAdapter(getContext(), R.layout.rv_item_today, mData);
         rvToday.setLayoutManager(new LinearLayoutManager(getContext()));

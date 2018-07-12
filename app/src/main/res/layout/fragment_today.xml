@@ -39,7 +39,7 @@
             android:layout_height="35dp"
             android:layout_gravity="center_vertical"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/avril" />
 
     </LinearLayout>
 

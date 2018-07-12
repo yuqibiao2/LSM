@@ -203,7 +203,7 @@ public class BleBTDeviceScanDialog extends LsmBaseDialog {
      * @param bleDevice
      */
     private void connect(final BleDevice bleDevice) {
-        BleManager.getInstance().connectWapper(bleDevice, new BleGattCallback() {
+        /*BleManager.getInstance().connectWapper(bleDevice, new BleGattCallback() {
             @Override
             public void onStartConnect() {
             }
@@ -236,7 +236,7 @@ public class BleBTDeviceScanDialog extends LsmBaseDialog {
                 mDeviceAdapter.removeDevice(bleDevice);
                 mDeviceAdapter.notifyDataSetChanged();
             }
-        });
+        });*/
     }
 
     /**

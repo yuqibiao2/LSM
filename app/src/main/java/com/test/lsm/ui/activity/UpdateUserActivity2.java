@@ -23,12 +23,15 @@ import com.test.lsm.bean.form.UserRegVo;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.json.UserRegReturn;
 import com.test.lsm.net.APIMethodManager;
+import com.test.lsm.net.GlidUtils;
 import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.utils.LoginRegUtils;
 import com.yyyu.baselibrary.ui.pop.PicChoicePop;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MediaUtils;
 import com.yyyu.baselibrary.utils.MyFileOprateUtils;
 import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.io.File;
@@ -68,6 +71,7 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
     private UserRegVo userRegVo;
     private APIMethodManager apiMethodManager;
     private UserLoginReturn.PdBean user;
+    private MyApplication application;
 
     @Override
     public int getLayoutId() {
@@ -98,7 +102,7 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
         userRegVo = mGson.fromJson(userVoJsonStr, UserRegVo.class);
         apiMethodManager = APIMethodManager.getInstance();
 
-        MyApplication application = (MyApplication) getApplication();
+        application = (MyApplication) getApplication();
         user = application.getUser();
 
     }
@@ -124,7 +128,7 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
         tvCstTel.setText(""+user.getURGENT_PHONE());
         String userImage = user.getUSER_IMAGE();
         if (!TextUtils.isEmpty(userImage)){
-            Glide.with(this).load(userImage).into(ivUserIcon);
+            GlidUtils.load(this  , ivUserIcon , userImage);
         }
     }
 
@@ -168,6 +172,11 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
                 if ("01".equals(code)) {
                     EventBus.getDefault().post("register_finished");
                     MyToast.showLong(UpdateUserActivity2.this, "修改成功！");
+                    String pdStr = mGson.toJson(result.getPd());
+                    //保存用户信息
+                    MySPUtils.put(UpdateUserActivity2.this , LoginRegUtils.USER_INFO , pdStr);
+                    application.setUser(result.getPd());
+                    initView();
                     finish();
                 }
                 MyLog.e(TAG, "code：" + code);
@@ -201,10 +210,10 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
             }
             case MediaUtils.PHOTO_REQUEST_CUT: {//剪切
                 if (RESULT_OK != resultCode) break;
-                Bitmap bitmap = BitmapFactory.decodeFile(MediaUtils.filePath + MediaUtils.cropName);
+                String cropPicPath = MediaUtils.filePath + MediaUtils.cropName;
+                Bitmap bitmap = BitmapFactory.decodeFile(cropPicPath);
                 ivUserIcon.setImageBitmap(bitmap);
-                String savePath = MyFileOprateUtils.saveBitmap(this, bitmap , "crop_temp.jpg");
-                userRegVo.setUSER_IMAGE(MyFileOprateUtils.imgToBase64(savePath , this));
+                userRegVo.setUSER_IMAGE(MyFileOprateUtils.imgToBase64(cropPicPath , this));
                 break;
             }
             case PICK_CONTACT_REQUEST: {

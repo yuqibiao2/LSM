@@ -17,6 +17,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:padding="15dp"
+            android:onClick="back"
             android:src="@mipmap/ic_back" />
 
         <ImageView
@@ -25,6 +26,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/tv_tip"
+            android:onClick="toSetting"
             android:src="@mipmap/ic_run_chg" />
 
         <TextView
@@ -43,8 +45,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
+            android:scaleType="centerCrop" />
     </RelativeLayout>
 
     <LinearLayout
