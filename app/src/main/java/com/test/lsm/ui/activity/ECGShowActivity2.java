@@ -2,18 +2,12 @@ package com.test.lsm.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.swm.algorithm.Algorithm;
 import com.swm.algorithm.support.IirFilter;
 import com.test.lsm.R;
@@ -21,12 +15,10 @@ import com.test.lsm.bean.event.ECGChgEvent;
 import com.test.lsm.bean.event.HeartChgEvent;
 import com.test.lsm.global.Constant;
 import com.yyyu.baselibrary.ui.widget.EcgView;
-import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.StatusBarCompat;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;

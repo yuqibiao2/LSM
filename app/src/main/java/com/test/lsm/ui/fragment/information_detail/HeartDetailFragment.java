@@ -1,20 +1,20 @@
 package com.test.lsm.ui.fragment.information_detail;
 
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.test.lsm.R;
-import com.test.lsm.bean.event.HeartChgEvent;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
 import com.test.lsm.bean.form.QueryHRVInfo;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.global.Constant;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.ui.activity.HrRecordActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
-import com.yyyu.lsmalgorithm.MyLib;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
@@ -55,6 +55,12 @@ public class HeartDetailFragment extends LsmBaseFragment {
     TextView tvStatus4;
     @BindView(R.id.tv_update_time)
     TextView tvUpdateTime;
+    @BindView(R.id.tv_avg_hr)
+    TextView tvAvgHr;
+    @BindView(R.id.tv_max_hr)
+    TextView tvMaxHr;
+    @BindView(R.id.ll_hr_value)
+    LinearLayout llHrValue;
 
     private List<View> statusList;
     private APIMethodManager apiMethodManager;
@@ -81,8 +87,33 @@ public class HeartDetailFragment extends LsmBaseFragment {
     }
 
     @Override
-    protected void initListener() {
+    public void onResume() {
+        super.onResume();
+        CircularFifoQueue<Integer> hrBuffer = Constant.hrBuffer2;
+        int maxHr = 0;
+        int avgHr=0;
+        int total = 0;
+        for (Integer hrValue : hrBuffer) {
+            if (hrValue > maxHr) {
+                maxHr = hrValue;
+            }
+            total = total + hrValue;
+        }
+        if (hrBuffer.size()>0){
+            avgHr = total / hrBuffer.size();
+        }
+        tvAvgHr.setText("平均心率                " + avgHr + " bpm");
+        tvMaxHr.setText("最大心率                " + maxHr + " bpm");
+    }
 
+    @Override
+    protected void initListener() {
+        llHrValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HrRecordActivity.startAction(getContext());
+            }
+        });
     }
 
 
@@ -91,12 +122,12 @@ public class HeartDetailFragment extends LsmBaseFragment {
 
         CircularFifoQueue<Long> rriBuffer = Constant.rriBuffer;
         StringBuffer rrlIntervalSb = new StringBuffer();
-        for (int i=0 ; i<rriBuffer.size() ; i++){
+        for (int i = 0; i < rriBuffer.size(); i++) {
             Long rriValue = rriBuffer.get(i);
-            if (i==rriBuffer.size()-1){
-                rrlIntervalSb.append(rriValue+"");
-            }else{
-                rrlIntervalSb.append(rriValue+",");
+            if (i == rriBuffer.size() - 1) {
+                rrlIntervalSb.append(rriValue + "");
+            } else {
+                rrlIntervalSb.append(rriValue + ",");
             }
         }
         QueryHRVInfo hrvInfo = new QueryHRVInfo();
@@ -107,7 +138,7 @@ public class HeartDetailFragment extends LsmBaseFragment {
             public void onSuccess(GetHRVInfoReturn result) {
                 List<GetHRVInfoReturn.HRVIndexBean> hrvIndex = result.getHRVIndex();
                 if (hrvIndex != null && hrvIndex.size() > 0) {
-                    tvUpdateTime.setText("更新时间："+ MyTimeUtils.getCurrentDateTime());
+                    tvUpdateTime.setText("更新时间：" + MyTimeUtils.getCurrentDateTime());
                     GetHRVInfoReturn.HRVIndexBean hrvIndexBean = hrvIndex.get(0);
                     //---体力状态
                     Integer bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());

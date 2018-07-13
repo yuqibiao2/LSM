@@ -14,6 +14,8 @@ import com.yyyu.baselibrary.utils.ActivityHolder;
 import com.yyyu.baselibrary.utils.FormValidationUtils;
 import com.yyyu.baselibrary.utils.MySPUtils;
 
+import static com.test.lsm.utils.bt.ble.BleBTUtils.CONNECTED_DEVICE;
+
 /**
  * 功能：登录注册相关工具类
  *
@@ -23,17 +25,18 @@ import com.yyyu.baselibrary.utils.MySPUtils;
  */
 public class LoginRegUtils {
 
-    public final static String USER_INFO ="userInfo";
+    public final static String USER_INFO = "userInfo";
 
 
-    public static void logout(Context ctx){
-        MySPUtils.remove(ctx , USER_INFO);
+    public static void logout(Context ctx) {
+        MySPUtils.remove(ctx, USER_INFO);
+        MySPUtils.remove(ctx, CONNECTED_DEVICE);
         ActivityHolder.finishedAll();
     }
 
-    public static UserLoginReturn.PdBean getLoginUser(Context ctx){
-        String userInfoStr = (String) MySPUtils.get(ctx , USER_INFO, "");
-        return new Gson().fromJson(userInfoStr , UserLoginReturn.PdBean.class);
+    public static UserLoginReturn.PdBean getLoginUser(Context ctx) {
+        String userInfoStr = (String) MySPUtils.get(ctx, USER_INFO, "");
+        return new Gson().fromJson(userInfoStr, UserLoginReturn.PdBean.class);
     }
 
     /**
@@ -42,23 +45,23 @@ public class LoginRegUtils {
      * @param ctx
      * @return
      */
-    public static boolean isLogin(Context ctx){
-        String userInfoStr = (String) MySPUtils.get(ctx , USER_INFO, "");
+    public static boolean isLogin(Context ctx) {
+        String userInfoStr = (String) MySPUtils.get(ctx, USER_INFO, "");
         return !TextUtils.isEmpty(userInfoStr);
     }
 
 
     public enum CheckType {
-        tel, pwd,height,weight
+        tel, pwd, height, weight
     }
 
     /**
      * TextInputLayout 输入提示（检测）
      *
      * @param textInputLayout
-     * @param checkType            0 ：手机号 1：密码
+     * @param checkType       0 ：手机号 1：密码
      */
-    public static  void checkEdit(final TextInputLayout textInputLayout, final CheckType checkType) {
+    public static void checkEdit(final TextInputLayout textInputLayout, final CheckType checkType) {
         EditText editText = textInputLayout.getEditText();
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -92,11 +95,11 @@ public class LoginRegUtils {
                         }
                         break;
                     }
-                    case height:{
+                    case height: {
 
                         break;
                     }
-                    case weight:{
+                    case weight: {
 
                         break;
                     }

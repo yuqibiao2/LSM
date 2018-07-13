@@ -10,6 +10,7 @@
         android:layout_height="56dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
+        android:background="@color/my_white"
         android:orientation="horizontal">
 
        <LinearLayout

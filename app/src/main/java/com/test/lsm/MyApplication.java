@@ -70,12 +70,17 @@ public class MyApplication extends Application{
      * 初始化Ble
      */
     private void initBleBT() {
-        BleManager.getInstance().init(this);
-        BleManager.getInstance()
+        BleManager bleManager = BleManager.getInstance();
+        bleManager.init(this);
+        bleManager
                 .enableLog(true)
-                .setReConnectCount(10, 1000)
-                .setConnectOverTime(5000)
                 .setOperateTimeout(5000);
+        //开始蓝牙
+        if (bleManager.isSupportBle()){
+          if (!bleManager.isBlueEnable()){
+              bleManager.enableBluetooth();//开启蓝牙
+          }
+        }
     }
 
     public boolean isBleConnected(){

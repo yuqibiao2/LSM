@@ -24,7 +24,7 @@ public class CheckBleIsConnectService extends Service {
 
     private static final String TAG = "CheckBleIsConnectServic";
 
-    private final static int TIME_SPACE = 2 * 1000;
+    private final static int TIME_SPACE = 5 * 1000;
     private MyApplication application;
     private BleDevice currentBleDevice;
     private BleManager bleManager;

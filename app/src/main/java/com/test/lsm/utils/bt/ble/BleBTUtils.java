@@ -13,7 +13,7 @@ import com.yyyu.baselibrary.utils.MySPUtils;
  */
 public class BleBTUtils {
 
-    private static final String CONNECTED_DEVICE="CONNECTED_DEVICE";
+    public static final String CONNECTED_DEVICE="CONNECTED_DEVICE";
 
     /**
      * 得到配对设备的mac地址

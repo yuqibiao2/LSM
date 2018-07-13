@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -59,60 +58,65 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/rl_heart"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
                     android:background="@mipmap/ic_info_item_bg">
 
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="50dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_heart" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_con"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/rl_heart"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="45dp">
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_heart" />
 
                         <LinearLayout
+                            android:id="@+id/ll_con"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="45dp">
 
-                            <TextView
-                                android:id="@+id/tv_heart_num"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="#000"
-                                android:textSize="30sp" />
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:text=" bpm"
-                                android:textColor="#000"
-                                android:textSize="24sp" />
+                                <TextView
+                                    android:id="@+id/tv_heart_num"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textColor="#000"
+                                    android:textSize="30sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text=" bpm"
+                                    android:textColor="#000"
+                                    android:textSize="24sp" />
+                            </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/ll_con"
-                        android:layout_below="@+id/ll_con"
-                        android:layout_marginBottom="25dp"
-                        android:text="目前状态"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="10sp" />
-
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/ll_con"
+                            android:layout_below="@+id/ll_con"
+                            android:layout_marginTop="5dp"
+                            android:text="目前状态"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
                 </RelativeLayout>
 
                 <FrameLayout
@@ -137,60 +141,66 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/rl_step"
+
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
                     android:background="@mipmap/ic_info_item_bg">
 
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="50dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_step" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_con2"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/rl_step"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="45dp">
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_step" />
 
                         <LinearLayout
+                            android:id="@+id/ll_con2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="45dp">
 
-                            <TextView
-                                android:id="@+id/tv_step_num"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="#000"
-                                android:textSize="30sp" />
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:text="步"
-                                android:textColor="#000"
-                                android:textSize="18sp" />
+                                <TextView
+                                    android:id="@+id/tv_step_num"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textColor="#000"
+                                    android:textSize="30sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="步"
+                                    android:textColor="#000"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/ll_con2"
-                        android:layout_below="@+id/ll_con2"
-                        android:layout_marginBottom="25dp"
-                        android:layout_marginTop="0dp"
-                        android:text="今日累计"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="10sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/ll_con2"
+                            android:layout_below="@+id/ll_con2"
+                            android:layout_marginTop="3dp"
+                            android:text="今日累计"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
 
                 </RelativeLayout>
 
@@ -204,7 +214,9 @@
                         android:id="@+id/frag_step_detail"
                         android:name="com.test.lsm.ui.fragment.information_detail.StepDetailFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp" />
                 </FrameLayout>
             </LinearLayout>
 
@@ -212,63 +224,68 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-60dp"
-                android:orientation="vertical">
+                android:orientation="vertical">-
 
                 <RelativeLayout
-                    android:id="@+id/rl_calorie"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
                     android:background="@mipmap/ic_info_item_bg">
 
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="50dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_calorie" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_con3"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/rl_calorie"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="45dp">
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_calorie" />
 
                         <LinearLayout
+                            android:id="@+id/ll_con3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="45dp">
 
-                            <TextView
-                                android:id="@+id/tv_calorie"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="#000"
-                                android:textSize="30sp" />
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:text="大卡"
-                                android:textColor="#000"
-                                android:textSize="18sp" />
+                                <TextView
+                                    android:id="@+id/tv_calorie"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textColor="#000"
+                                    android:textSize="30sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="大卡"
+                                    android:textColor="#000"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/ll_con3"
-                        android:layout_below="@+id/ll_con3"
-                        android:layout_marginBottom="5dp"
-                        android:text="目前状态"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="10sp" />
-
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/ll_con3"
+                            android:layout_below="@+id/ll_con3"
+                            android:layout_marginTop="3dp"
+                            android:text="目前状态"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
                 </RelativeLayout>
 
                 <FrameLayout
@@ -281,7 +298,9 @@
                         android:id="@+id/frag_calorie"
                         android:name="com.test.lsm.ui.fragment.information_detail.CalorieDetailFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp" />
                 </FrameLayout>
             </LinearLayout>
 
@@ -292,58 +311,63 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/rl_ecg"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
                     android:background="@mipmap/ic_info_item_bg">
 
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="50dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_ecg" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_con4"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/rl_ecg"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="45dp">
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_ecg" />
 
                         <LinearLayout
+                            android:id="@+id/ll_con4"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="45dp">
 
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text=""
-                                android:textColor="#000"
-                                android:textSize="30sp" />
+                                android:layout_height="wrap_content">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:text="生理讯号"
-                                android:textColor="#000"
-                                android:textSize="18sp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=""
+                                    android:textColor="#000"
+                                    android:textSize="30sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="生理讯号"
+                                    android:textColor="#000"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/ll_con4"
-                        android:layout_below="@+id/ll_con4"
-                        android:layout_marginBottom="5dp"
-                        android:text="目前状态"
-                        android:textSize="10sp"
-                        android:visibility="invisible" />
-
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/ll_con4"
+                            android:layout_below="@+id/ll_con4"
+                            android:layout_marginTop="3dp"
+                            android:text="目前状态"
+                            android:textSize="10sp"
+                            android:visibility="invisible" />
+                    </RelativeLayout>
                 </RelativeLayout>
 
                 <FrameLayout
@@ -362,60 +386,64 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/rl_hr_chart"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
                     android:background="@mipmap/ic_info_item_bg">
 
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="50dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_ecg" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_con5"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/rl_hr_chart"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="45dp">
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_ecg" />
 
                         <LinearLayout
+                            android:id="@+id/ll_con5"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="45dp">
 
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text=""
-                                android:textColor="#000"
-                                android:textSize="30sp" />
+                                android:layout_height="wrap_content">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:text="心率记录"
-                                android:textColor="#000"
-                                android:textSize="18sp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=""
+                                    android:textColor="#000"
+                                    android:textSize="30sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="心率记录"
+                                    android:textColor="#000"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/ll_con5"
-                        android:layout_below="@+id/ll_con5"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="20dp"
-                        android:text="目前状态"
-                        android:textSize="10sp"
-                        android:visibility="invisible" />
-
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/ll_con5"
+                            android:layout_below="@+id/ll_con5"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="目前状态"
+                            android:textSize="10sp"
+                            android:visibility="invisible" />
+                    </RelativeLayout>
                 </RelativeLayout>
 
                 <FrameLayout
@@ -428,10 +456,61 @@
                         android:id="@+id/frag_hr_chart"
                         android:name="com.test.lsm.ui.fragment.information_detail.HRChartDetailFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="50dp"/>
+                        android:layout_height="wrap_content" />
                 </FrameLayout>
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_connected_device"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:visibility="gone"
+                android:layout_marginBottom="60dp">
+
+                <ImageView
+                    android:id="@+id/iv_bt_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:src="@mipmap/ic_bt" />
+
+                <ImageView
+                    android:id="@+id/iv_cc"
+                    android:layout_width="35dp"
+                    android:layout_height="26dp"
+                    android:layout_below="@+id/iv_bt_icon"
+                    android:src="@mipmap/ic_cca10" />
+
+                <TextView
+                    android:id="@+id/tv_bt_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#FF9B9B9B"
+                    android:layout_toRightOf="@+id/iv_cc"
+                    android:layout_alignTop="@+id/iv_cc"
+                    android:paddingLeft="10dp"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tv_bry_pct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#FF9B9B9B"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:paddingLeft="10dp"
+                    android:textSize="14sp" />
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/ic_battery"
+                    android:layout_toLeftOf="@id/tv_bry_pct"
+                    android:layout_alignParentBottom="true" />
+            </RelativeLayout>
 
         </LinearLayout>
     </com.yyyu.baselibrary.ui.widget.BounceScrollView>

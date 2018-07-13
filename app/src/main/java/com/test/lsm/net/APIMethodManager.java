@@ -1,5 +1,7 @@
 package com.test.lsm.net;
 
+import android.text.TextUtils;
+
 import com.test.lsm.bean.form.QueryHRVInfo;
 import com.test.lsm.bean.form.QueryRunInfoVo;
 import com.test.lsm.bean.form.RunRecord;
@@ -7,6 +9,7 @@ import com.test.lsm.bean.form.SaveHeartByMinVo;
 import com.test.lsm.bean.form.SaveUserHRVVo;
 import com.test.lsm.bean.form.UserHealthInfo;
 import com.test.lsm.bean.form.UserRegVo;
+import com.test.lsm.bean.form.UserUpdateVo;
 import com.test.lsm.bean.json.GetActiveUser;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
@@ -425,9 +428,10 @@ public class APIMethodManager {
      * @param callback
      * @return
      */
-    public Subscription updateUser(UserRegVo userRegVo, final IRequestCallback<UserRegReturn> callback) {
+    public Subscription updateUser(UserUpdateVo userRegVo, final IRequestCallback<UserRegReturn> callback) {
 
         Map<String, String> paras = new HashMap<>();
+        paras.put("USER_ID", ""+userRegVo.getUSER_ID());
         paras.put("USERNAME", userRegVo.getUSERNAME());
         paras.put("PASSWORD", userRegVo.getPASSWORD());
         paras.put("PHONE", userRegVo.getPHONE());
@@ -437,7 +441,11 @@ public class APIMethodManager {
         paras.put("BIRTHDAY", userRegVo.getBIRTHDAY());
         paras.put("URGENT_USER", userRegVo.getURGENT_USER());
         paras.put("URGENT_PHONE", userRegVo.getURGENT_PHONE());
-        paras.put("USER_IMAGE" , userRegVo.getUSER_IMAGE());
+        String userImage = userRegVo.getUSER_IMAGE();
+        if (!TextUtils.isEmpty(userImage)){
+            paras.put("USER_IMAGE" , userImage);
+        }
+        paras.put("HEALTH_PARAM" , userRegVo.getHEALTH_PARAM());
 
         Subscription subscribe = lsmApi.updateUser(paras)
                 .subscribeOn(Schedulers.io())

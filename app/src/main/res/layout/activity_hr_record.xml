@@ -17,8 +17,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:padding="15dp"
             android:onClick="back"
+            android:padding="15dp"
             android:src="@mipmap/ic_back" />
 
 
@@ -72,13 +72,21 @@
 
     </RelativeLayout>
 
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_hr"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"
+        app:cardCornerRadius="8dp"
+        app:elevation="2dp">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_hr"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginLeft="-16dp"
+            android:layout_marginRight="-16dp"/>
+    </android.support.v7.widget.CardView>
 
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/ci_hr"

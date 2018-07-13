@@ -3,7 +3,6 @@ package com.test.lsm.ui.activity;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,14 +14,15 @@ import android.widget.RadioGroup;
 import com.google.gson.Gson;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
-import com.test.lsm.bean.form.UserRegVo;
+import com.test.lsm.bean.form.UserUpdateVo;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.Calendar;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
@@ -67,7 +67,7 @@ public class UpdateUserActivity1 extends LsmBaseActivity {
     private Calendar cal;
     private DatePickerDialog datePickerDialog;
     private UserLoginReturn.PdBean user;
-    private UserRegVo userRegVo;
+    private UserUpdateVo userUpdateVo;
 
     @Override
     public int getLayoutId() {
@@ -81,9 +81,11 @@ public class UpdateUserActivity1 extends LsmBaseActivity {
         Intent intent = getIntent();
         mGson = new Gson();
         getDate();
-        userRegVo = new UserRegVo();
+        userUpdateVo = new UserUpdateVo();
         MyApplication application = (MyApplication) getApplication();
         user = application.getUser();
+        userUpdateVo.setUSER_ID(intent.getIntExtra("userId" , -1));
+        userUpdateVo.setHEALTH_PARAM(""+MySPUtils.get(this , "waringHr" , -1));
     }
 
     @Override
@@ -99,14 +101,14 @@ public class UpdateUserActivity1 extends LsmBaseActivity {
         };
         datePickerDialog = new DatePickerDialog(UpdateUserActivity1.this, 0, listener, year, month, day);
         String userSex = user.getUSER_SEX();
-            switch (userSex) {
-            case "0":
+            switch (Integer.parseInt(userSex)) {
+            case 0:
                 rbMale.setChecked(true);
-                userRegVo.setUSER_SEX(0 + "");
+                userUpdateVo.setUSER_SEX(0 + "");
                 break;
-            case "1":
+            case 1:
                 rbFemale.setChecked(true);
-                userRegVo.setUSER_SEX(1 + "");
+                userUpdateVo.setUSER_SEX(1 + "");
                 break;
         }
         String birthday = user.getBIRTHDAY();
@@ -136,12 +138,13 @@ public class UpdateUserActivity1 extends LsmBaseActivity {
         rgSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                MyLog.e("onCheckedChanged================="+i);
                 switch (i) {
-                    case 1://男
-                        userRegVo.setUSER_SEX(0 + "");
+                    case R.id.rb_male://男
+                        userUpdateVo.setUSER_SEX(0 + "");
                         break;
-                    case 2://女
-                        userRegVo.setUSER_SEX(1 + "");
+                    case R.id.rb_female://女
+                        userUpdateVo.setUSER_SEX(1 + "");
                         break;
                 }
             }
@@ -166,12 +169,11 @@ public class UpdateUserActivity1 extends LsmBaseActivity {
             return;
         }
 
-        userRegVo.setUSER_SEX(0 + "");
-        userRegVo.setBIRTHDAY(birthday);
-        userRegVo.setUSER_HEIGHT(height);
-        userRegVo.setUSER_WEIGHT(weight);
+        userUpdateVo.setBIRTHDAY(birthday);
+        userUpdateVo.setUSER_HEIGHT(height);
+        userUpdateVo.setUSER_WEIGHT(weight);
 
-        UpdateUserActivity2.startAction(this, mGson.toJson(userRegVo));
+        UpdateUserActivity2.startAction(this, mGson.toJson(userUpdateVo));
 
     }
 
@@ -183,8 +185,9 @@ public class UpdateUserActivity1 extends LsmBaseActivity {
     }
 
 
-    public static void startAction(Activity activity) {
+    public static void startAction(Activity activity,Integer userId) {
         Intent intent = new Intent(activity, UpdateUserActivity1.class);
+        intent.putExtra("userId" , userId);
         activity.startActivity(intent);
     }
 

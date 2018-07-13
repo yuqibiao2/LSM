@@ -293,7 +293,7 @@ public class BleManager {
         return null;
     }
 
-    public void connectWapper(BleDevice bleDevice , final BleGattCallback bleGattCallback){
+    public void connectWrapper(BleDevice bleDevice , final BleGattCallback bleGattCallback){
 
         connect(bleDevice , new BleGattCallback() {
             @Override
@@ -724,6 +724,24 @@ public class BleManager {
             return multipleBluetoothController.isContainDevice(bleDevice);
         }
         return false;
+    }
+
+    /**
+     * 通过mac地址判断设备是否已连接
+     *
+     * @param mac
+     * @return
+     */
+    public boolean isConnected(String mac){
+        boolean isConnected = false;
+        List<BleDevice> connectedDevice = getAllConnectedDevice();
+        for (BleDevice bleDevice: connectedDevice) {
+            if (bleDevice.getMac().equalsIgnoreCase(mac)){
+                isConnected = true;
+                break;
+            }
+        }
+        return  isConnected;
     }
 
     public void disconnect(BleDevice bleDevice) {

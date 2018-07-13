@@ -36,9 +36,11 @@ public class BleDeviceAdapter2 extends BaseQuickAdapter<BleDevice, BaseViewHolde
     protected void convert(BaseViewHolder helper, final BleDevice item) {
 
         String dName = item.getName();
+        ImageView ivDeviceIcon = helper.getView(R.id.iv_bt_device_icon);
         if (dName.contains("CC") || dName.contains("Sensor") || dName.contains("Tag")) {
-            ImageView ivDeviceIcon = helper.getView(R.id.iv_bt_device_icon);
-            Glide.with(mContext).load(R.mipmap.ic_launcher).into(ivDeviceIcon);
+            Glide.with(mContext).load(R.mipmap.ic_cca10).into(ivDeviceIcon);
+        }else if(dName.contains("watch")||dName.contains("Watch")||dName.contains("WATCH")){
+            Glide.with(mContext).load(R.mipmap.ic_iwatch).into(ivDeviceIcon);
         }
         helper.setText(R.id.tv_bt_name, item.getName());
         helper.setText(R.id.tv_bt_mac, item.getMac());
@@ -51,11 +53,11 @@ public class BleDeviceAdapter2 extends BaseQuickAdapter<BleDevice, BaseViewHolde
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {// 连接
                     if (!bleManager.isConnected(item)){
-                        mOnDeviceConnectListener.toConnect(item);
+                        mOnDeviceConnectListener.toConnect(item , scDevice);
                     }
                 } else {//取消连接
                     if (bleManager.isConnected(item)){
-                        mOnDeviceConnectListener.toDisConnect(item);
+                        mOnDeviceConnectListener.toDisConnect(item , scDevice);
                     }
                 }
             }
@@ -70,9 +72,9 @@ public class BleDeviceAdapter2 extends BaseQuickAdapter<BleDevice, BaseViewHolde
 
     public interface OnDeviceConnectListener {
 
-        void toConnect(BleDevice bleDevice);
+        void toConnect(BleDevice bleDevice, SwitchCompat switchCompat);
 
-        void toDisConnect(BleDevice bleDevice);
+        void toDisConnect(BleDevice bleDevice , SwitchCompat switchCompat);
 
     }
 

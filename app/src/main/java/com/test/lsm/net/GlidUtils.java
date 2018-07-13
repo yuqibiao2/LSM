@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.yyyu.baselibrary.utils.MyLog;
 
 /**
  * 功能：
@@ -14,9 +15,10 @@ import com.bumptech.glide.Glide;
  */
 public class GlidUtils {
 
-    public static void load(Context context , ImageView iv , String imgURL){
+    public static final String BASE_IMAGE_URL = "http://lsm.mycgb.cn/";
 
-        Glide.with(context ).load(APIFactory.BASE_URL+imgURL).into(iv);
+    public static void load(Context context , ImageView iv , String imgURL){
+        Glide.with(context ).load(BASE_IMAGE_URL+imgURL).into(iv);
     }
 
 }

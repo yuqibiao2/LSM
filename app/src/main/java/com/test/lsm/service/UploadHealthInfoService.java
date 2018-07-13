@@ -164,9 +164,9 @@ public class UploadHealthInfoService extends Service {
                 try {
                     while (true) {
                         Thread.sleep(60 * 1000);
-                        if (!application.isBleConnected()) {
+                      /*  if (!application.isBleConnected()) {
                             continue;
-                        }
+                        }*/
                         //计算平均值
                         CircularFifoQueue<Integer> oneMinHeart = Constant.oneMinHeart;
                         int total = 0;

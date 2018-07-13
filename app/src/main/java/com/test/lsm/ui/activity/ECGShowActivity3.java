@@ -120,7 +120,7 @@ public class ECGShowActivity3 extends LsmBaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
-    public void updateHeart(ECGChgEvent ecgChgEvent) {
+    public void updateECG(ECGChgEvent ecgChgEvent) {
         short[] ecgValue = ecgChgEvent.getEcgValue();
         ecgHr.addEcgRawData(ecgValue , 0 , 0);
     }

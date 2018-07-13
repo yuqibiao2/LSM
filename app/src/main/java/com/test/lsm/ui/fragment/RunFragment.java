@@ -36,12 +36,14 @@ import com.google.gson.Gson;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.HeartChgEvent;
+import com.test.lsm.bean.event.OnUserInfoChg;
 import com.test.lsm.bean.event.RunStartEvent;
 import com.test.lsm.bean.event.RunStopEvent;
 import com.test.lsm.bean.form.RunRecord;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
+import com.test.lsm.net.GlidUtils;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.RunRecordActivity;
 import com.test.lsm.ui.activity.SettingActivity;
@@ -635,5 +637,12 @@ public class RunFragment extends LsmBaseFragment {
         super.onDestroy();
     }
 
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onUserInfoChanged(OnUserInfoChg onUserInfoChg){
+        String userImage = application.getUser().getUSER_IMAGE();
+        if (!TextUtils.isEmpty(userImage)){
+            GlidUtils.load(getContext() , rvUserIcon , userImage);
+        }
+    }
 
 }

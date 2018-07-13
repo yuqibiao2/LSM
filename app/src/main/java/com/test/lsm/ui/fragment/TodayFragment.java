@@ -18,6 +18,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.PushMsgAdapter;
+import com.test.lsm.bean.event.OnUserInfoChg;
 import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.PushExtra;
 import com.test.lsm.net.APIMethodManager;
@@ -37,6 +38,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import cn.jpush.android.api.JPushInterface;
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import de.greenrobot.event.ThreadMode;
 
 /**
  * 功能：今天的动态
@@ -79,7 +83,7 @@ public class TodayFragment extends LsmBaseFragment {
         mGson = new Gson();
         application = (MyApplication) getActivity().getApplication();
         apiMethodManager = APIMethodManager.getInstance();
-
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -170,6 +174,15 @@ public class TodayFragment extends LsmBaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onUserInfoChanged(OnUserInfoChg onUserInfoChg){
+        String userImage = application.getUser().getUSER_IMAGE();
+        if (!TextUtils.isEmpty(userImage)){
+            GlidUtils.load(getContext() , rvUserIcon , userImage);
+        }
     }
 
 

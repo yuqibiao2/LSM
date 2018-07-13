@@ -156,8 +156,6 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         ccHt.setVisibleXRangeMaximum(30);
         ccHt.moveViewTo(set.getEntryCount()-31, 50f, YAxis.AxisDependency.LEFT);
 
-        MyLog.e("set.getEntryCount()==="+set.getEntryCount());
-
     }
 
     private void setChartData(CombinedChart mLineChart, List<BarEntry> mValues) {

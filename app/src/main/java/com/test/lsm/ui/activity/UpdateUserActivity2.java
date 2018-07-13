@@ -15,11 +15,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
-import com.test.lsm.bean.form.UserRegVo;
+import com.test.lsm.bean.event.OnUserInfoChg;
+import com.test.lsm.bean.form.UserUpdateVo;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.json.UserRegReturn;
 import com.test.lsm.net.APIMethodManager;
@@ -68,7 +68,7 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
 
     private PicChoicePop picChoicePop;
 
-    private UserRegVo userRegVo;
+    private UserUpdateVo userUpdateVo;
     private APIMethodManager apiMethodManager;
     private UserLoginReturn.PdBean user;
     private MyApplication application;
@@ -99,7 +99,7 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
         String userVoJsonStr = getIntent().getStringExtra("userVoJsonStr");
         MyLog.e(TAG, "userVoJsonStr：" + userVoJsonStr);
         Gson mGson = new Gson();
-        userRegVo = mGson.fromJson(userVoJsonStr, UserRegVo.class);
+        userUpdateVo = mGson.fromJson(userVoJsonStr, UserUpdateVo.class);
         apiMethodManager = APIMethodManager.getInstance();
 
         application = (MyApplication) getApplication();
@@ -110,9 +110,9 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
     @Override
     protected void initView() {
         tvUserIcon.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-        String username = userRegVo.getUSERNAME();
-        String urgent_user = userRegVo.getURGENT_USER();
-        String urgent_phone = userRegVo.getURGENT_PHONE();
+        String username = userUpdateVo.getUSERNAME();
+        String urgent_user = userUpdateVo.getURGENT_USER();
+        String urgent_phone = userUpdateVo.getURGENT_PHONE();
         if (!TextUtils.isEmpty(username)){
             etUsername.setText(""+username);
         }
@@ -129,6 +129,7 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
         String userImage = user.getUSER_IMAGE();
         if (!TextUtils.isEmpty(userImage)){
             GlidUtils.load(this  , ivUserIcon , userImage);
+            //userUpdateVo.setUSER_IMAGE(userImage);
         }
     }
 
@@ -153,18 +154,22 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
 
     @OnClick(R.id.tv_to_finished)
     public void toFinished() {
-        String linkman = tvLinkman.getText().toString();
+        String cstName = tvCstName.getText().toString();
+        String cstTel = tvCstTel.getText().toString();
         String username = etUsername.getText().toString();
         if (TextUtils.isEmpty(username)) {
             MyToast.showLong(this, "请填写用户名");
             return;
-        } else if (TextUtils.isEmpty(linkman)) {
+        } else if (TextUtils.isEmpty(cstName)) {
             MyToast.showLong(this, "请选择紧急联系人");
             return;
         }
-        userRegVo.setUSERNAME(username);
+        userUpdateVo.setUSERNAME(username);
+        userUpdateVo.setURGENT_USER(cstName);
+
+        userUpdateVo.setURGENT_PHONE(cstTel);
         showLoadDialog("修改中....");
-        apiMethodManager.updateUser(userRegVo, new IRequestCallback<UserRegReturn>() {
+        apiMethodManager.updateUser(userUpdateVo, new IRequestCallback<UserRegReturn>() {
 
             @Override
             public void onSuccess(UserRegReturn result) {
@@ -176,6 +181,7 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
                     //保存用户信息
                     MySPUtils.put(UpdateUserActivity2.this , LoginRegUtils.USER_INFO , pdStr);
                     application.setUser(result.getPd());
+                    EventBus.getDefault().post(new OnUserInfoChg("修改了用户信息"));
                     initView();
                     finish();
                 }
@@ -213,7 +219,7 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
                 String cropPicPath = MediaUtils.filePath + MediaUtils.cropName;
                 Bitmap bitmap = BitmapFactory.decodeFile(cropPicPath);
                 ivUserIcon.setImageBitmap(bitmap);
-                userRegVo.setUSER_IMAGE(MyFileOprateUtils.imgToBase64(cropPicPath , this));
+                userUpdateVo.setUSER_IMAGE(MyFileOprateUtils.imgToBase64(cropPicPath , this));
                 break;
             }
             case PICK_CONTACT_REQUEST: {
@@ -231,9 +237,12 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
                 //返回当前行指定列的值,这里就是电话
                 String number = cursor.getString(column1);
                 String name = cursor.getString(column2);
-                userRegVo.setURGENT_USER(name);
-                userRegVo.setURGENT_PHONE(number);
+                userUpdateVo.setURGENT_USER(name);
+                userUpdateVo.setURGENT_PHONE(number);
                 tvCstName.setText(""+name);
+                if (!TextUtils.isEmpty(number)){
+                    number = number.trim().replace(" ","");
+                }
                 tvCstTel.setText(""+number);
                 break;
             }

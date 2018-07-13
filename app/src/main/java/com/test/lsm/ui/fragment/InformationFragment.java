@@ -22,16 +22,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleNotifyCallback;
+import com.clj.fastble.callback.BleReadCallback;
 import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
 import com.swm.algorithm.Algorithm;
 import com.swm.algorithm.support.IirFilter;
-import com.swm.algorithm.support.heartrate.HeartRate;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.BleConnectMessage;
@@ -39,6 +38,7 @@ import com.test.lsm.bean.InfoBean;
 import com.test.lsm.bean.event.CalorieChgEvent;
 import com.test.lsm.bean.event.ECGChgEvent;
 import com.test.lsm.bean.event.HeartChgEvent;
+import com.test.lsm.bean.event.OnUserInfoChg;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
 import com.test.lsm.bean.event.StepChgEvent;
 import com.test.lsm.db.bean.Step;
@@ -47,7 +47,6 @@ import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.global.Constant;
 import com.test.lsm.net.GlidUtils;
 import com.test.lsm.ui.activity.ECGShowActivity3;
-import com.test.lsm.ui.activity.HrRecordActivity;
 import com.test.lsm.ui.activity.SettingActivity;
 import com.test.lsm.utils.AlgorithmWrapper;
 import com.today.step.lib.ISportStepInterface;
@@ -67,7 +66,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
@@ -113,13 +111,19 @@ public class InformationFragment extends LsmBaseFragment {
     FrameLayout flHrChart;
     @BindView(R.id.rv_user_icon)
     RoundImageView rvUserIcon;
+    @BindView(R.id.rl_connected_device)
+    RelativeLayout rlConnectedDevice;
+    @BindView(R.id.tv_bt_name)
+    TextView tvBtName;
+    @BindView(R.id.tv_bry_pct)
+    TextView tvBryPct;
 
     private Activity mAct;
     private MyApplication application;
 
     CircularFifoQueue<Integer> ecgBuffer = new CircularFifoQueue(2500);
 
-    private int index= 0;
+    private int index = 0;
 
     private int rriIndex = 0;
 
@@ -161,21 +165,21 @@ public class InformationFragment extends LsmBaseFragment {
                     short[] ecgData = Algorithm.getEcgByte2Short(obj);
 
                     EventBus.getDefault().post(new ECGChgEvent(ecgData, "得到ECG的值了==="));
-                    for (short ecg: ecgData) {
+                    for (short ecg : ecgData) {
                         ecgBuffer.add(Integer.valueOf(ecg));
                     }
 
                     AlgorithmWrapper.startRRI();
 
                     index++;
-                    if (ecgBuffer.size()>=1500 && index%200==0){
+                    if (ecgBuffer.size() >= 1500 && index % 200 == 0) {
                         index = 0;
                         int[] ints = new int[ecgBuffer.size()];
                         for (int i = 0; i < ecgBuffer.size(); i++) {
                             ints[i] = ecgBuffer.get(i);
                         }
-                        int heartNum =Algorithm.getCalculateHeartRate(ints);
-                         //int heartNum = hrImpl.countHeartRate(ecgData, getShort(obj, 11));
+                        int heartNum = Algorithm.getCalculateHeartRate(ints);
+                        //int heartNum = hrImpl.countHeartRate(ecgData, getShort(obj, 11));
                         //MyLog.e(TAG , "epcData=="+epcData);
                         if (heartNum > 0) {
                             Constant.oneMinHeart.add(heartNum);
@@ -186,16 +190,16 @@ public class InformationFragment extends LsmBaseFragment {
                             EventBus.getDefault().post(new HeartChgEvent(heartNum, "心跳变化了"));
                             MyLog.e(TAG, "tvHeartNum：" + heartNum);
                             //Algorithm.initialForModeChange(1);
-                            Algorithm.getRtoRIntervalData(rriAry , timeAry);
-                            MyLog.e(TAG , "rriAry==111="+ Arrays.toString(rriAry));
-                            MyLog.e(TAG , "timeAry==111="+ Arrays.toString(timeAry));
+                            Algorithm.getRtoRIntervalData(rriAry, timeAry);
+                            MyLog.e(TAG, "rriAry==111=" + Arrays.toString(rriAry));
+                            MyLog.e(TAG, "timeAry==111=" + Arrays.toString(timeAry));
                             Constant.rriBuffer.clear();
-                            for (double value: rriAry) {
+                            for (double value : rriAry) {
                                 int legalCount = 0;
                                 if (value > 200 && value < 2000) {
                                     legalCount++;
                                     Constant.rriBuffer.add(Long.valueOf(Double.valueOf(value).intValue()));
-                                    if (legalCount>300){//
+                                    if (legalCount > 300) {//
                                         AlgorithmWrapper.stopRRI();
                                         // 通知刷新 HRV
                                         EventBus.getDefault().post(new RefreshHearthInfoEvent());
@@ -322,8 +326,8 @@ public class InformationFragment extends LsmBaseFragment {
     @Override
     protected void initView() {
         String userImage = application.getUser().getUSER_IMAGE();
-        if (!TextUtils.isEmpty(userImage)){
-            GlidUtils.load(getContext()  , rvUserIcon , userImage);
+        if (!TextUtils.isEmpty(userImage)) {
+            GlidUtils.load(getContext(), rvUserIcon, userImage);
         }
     }
 
@@ -343,19 +347,17 @@ public class InformationFragment extends LsmBaseFragment {
         initStepCount();
     }
 
-    @OnClick({R.id.rl_heart, R.id.rl_step, R.id.rl_calorie, R.id.rl_ecg , R.id.rl_hr_chart})
+    @OnClick({R.id.rl_heart, R.id.rl_step, R.id.rl_calorie, R.id.rl_ecg, R.id.rl_hr_chart})
     public void onItemClick(View view) {
 
         // TransitionManager.beginDelayedTransition(llContainer);
 
         switch (view.getId()) {
             case R.id.rl_heart:
-
-                HrRecordActivity.startAction(getActivity());
-
+                //HrRecordActivity.startAction(getActivity());
                 if (Constant.rriBuffer.size() < 250) {
                     MyToast.showLong(getContext(), "还没有足够的数据请耐心等待" + Constant.rriBuffer.size());
-                    return;
+                    //return;
                 }
                 openItem(0);
                 if (flHeart.getVisibility() == View.VISIBLE) {
@@ -384,8 +386,8 @@ public class InformationFragment extends LsmBaseFragment {
                 break;
             case R.id.rl_hr_chart:
                 openItem(3);
-                MyLog.e(TAG , "==============");
-                if (flHrChart.getVisibility() == View.VISIBLE){
+                MyLog.e(TAG, "==============");
+                if (flHrChart.getVisibility() == View.VISIBLE) {
                     Constant.isHRChartDetailShow = true;
                 }
                 break;
@@ -393,17 +395,17 @@ public class InformationFragment extends LsmBaseFragment {
         view.setVisibility(View.VISIBLE);
     }
 
-    private void openItem(int position){
+    private void openItem(int position) {
         Constant.isHRChartDetailShow = false;
         for (int i = 0; i < itemContainer.size(); i++) {
             FrameLayout item = itemContainer.get(i);
-            if (position==i){
-                if (item.getVisibility() == View.VISIBLE){
+            if (position == i) {
+                if (item.getVisibility() == View.VISIBLE) {
                     item.setVisibility(View.GONE);
-                }else{
+                } else {
                     item.setVisibility(View.VISIBLE);
                 }
-            }else{
+            } else {
                 item.setVisibility(View.GONE);
             }
         }
@@ -500,7 +502,6 @@ public class InformationFragment extends LsmBaseFragment {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onBleDeviceStatusChg(BleConnectMessage message) {
         int status = message.getStatus();
@@ -514,6 +515,11 @@ public class InformationFragment extends LsmBaseFragment {
                 List<BluetoothGattService> services = gatt.getServices();
                 //---处理Service
                 handleService(services, bleDevice);
+                if (application.isBleConnected()) {
+                    BleDevice currentBleDevice = application.getCurrentBleDevice();
+                    rlConnectedDevice.setVisibility(View.VISIBLE);
+                    tvBtName.setText(currentBleDevice.getName());
+                }
                 break;
         }
     }
@@ -550,13 +556,23 @@ public class InformationFragment extends LsmBaseFragment {
      * @param bleDevice
      */
     private void handleBatteryService(List<BluetoothGattCharacteristic> characteristics, BleDevice bleDevice) {
-        for (final BluetoothGattCharacteristic characteristic : characteristics) {
-            String characteristicUUID = characteristic.getUuid().toString().toLowerCase();
-            if (characteristicUUID.contains("2A19")) {//
 
-            }
+        BleManager.getInstance().read(bleDevice,
+                "0000180f-0000-1000-8000-00805f9b34fb",
+                "00002a19-0000-1000-8000-00805f9b34fb",
+                new BleReadCallback() {
+                    @Override
+                    public void onReadSuccess(byte[] data) {
+                        String hexString = HexUtil.formatHexString(data).substring(0, 2);
+                        MyLog.e(TAG, "hexString：" + Integer.parseInt(hexString, 16));
+                        tvBryPct.setText(Integer.parseInt(hexString, 16) + "%");
+                    }
 
-        }
+                    @Override
+                    public void onReadFailure(BleException exception) {
+
+                    }
+                });
     }
 
 
@@ -638,10 +654,67 @@ public class InformationFragment extends LsmBaseFragment {
      */
     private void handleHeartService(final List<BluetoothGattCharacteristic> characteristics, final BleDevice bleDevice) {
 
-        for (final BluetoothGattCharacteristic characteristic : characteristics) {
+        //发送01使设备处于工作状态 00 是休眠状态
+        BleManager.getInstance().write(
+                bleDevice,
+                "f000aa70-0451-4000-b000-000000000000",
+                "f000aa72-0451-4000-b000-000000000000",
+                HexUtil.hexStringToBytes("01"),
+                new BleWriteCallback() {
+                    @Override
+                    public void onWriteSuccess(final int current, final int total, final byte[] justWrite) {
+                        startNotify();
+                    }
+
+                    @Override
+                    public void onWriteFailure(final BleException exception) {
+                        MyToast.showLong(getContext(), "AA72指令写入失败" + exception);
+                        MyLog.e(TAG, "AA72指令写入失败" + exception);
+                    }
+
+                    //开启通知
+                    private void startNotify() {
+                        for (final BluetoothGattCharacteristic characteristic : characteristics) {
+                            String serviceUUID = characteristic.getService().getUuid().toString();
+                            String characteristicUUID = characteristic.getUuid().toString();
+                            //MyLog.e(TAG , "心跳通知：serviceUUID："+serviceUUID+" characteristicUUID："+characteristicUUID);
+                            if (characteristicUUID.contains("AA71") || characteristicUUID.contains("aa71")) {
+                                BleManager.getInstance().notify(
+                                        bleDevice,
+                                        serviceUUID,
+                                        characteristicUUID,
+                                        new BleNotifyCallback() {
+                                            @Override
+                                            public void onNotifySuccess() {
+                                                MyLog.d(TAG, "AA71通知开始成功===============");
+                                                handleBatteryService(characteristics, bleDevice);
+                                            }
+
+                                            @Override
+                                            public void onNotifyFailure(final BleException exception) {
+                                                MyLog.e(TAG, "AA71通知开始失败===============");
+                                            }
+
+                                            @Override
+                                            public void onCharacteristicChanged(byte[] data) {
+                                                Message message = new Message();
+                                                message.what = 0;
+                                                message.obj = characteristic.getValue();
+                                                mHandler.sendMessage(message);
+                                            }
+                                        });
+                            }
+
+                        }
+                    }
+                });
+
+
+      /*  for (final BluetoothGattCharacteristic characteristic : characteristics) {
             String serviceUUID = characteristic.getService().getUuid().toString();
             String characteristicUUID = characteristic.getUuid().toString();
             if (characteristicUUID.contains("AA72") || characteristicUUID.contains("aa72")) {
+                MyLog.e(TAG , "心跳写：serviceUUID："+serviceUUID+" characteristicUUID："+characteristicUUID);
                 //发送01使设备处于工作状态 00 是休眠状态
                 BleManager.getInstance().write(
                         bleDevice,
@@ -665,6 +738,7 @@ public class InformationFragment extends LsmBaseFragment {
                                 for (final BluetoothGattCharacteristic characteristic : characteristics) {
                                     String serviceUUID = characteristic.getService().getUuid().toString();
                                     String characteristicUUID = characteristic.getUuid().toString();
+                                    MyLog.e(TAG , "心跳通知：serviceUUID："+serviceUUID+" characteristicUUID："+characteristicUUID);
                                     if (characteristicUUID.contains("AA71") || characteristicUUID.contains("aa71")) {
                                         BleManager.getInstance().notify(
                                                 bleDevice,
@@ -696,7 +770,7 @@ public class InformationFragment extends LsmBaseFragment {
                         });
             }
 
-        }
+        }*/
 
     }
 
@@ -717,5 +791,13 @@ public class InformationFragment extends LsmBaseFragment {
         mHandler.removeMessages(1);
         EventBus.getDefault().unregister(this);
         mAct.unbindService(stepServiceConnect);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onUserInfoChanged(OnUserInfoChg onUserInfoChg) {
+        String userImage = application.getUser().getUSER_IMAGE();
+        if (!TextUtils.isEmpty(userImage)) {
+            GlidUtils.load(getContext(), rvUserIcon, userImage);
+        }
     }
 }

@@ -157,7 +157,7 @@ public class BleBTDeviceScanDialog extends LsmBaseDialog {
 /*                        String mac = bleDevice.getMac();
                         String connectDeviceMac = BleBTUtils.getConnectDevice(getContext());
                         if (!TextUtils.isEmpty(mac) && mac.equals(connectDeviceMac)) {//已经配对过的设备
-                            BleManager.getInstance().connectWapper(bleDevice, new BleGattCallback() {
+                            BleManager.getInstance().connectWrapper(bleDevice, new BleGattCallback() {
                                 @Override
                                 public void onStartConnect() {
                                     MyLog.d(TAG, "onStartConnect===");
@@ -203,7 +203,7 @@ public class BleBTDeviceScanDialog extends LsmBaseDialog {
      * @param bleDevice
      */
     private void connect(final BleDevice bleDevice) {
-        /*BleManager.getInstance().connectWapper(bleDevice, new BleGattCallback() {
+        /*BleManager.getInstance().connectWrapper(bleDevice, new BleGattCallback() {
             @Override
             public void onStartConnect() {
             }

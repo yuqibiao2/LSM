@@ -44,7 +44,6 @@ import com.test.lsm.ui.dialog.DeviceInformationDialog;
 import com.test.lsm.ui.fragment.ExerciseChoiceFragment;
 import com.test.lsm.ui.fragment.InformationFragment;
 import com.test.lsm.ui.fragment.RunFragment;
-import com.test.lsm.ui.fragment.SettingFragment;
 import com.test.lsm.ui.fragment.TodayFragment;
 import com.test.lsm.utils.LoginRegUtils;
 import com.test.lsm.utils.bt.ble.BleBTUtils;
@@ -221,20 +220,20 @@ public class MainActivity extends LsmBaseActivity {
         });
 
 
-      /*  BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
+        BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
             @Override
             public void dismiss(BleDevice bleDevice) {
                 retryConnect(bleDevice);
             }
-        });*/
+        });
 
     }
 
-  /*  private void retryConnect(BleDevice bleDevice) {
+    private void retryConnect(BleDevice bleDevice) {
         String mac = bleDevice.getMac();
         String connectDeviceMac = BleBTUtils.getConnectDevice(MainActivity.this);
         if (!TextUtils.isEmpty(mac) && mac.equals(connectDeviceMac)) {//已经配对过的设备
-            BleManager.getInstance().connectWapper(bleDevice, new BleGattCallback() {
+            BleManager.getInstance().connectWrapper(bleDevice, new BleGattCallback() {
                 @Override
                 public void onStartConnect() {
                     MyLog.d(TAG, "onStartConnect===");
@@ -263,7 +262,7 @@ public class MainActivity extends LsmBaseActivity {
                 }
             });
         }
-    }*/
+    }
 
     @Override
     protected void afterInit() {
@@ -375,7 +374,7 @@ public class MainActivity extends LsmBaseActivity {
         super.onDestroy();
         stopService(uploadHealthInfoIntent);
         //断开蓝牙设备
-        BleManager.getInstance().disconnect(application.getCurrentBleDevice());
+       // BleManager.getInstance().disconnect(application.getCurrentBleDevice());
     }
 
     public static void startAction(Activity activity) {

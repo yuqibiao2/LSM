@@ -29,6 +29,7 @@
         android:orientation="horizontal">
 
         <RadioButton
+            android:id="@+id/rb_male"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@null"
@@ -42,6 +43,7 @@
             android:textSize="18sp" />
 
         <RadioButton
+            android:id="@+id/rb_female"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@null"

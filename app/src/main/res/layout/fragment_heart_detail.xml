@@ -26,17 +26,18 @@
                 android:id="@+id/v_status1"
                 android:layout_width="100dp"
                 android:layout_height="20dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
                 android:enabled="false" />
 
             <TextView
                 android:id="@+id/tv_status1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/my_blue"
-                android:text="精力充沛" />
+                android:text="精力充沛"
+                android:textColor="@color/my_blue" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -53,16 +54,16 @@
                 android:id="@+id/v_status2"
                 android:layout_width="100dp"
                 android:layout_height="20dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
                 android:enabled="false" />
 
             <TextView
                 android:id="@+id/tv_status2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/my_blue"
-                android:text="续航持久" />
+                android:text="续航持久"
+                android:textColor="@color/my_blue" />
         </LinearLayout>
     </LinearLayout>
 
@@ -88,23 +89,24 @@
                 android:id="@+id/v_status3"
                 android:layout_width="100dp"
                 android:layout_height="20dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
                 android:enabled="false" />
 
             <TextView
                 android:id="@+id/tv_status3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/my_blue"
-                android:text="承压千斤顶" />
+                android:text="承压千斤顶"
+                android:textColor="@color/my_blue" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_marginBottom="15dp"
             android:orientation="vertical">
 
             <TextView
@@ -116,27 +118,51 @@
                 android:id="@+id/v_status4"
                 android:layout_width="100dp"
                 android:layout_height="20dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
                 android:enabled="false" />
 
             <TextView
                 android:id="@+id/tv_status4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/my_blue"
-                android:text="无法熟睡" />
+                android:text="无法熟睡"
+                android:textColor="@color/my_blue" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_hr_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_avg_hr"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:text="平均心率                63 bpm"
+            android:textColor="#FF9B9B9B"
+            android:gravity="center"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tv_max_hr"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:text="最大心率                63 bpm"
+            android:textColor="#FF9B9B9B"
+            android:gravity="center"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/tv_update_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="9dp"
-        android:gravity="right"
         android:layout_marginRight="35dp"
         android:layout_marginTop="5dp"
-        android:text=""/>
+        android:layout_marginBottom="50dp"
+        android:gravity="right"
+        android:text=""
+        android:textSize="9dp" />
 
 </LinearLayout>

@@ -30,20 +30,20 @@ public class UserLoginReturn {
 
     public static class PdBean {
 
-        private String USER_IMAGE;
-        private String RIGHTS;
-        private String USER_SEX;
-        private String IP;
-        private String PHONE;
-        private String URGENT_USER;
+        private String USER_IMAGE = "";
+        private String RIGHTS="";
+        private String USER_SEX="";
+        private String IP="";
+        private String PHONE="";
+        private String URGENT_USER="";
         private int USER_ID;
-        private String USER_WEIGHT;
-        private String URGENT_PHONE;
-        private String LAST_LOGIN;
-        private String PASSWORD;
-        private String USER_HEIGHT;
-        private String USERNAME;
-        private String BIRTHDAY;
+        private String USER_WEIGHT="";
+        private String URGENT_PHONE="";
+        private String LAST_LOGIN="";
+        private String PASSWORD="";
+        private String USER_HEIGHT="";
+        private String USERNAME="";
+        private String BIRTHDAY="";
 
         public String getUSER_IMAGE() {
             return USER_IMAGE;
