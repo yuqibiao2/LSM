@@ -53,6 +53,7 @@ import com.test.lsm.ui.fragment.run_bottom.RunBottomFragment2;
 import com.test.lsm.utils.TimeUtils;
 import com.test.lsm.utils.map.MyOrientationListener;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
+import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
@@ -239,7 +240,7 @@ public class RunFragment extends LsmBaseFragment {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        bottomSheetBehavior.setPeekHeight(340);
+        bottomSheetBehavior.setPeekHeight(DimensChange.dp2px(getContext() , 160));
         bottomSheetBehavior.setHideable(false);
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -256,11 +257,11 @@ public class RunFragment extends LsmBaseFragment {
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 if (slideOffset < 0.01) {
-                    rlRunBottom.setBackgroundColor(Color.parseColor("#00FFFFFF"));
-                    vpRunBtm.setVisibility(View.INVISIBLE);
+                   /* rlRunBottom.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+                    vpRunBtm.setVisibility(View.INVISIBLE);*/
                 } else {
-                    rlRunBottom.setBackgroundColor(Color.parseColor("#DDFFFFFF"));
-                    vpRunBtm.setVisibility(View.VISIBLE);
+                  /*  rlRunBottom.setBackgroundColor(Color.parseColor("#DDFFFFFF"));
+                    vpRunBtm.setVisibility(View.VISIBLE);*/
                 }
             }
         });

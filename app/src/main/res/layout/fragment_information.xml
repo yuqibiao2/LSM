@@ -52,6 +52,7 @@
             android:clipChildren="false"
             android:orientation="vertical">
 
+            <!--心率-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -133,7 +134,91 @@
                 </FrameLayout>
 
             </LinearLayout>
+            <!--卡路里-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-60dp"
+                android:orientation="vertical">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:background="@mipmap/ic_info_item_bg">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_calorie"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/ic_calorie" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_con3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="45dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_calorie"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textColor="#000"
+                                    android:textSize="30sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="大卡"
+                                    android:textColor="#000"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/ll_con3"
+                            android:layout_below="@+id/ll_con3"
+                            android:layout_marginTop="3dp"
+                            android:text="目前状态"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_calorie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <fragment
+                        android:id="@+id/frag_calorie"
+                        android:name="com.test.lsm.ui.fragment.information_detail.CalorieDetailFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp" />
+                </FrameLayout>
+            </LinearLayout>
+            <!--心率-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -219,91 +304,7 @@
                         android:layout_marginRight="35dp" />
                 </FrameLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-60dp"
-                android:orientation="vertical">-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="130dp"
-                    android:background="@mipmap/ic_info_item_bg">
-
-                    <RelativeLayout
-                        android:id="@+id/rl_calorie"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true">
-
-                        <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="50dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/ic_calorie" />
-
-                        <LinearLayout
-                            android:id="@+id/ll_con3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="45dp">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/tv_calorie"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:textColor="#000"
-                                    android:textSize="30sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:text="大卡"
-                                    android:textColor="#000"
-                                    android:textSize="18sp" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/ll_con3"
-                            android:layout_below="@+id/ll_con3"
-                            android:layout_marginTop="3dp"
-                            android:text="目前状态"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="10sp" />
-                    </RelativeLayout>
-                </RelativeLayout>
-
-                <FrameLayout
-                    android:id="@+id/fl_calorie"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone">
-
-                    <fragment
-                        android:id="@+id/frag_calorie"
-                        android:name="com.test.lsm.ui.fragment.information_detail.CalorieDetailFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="35dp"
-                        android:layout_marginRight="35dp" />
-                </FrameLayout>
-            </LinearLayout>
-
+            <!--生理讯号-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -378,7 +379,7 @@
 
                 </FrameLayout>
             </LinearLayout>
-
+            <!--心率记录-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,24 +1,34 @@
 package com.test.lsm.ui.fragment.information_detail;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.CandleEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.utils.MPPointF;
+import com.github.mikephil.charting.utils.Utils;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.CalorieChgEvent;
 import com.test.lsm.db.bean.Step;
 import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
+import com.test.lsm.ui.wdiget.MyMarkerView;
 import com.today.step.lib.SportStepJsonUtils;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import de.greenrobot.event.EventBus;
@@ -79,7 +89,7 @@ public class CalorieDetailFragment extends LsmBaseFragment {
         ArrayList<BarEntry> yVals = new ArrayList<BarEntry>();
 
         for (int i = 0; i < 24; i++) {
-            int val = 0;
+            int val = 0;//new Random().nextInt(100);
             yVals.add(new BarEntry(i, (int) val));
         }
 
@@ -96,19 +106,28 @@ public class CalorieDetailFragment extends LsmBaseFragment {
         BarDataSet set = new BarDataSet(yVals, "卡路里");
         set.setColors(getResources().getColor(R.color.chart_bar));
         set.setDrawValues(false);//不显示value
+        set.setShowConner(true);
+        set.setHighLightColor(Color.rgb(254, 199, 109));
         BarData data = new BarData(set);
-
         bcCalorie.setData(data);
         bcCalorie.invalidate();
         bcCalorie.animateY(800);
         bcCalorie.setScaleEnabled(false);
-        bcCalorie.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴的位置
-        bcCalorie.getXAxis().setDrawGridLines(false);//不显示网格
+        XAxis xAxis = bcCalorie.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴的位置
+        xAxis.setDrawGridLines(false);//不显示网格
+        xAxis.setLabelCount(yVals.size());
+        xAxis.setDrawAxisLine(false);
         bcCalorie.getAxisRight().setEnabled(false);//右侧不显示Y轴
+        bcCalorie.getAxisLeft().setEnabled(false);//左侧不显示Y轴
         bcCalorie.getDescription().setEnabled(false);//不设置描述
         bcCalorie.setDrawValueAboveBar(true);
         bcCalorie.getAxisLeft().setDrawGridLines(true);//不设置Y轴网格
         bcCalorie.getAxisLeft().setAxisMinValue(0.0f);
+        //---设置marker
+        MyMarkerView mv = new MyMarkerView(getActivity(), R.layout.custom_marker_view2);
+        mv.setChartView(bcCalorie);
+        bcCalorie.setMarker(mv);  //设置 marker ,点击后显示的功能 ，布局可以自定义
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)

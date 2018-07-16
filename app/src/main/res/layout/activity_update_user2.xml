@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:background="@color/my_white">
 
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/ll_con"
         android:layout_width="match_parent"
@@ -98,29 +100,15 @@
         </LinearLayout>
 
 
+        <ImageButton
+            android:id="@+id/tv_to_finished"
+            android:layout_width="320dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="35dp"
+            android:background="@mipmap/ic_btn_finished"
+            android:layout_marginBottom="15dp"
+            android:onClick="toFinished" />
     </LinearLayout>
-
-    <!-- <TextView
-         android:id="@+id/tv_to_finished"
-         android:layout_width="match_parent"
-         android:layout_height="50dp"
-         android:layout_alignParentBottom="true"
-         android:layout_marginBottom="40dp"
-         android:gravity="center"
-         android:onClick="toFinished"
-         android:text=" 完成"
-         android:textColor="@drawable/accent_color_selector"
-         android:textSize="38sp" />-->
-
-    <ImageButton
-        android:id="@+id/tv_to_finished"
-        android:layout_width="320dp"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="90dp"
-        android:background="@mipmap/ic_btn_finished"
-        android:onClick="toFinished" />
-
+</ScrollView>
 
 </RelativeLayout>

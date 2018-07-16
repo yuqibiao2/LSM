@@ -23,6 +23,7 @@ import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.test.lsm.R;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
+import com.test.lsm.ui.wdiget.MyMarkerView;
 import com.yyyu.baselibrary.utils.DimensChange;
 
 import java.text.DecimalFormat;
@@ -63,7 +64,7 @@ public abstract class HrBaseFragment extends LsmBaseFragment {
         xAxis.setDrawAxisLine(false);//是否绘制轴线
         xAxis.setDrawGridLines(false);//设置x轴上每个点对应的线
         xAxis.setDrawLabels(true);//绘制标签  指x轴上的对应数值
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置x轴的显示位置
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);//设置x轴的显示位置
         //xAxis.setTextSize(12f);//设置文字大小
         xAxis.setAxisMinimum(0f);//设置x轴的最小值 //
         xAxis.setLabelCount(mValues.size() / 2);  //设置X轴的显示个数
@@ -107,7 +108,7 @@ public abstract class HrBaseFragment extends LsmBaseFragment {
         xAxis.setDrawAxisLine(true);//是否绘制轴线
         xAxis.setDrawGridLines(false);//设置x轴上每个点对应的线
         xAxis.setDrawLabels(true);//绘制标签  指x轴上的对应数值
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置x轴的显示位置
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);//设置x轴的显示位置
         xAxis.setTextSize(12f);//设置文字大小
         xAxis.setAxisMinimum(0f);//设置x轴的最小值 //`
         //xAxis.setAxisMaximum(31f);//设置最大值 //
@@ -191,38 +192,6 @@ public abstract class HrBaseFragment extends LsmBaseFragment {
             mLineChart.invalidate();
         }
 
-    }
-
-
-    /**
-     * 自定义maker
-     */
-    public class MyMarkerView extends MarkerView {
-
-        private TextView tvContent;
-
-        public MyMarkerView(Context context, int layoutResource) {
-            super(context, layoutResource);
-            tvContent = (TextView) findViewById(R.id.tvContent);
-        }
-
-        @Override
-        public void refreshContent(Entry e, Highlight highlight) {
-
-            if (e instanceof CandleEntry) {
-                CandleEntry ce = (CandleEntry) e;
-                tvContent.setText("" + Utils.formatNumber(ce.getHigh(), 0, true));
-            } else {
-                tvContent.setText("" + Utils.formatNumber(e.getY(), 0, true));
-            }
-
-            super.refreshContent(e, highlight);
-        }
-
-        @Override
-        public MPPointF getOffset() {
-            return new MPPointF(-(getWidth() / 2), -getHeight());
-        }
     }
 
     protected int getLineColor() {

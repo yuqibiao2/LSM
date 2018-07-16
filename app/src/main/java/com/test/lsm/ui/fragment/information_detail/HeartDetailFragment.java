@@ -1,6 +1,7 @@
 package com.test.lsm.ui.fragment.information_detail;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,7 +15,6 @@ import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.HrRecordActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.yyyu.baselibrary.utils.MyLog;
-import com.yyyu.baselibrary.utils.MyTimeUtils;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
@@ -36,23 +36,6 @@ import de.greenrobot.event.ThreadMode;
 public class HeartDetailFragment extends LsmBaseFragment {
 
     private static final String TAG = "HeartDetailFragment";
-
-    @BindView(R.id.v_status1)
-    View vStatus1;
-    @BindView(R.id.v_status2)
-    View vStatus2;
-    @BindView(R.id.v_status3)
-    View vStatus3;
-    @BindView(R.id.v_status4)
-    View vStatus4;
-    @BindView(R.id.tv_status1)
-    TextView tvStatus1;
-    @BindView(R.id.tv_status2)
-    TextView tvStatus2;
-    @BindView(R.id.tv_status3)
-    TextView tvStatus3;
-    @BindView(R.id.tv_status4)
-    TextView tvStatus4;
     @BindView(R.id.tv_update_time)
     TextView tvUpdateTime;
     @BindView(R.id.tv_avg_hr)
@@ -61,6 +44,26 @@ public class HeartDetailFragment extends LsmBaseFragment {
     TextView tvMaxHr;
     @BindView(R.id.ll_hr_value)
     LinearLayout llHrValue;
+    @BindView(R.id.tv_hrv_value_num)
+    TextView tvHrvValueNum;
+    @BindView(R.id.tv_physical)
+    TextView tvPhysical;
+    @BindView(R.id.iv_physical)
+    ImageView ivPhysical;
+    @BindView(R.id.tv_mental)
+    TextView tvMental;
+    @BindView(R.id.iv_mental)
+    ImageView ivMental;
+    @BindView(R.id.tv_emotion)
+    TextView tvEmotion;
+    @BindView(R.id.iv_emotion)
+    ImageView ivEmotion;
+    @BindView(R.id.tv_pressure)
+    TextView tvPressure;
+    @BindView(R.id.iv_pressure)
+    ImageView ivPressure;
+    @BindView(R.id.iv_pressure_icon)
+    ImageView ivPressureIcon;
 
     private List<View> statusList;
     private APIMethodManager apiMethodManager;
@@ -80,10 +83,6 @@ public class HeartDetailFragment extends LsmBaseFragment {
     @Override
     protected void initView() {
         statusList = new ArrayList<>(4);
-        statusList.add(vStatus1);
-        statusList.add(vStatus2);
-        statusList.add(vStatus3);
-        statusList.add(vStatus4);
     }
 
     @Override
@@ -91,7 +90,7 @@ public class HeartDetailFragment extends LsmBaseFragment {
         super.onResume();
         CircularFifoQueue<Integer> hrBuffer = Constant.hrBuffer2;
         int maxHr = 0;
-        int avgHr=0;
+        int avgHr = 0;
         int total = 0;
         for (Integer hrValue : hrBuffer) {
             if (hrValue > maxHr) {
@@ -99,7 +98,7 @@ public class HeartDetailFragment extends LsmBaseFragment {
             }
             total = total + hrValue;
         }
-        if (hrBuffer.size()>0){
+        if (hrBuffer.size() > 0) {
             avgHr = total / hrBuffer.size();
         }
         tvAvgHr.setText("平均心率                " + avgHr + " bpm");
@@ -120,6 +119,10 @@ public class HeartDetailFragment extends LsmBaseFragment {
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void updateHeart(RefreshHearthInfoEvent heartChgEvent) {
 
+        if (Constant.rriBuffer.size() < 200) {
+            return;
+        }
+        tvHrvValueNum.setText("" + Constant.rriBuffer.size());
         CircularFifoQueue<Long> rriBuffer = Constant.rriBuffer;
         StringBuffer rrlIntervalSb = new StringBuffer();
         for (int i = 0; i < rriBuffer.size(); i++) {
@@ -138,91 +141,96 @@ public class HeartDetailFragment extends LsmBaseFragment {
             public void onSuccess(GetHRVInfoReturn result) {
                 List<GetHRVInfoReturn.HRVIndexBean> hrvIndex = result.getHRVIndex();
                 if (hrvIndex != null && hrvIndex.size() > 0) {
-                    tvUpdateTime.setText("更新时间：" + MyTimeUtils.getCurrentDateTime());
                     GetHRVInfoReturn.HRVIndexBean hrvIndexBean = hrvIndex.get(0);
                     //---体力状态
                     Integer bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());
                     if (bodyFitness >= 30) {
-                        chgStatus(vStatus1, 1);
-                        tvStatus1.setText("过度暴动");
+                        chgStatus1(ivPhysical, 1);
+                        tvPhysical.setText("过度暴动");
                     } else if (bodyFitness >= 10) {
-                        chgStatus(vStatus1, 2);
-                        tvStatus1.setText("拼劲十足");
+                        chgStatus1(ivPhysical, 2);
+                        tvPhysical.setText("拼劲十足");
                     } else if (bodyFitness >= -10) {
-                        chgStatus(vStatus1, 3);
-                        tvStatus1.setText("正常范围");
+                        chgStatus1(ivPhysical, 3);
+                        tvPhysical.setText("正常范围");
                     } else if (bodyFitness >= -30) {
-                        chgStatus(vStatus1, 4);
-                        tvStatus1.setText("疲劳");
+                        chgStatus1(ivPhysical, 4);
+                        tvPhysical.setText("疲劳");
                     } else if (bodyFitness >= -50) {
-                        chgStatus(vStatus1, 5);
-                        tvStatus1.setText("体力透支");
+                        chgStatus1(ivPhysical, 5);
+                        tvPhysical.setText("体力透支");
                     } else {
-                        chgStatus(vStatus1, 5);
-                        tvStatus1.setText("体力透支");
+                        chgStatus1(ivPhysical, 5);
+                        tvPhysical.setText("体力透支");
                     }
-                    //---身体疲劳
+                    //---脑力
                     Integer bodyFatigue = Integer.parseInt(hrvIndexBean.getBodyFatigue());
                     if (bodyFatigue <= 20) {
-                        chgStatus(vStatus2, 1);
-                        tvStatus2.setText("正常范围");
+                        chgStatus2(ivMental, 1);
+                        tvMental.setText("正常范围");
                     } else if (bodyFatigue <= 40) {
-                        chgStatus(vStatus2, 2);
-                        tvStatus2.setText("略疲劳");
+                        chgStatus2(ivMental, 2);
+                        tvMental.setText("略疲劳");
                     } else if (bodyFatigue <= 60) {
-                        chgStatus(vStatus2, 3);
-                        tvStatus2.setText("疲劳");
+                        chgStatus2(ivMental, 3);
+                        tvMental.setText("疲劳");
                     } else if (bodyFatigue <= 80) {
-                        chgStatus(vStatus2, 4);
-                        tvStatus2.setText("太疲劳");
+                        chgStatus2(ivMental, 4);
+                        tvMental.setText("太疲劳");
                     } else if (bodyFatigue <= 100) {
-                        chgStatus(vStatus2, 5);
-                        tvStatus2.setText("过度疲劳");
+                        chgStatus2(ivMental, 5);
+                        tvMental.setText("过度疲劳");
                     } else {
-                        chgStatus(vStatus2, 5);
-                        tvStatus2.setText("过度疲劳");
+                        chgStatus2(ivMental, 5);
+                        tvMental.setText("过度疲劳");
                     }
-                    //---压力紧张
-                    Integer stressTension = Integer.parseInt(hrvIndexBean.getStressTension());
-                    if (stressTension <= -30) {//过渡松散
-                        tvStatus3.setText("过度松散");
-                        chgStatus(vStatus3, 3);
-                    } else if (stressTension <= -10) {//松散
-                        tvStatus3.setText("松散");
-                        chgStatus(vStatus3, 2);
-                    } else if (stressTension <= 10) {//正常
-                        chgStatus(vStatus3, 1);
-                        tvStatus3.setText("正常范围");
-                    } else if (stressTension <= 30) {//紧张
-                        tvStatus3.setText("紧张");
-                        chgStatus(vStatus3, 4);
-                    } else if (stressTension <= 50) {//过渡紧张
-                        tvStatus3.setText("过度紧张");
-                        chgStatus(vStatus3, 5);
+                    //---情绪
+                    Integer mood = Integer.parseInt(hrvIndexBean.getMoodStability());
+                    if (mood <= -30) {//过渡松散
+                        tvEmotion.setText("过度松散");
+                        chgStatus2(ivEmotion, 3);
+                    } else if (mood <= -10) {//松散
+                        tvEmotion.setText("松散");
+                        chgStatus2(ivEmotion, 2);
+                    } else if (mood <= 10) {//正常
+                        chgStatus2(ivEmotion, 1);
+                        tvEmotion.setText("正常范围");
+                    } else if (mood <= 30) {//紧张
+                        tvEmotion.setText("紧张");
+                        chgStatus2(ivEmotion, 4);
+                    } else if (mood <= 50) {//过渡紧张
+                        tvEmotion.setText("过度紧张");
+                        chgStatus2(ivEmotion, 5);
                     } else {
-                        chgStatus(vStatus3, 5);
-                        tvStatus3.setText("过度紧张");
+                        chgStatus2(ivEmotion, 5);
+                        tvEmotion.setText("过度紧张");
                     }
-                    //---心情稳定
-                    Integer moodStability = Integer.parseInt(hrvIndexBean.getMoodStability());
-                    if (moodStability <= -30) {//过渡低落
-                        chgStatus(vStatus4, 5);
-                        tvStatus4.setText("过度低落");
-                    } else if (moodStability <= -10) {//低落
-                        chgStatus(vStatus4, 4);
-                        tvStatus4.setText("低落");
-                    } else if (moodStability <= 10) {//良好
-                        tvStatus4.setText("良好");
-                        chgStatus(vStatus4, 1);
-                    } else if (moodStability <= 30) {//兴奋
-                        chgStatus(vStatus4, 2);
-                        tvStatus4.setText("兴奋");
-                    } else if (moodStability <= 50) {//过渡兴奋
-                        chgStatus(vStatus4, 3);
-                        tvStatus4.setText("过度兴奋");
+                    //---压力
+                    Integer stress = Integer.parseInt(hrvIndexBean.getStressTension());
+                    if (stress <= -30) {//过渡低落
+                        chgStatus2(ivPressure, 5);
+                        tvPressure.setText("过度低落");
+                        ivPressureIcon.setImageResource(R.mipmap.ic_emotion1);
+                    } else if (stress <= -10) {//低落
+                        chgStatus2(ivPressure, 4);
+                        tvPressure.setText("低落");
+                        ivPressureIcon.setImageResource(R.mipmap.ic_emotion2);
+                    } else if (stress <= 10) {//良好
+                        chgStatus2(ivPressure, 1);
+                        tvPressure.setText("良好");
+                        ivPressureIcon.setImageResource(R.mipmap.ic_emotion3);
+                    } else if (stress <= 30) {//兴奋
+                        chgStatus2(ivPressure, 2);
+                        tvPressure.setText("兴奋");
+                        ivPressureIcon.setImageResource(R.mipmap.ic_emotion4);
+                    } else if (stress <= 50) {//过渡兴奋
+                        chgStatus2(ivPressure, 3);
+                        tvPressure.setText("过度兴奋");
+                        ivPressureIcon.setImageResource(R.mipmap.ic_emotion5);
                     } else {
-                        chgStatus(vStatus4, 3);
-                        tvStatus4.setText("过度兴奋");
+                        chgStatus2(ivPressure, 3);
+                        tvPressure.setText("过度兴奋");
+                        ivPressureIcon.setImageResource(R.mipmap.ic_emotion5);
                     }
                 }
             }
@@ -236,25 +244,48 @@ public class HeartDetailFragment extends LsmBaseFragment {
     }
 
 
-    public void chgStatus(View view, int status) {
+    public void chgStatus1(View view, int status) {
         switch (status) {
             case 0:
                 view.setEnabled(false);
                 break;
             case 1:
-                view.setBackgroundResource(R.drawable.hrv_status1_bg);
+                view.setBackgroundResource(R.mipmap.ic_bar11);
                 break;
             case 2:
-                view.setBackgroundResource(R.drawable.hrv_status2_bg);
+                view.setBackgroundResource(R.mipmap.ic_bar12);
                 break;
             case 3:
-                view.setBackgroundResource(R.drawable.hrv_status3_bg);
+                view.setBackgroundResource(R.mipmap.ic_bar13);
                 break;
             case 4:
-                view.setBackgroundResource(R.drawable.hrv_status4_bg);
+                view.setBackgroundResource(R.mipmap.ic_bar14);
                 break;
             case 5:
-                view.setBackgroundResource(R.drawable.hrv_status5_bg);
+                view.setBackgroundResource(R.mipmap.ic_bar15);
+                break;
+        }
+    }
+
+    public void chgStatus2(View view, int status) {
+        switch (status) {
+            case 0:
+                view.setEnabled(false);
+                break;
+            case 1:
+                view.setBackgroundResource(R.mipmap.ic_bar21);
+                break;
+            case 2:
+                view.setBackgroundResource(R.mipmap.ic_bar22);
+                break;
+            case 3:
+                view.setBackgroundResource(R.mipmap.ic_bar23);
+                break;
+            case 4:
+                view.setBackgroundResource(R.mipmap.ic_bar24);
+                break;
+            case 5:
+                view.setBackgroundResource(R.mipmap.ic_bar25);
                 break;
         }
     }

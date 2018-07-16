@@ -62,7 +62,8 @@ dependencies {
     compile project(':FastBleLib')
    /* compile 'com.clj.fastble:FastBleLib:2.3.2'*/
     compile project(path: ':todaystepcounterlib')
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    /*compile 'com.github.PhilJay:MPAndroidChart:v3.0.3'*/
+    compile project(':MPChartLib')
     compile project(':jpush')
     /* compile project(':LsmAlgorithm')*/
     debugCompile project(path: ':LsmAlgorithm', configuration: 'debug')

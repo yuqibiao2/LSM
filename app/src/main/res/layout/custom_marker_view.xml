@@ -17,7 +17,7 @@
         android:singleLine="true"
         android:text="123123"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#FFBF45"
+        android:textColor="#000"
         android:textSize="18dp"
         android:textStyle="bold"
         android:layout_marginBottom="15dp"/>

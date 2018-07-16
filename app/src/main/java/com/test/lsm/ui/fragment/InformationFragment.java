@@ -356,7 +356,7 @@ public class InformationFragment extends LsmBaseFragment {
             case R.id.rl_heart:
                 //HrRecordActivity.startAction(getActivity());
                 if (Constant.rriBuffer.size() < 250) {
-                    MyToast.showLong(getContext(), "还没有足够的数据请耐心等待" + Constant.rriBuffer.size());
+                    //MyToast.showLong(getContext(), "还没有足够的数据请耐心等待" + Constant.rriBuffer.size());
                     //return;
                 }
                 openItem(0);
@@ -386,7 +386,6 @@ public class InformationFragment extends LsmBaseFragment {
                 break;
             case R.id.rl_hr_chart:
                 openItem(3);
-                MyLog.e(TAG, "==============");
                 if (flHrChart.getVisibility() == View.VISIBLE) {
                     Constant.isHRChartDetailShow = true;
                 }

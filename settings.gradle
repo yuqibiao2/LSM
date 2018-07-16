@@ -1,1 +1,1 @@
-include ':app', ':baselibrary',':FastBleLib', ':LsmAlgorithm',':todaystepcounterlib',':jpush'
+include ':app', ':baselibrary',':FastBleLib', ':LsmAlgorithm',':todaystepcounterlib',':jpush',':MPChartLib'

@@ -20,7 +20,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/avril" />
+            android:src="@mipmap/ic_bt_default" />
 
         <LinearLayout
             android:layout_width="wrap_content"

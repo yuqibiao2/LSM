@@ -72,7 +72,7 @@ public class RunRecordActivity extends LsmBaseActivity {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                RunRecordDetailActivity.startAction(RunRecordActivity.this , mData.get(position).getID());
+                RunRecordDetailActivity.startAction(RunRecordActivity.this, mData.get(position).getID());
             }
         });
 
@@ -150,7 +150,7 @@ public class RunRecordActivity extends LsmBaseActivity {
         });
     }
 
-    public void back(View view){
+    public void back(View view) {
         finish();
     }
 

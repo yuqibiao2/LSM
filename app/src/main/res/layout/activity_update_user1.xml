@@ -188,7 +188,6 @@
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="45dp"
         android:background="@mipmap/ic_btn_next"
         android:onClick="toNext" />
 

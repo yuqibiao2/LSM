@@ -1,5 +1,6 @@
 package com.test.lsm.ui.fragment.information_detail;
 
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.view.View;
 
@@ -19,6 +20,7 @@ import com.test.lsm.db.bean.Step;
 import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
+import com.test.lsm.ui.wdiget.MyMarkerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,6 +123,8 @@ public class StepDetailFragment extends LsmBaseFragment {
         BarDataSet set = new BarDataSet(yVals, "步数");
         set.setColors(getResources().getColor(R.color.chart_bar));
         set.setDrawValues(false);//不显示value
+        set.setShowConner(true);
+        set.setHighLightColor(Color.rgb(254, 199, 109));
         BarData data = new BarData(set);
 
         bcStepNum.setData(data);
@@ -130,16 +134,16 @@ public class StepDetailFragment extends LsmBaseFragment {
         bcStepNum.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴的位置
         bcStepNum.getXAxis().setDrawGridLines(false);//不显示网格
         bcStepNum.getAxisRight().setEnabled(false);//右侧不显示Y轴
+        bcStepNum.getAxisLeft().setEnabled(false);
+        bcStepNum.getXAxis().setLabelCount(yVals.size());
         bcStepNum.getDescription().setEnabled(false);//不设置描述
         bcStepNum.getAxisLeft().setDrawGridLines(true);//不设置Y轴网格
         bcStepNum.getAxisLeft().setAxisMinValue(0.0f);
         bcStepNum.setDrawValueAboveBar(true);
-        //---设置标记
-      /*  IAxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(bcStepNum);
-        bcStepNum.getXAxis().setValueFormatter(xAxisFormatter);
-        XYMarkerView mv = new XYMarkerView(getContext(), xAxisFormatter);
-        mv.setChartView(bcStepNum); // For bounds control
-        bcStepNum.setMarker(mv); // Set the marker to the chart*/
+        //---设置marker
+        MyMarkerView mv = new MyMarkerView(getActivity(), R.layout.custom_marker_view2);
+        mv.setChartView(bcStepNum);
+        bcStepNum.setMarker(mv);  //设置 marker ,点击后显示的功能 ，布局可以自定义
     }
 
 
