@@ -39,6 +39,43 @@ public class QueryUserRunInfoReturn {
         private int ID;
         private String STOP_TIME;
         private String RUN_TIME;
+        private  String AVG_HEART;
+        private String MAX_HEART;
+        private String CALORIE_VALUE;
+        private String RUN_ADDRESS;
+
+
+        public String getAVG_HEART() {
+            return AVG_HEART;
+        }
+
+        public void setAVG_HEART(String AVG_HEART) {
+            this.AVG_HEART = AVG_HEART;
+        }
+
+        public String getMAX_HEART() {
+            return MAX_HEART;
+        }
+
+        public void setMAX_HEART(String MAX_HEART) {
+            this.MAX_HEART = MAX_HEART;
+        }
+
+        public String getCALORIE_VALUE() {
+            return CALORIE_VALUE;
+        }
+
+        public void setCALORIE_VALUE(String CALORIE_VALUE) {
+            this.CALORIE_VALUE = CALORIE_VALUE;
+        }
+
+        public String getRUN_ADDRESS() {
+            return RUN_ADDRESS;
+        }
+
+        public void setRUN_ADDRESS(String RUN_ADDRESS) {
+            this.RUN_ADDRESS = RUN_ADDRESS;
+        }
 
         public double getDISTANCE() {
             return DISTANCE;

@@ -18,6 +18,8 @@ import com.test.lsm.R;
 
         private TextView tvContent;
 
+        private int digitCount = 0;
+
         public MyMarkerView(Context context, int layoutResource) {
             super(context, layoutResource);
             tvContent = (TextView) findViewById(R.id.tvContent);
@@ -28,9 +30,9 @@ import com.test.lsm.R;
 
             if (e instanceof CandleEntry) {
                 CandleEntry ce = (CandleEntry) e;
-                tvContent.setText("" + Utils.formatNumber(ce.getHigh(), 0, true));
+                tvContent.setText("" + Utils.formatNumber(ce.getHigh(), digitCount, true));
             } else {
-                tvContent.setText("" + Utils.formatNumber(e.getY(), 0, true));
+                tvContent.setText("" + Utils.formatNumber(e.getY(), digitCount, true));
             }
 
             super.refreshContent(e, highlight);
@@ -40,4 +42,8 @@ import com.test.lsm.R;
         public MPPointF getOffset() {
             return new MPPointF(-(getWidth() / 2), -getHeight());
         }
+
+    public void setDigitCount(int digitCount) {
+        this.digitCount = digitCount;
     }
+}

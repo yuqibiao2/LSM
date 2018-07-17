@@ -120,6 +120,10 @@ public class MyTimeUtils {
         return null;
     }
 
+    public static long pareDate(String str){
+        return parseDate(str).getTime();
+    }
+
     public static Date parseDate( String str){
 
         return parseDate("yyyy-MM-dd HH:mm:ss" , str);

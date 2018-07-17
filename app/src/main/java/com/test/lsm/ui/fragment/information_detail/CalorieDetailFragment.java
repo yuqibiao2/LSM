@@ -127,6 +127,7 @@ public class CalorieDetailFragment extends LsmBaseFragment {
         //---设置marker
         MyMarkerView mv = new MyMarkerView(getActivity(), R.layout.custom_marker_view2);
         mv.setChartView(bcCalorie);
+        mv.setDigitCount(1);
         bcCalorie.setMarker(mv);  //设置 marker ,点击后显示的功能 ，布局可以自定义
     }
 

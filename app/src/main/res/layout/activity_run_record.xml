@@ -11,19 +11,23 @@
         android:id="@+id/tb_scan"
         style="@style/base_tb">
 
-        <ImageButton
-            android:id="@+id/ib_nav_lit"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:background="@color/my_trans"
-            android:onClick="back"
-            android:src="@mipmap/ic_back" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            style="@style/base_tv"
-            android:text="跑步历史纪录"
-            android:textColor="#707070"
-            android:textSize="14sp" />
+            <ImageButton
+                android:id="@+id/ib_nav_lit"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="@color/my_trans"
+                android:onClick="back"
+                android:src="@mipmap/ic_back" />
+            <TextView
+                style="@style/base_tv"
+                android:text="室内跑步"
+                android:layout_centerInParent="true"
+                android:textSize="16sp" />
+        </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
@@ -38,7 +42,6 @@
             android:id="@+id/rv_run_record"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="25dp"
             android:background="@color/my_white"
             android:overScrollMode="never" />
 
