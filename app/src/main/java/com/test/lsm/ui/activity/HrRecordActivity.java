@@ -108,9 +108,10 @@ public class HrRecordActivity extends LsmBaseActivity {
 
 
     private enum HrFragment {
-        mouth(R.layout.fragment_mouth_hr, MouthHrFragment.class),
-        day(R.layout.fragment_mouth_hr, DayHrFragment.class),
-        hour(R.layout.fragment_mouth_hr, HourHrFragment.class);
+
+        hour(R.layout.fragment_hour_hr, HourHrFragment.class),
+        day(R.layout.fragment_day_hr, DayHrFragment.class),
+        mouth(R.layout.fragment_mouth_hr, MouthHrFragment.class);
 
         private Fragment fragment;
         private int resId;

@@ -469,7 +469,7 @@
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:visibility="gone"
-                android:layout_marginBottom="60dp">
+                android:layout_marginBottom="80dp">
 
                 <ImageView
                     android:id="@+id/iv_bt_icon"

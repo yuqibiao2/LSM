@@ -98,7 +98,7 @@
             android:layout_marginTop="44dp"
             android:background="@color/trans"
             android:hint="  Phone number"
-            android:inputType="textPhonetic"
+            android:inputType="number"
             android:textColor="#919EC4"
             android:textSize="14sp" />
 
@@ -111,7 +111,7 @@
             android:layout_marginTop="42dp"
             android:background="@color/trans"
             android:hint="  Password"
-            android:inputType="numberPassword"
+            android:inputType="textPassword"
             android:textColor="#919EC4"
             android:textSize="14sp" />
     </LinearLayout>

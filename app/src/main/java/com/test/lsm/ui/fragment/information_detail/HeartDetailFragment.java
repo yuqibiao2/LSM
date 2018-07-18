@@ -15,6 +15,7 @@ import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.HrRecordActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MyTimeUtils;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
@@ -118,11 +119,10 @@ public class HeartDetailFragment extends LsmBaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void updateHeart(RefreshHearthInfoEvent heartChgEvent) {
-
+        tvHrvValueNum.setText("" + Constant.rriBuffer.size());
         if (Constant.rriBuffer.size() < 200) {
             return;
         }
-        tvHrvValueNum.setText("" + Constant.rriBuffer.size());
         CircularFifoQueue<Long> rriBuffer = Constant.rriBuffer;
         StringBuffer rrlIntervalSb = new StringBuffer();
         for (int i = 0; i < rriBuffer.size(); i++) {
@@ -141,6 +141,7 @@ public class HeartDetailFragment extends LsmBaseFragment {
             public void onSuccess(GetHRVInfoReturn result) {
                 List<GetHRVInfoReturn.HRVIndexBean> hrvIndex = result.getHRVIndex();
                 if (hrvIndex != null && hrvIndex.size() > 0) {
+                    tvUpdateTime.setText("更新时间："+ MyTimeUtils.getCurrentDateTime());
                     GetHRVInfoReturn.HRVIndexBean hrvIndexBean = hrvIndex.get(0);
                     //---体力状态
                     Integer bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());

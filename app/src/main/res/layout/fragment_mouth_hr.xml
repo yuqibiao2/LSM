@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="心率紀錄 - 23日"
         android:textColor="#FF121958"
-        android:paddingLeft="16dp"
+        android:paddingLeft="26dp"
         android:paddingRight="16dp"
         android:textSize="18sp" />
 

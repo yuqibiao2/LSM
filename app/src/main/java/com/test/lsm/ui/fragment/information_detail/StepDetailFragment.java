@@ -131,8 +131,9 @@ public class StepDetailFragment extends LsmBaseFragment {
         bcStepNum.invalidate();
         bcStepNum.animateY(800);
         bcStepNum.setScaleEnabled(false);
-        bcStepNum.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴的位置
+        bcStepNum.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);//设置X轴的位置
         bcStepNum.getXAxis().setDrawGridLines(false);//不显示网格
+        bcStepNum.getXAxis().setDrawAxisLine(false);
         bcStepNum.getAxisRight().setEnabled(false);//右侧不显示Y轴
         bcStepNum.getAxisLeft().setEnabled(false);
         bcStepNum.getXAxis().setLabelCount(yVals.size());

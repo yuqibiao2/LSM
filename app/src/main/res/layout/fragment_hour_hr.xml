@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
+        android:paddingLeft="26dp"
         android:paddingRight="16dp"
         android:text="心率紀錄 - 23分"
         android:textColor="#FF121958"
