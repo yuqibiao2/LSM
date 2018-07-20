@@ -566,10 +566,10 @@ public class RunFragment extends LsmBaseFragment {
      * 保存跑步记录
      */
     private void saveRunRecord() {
-        if (points.size() < 2) {
+       /* if (points.size() < 2) {
             MyToast.showLong(getContext(), "您移动的距离太小，记录数据失败！");
             return;
-        }
+        }*/
         RunRecord runRecord = new RunRecord();
         runRecord.setUserId(user.getUSER_ID());
         runRecord.setStartTime(startTime);
@@ -587,7 +587,10 @@ public class RunFragment extends LsmBaseFragment {
             }
             hrTotal += hr;
         }
-        int avgHr = hrTotal / hrBuffer.size();
+        int avgHr = 0;
+        if (hrBuffer.size()>0){
+            avgHr = hrTotal / hrBuffer.size();
+        }
         runRecord.setAvgHeart("" + avgHr);
         runRecord.setMaxHeart("" + maxHr);
         apiMethodManager.saveRunRecord(runRecord, new IRequestCallback<SaveRunRecordReturn>() {

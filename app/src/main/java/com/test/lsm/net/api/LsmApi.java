@@ -1,6 +1,9 @@
 package com.test.lsm.net.api;
 
+import com.test.lsm.bean.form.GetHeartChart;
+import com.test.lsm.bean.json.DoFooBean;
 import com.test.lsm.bean.json.GetActiveUser;
+import com.test.lsm.bean.json.GetCoachByCourseType;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
@@ -34,6 +37,17 @@ import rx.Observable;
 
 public interface LsmApi {
 
+
+
+    @GET("queryAppUserHeartEchart")
+    Observable<GetHeartChart> getHeartChart(@Query("USER_ID") Integer userId, @Query("SELECT_TYPE") Integer type ,@Query("CREATE_DATE") String dateTime);
+
+    @GET("queryCoachByCourseType")
+    Observable<GetCoachByCourseType> getCoachByCourseType();
+
+    @FormUrlEncoded
+    @POST("delRunRecord")
+    Observable<DoFooBean>  delRunRecord(@Field("ID") Integer recordId);
 
     @FormUrlEncoded
     @POST("saveUserHRV")

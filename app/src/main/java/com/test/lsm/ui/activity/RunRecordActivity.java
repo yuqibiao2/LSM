@@ -2,8 +2,10 @@ package com.test.lsm.ui.activity;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +24,7 @@ import com.test.lsm.R;
 import com.test.lsm.adapter.RunRecordAdapter;
 import com.test.lsm.adapter.RunRecordAdapter2;
 import com.test.lsm.bean.form.QueryRunInfoVo;
+import com.test.lsm.bean.json.DoFooBean;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
@@ -82,6 +85,53 @@ public class RunRecordActivity extends LsmBaseActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 RunRecordDetailDialog detailDialog = new RunRecordDetailDialog(RunRecordActivity.this , mData.get(position));
                 detailDialog.show();
+            }
+        });
+
+        adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(final BaseQuickAdapter adapter, View view, final int position) {
+                new AlertDialog.Builder(RunRecordActivity.this)
+                        .setTitle("操作")
+                        .setMessage("确认要删除本条记录吗？")
+                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialogInterface, int i) {
+                                final int id = mData.get(position).getID();
+                                APIMethodManager.getInstance().deleteRunRecordById(id, new IRequestCallback<DoFooBean>() {
+                                    @Override
+                                    public void onSuccess(DoFooBean result) {
+                                        int removeIndex = -1;
+                                        for (int i=0 ; i<mData.size() ; i++) {
+                                            QueryUserRunInfoReturn.PdBean pdBean = mData.get(i);
+                                            int pdBeanID = pdBean.getID();
+                                            if (pdBeanID == id){
+                                                removeIndex = i;
+                                            }
+                                        }
+                                        if (removeIndex>=0){
+                                            mData.remove(removeIndex);
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                        dialogInterface.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Throwable throwable) {
+                                        MyToast.showLong(RunRecordActivity.this , "删除失败");
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
+                return false;
             }
         });
 

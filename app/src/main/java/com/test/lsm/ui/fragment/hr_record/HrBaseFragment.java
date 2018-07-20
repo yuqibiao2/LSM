@@ -151,52 +151,50 @@ public abstract class HrBaseFragment extends LsmBaseFragment {
 
     private void setData(LineChart mLineChart, List<Entry> mValues) {
         LineDataSet set1;
-        //判断图表中原来是否有数据
-        if (mLineChart.getData() != null &&
-                mLineChart.getData().getDataSetCount() > 0) {
-            //获取数据1
-            set1 = (LineDataSet) mLineChart.getData().getDataSetByIndex(0);
-            set1.setValues(mValues);
-            //刷新数据
-            mLineChart.getData().notifyDataChanged();
-            mLineChart.notifyDataSetChanged();
+        //设置数据1  参数1：数据源 参数2：图例名称
+        set1 = new LineDataSet(mValues, "测试数据1");
+        set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        set1.setColor(getLineColor());
+        set1.setHighLightColor(Color.WHITE);//设置点击交点后显示交高亮线的颜色
+        set1.setHighlightEnabled(true);//是否使用点击高亮线
+        set1.setDrawCircles(true);
+        set1.setValueTextColor(Color.parseColor("#FBA165"));
+        set1.setLineWidth(DimensChange.dp2px(getActivity(), 2f));//设置线宽
+        set1.setDrawCircles(false);//是否画焦点
+        set1.setDrawValues(false);
+        //格式化显示数据
+        set1.setDrawFilled(true);//设置使用 范围背景填充
+        set1.setFillAlpha(0);
+        if (Utils.getSDKInt() >= 18) {
+            // fill drawable only supported on api level 18 and above
+            Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.lc_mouth_bg);
+            set1.setFillDrawable(drawable);//设置范围背景填充
         } else {
-            //设置数据1  参数1：数据源 参数2：图例名称
-            set1 = new LineDataSet(mValues, "测试数据1");
-            set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-            set1.setColor(getLineColor());
-            set1.setHighLightColor(Color.WHITE);//设置点击交点后显示交高亮线的颜色
-            set1.setHighlightEnabled(true);//是否使用点击高亮线
-            set1.setDrawCircles(true);
-            set1.setValueTextColor(Color.parseColor("#FBA165"));
-            set1.setLineWidth(DimensChange.dp2px(getActivity(), 2f));//设置线宽
-            set1.setDrawCircles(false);//是否画焦点
-            set1.setDrawValues(false);
-            //格式化显示数据
-            set1.setDrawFilled(true);//设置使用 范围背景填充
-            set1.setFillAlpha(0);
-            if (Utils.getSDKInt() >= 18) {
-                // fill drawable only supported on api level 18 and above
-                Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.lc_mouth_bg);
-                set1.setFillDrawable(drawable);//设置范围背景填充
-            } else {
-                set1.setFillColor(Color.parseColor("#FEE1CB"));
-            }
-            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-            dataSets.add(set1); // add the datasets
-            //创建LineData对象 属于LineChart折线图的数据集合
-            LineData data = new LineData(dataSets);
-            // 添加到图表中
-            mLineChart.setData(data);
-            //绘制图表
-            mLineChart.invalidate();
+            set1.setFillColor(Color.parseColor("#FEE1CB"));
         }
-
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(set1); // add the datasets
+        //创建LineData对象 属于LineChart折线图的数据集合
+        LineData data = new LineData(dataSets);
+        // 添加到图表中
+        mLineChart.setData(data);
+        //绘制图表
+        mLineChart.invalidate();
     }
 
     protected int getLineColor() {
 
         return Color.parseColor("#FB6EC8");
+    }
+
+    protected OnLoadDataSuccess mOnLoadDataSuccess;
+
+    public void setOnLoadDataSuccess(OnLoadDataSuccess onLoadDataSuccess){
+        this.mOnLoadDataSuccess = onLoadDataSuccess;
+    }
+
+    public interface OnLoadDataSuccess{
+        void onSuccess(int maxHr , int minHr , int avgHr);
     }
 
 }

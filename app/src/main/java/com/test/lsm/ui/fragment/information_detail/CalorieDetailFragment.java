@@ -114,7 +114,7 @@ public class CalorieDetailFragment extends LsmBaseFragment {
         bcCalorie.animateY(800);
         bcCalorie.setScaleEnabled(false);
         XAxis xAxis = bcCalorie.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);//设置X轴的位置
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴的位置
         xAxis.setDrawGridLines(false);//不显示网格
         xAxis.setLabelCount(yVals.size());
         xAxis.setDrawAxisLine(false);

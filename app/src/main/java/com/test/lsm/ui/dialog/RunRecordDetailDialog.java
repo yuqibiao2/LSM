@@ -115,7 +115,7 @@ public class RunRecordDetailDialog extends LsmBaseDialog {
     protected void initView() {
         initMap();
         tvCity.setText("" + item.getRUN_ADDRESS());
-        tvDistance.setText("" + item.getCREATE_TIME());
+        tvDatetime.setText("" + item.getCREATE_TIME());
         tvDistance.setText("" + item.getDISTANCE() + "km");
         tvTimeSpent.setText("" + item.getRUN_TIME());
         tvAvgHr.setText("" + "平均心率    " + item.getAVG_HEART() + " bpm");

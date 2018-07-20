@@ -7,8 +7,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.test.lsm.R;
+import com.test.lsm.net.GlidUtils;
 import com.yyyu.baselibrary.utils.StatusBarCompat;
 
 import butterknife.BindView;
@@ -22,6 +22,8 @@ import butterknife.OnClick;
  * @date 2018/7/5
  */
 public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
+
+    private static final String TAG = "ExeIntensiveChoiceActiv";
 
     @BindView(R.id.iv_icon)
     ImageView ivIcon;
@@ -47,9 +49,12 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
     ImageView ivHardSelected;
     @BindView(R.id.rl_hard)
     RelativeLayout rlHard;
+    @BindView(R.id.tv_course_name)
+    TextView tvCourseName;
     private String imgUrl;
     private Integer bodyFitness;
     private Integer intensiveSelected = 1; // 0：简单 1：一般  2：困难
+    private String courseNames;
 
     @Override
     public int getLayoutId() {
@@ -67,14 +72,14 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         super.beforeInit();
         Intent intent = getIntent();
         imgUrl = intent.getStringExtra("imgUrl");
+        courseNames = intent.getStringExtra("courseName");
         bodyFitness = intent.getIntExtra("bodyFitness", 0);
     }
 
     @Override
     protected void initView() {
-
-        Glide.with(this).load(imgUrl).into(ivIcon);
-
+        GlidUtils.load(this, ivIcon, imgUrl);
+        tvCourseName.setText("# "+courseNames);
         if (bodyFitness >= 30) {
             chgStatus1(ivPhysical, 1);
             tvPhysical.setText("过度暴动");
@@ -94,7 +99,6 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
             chgStatus1(ivPhysical, 5);
             tvPhysical.setText("体力透支");
         }
-
     }
 
     @Override
@@ -102,15 +106,15 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
 
     }
 
-    @OnClick({R.id.rl_easy , R.id.rl_normal , R.id.rl_hard})
-    public void chgIntensive(View view){
+    @OnClick({R.id.rl_easy, R.id.rl_normal, R.id.rl_hard})
+    public void chgIntensive(View view) {
         ivEasy.setImageResource(R.mipmap.ic_easy);
         ivEasySelected.setVisibility(View.GONE);
         ivNormal.setImageResource(R.mipmap.ic_normal);
         ivNormalSelected.setVisibility(View.GONE);
         ivHard.setImageResource(R.mipmap.ic_hard);
         ivHardSelected.setVisibility(View.GONE);
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.rl_easy:
                 intensiveSelected = 0;
                 ivEasy.setImageResource(R.mipmap.ic_easy_selected);
@@ -131,12 +135,13 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
 
 
     public void toNext(View view) {
-        IndoorExerciseActivity.startAction(this , intensiveSelected);
+        IndoorExerciseActivity.startAction(this, intensiveSelected);
     }
 
-    public static void startAction(Context context, String imgUrl, Integer bodyFitness) {
+    public static void startAction(Context context, String imgUrl, String courseName, Integer bodyFitness) {
         Intent intent = new Intent(context, ExeIntensiveChoiceActivity.class);
         intent.putExtra("imgUrl", imgUrl);
+        intent.putExtra("courseName", courseName);
         intent.putExtra("bodyFitness", bodyFitness);
         context.startActivity(intent);
     }

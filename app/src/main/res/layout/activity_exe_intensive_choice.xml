@@ -8,11 +8,30 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/iv_icon"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:scaleType="centerCrop" />
+            android:layout_height="250dp">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/avril" />
+
+            <TextView
+                android:id="@+id/tv_course_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="72dp"
+                android:layout_marginLeft="26dp"
+                android:text="#跑步"
+                android:textColor="@color/my_white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,8 +110,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:visibility="gone"
-                    android:src="@mipmap/ic_exe_suggestion" />
+                    android:src="@mipmap/ic_exe_suggestion"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/iv_easy"
@@ -108,8 +127,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"
-                    android:visibility="gone"
-                    android:src="@mipmap/ic_exe_select" />
+                    android:src="@mipmap/ic_exe_select"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -157,8 +176,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:visibility="gone"
-                    android:src="@mipmap/ic_exe_suggestion" />
+                    android:src="@mipmap/ic_exe_suggestion"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/iv_hard"
@@ -174,8 +193,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"
-                    android:visibility="gone"
-                    android:src="@mipmap/ic_exe_select" />
+                    android:src="@mipmap/ic_exe_select"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 

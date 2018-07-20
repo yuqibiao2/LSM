@@ -234,7 +234,7 @@ public class MyTimeUtils {
      * 得到当前日
      * @return
      */
-    public static int getCurerntDay(){
+    public static int getCurrentDay(){
         return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     }
 
@@ -242,7 +242,7 @@ public class MyTimeUtils {
      * 得到当前月
      * @return
      */
-    public static int getCurerntMonth(){
+    public static int getCurrentMonth(){
         return Calendar.getInstance().get(Calendar.MONTH);
     }
 

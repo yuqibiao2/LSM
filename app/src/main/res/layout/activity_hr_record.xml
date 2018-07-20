@@ -52,6 +52,7 @@
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/tv_datetime"
             android:padding="15dp"
+            android:onClick="backward"
             android:src="@mipmap/ic_backward" />
 
         <TextView
@@ -68,6 +69,7 @@
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/tv_datetime"
             android:padding="15dp"
+            android:onClick="forward"
             android:src="@mipmap/ic_forward" />
 
     </RelativeLayout>

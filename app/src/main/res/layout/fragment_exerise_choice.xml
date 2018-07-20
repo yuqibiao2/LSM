@@ -75,18 +75,24 @@
                 android:text="今天你想做些什麼運動?"
                 android:textColor="#FF323643"
                 android:textSize="34sp" />
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="現場課程             >"
+                android:textColor="#FF323643"
+                android:textSize="20sp" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_exercise_type"
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
-                android:layout_marginTop="50dp" />
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="還有這些課程        >"
+                android:text="還有綫下課程        >"
                 android:textColor="#FF323643"
                 android:textSize="20sp" />
 
@@ -94,7 +100,7 @@
                 android:id="@+id/rv_lesson"
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="60dp"
                 android:layout_marginTop="10dp" />
         </LinearLayout>
     </com.yyyu.baselibrary.ui.widget.BounceScrollView>

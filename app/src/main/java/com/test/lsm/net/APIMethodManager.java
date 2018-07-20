@@ -2,6 +2,7 @@ package com.test.lsm.net;
 
 import android.text.TextUtils;
 
+import com.test.lsm.bean.form.GetHeartChart;
 import com.test.lsm.bean.form.QueryHRVInfo;
 import com.test.lsm.bean.form.QueryRunInfoVo;
 import com.test.lsm.bean.form.RunRecord;
@@ -10,7 +11,9 @@ import com.test.lsm.bean.form.SaveUserHRVVo;
 import com.test.lsm.bean.form.UserHealthInfo;
 import com.test.lsm.bean.form.UserRegVo;
 import com.test.lsm.bean.form.UserUpdateVo;
+import com.test.lsm.bean.json.DoFooBean;
 import com.test.lsm.bean.json.GetActiveUser;
+import com.test.lsm.bean.json.GetCoachByCourseType;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
@@ -64,17 +67,116 @@ public class APIMethodManager {
     }
 
 
-    public Subscription saveUserHRV(SaveUserHRVVo saveUserHRVVo , final IRequestCallback<SaveUserHRV> callback){
+    /**
+     * 获取心率记录信息
+     *
+     * @param userId
+     * @param type     0：按时；1：按日；2：按周；3：按月
+     * @param dateTime 2018-07-18 15:10
+     * @return
+     */
+    public Subscription getHeartChart(Integer userId, Integer type, String dateTime, final IRequestCallback<GetHeartChart> callback) {
+        Subscription subscribe = lsmApi.getHeartChart(userId, type, dateTime)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<GetHeartChart>() {
+                    @Override
+                    public void onCompleted() {
 
-        Map<String , String> map = new HashMap<>();
-        map.put("userId" , ""+saveUserHRVVo.getUserId());
-        map.put("MINDFITNESS" , ""+saveUserHRVVo.getMINDFITNESS());
-        map.put("BODYFITNESS" , ""+saveUserHRVVo.getBODYFITNESS());
-        map.put("MOODSTABILITY" , ""+saveUserHRVVo.getMOODSTABILITY());
-        map.put("STRESSTENSION" , ""+saveUserHRVVo.getSTRESSTENSION());
-        map.put("MINDFATIGUE" , ""+saveUserHRVVo.getMINDFATIGUE());
-        map.put("BODYFATIGUE" , ""+saveUserHRVVo.getBODYFATIGUE());
-        map.put("currentTime" , ""+ MyTimeUtils.getCurrentDateTime());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetHeartChart getHeartChart) {
+                        callback.onSuccess(getHeartChart);
+                    }
+                });
+        return subscribe;
+    }
+
+    /**
+     * 获取训练课程
+     *
+     * @param callback
+     * @return
+     */
+    public Subscription getCoachByCourseType(final IRequestCallback<GetCoachByCourseType> callback) {
+
+        Subscription subscribe = lsmApi.getCoachByCourseType()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<GetCoachByCourseType>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetCoachByCourseType getCoachByCourseType) {
+                        callback.onSuccess(getCoachByCourseType);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 删除跑步记录
+     *
+     * @param recordId
+     * @param callback
+     * @return
+     */
+    public Subscription deleteRunRecordById(Integer recordId, final IRequestCallback<DoFooBean> callback) {
+
+        Subscription subscribe = lsmApi.delRunRecord(recordId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<DoFooBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(DoFooBean doFooBean) {
+                        callback.onSuccess(doFooBean);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 保存HRV的值
+     *
+     * @param saveUserHRVVo
+     * @param callback
+     * @return
+     */
+    public Subscription saveUserHRV(SaveUserHRVVo saveUserHRVVo, final IRequestCallback<SaveUserHRV> callback) {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", "" + saveUserHRVVo.getUserId());
+        map.put("MINDFITNESS", "" + saveUserHRVVo.getMINDFITNESS());
+        map.put("BODYFITNESS", "" + saveUserHRVVo.getBODYFITNESS());
+        map.put("MOODSTABILITY", "" + saveUserHRVVo.getMOODSTABILITY());
+        map.put("STRESSTENSION", "" + saveUserHRVVo.getSTRESSTENSION());
+        map.put("MINDFATIGUE", "" + saveUserHRVVo.getMINDFATIGUE());
+        map.put("BODYFATIGUE", "" + saveUserHRVVo.getBODYFATIGUE());
+        map.put("currentTime", "" + MyTimeUtils.getCurrentDateTime());
 
 
         Subscription subscribe = lsmApi.saveUserHRV(map)
@@ -101,7 +203,6 @@ public class APIMethodManager {
     }
 
 
-
     /**
      * 一分钟上传一次身体信息
      *
@@ -109,14 +210,14 @@ public class APIMethodManager {
      * @param callback
      * @return
      */
-    public Subscription saveHeartByMin(SaveHeartByMinVo saveHeartByMinVo , final IRequestCallback<SaveHeartByMin> callback){
+    public Subscription saveHeartByMin(SaveHeartByMinVo saveHeartByMinVo, final IRequestCallback<SaveHeartByMin> callback) {
 
-        Map<String , String> map = new HashMap<>();
-        map.put("userId" , ""+saveHeartByMinVo.getUserId());
-        map.put("heartNum" , ""+saveHeartByMinVo.getHeartNum());
-        map.put("calorieValue" , ""+saveHeartByMinVo.getCalorieValue());
-        map.put("stepNum" , ""+saveHeartByMinVo.getStepNum());
-        map.put("currentTime" , ""+saveHeartByMinVo.getCurrentTime());
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", "" + saveHeartByMinVo.getUserId());
+        map.put("heartNum", "" + saveHeartByMinVo.getHeartNum());
+        map.put("calorieValue", "" + saveHeartByMinVo.getCalorieValue());
+        map.put("stepNum", "" + saveHeartByMinVo.getStepNum());
+        map.put("currentTime", "" + saveHeartByMinVo.getCurrentTime());
 
         Subscription subscribe = lsmApi.saveHeartByMin(map)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -148,7 +249,7 @@ public class APIMethodManager {
      * @param callback
      * @return
      */
-    public Subscription getActiveUserList(final IRequestCallback<GetActiveUser> callback){
+    public Subscription getActiveUserList(final IRequestCallback<GetActiveUser> callback) {
 
         Subscription subscribe = lsmApi.getGetActiveUserList()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -431,7 +532,7 @@ public class APIMethodManager {
     public Subscription updateUser(UserUpdateVo userRegVo, final IRequestCallback<UserRegReturn> callback) {
 
         Map<String, String> paras = new HashMap<>();
-        paras.put("USER_ID", ""+userRegVo.getUSER_ID());
+        paras.put("USER_ID", "" + userRegVo.getUSER_ID());
         paras.put("USERNAME", userRegVo.getUSERNAME());
         paras.put("PASSWORD", userRegVo.getPASSWORD());
         paras.put("PHONE", userRegVo.getPHONE());
@@ -442,10 +543,10 @@ public class APIMethodManager {
         paras.put("URGENT_USER", userRegVo.getURGENT_USER());
         paras.put("URGENT_PHONE", userRegVo.getURGENT_PHONE());
         String userImage = userRegVo.getUSER_IMAGE();
-        if (!TextUtils.isEmpty(userImage)){
-            paras.put("USER_IMAGE" , userImage);
+        if (!TextUtils.isEmpty(userImage)) {
+            paras.put("USER_IMAGE", userImage);
         }
-        paras.put("HEALTH_PARAM" , userRegVo.getHEALTH_PARAM());
+        paras.put("HEALTH_PARAM", userRegVo.getHEALTH_PARAM());
 
         Subscription subscribe = lsmApi.updateUser(paras)
                 .subscribeOn(Schedulers.io())

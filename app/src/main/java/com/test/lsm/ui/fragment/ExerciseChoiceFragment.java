@@ -8,10 +8,12 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
-import com.test.lsm.adapter.ExerciseAdapter;
-import com.test.lsm.adapter.LessonAdapter;
-import com.test.lsm.bean.FooBean;
+import com.test.lsm.adapter.DownLineCourseAdapter;
+import com.test.lsm.adapter.OnLineCourseAdapter;
+import com.test.lsm.bean.json.GetCoachByCourseType;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.net.APIMethodManager;
+import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.ExeIntensiveChoiceActivity;
 
 import java.util.ArrayList;
@@ -36,9 +38,12 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
     @BindView(R.id.rv_lesson)
     RecyclerView rvLesson;
 
-    private List<FooBean> fooBeanList;
     private UserLoginReturn.PdBean user;
-    private ExerciseAdapter exerciseAdapter;
+    private OnLineCourseAdapter onLineCourseAdapter;
+    private APIMethodManager apiMethodManager;
+    private List<GetCoachByCourseType.ListBean> onLineData;
+    List<GetCoachByCourseType.ListBean> downLineData;
+    private DownLineCourseAdapter downLineCourseAdapter;
 
     @Override
     public int getLayoutId() {
@@ -49,35 +54,67 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
     @Override
     protected void beforeInit() {
         super.beforeInit();
-        fooBeanList = new ArrayList<>();
-        fooBeanList.add(new FooBean());
-        fooBeanList.add(new FooBean());
-        fooBeanList.add(new FooBean());
-        fooBeanList.add(new FooBean());
-        fooBeanList.add(new FooBean());
-        fooBeanList.add(new FooBean());
         MyApplication application = (MyApplication) getActivity().getApplication();
         user = application.getUser();
+        apiMethodManager = APIMethodManager.getInstance();
+        onLineData = new ArrayList<>();
+        downLineData = new ArrayList<>();
     }
 
     @Override
     protected void initView() {
-        tvWelcome.setText("Welcome back, "+user.getUSERNAME()+".");
-        rvExerciseType.setLayoutManager(new LinearLayoutManager(getActivity() , LinearLayoutManager.HORIZONTAL , false));
-        rvLesson.setLayoutManager(new LinearLayoutManager(getActivity() , LinearLayoutManager.HORIZONTAL , false));
-        exerciseAdapter = new ExerciseAdapter(R.layout.rv_item_exercise, fooBeanList);
-        rvExerciseType.setAdapter(exerciseAdapter);
-        rvLesson.setAdapter(new LessonAdapter(R.layout.rv_item_lesson, fooBeanList));
+        tvWelcome.setText("Welcome back, " + user.getUSERNAME() + ".");
+        rvExerciseType.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        onLineCourseAdapter = new OnLineCourseAdapter(R.layout.rv_item_online, onLineData);
+        rvExerciseType.setAdapter(onLineCourseAdapter);
+
+        rvLesson.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        downLineCourseAdapter = new DownLineCourseAdapter(R.layout.rv_item_offline, downLineData);
+        rvLesson.setAdapter(downLineCourseAdapter);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+
+        apiMethodManager.getCoachByCourseType(new IRequestCallback<GetCoachByCourseType>() {
+            @Override
+            public void onSuccess(GetCoachByCourseType result) {
+                GetCoachByCourseType.PdBean pd = result.getPd();
+                List<GetCoachByCourseType.ListBean> onLineList = pd.getOnLineList();
+                onLineData.addAll(onLineList);
+                onLineCourseAdapter.notifyDataSetChanged();
+
+                List<GetCoachByCourseType.ListBean> downLineList = pd.getDownLineList();
+                downLineData.addAll(downLineList);
+                downLineCourseAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
     }
 
     @Override
     protected void initListener() {
-        exerciseAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        onLineCourseAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ExeIntensiveChoiceActivity.startAction(getActivity() ,
-                        "http://g.hiphotos.baidu.com/image/h%3D300/sign=0236ec87e7f81a4c3932eac9e72b6029/2e2eb9389b504fc2db67eef6e9dde71190ef6d0c.jpg"
-                        ,0);
+                ExeIntensiveChoiceActivity.startAction(getActivity(),
+                        onLineData.get(position).getCOURSE_IMG(),
+                        onLineData.get(position).getNAME(),
+                        0);
+            }
+        });
+        downLineCourseAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ExeIntensiveChoiceActivity.startAction(getActivity(),
+                        downLineData.get(position).getCOURSE_IMG(),
+                        downLineData.get(position).getNAME(),
+                        0);
             }
         });
     }
