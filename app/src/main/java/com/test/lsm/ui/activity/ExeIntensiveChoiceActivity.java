@@ -53,8 +53,9 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
     TextView tvCourseName;
     private String imgUrl;
     private Integer bodyFitness;
-    private Integer intensiveSelected = 1; // 0：简单 1：一般  2：困难
+    private Integer courseLevel = 1; // 0：简单 1：一般  2：困难
     private String courseNames;
+    private String courseType;
 
     @Override
     public int getLayoutId() {
@@ -73,6 +74,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         Intent intent = getIntent();
         imgUrl = intent.getStringExtra("imgUrl");
         courseNames = intent.getStringExtra("courseName");
+        courseType = intent.getStringExtra("courseType");
         bodyFitness = intent.getIntExtra("bodyFitness", 0);
     }
 
@@ -116,17 +118,17 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         ivHardSelected.setVisibility(View.GONE);
         switch (view.getId()) {
             case R.id.rl_easy:
-                intensiveSelected = 0;
+                courseLevel = 0;
                 ivEasy.setImageResource(R.mipmap.ic_easy_selected);
                 ivEasySelected.setVisibility(View.VISIBLE);
                 break;
             case R.id.rl_normal:
-                intensiveSelected = 1;
+                courseLevel = 1;
                 ivNormal.setImageResource(R.mipmap.ic_normal_selected);
                 ivNormalSelected.setVisibility(View.VISIBLE);
                 break;
             case R.id.rl_hard:
-                intensiveSelected = 2;
+                courseLevel = 2;
                 ivHard.setImageResource(R.mipmap.ic_hard_selected);
                 ivHardSelected.setVisibility(View.VISIBLE);
                 break;
@@ -135,13 +137,14 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
 
 
     public void toNext(View view) {
-        IndoorExerciseActivity.startAction(this, intensiveSelected);
+        IndoorExerciseActivity.startAction(this, courseLevel ,courseType );
     }
 
-    public static void startAction(Context context, String imgUrl, String courseName, Integer bodyFitness) {
+    public static void startAction(Context context, String imgUrl, String courseName, String courseType , Integer bodyFitness) {
         Intent intent = new Intent(context, ExeIntensiveChoiceActivity.class);
         intent.putExtra("imgUrl", imgUrl);
         intent.putExtra("courseName", courseName);
+        intent.putExtra("courseType", courseType);
         intent.putExtra("bodyFitness", bodyFitness);
         context.startActivity(intent);
     }

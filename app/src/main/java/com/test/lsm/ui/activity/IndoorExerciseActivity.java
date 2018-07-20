@@ -1,9 +1,11 @@
 package com.test.lsm.ui.activity;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -23,16 +25,24 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
+import com.test.lsm.bean.event.UpdateIndoorRunDataEvent;
+import com.test.lsm.bean.json.GetCourseParams;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.net.APIMethodManager;
+import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.ui.fragment.indoor_run.IndoorRunHrFragment;
+import com.test.lsm.ui.fragment.indoor_run.IndoorRunHrvFragment;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.DimensChange;
-import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MyStringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import butterknife.BindView;
+import de.greenrobot.event.EventBus;
+import me.relex.circleindicator.CircleIndicator;
 
 /**
  * 功能：室内运动
@@ -51,9 +61,18 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     RelativeLayout rrBt;
     @BindView(R.id.cc_ht)
     CombinedChart ccHt;
-    private List<BarEntry> mValues;
+    @BindView(R.id.vp_indoor_run)
+    ViewPager vpIndoorRun;
+    @BindView(R.id.ci_indoor_run)
+    CircleIndicator ciIndoorRun;
+    private List<BarEntry> realTimeValues;
+    private List<BarEntry> endTimeValues;
     private List<Entry> lineValues;
     private UserLoginReturn.PdBean user;
+    private int courseLevel;
+    private String courseType;
+    private int maxBaseHr;
+    private List<Fragment> fragmentList;
 
     @Override
     public int getLayoutId() {
@@ -64,45 +83,19 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     public void beforeInit() {
         super.beforeInit();
 
+        fragmentList = new ArrayList<>();
+        fragmentList.add(new IndoorRunHrFragment());
+        fragmentList.add(new IndoorRunHrvFragment());
+
+        Intent intent = getIntent();
+        courseLevel = intent.getIntExtra("courseLevel", 0);
+        courseType = intent.getStringExtra("courseType");
         MyApplication application = (MyApplication) getApplication();
         user = application.getUser();
 
-        mValues = new ArrayList<>();
-        mValues.add(new BarEntry(0, new float[]{0, 60}));
-        mValues.add(new BarEntry(1, new float[]{0, 60}));
-        mValues.add(new BarEntry(2, new float[]{0, 60}));
-        mValues.add(new BarEntry(3, new float[]{0, 60}));
-        mValues.add(new BarEntry(4, new float[]{0, 60}));
-        mValues.add(new BarEntry(5, new float[]{60, 60}));
-        mValues.add(new BarEntry(6, new float[]{60, 60}));
-        mValues.add(new BarEntry(7, new float[]{60, 60}));
-        mValues.add(new BarEntry(8, new float[]{120, 60}));
-        mValues.add(new BarEntry(9, new float[]{120, 60}));
-        mValues.add(new BarEntry(10, new float[]{120, 60}));
-        mValues.add(new BarEntry(11, new float[]{60, 60}));
-        mValues.add(new BarEntry(12, new float[]{60, 60}));
-        mValues.add(new BarEntry(13, new float[]{60, 60}));
-        mValues.add(new BarEntry(14, new float[]{0, 60}));
-        mValues.add(new BarEntry(15, new float[]{0, 60}));
-        mValues.add(new BarEntry(16, new float[]{0, 60}));
-        mValues.add(new BarEntry(17, new float[]{0, 60}));
-        mValues.add(new BarEntry(18, new float[]{0, 60}));
-        mValues.add(new BarEntry(19, new float[]{0, 60}));
-        mValues.add(new BarEntry(20, new float[]{0, 60}));
-        mValues.add(new BarEntry(21, new float[]{0, 60}));
-        mValues.add(new BarEntry(22, new float[]{0, 60}));
-        mValues.add(new BarEntry(23, new float[]{0, 60}));
-        mValues.add(new BarEntry(24, new float[]{0, 60}));
-        mValues.add(new BarEntry(25, new float[]{0, 60}));
-        mValues.add(new BarEntry(26, new float[]{0, 60}));
-        mValues.add(new BarEntry(27, new float[]{0, 60}));
-        mValues.add(new BarEntry(28, new float[]{0, 60}));
-        mValues.add(new BarEntry(29, new float[]{0, 60}));
-        mValues.add(new BarEntry(30, new float[]{0, 60}));
-        for (int i = 0; i < 60; i++) {
-            mValues.add(new BarEntry(30 + i, new float[]{0, 60}));
-        }
-
+        maxBaseHr = 220; //220-用户年纪
+        realTimeValues = new ArrayList<>();
+        endTimeValues = new ArrayList<>();
         lineValues = new ArrayList<>();
         for (int i = 0; i < 80; i++) {
             int nextInt = new Random().nextInt(180);
@@ -113,18 +106,26 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
 
     @Override
     protected void initView() {
+
+        vpIndoorRun.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return fragmentList.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return fragmentList.size();
+            }
+        });
+
+        ciIndoorRun.setViewPager(vpIndoorRun);
+
         String userImage = user.getUSER_IMAGE();
-        if (!TextUtils.isEmpty(userImage)){
+        if (!TextUtils.isEmpty(userImage)) {
             Glide.with(this).load(userImage).into(rvUserIcon);
         }
         initChart(ccHt);
-        setChartData(ccHt, mValues);
-        CombinedData data = ccHt.getData();
-        BarDataSet set = (BarDataSet) data.getDataSetByIndex(1);
-        data.notifyDataChanged();
-        ccHt.notifyDataSetChanged();
-        ccHt.setVisibleXRangeMaximum(30);
-        ccHt.moveViewTo(set.getEntryCount()-31, 50f, YAxis.AxisDependency.LEFT);
     }
 
     @Override
@@ -137,24 +138,73 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         });
     }
 
-    public void back(View view){
+    @Override
+    protected void initData() {
+        super.initData();
+        showLoadDialog();
+        APIMethodManager.getInstance().getCourseParamByType(courseType, courseLevel, new IRequestCallback<GetCourseParams>() {
+            @Override
+            public void onSuccess(GetCourseParams result) {
+                dismissLoadDialog();
+                if (result.getResult().equals("01")) {
+                    List<GetCourseParams.PdBean> pd = result.getPd();
+                    int index = 0;
+                    int index2 = 0;
+                    for (GetCourseParams.PdBean bean : pd) {
+                        String paramNumber = bean.getPARAM_NUMBER();
+                        String[] split = paramNumber.split("~");
+                        float start = MyStringUtils.percentToDecimals(split[0]);
+                        float end = MyStringUtils.percentToDecimals(split[1]);
+                        for (int i = 0; i < 30; i++) {//5分钟一个数据 转换为10s间隔一个数据
+                            int y1 = (int) (maxBaseHr * end);
+                            int y2 = (int) (maxBaseHr * start);
+                            BarEntry entry = new BarEntry(index++, new float[]{y1, y1 - y2});
+                            realTimeValues.add(entry);
+                        }
+                        int y1 = (int) (maxBaseHr * end);
+                        int y2 = (int) (maxBaseHr * start);
+                        BarEntry entry = new BarEntry(index2++, new float[]{y1, y1 - y2});
+                        endTimeValues.add(entry);
+                    }
+                }
+
+                setChartData(ccHt, realTimeValues);
+                CombinedData data = ccHt.getData();
+                data.notifyDataChanged();
+                ccHt.notifyDataSetChanged();
+                ccHt.setVisibleXRangeMaximum(30);
+                //BarDataSet set = (BarDataSet) data.getDataSetByIndex(1);
+                //ccHt.moveViewTo(set.getEntryCount() - 31, 50f, YAxis.AxisDependency.LEFT);
+
+                EventBus.getDefault().post(new UpdateIndoorRunDataEvent(endTimeValues));
+
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                dismissLoadDialog();
+            }
+        });
+    }
+
+    public void back(View view) {
         finish();
     }
 
-    public void toSetting(View view){
+    public void toSetting(View view) {
         SettingActivity.startAction(this);
     }
 
     private void addEntry() {
         CombinedData data = ccHt.getData();
         BarDataSet set = (BarDataSet) data.getDataSetByIndex(1);
-        BarEntry barEntry = new BarEntry(set.getEntryCount()+1, new float[]{120, 60});
+        BarEntry barEntry = new BarEntry(set.getEntryCount() + 1, new float[]{120, 60});
         set.addEntry(barEntry);
         set.notifyDataSetChanged();
         data.notifyDataChanged();
         ccHt.notifyDataSetChanged();
         ccHt.setVisibleXRangeMaximum(30);
-        ccHt.moveViewTo(set.getEntryCount()-31, 50f, YAxis.AxisDependency.LEFT);
+        ccHt.moveViewTo(set.getEntryCount() - 31, 50f, YAxis.AxisDependency.LEFT);
 
     }
 
@@ -238,7 +288,6 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setAxisMinimum(0f);
         xAxis.setGranularity(1f);
         xAxis.setAxisMinimum(0f);
         xAxis.setTextColor(Color.WHITE);
@@ -247,9 +296,10 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         xAxis.setDrawAxisLine(false);
     }
 
-    public static void startAction(Context context, Integer intensiveSelected) {
+    public static void startAction(Context context, Integer courseLevel, String courseType) {
         Intent intent = new Intent(context, IndoorExerciseActivity.class);
-        intent.putExtra("intensiveSelected", intensiveSelected);
+        intent.putExtra("courseLevel", courseLevel);
+        intent.putExtra("courseType", courseType);
         context.startActivity(intent);
     }
 

@@ -105,6 +105,7 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
                 ExeIntensiveChoiceActivity.startAction(getActivity(),
                         onLineData.get(position).getCOURSE_IMG(),
                         onLineData.get(position).getNAME(),
+                        onLineData.get(position).getCOURSE_TYPE(),
                         0);
             }
         });
@@ -114,6 +115,7 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
                 ExeIntensiveChoiceActivity.startAction(getActivity(),
                         downLineData.get(position).getCOURSE_IMG(),
                         downLineData.get(position).getNAME(),
+                        downLineData.get(position).getCOURSE_TYPE(),
                         0);
             }
         });

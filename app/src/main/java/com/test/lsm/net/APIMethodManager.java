@@ -14,6 +14,7 @@ import com.test.lsm.bean.form.UserUpdateVo;
 import com.test.lsm.bean.json.DoFooBean;
 import com.test.lsm.bean.json.GetActiveUser;
 import com.test.lsm.bean.json.GetCoachByCourseType;
+import com.test.lsm.bean.json.GetCourseParams;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
@@ -66,6 +67,38 @@ public class APIMethodManager {
         return SingletonHolder.INSTANCE;
     }
 
+
+    /**
+     * 室内运动 心跳参照数据
+     *
+     * @param courseType
+     * @param courseLevel
+     * @param callback
+     * @return
+     */
+    public Subscription getCourseParamByType(String courseType , Integer courseLevel , final IRequestCallback<GetCourseParams> callback){
+
+        Subscription subscribe = lsmApi.getCourseParamsByType(courseType, courseLevel)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<GetCourseParams>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetCourseParams getCourseParams) {
+                        callback.onSuccess(getCourseParams);
+                    }
+                });
+
+        return subscribe;
+    }
 
     /**
      * 获取心率记录信息
