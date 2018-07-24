@@ -2,6 +2,9 @@ package com.test.lsm.global;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 功能：
  *
@@ -16,8 +19,6 @@ public class Constant {
     //public static StringBuffer sbHeartData2 = new StringBuffer();
     public static CircularFifoQueue<Short> egcDataCon = new CircularFifoQueue(2000);
 
-    public static CircularFifoQueue<Long> rriBuffer = new CircularFifoQueue(300);
-
 
     //一分钟的心跳值
     public static CircularFifoQueue<Integer> oneMinHeart = new CircularFifoQueue<>(60);
@@ -28,5 +29,7 @@ public class Constant {
 
     public static boolean isHRChartDetailShow = false;
 
+
+    public  static List<Integer> lastedUsefulRriList = new ArrayList<>();
 
 }

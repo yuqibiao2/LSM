@@ -121,10 +121,10 @@ public class MouthHrFragment extends HrBaseFragment {
                     int hrValue = Integer.parseInt(pdBean.getHEART_VALUE());
                     entry1.setY(hrValue);
                     total += hrValue;
-                    if (hrValue > maxHr) {
+                    if (hrValue > maxHr &&hrValue>0) {
                         maxHr = hrValue;
                     }
-                    if (hrValue < minHr) {
+                    if (hrValue < minHr &&hrValue>0) {
                         minHr = hrValue;
                     }
                 }

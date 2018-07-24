@@ -152,15 +152,15 @@ public class StepDetailFragment extends LsmBaseFragment {
     public void updateStep(StepChgEvent stepChgEvent){
         int stepNum = stepChgEvent.getStep();
         if (stepNum<10){
-            setStatus(0);
+
         }else if (stepNum<100){
-            setStatus(1);
+            setStatus(0);
         }else if(stepNum<1000){
-            setStatus(2);
+            setStatus(1);
         }else if(stepNum<10000){
-            setStatus(3);
+            setStatus(2);
         }else{
-            setStatus(3);
+            setStatus(2);
         }
         setData();
     }
@@ -168,7 +168,7 @@ public class StepDetailFragment extends LsmBaseFragment {
     public void setStatus(int index){
         for (int i =0 ; i<statusList.size() ; i++){
             View view = statusList.get(i);
-            if (index-1==i){
+            if (i<=index){
                 view.setEnabled(true);
             }else{
                 view.setEnabled(false);

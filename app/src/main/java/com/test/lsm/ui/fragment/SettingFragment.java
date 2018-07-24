@@ -267,9 +267,8 @@ public class SettingFragment extends LsmBaseFragment {
             @Override
             public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 showToast("连接成功");
-                BleBTUtils.saveConnectDevice(getContext(), bleDevice.getMac());
-                EventBus.getDefault().post(new BleConnectMessage(1, bleDevice));
                 application.setCurrentBleDevice(bleDevice);
+                EventBus.getDefault().post(new BleConnectMessage(1, bleDevice));
             }
 
             @Override

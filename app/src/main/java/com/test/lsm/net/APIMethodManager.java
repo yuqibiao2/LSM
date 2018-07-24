@@ -495,6 +495,9 @@ public class APIMethodManager {
         paras.put("coordinateInfo", "" + runRecord.getCoordinateInfo());
         paras.put("distance", "" + runRecord.getDistance());
         paras.put("runTime", "" + runRecord.getRunTime());
+        paras.put("avgHeart",runRecord.getAvgHeart());
+        paras.put("maxHeart" ,runRecord.getMaxHeart() );
+        paras.put("calorieValue" , runRecord.getCalorieValue());
         final Subscription subscribe = lsmApi.saveRunRecord(paras)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

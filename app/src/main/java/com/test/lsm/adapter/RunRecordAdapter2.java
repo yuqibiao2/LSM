@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.test.lsm.R;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.ui.fragment.RunRecordDetailFragment;
+import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 
 import java.text.DecimalFormat;
@@ -58,14 +59,10 @@ public class RunRecordAdapter2 extends BaseQuickAdapter<QueryUserRunInfoReturn.P
         }
 
         if (spentTime>0&&distance>0){
-            speed= distance/(spentTime/1000/60/60);
+            speed= distance*1000*60*60/(spentTime);
         }
-        String speedStr = "0.00";
-        if (speed>0){
-            DecimalFormat df = new DecimalFormat("#.00");
-            speedStr = df.format(speed);
-        }
-        helper.setText(R.id.tv_speed, speedStr+" km/Hrs");
+        speed = (double) Math.round(speed * 100) / 100;
+        helper.setText(R.id.tv_item_speed,  speed+" km/Hrs");
     }
 
     @Override

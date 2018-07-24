@@ -309,6 +309,9 @@ public class BleManager {
             @Override
             public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 bleGattCallback.onConnectSuccess(bleDevice , gatt , status);
+                if (mOnConnectSuccess!=null){
+                    mOnConnectSuccess.onSuccess(bleDevice);
+                }
             }
 
             @Override
@@ -330,6 +333,16 @@ public class BleManager {
 
     public interface OnConnectDismiss{
         void dismiss(BleDevice device);
+    }
+
+    private OnConnectSuccess mOnConnectSuccess;
+
+    public void setOnConnectSuccessListener(OnConnectSuccess onConnectSuccess){
+        this.mOnConnectSuccess = onConnectSuccess;
+    }
+
+    public interface  OnConnectSuccess{
+        void onSuccess(BleDevice device);
     }
 
     /**

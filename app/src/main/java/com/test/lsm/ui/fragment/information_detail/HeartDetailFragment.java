@@ -89,21 +89,7 @@ public class HeartDetailFragment extends LsmBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        CircularFifoQueue<Integer> hrBuffer = Constant.hrBuffer2;
-        int maxHr = 0;
-        int avgHr = 0;
-        int total = 0;
-        for (Integer hrValue : hrBuffer) {
-            if (hrValue > maxHr) {
-                maxHr = hrValue;
-            }
-            total = total + hrValue;
-        }
-        if (hrBuffer.size() > 0) {
-            avgHr = total / hrBuffer.size();
-        }
-        tvAvgHr.setText("平均心率                " + avgHr + " bpm");
-        tvMaxHr.setText("最大心率                " + maxHr + " bpm");
+        updateHrValue();
     }
 
     @Override
@@ -119,15 +105,16 @@ public class HeartDetailFragment extends LsmBaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void updateHeart(RefreshHearthInfoEvent heartChgEvent) {
-        tvHrvValueNum.setText("" + Constant.rriBuffer.size());
-        if (Constant.rriBuffer.size() < 200) {
+        List<Integer> rriList = heartChgEvent.getRriList();
+        tvHrvValueNum.setText("" + rriList.size());
+        updateHrValue();
+        if (rriList.size() < 220) {
             return;
         }
-        CircularFifoQueue<Long> rriBuffer = Constant.rriBuffer;
         StringBuffer rrlIntervalSb = new StringBuffer();
-        for (int i = 0; i < rriBuffer.size(); i++) {
-            Long rriValue = rriBuffer.get(i);
-            if (i == rriBuffer.size() - 1) {
+        for (int i = 0; i < rriList.size(); i++) {
+            Integer rriValue = rriList.get(i);
+            if (i == rriList.size() - 1) {
                 rrlIntervalSb.append(rriValue + "");
             } else {
                 rrlIntervalSb.append(rriValue + ",");
@@ -244,6 +231,23 @@ public class HeartDetailFragment extends LsmBaseFragment {
 
     }
 
+    private void updateHrValue(){
+        CircularFifoQueue<Integer> hrBuffer = Constant.hrBuffer2;
+        int maxHr = 0;
+        int avgHr = 0;
+        int total = 0;
+        for (Integer hrValue : hrBuffer) {
+            if (hrValue > maxHr) {
+                maxHr = hrValue;
+            }
+            total = total + hrValue;
+        }
+        if (hrBuffer.size() > 0) {
+            avgHr = total / hrBuffer.size();
+        }
+        tvAvgHr.setText("平均心率                " + avgHr + " bpm");
+        tvMaxHr.setText("最大心率                " + maxHr + " bpm");
+    }
 
     public void chgStatus1(View view, int status) {
         switch (status) {

@@ -126,15 +126,11 @@ public class RunRecordDetailDialog extends LsmBaseDialog {
         long spentTime = MyTimeUtils.pareDate(stopTime) - MyTimeUtils.pareDate(startTime);
         double distance = item.getDISTANCE();
         double speed = 0.00;
-        if (spentTime > 0 && distance > 0) {
-            speed = distance / (spentTime / 1000 / 60 / 60);
+        if (spentTime>0&&distance>0){
+            speed= distance*1000*60*60/(spentTime);
         }
-        String speedStr = "0.00";
-        if (speed > 0) {
-            DecimalFormat df = new DecimalFormat("#.00");
-            speedStr = df.format(speed);
-        }
-        tvSpeed.setText("" + speedStr + " km/Hrs");
+        speed = (double) Math.round(speed * 100) / 100;
+        tvSpeed.setText("" + speed + " km/Hrs");
     }
 
     @Override

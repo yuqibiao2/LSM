@@ -122,10 +122,10 @@ public class HourHrFragment extends HrBaseFragment {
                     int x = Integer.parseInt(pdBean.getHEART_TIME());
                     mValues.get(x).setY(hrValue);
                     total += hrValue;
-                    if (hrValue > maxHr) {
+                    if (hrValue > maxHr &&hrValue>0) {
                         maxHr = hrValue;
                     }
-                    if (hrValue < minHr) {
+                    if (hrValue < minHr &&hrValue>0) {
                         minHr = hrValue;
                     }
                 }

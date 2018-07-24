@@ -32,10 +32,10 @@
         <com.yyyu.baselibrary.ui.widget.RoundImageView
             android:id="@+id/rv_user_icon"
             android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="15dp"
             android:scaleType="centerCrop"
             android:src="@mipmap/avril" />
     </RelativeLayout>

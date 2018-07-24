@@ -8,12 +8,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
-import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -49,6 +47,7 @@ import com.test.lsm.net.GlidUtils;
 import com.test.lsm.ui.activity.ECGShowActivity3;
 import com.test.lsm.ui.activity.SettingActivity;
 import com.test.lsm.utils.AlgorithmWrapper;
+import com.test.lsm.utils.bt.ble.BleBTUtils;
 import com.today.step.lib.ISportStepInterface;
 import com.today.step.lib.SportStepJsonUtils;
 import com.today.step.lib.TodayStepService;
@@ -63,6 +62,7 @@ import org.apache.commons.collections4.queue.CircularFifoQueue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -132,6 +132,9 @@ public class InformationFragment extends LsmBaseFragment {
     double[] rriAry = new double[196000];
     double[] timeAry = new double[196000];
 
+    private List<Integer> rriList = new ArrayList<>();
+
+    private boolean isHandBatteryService = false;
 
     private IirFilter iirFilter = Algorithm.newIirFilterInstance();
 
@@ -140,27 +143,8 @@ public class InformationFragment extends LsmBaseFragment {
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case 0: {//心电图
+
                     byte[] obj = (byte[]) msg.obj;
-                    // 处理心电图数据
-                    /*String hexStr = HexUtil.encodeHexStr(obj);
-                    String substring = hexStr.substring(0, 4);
-                    int parseInt = Integer.parseInt(substring, 16);
-                    //MyLog.e(TAG, "encodeHexStr===" + hexStr);
-                    short[] data = new short[]{
-                            getECGValue(1, obj),
-                            getECGValue(2, obj),
-                            getECGValue(3, obj),
-                            getECGValue(4, obj),
-                            getECGValue(5, obj)};*/
-
-                 /*  int[] data = new int[]{
-                           Integer.parseInt(hexStr.substring(0, 4), 16),
-                           Integer.parseInt(hexStr.substring(4, 8), 16),
-                           Integer.parseInt(hexStr.substring(8, 12), 16),
-                           Integer.parseInt(hexStr.substring(12, 16), 16),
-                           Integer.parseInt(hexStr.substring(16, 20), 16)
-                   };*/
-
 
                     short[] ecgData = Algorithm.getEcgByte2Short(obj);
 
@@ -182,6 +166,12 @@ public class InformationFragment extends LsmBaseFragment {
                         //int heartNum = hrImpl.countHeartRate(ecgData, getShort(obj, 11));
                         //MyLog.e(TAG , "epcData=="+epcData);
                         if (heartNum > 0) {
+
+                            //得到心跳值得回调
+                            if (application.mOnGetHrValueListener!=null){
+                                application.mOnGetHrValueListener.onGet(heartNum);
+                            }
+
                             Constant.oneMinHeart.add(heartNum);
                             Constant.hrBuffer.add(heartNum);
                             Constant.hrBuffer2.add(heartNum);
@@ -191,18 +181,26 @@ public class InformationFragment extends LsmBaseFragment {
                             MyLog.e(TAG, "tvHeartNum：" + heartNum);
                             //Algorithm.initialForModeChange(1);
                             Algorithm.getRtoRIntervalData(rriAry, timeAry);
-                            MyLog.e(TAG, "rriAry==111=" + Arrays.toString(rriAry));
-                            MyLog.e(TAG, "timeAry==111=" + Arrays.toString(timeAry));
-                            Constant.rriBuffer.clear();
+
+                            //TODO 删除(测试用)
+                           /* for (int i = 50; i <269 ; i++) {
+                                int i1 = new Random().nextInt(100) + 500;
+                                rriAry[i] =i1;
+                            }
+                            MyLog.e(TAG, "rriAry==111=" + Arrays.toString(rriAry));*/
+
+                            rriList.clear();
                             for (double value : rriAry) {
-                                int legalCount = 0;
                                 if (value > 200 && value < 2000) {
-                                    legalCount++;
-                                    Constant.rriBuffer.add(Long.valueOf(Double.valueOf(value).intValue()));
-                                    if (legalCount > 300) {//
+                                    rriList.add(Double.valueOf(value).intValue());
+                                    // 通知刷新 HRV
+                                    EventBus.getDefault().post(new RefreshHearthInfoEvent("更新HRV" , rriList));
+                                    if (rriList.size() >= 220) {//
+                                        Constant.lastedUsefulRriList.clear();
+                                        Constant.lastedUsefulRriList.addAll(rriList);
                                         AlgorithmWrapper.stopRRI();
-                                        // 通知刷新 HRV
-                                        EventBus.getDefault().post(new RefreshHearthInfoEvent());
+                                        rriAry = new double[196000];
+                                        MyLog.e(TAG , "====================归零");
                                     }
                                 }
                             }
@@ -266,6 +264,7 @@ public class InformationFragment extends LsmBaseFragment {
     private int heartNum;
     private IStepService stepService;
     private List<FrameLayout> itemContainer;
+    private BleDevice bleDevice;
 
 
     /**
@@ -326,9 +325,20 @@ public class InformationFragment extends LsmBaseFragment {
     @Override
     protected void initView() {
         String userImage = application.getUser().getUSER_IMAGE();
-        if (!TextUtils.isEmpty(userImage)) {
-            GlidUtils.load(getContext(), rvUserIcon, userImage);
+        GlidUtils.load(getContext(), rvUserIcon, userImage);
+
+        //---蓝牙已连接（SplashActivity）
+        if (application.isBleConnected()) {
+            BleDevice currentBleDevice = application.getCurrentBleDevice();
+            rlConnectedDevice.setVisibility(View.VISIBLE);
+            tvBtName.setText(currentBleDevice.getName());
+            //---得到所有的Service
+            BluetoothGatt gatt = BleManager.getInstance().getBluetoothGatt(currentBleDevice);
+            List<BluetoothGattService> services = gatt.getServices();
+            //---处理Service
+            handleService(services, currentBleDevice);
         }
+
     }
 
     @Override
@@ -339,6 +349,33 @@ public class InformationFragment extends LsmBaseFragment {
                 SettingActivity.startAction(getActivity());
             }
         });
+
+        //---蓝牙断开连接
+        BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
+            @Override
+            public void dismiss(BleDevice device) {
+                rlConnectedDevice.setVisibility(View.GONE);
+            }
+        });
+
+        //---蓝牙连接成功
+        BleManager.getInstance().setOnConnectSuccessListener(new BleManager.OnConnectSuccess() {
+            @Override
+            public void onSuccess(BleDevice bleDevice) {
+                //---得到所有的Service
+                BluetoothGatt gatt = BleManager.getInstance().getBluetoothGatt(bleDevice);
+                List<BluetoothGattService> services = gatt.getServices();
+                //---处理Service
+                handleService(services, bleDevice);
+                if (application.isBleConnected()) {
+                    BleDevice currentBleDevice = application.getCurrentBleDevice();
+                    rlConnectedDevice.setVisibility(View.VISIBLE);
+                    tvBtName.setText(currentBleDevice.getName());
+                }
+                BleBTUtils.saveConnectDevice(getContext(), bleDevice.getMac());
+            }
+        });
+
     }
 
     @Override
@@ -355,14 +392,7 @@ public class InformationFragment extends LsmBaseFragment {
         switch (view.getId()) {
             case R.id.rl_heart:
                 //HrRecordActivity.startAction(getActivity());
-                if (Constant.rriBuffer.size() < 250) {
-                    //MyToast.showLong(getContext(), "还没有足够的数据请耐心等待" + Constant.rriBuffer.size());
-                    //return;
-                }
                 openItem(0);
-                if (flHeart.getVisibility() == View.VISIBLE) {
-                    EventBus.getDefault().post(new RefreshHearthInfoEvent());
-                }
                 break;
             case R.id.rl_step:
                 openItem(1);
@@ -494,33 +524,7 @@ public class InformationFragment extends LsmBaseFragment {
         application.setStepDistance(Double.parseDouble(distanceByStep));
         application.setCalorieValue(Double.parseDouble(caloriesValue));
         EventBus.getDefault().post(new StepChgEvent(mStepSum, "步数值更新"));
-        //EventBus.getDefault().post(new PushMsgBean(R.mipmap.msg1));
 
-        //EventBus.getDefault().post(new CalorieChgEvent(Float.parseFloat(caloriesValue), "步数值更新"));
-
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.MainThread)
-    public void onBleDeviceStatusChg(BleConnectMessage message) {
-        int status = message.getStatus();
-        BleDevice bleDevice = message.getBleDevice();
-        switch (status) {
-            case 0://断开连接
-                break;
-            case 1://建立连接
-                //---得到所有的Service
-                BluetoothGatt gatt = BleManager.getInstance().getBluetoothGatt(bleDevice);
-                List<BluetoothGattService> services = gatt.getServices();
-                //---处理Service
-                handleService(services, bleDevice);
-                if (application.isBleConnected()) {
-                    BleDevice currentBleDevice = application.getCurrentBleDevice();
-                    rlConnectedDevice.setVisibility(View.VISIBLE);
-                    tvBtName.setText(currentBleDevice.getName());
-                }
-                break;
-        }
     }
 
     /**
@@ -551,10 +555,11 @@ public class InformationFragment extends LsmBaseFragment {
      * <p>
      * F000180F-0451-4000-B000-000000000000
      *
-     * @param characteristics
      * @param bleDevice
      */
-    private void handleBatteryService(List<BluetoothGattCharacteristic> characteristics, BleDevice bleDevice) {
+    private void handleBatteryService( BleDevice bleDevice) {
+
+        isHandBatteryService = true;
 
         BleManager.getInstance().read(bleDevice,
                 "0000180f-0000-1000-8000-00805f9b34fb",
@@ -563,8 +568,10 @@ public class InformationFragment extends LsmBaseFragment {
                     @Override
                     public void onReadSuccess(byte[] data) {
                         String hexString = HexUtil.formatHexString(data).substring(0, 2);
-                        MyLog.e(TAG, "hexString：" + Integer.parseInt(hexString, 16));
-                        tvBryPct.setText(Integer.parseInt(hexString, 16) + "%");
+                       // MyLog.e(TAG, "hexString：" + Integer.parseInt(hexString, 16));
+                        if (tvBryPct!=null){
+                            tvBryPct.setText(Integer.parseInt(hexString, 16) + "%");
+                        }
                     }
 
                     @Override
@@ -686,7 +693,6 @@ public class InformationFragment extends LsmBaseFragment {
                                             @Override
                                             public void onNotifySuccess() {
                                                 MyLog.d(TAG, "AA71通知开始成功===============");
-                                                handleBatteryService(characteristics, bleDevice);
                                             }
 
                                             @Override
@@ -700,6 +706,12 @@ public class InformationFragment extends LsmBaseFragment {
                                                 message.what = 0;
                                                 message.obj = characteristic.getValue();
                                                 mHandler.sendMessage(message);
+
+                                                //--处理电池电量service
+                                                if (!isHandBatteryService){
+                                                    handleBatteryService( bleDevice);
+                                                }
+
                                             }
                                         });
                             }

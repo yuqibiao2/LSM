@@ -130,15 +130,10 @@ public class RunFragment extends LsmBaseFragment {
     private boolean isRunning = false;
     private APIMethodManager apiMethodManager;
     private UserLoginReturn.PdBean user;
-    private double distance;
-    private String startTime;
-    private String stopTime;
     private Gson mGson;
     private List<Fragment> frgList;
     private BDLocation crtLocation;
     private MyApplication application;
-    private double startCalorie;
-    private double stopCalorie;
 
     @Override
     protected void beforeInit() {
@@ -491,8 +486,6 @@ public class RunFragment extends LsmBaseFragment {
     @OnClick(R.id.iv_run_start)
     public void onRunStart() {
         isStartRun = true;
-        startCalorie = application.getCalorieValue();
-        startTime = MyTimeUtils.getCurrentDateTime();
         showLoadingDialog();
         if (mLocationClient != null && !isRunning) {
             if (!mLocationClient.isStarted()) {
@@ -500,6 +493,7 @@ public class RunFragment extends LsmBaseFragment {
             }
             mBaiduMap.clear();
         }
+        points.clear();
     }
 
     /**
@@ -508,16 +502,13 @@ public class RunFragment extends LsmBaseFragment {
     @OnClick(R.id.iv_run_stop)
     public void onRunStop() {
         isStartRun = false;
-        stopCalorie = application.getCalorieValue();
-        stopTime = MyTimeUtils.getCurrentDateTime();
         // 记录本次跑步的数据
-        saveRunRecord();
 
         String toJson = new Gson().toJson(points);
         //MyLog.e(TAG , toJson);
 
         showLoadingDialog();
-        EventBus.getDefault().post(new RunStopEvent());
+        EventBus.getDefault().post(new RunStopEvent(points));
         if (mLocationClient != null /*&& mLocationClient.isStarted()*/ && isRunning) {
             if (mLocationClient.isStarted()) {
                 mLocationClient.stop();
@@ -561,52 +552,6 @@ public class RunFragment extends LsmBaseFragment {
             hrBuffer.add(heartChgEvent.getHeartNUm());
         }
     }
-
-    /**
-     * 保存跑步记录
-     */
-    private void saveRunRecord() {
-       /* if (points.size() < 2) {
-            MyToast.showLong(getContext(), "您移动的距离太小，记录数据失败！");
-            return;
-        }*/
-        RunRecord runRecord = new RunRecord();
-        runRecord.setUserId(user.getUSER_ID());
-        runRecord.setStartTime(startTime);
-        runRecord.setStopTime(stopTime);
-        runRecord.setDistance(distance);
-        runRecord.setCoordinateInfo(mGson.toJson(points));
-        runRecord.setRunTime("" + TimeUtils.countTimer(second));
-        double calorie = stopCalorie - startCalorie;
-        runRecord.setCalorieValue("" + calorie);
-        int maxHr = 0;
-        int hrTotal = 0;
-        for (Integer hr : hrBuffer) {
-            if (hr > maxHr) {
-                maxHr = hr;
-            }
-            hrTotal += hr;
-        }
-        int avgHr = 0;
-        if (hrBuffer.size()>0){
-            avgHr = hrTotal / hrBuffer.size();
-        }
-        runRecord.setAvgHeart("" + avgHr);
-        runRecord.setMaxHeart("" + maxHr);
-        apiMethodManager.saveRunRecord(runRecord, new IRequestCallback<SaveRunRecordReturn>() {
-            @Override
-            public void onSuccess(SaveRunRecordReturn result) {
-                MyLog.d(TAG, "saveRunRecord==成功==" + result);
-                hrBuffer.clear();
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                MyLog.e(TAG, "saveRunRecord==异常==" + throwable.getMessage());
-            }
-        });
-    }
-
 
     @Override
     public void onStart() {

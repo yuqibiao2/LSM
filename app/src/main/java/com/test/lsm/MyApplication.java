@@ -91,6 +91,16 @@ public class MyApplication extends Application{
         }
     }
 
+    public OnGetHrValueListener mOnGetHrValueListener;
+
+    public void setOnGetHrValueListener(OnGetHrValueListener onGetHrValueListener){
+        this.mOnGetHrValueListener = onGetHrValueListener;
+    }
+
+    public interface OnGetHrValueListener{
+        void onGet(int hrValue);
+    }
+
     public UserLoginReturn.PdBean getUser() {
         return user;
     }

@@ -86,14 +86,15 @@ public class UploadHealthInfoService extends Service {
                     try {
                         Thread.sleep(10*60*1000);
 
-                        CircularFifoQueue<Long> rriBuffer = Constant.rriBuffer;
-                        if (!application.isBleConnected()|| rriBuffer.size()<200) {
+                        //rriBufferCircularFifoQueue<Long> rriBuffer = Constant.rriBuffer;
+                        List<Integer> lastedUsefulRriList = Constant.lastedUsefulRriList;
+                        if (!application.isBleConnected()|| lastedUsefulRriList.size()<200) {
                             continue;
                         }
                         StringBuffer rrlIntervalSb = new StringBuffer();
-                        for (int i=0 ; i<rriBuffer.size() ; i++){
-                            Long rriValue = rriBuffer.get(i);
-                            if (i==rriBuffer.size()-1){
+                        for (int i=0 ; i<lastedUsefulRriList.size() ; i++){
+                            Integer rriValue = lastedUsefulRriList.get(i);
+                            if (i==lastedUsefulRriList.size()-1){
                                 rrlIntervalSb.append(rriValue+"");
                             }else{
                                 rrlIntervalSb.append(rriValue+",");
