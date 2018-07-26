@@ -29,7 +29,8 @@ public class Constant {
 
     public static boolean isHRChartDetailShow = false;
 
-
     public  static List<Integer> lastedUsefulRriList = new ArrayList<>();
+
+    public static Integer lastedBodyFitness = 0;
 
 }

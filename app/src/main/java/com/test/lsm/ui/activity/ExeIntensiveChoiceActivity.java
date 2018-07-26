@@ -51,10 +51,16 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
     RelativeLayout rlHard;
     @BindView(R.id.tv_course_name)
     TextView tvCourseName;
+    @BindView(R.id.iv_suggestion_easy)
+    ImageView ivSuggestionEasy;
+    @BindView(R.id.iv_suggestion_normal)
+    ImageView ivSuggestionNormal;
+    @BindView(R.id.iv_suggestion_hard)
+    ImageView ivSuggestionHard;
     private String imgUrl;
     private Integer bodyFitness;
     private Integer courseLevel = 1; // 0：简单 1：一般  2：困难
-    private String courseNames;
+    private String courseName;
     private String courseType;
 
     @Override
@@ -73,31 +79,68 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         super.beforeInit();
         Intent intent = getIntent();
         imgUrl = intent.getStringExtra("imgUrl");
-        courseNames = intent.getStringExtra("courseName");
+        courseName = intent.getStringExtra("courseName");
         courseType = intent.getStringExtra("courseType");
         bodyFitness = intent.getIntExtra("bodyFitness", 0);
     }
 
     @Override
     protected void initView() {
+        ivEasy.setImageResource(R.mipmap.ic_easy);
+        ivEasySelected.setVisibility(View.GONE);
+        ivNormal.setImageResource(R.mipmap.ic_normal);
+        ivNormalSelected.setVisibility(View.GONE);
+        ivHard.setImageResource(R.mipmap.ic_hard);
+        ivHardSelected.setVisibility(View.GONE);
+
         GlidUtils.load(this, ivIcon, imgUrl);
-        tvCourseName.setText("# "+courseNames);
+        tvCourseName.setText("# " + courseName);
         if (bodyFitness >= 30) {
+            ivSuggestionHard.setVisibility(View.VISIBLE);
+            courseLevel = 2;
+            ivHard.setImageResource(R.mipmap.ic_hard_selected);
+            ivHardSelected.setVisibility(View.VISIBLE);
+
             chgStatus1(ivPhysical, 1);
             tvPhysical.setText("过度暴动");
         } else if (bodyFitness >= 10) {
+            ivSuggestionHard.setVisibility(View.VISIBLE);
+            courseLevel = 2;
+            ivHard.setImageResource(R.mipmap.ic_hard_selected);
+            ivHardSelected.setVisibility(View.VISIBLE);
+
             chgStatus1(ivPhysical, 2);
             tvPhysical.setText("拼劲十足");
         } else if (bodyFitness >= -10) {
+            ivSuggestionNormal.setVisibility(View.VISIBLE);
+            courseLevel = 1;
+            ivNormal.setImageResource(R.mipmap.ic_normal_selected);
+            ivNormalSelected.setVisibility(View.VISIBLE);
+
             chgStatus1(ivPhysical, 3);
             tvPhysical.setText("正常范围");
         } else if (bodyFitness >= -30) {
+            ivSuggestionNormal.setVisibility(View.VISIBLE);
+            courseLevel = 1;
+            ivNormal.setImageResource(R.mipmap.ic_normal_selected);
+            ivNormalSelected.setVisibility(View.VISIBLE);
+
             chgStatus1(ivPhysical, 4);
             tvPhysical.setText("疲劳");
         } else if (bodyFitness >= -50) {
+            ivSuggestionHard.setVisibility(View.VISIBLE);
+            courseLevel = 0;
+            ivEasy.setImageResource(R.mipmap.ic_easy_selected);
+            ivEasySelected.setVisibility(View.VISIBLE);
+
             chgStatus1(ivPhysical, 5);
             tvPhysical.setText("体力透支");
         } else {
+            ivSuggestionHard.setVisibility(View.VISIBLE);
+            courseLevel = 0;
+            ivEasy.setImageResource(R.mipmap.ic_easy_selected);
+            ivEasySelected.setVisibility(View.VISIBLE);
+
             chgStatus1(ivPhysical, 5);
             tvPhysical.setText("体力透支");
         }
@@ -135,12 +178,11 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         }
     }
 
-
     public void toNext(View view) {
-        IndoorExerciseActivity.startAction(this, courseLevel ,courseType );
+        IndoorExerciseActivity.startAction(this, courseLevel, courseType , courseName);
     }
 
-    public static void startAction(Context context, String imgUrl, String courseName, String courseType , Integer bodyFitness) {
+    public static void startAction(Context context, String imgUrl, String courseName, String courseType, Integer bodyFitness) {
         Intent intent = new Intent(context, ExeIntensiveChoiceActivity.class);
         intent.putExtra("imgUrl", imgUrl);
         intent.putExtra("courseName", courseName);

@@ -3,6 +3,7 @@ package com.test.lsm.ui.fragment.indoor_run;
 import android.graphics.Color;
 
 import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -13,10 +14,14 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.google.code.microlog4android.format.command.util.StringUtil;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.UpdateIndoorRunDataEvent;
+import com.test.lsm.ui.activity.IndoorExerciseActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.yyyu.baselibrary.utils.DimensChange;
+import com.yyyu.baselibrary.utils.MyStringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +31,8 @@ import butterknife.BindView;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
+
+import static com.test.lsm.ui.activity.IndoorExerciseActivity.maxBaseHr;
 
 /**
  * 功能：室内运动结束后心率
@@ -50,10 +57,7 @@ public class IndoorRunHrFragment extends LsmBaseFragment {
         super.beforeInit();
         EventBus.getDefault().register(this);
         lineValues = new ArrayList<>();
-        for (int i = 0; i < 80; i++) {
-            int nextInt = new Random().nextInt(180)+10;
-            lineValues.add(new Entry(i, nextInt));
-        }
+        lineValues.add(new Entry(0, maxBaseHr*0.5f));
     }
 
     @Override
@@ -66,6 +70,29 @@ public class IndoorRunHrFragment extends LsmBaseFragment {
 
     }
 
+
+    public void resetLineChart(){
+        CombinedData data = ccHt.getData();
+        LineDataSet lineDataSet = (LineDataSet) data.getDataSetByIndex(0);
+        lineDataSet.clear();
+        lineDataSet.addEntry(new Entry(0, maxBaseHr * 0.5f));
+        lineDataSet.notifyDataSetChanged();
+        data.notifyDataChanged();
+        ccHt.moveViewTo( 0, 50f, YAxis.AxisDependency.LEFT);
+    }
+
+    public void addLineEntry(int hrValue) {
+        CombinedData data = ccHt.getData();
+        LineDataSet lineDataSet = (LineDataSet) data.getDataSetByIndex(0);
+        int i = lineDataSet.getEntryCount() - 1;
+        lineDataSet.addEntry(new Entry(i, hrValue));
+        lineDataSet.notifyDataSetChanged();
+        data.notifyDataChanged();
+        ccHt.setVisibleXRangeMaximum(7);
+        int entryCount = lineDataSet.getEntryCount();
+        ccHt.moveViewTo( entryCount- 8, 50f, YAxis.AxisDependency.LEFT);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -73,8 +100,10 @@ public class IndoorRunHrFragment extends LsmBaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
-    public void updateBaseData(UpdateIndoorRunDataEvent event) {
+    public void setBaseData(UpdateIndoorRunDataEvent event) {
         List<BarEntry> values = event.getmValues();
+        BarEntry entry = new BarEntry(values.size()+0.5f, new float[]{0, 0});
+        values.add(entry);
         setChartData(ccHt, values);
         CombinedData data = ccHt.getData();
         data.notifyDataChanged();
@@ -150,17 +179,27 @@ public class IndoorRunHrFragment extends LsmBaseFragment {
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setDrawGridLines(false);
-        rightAxis.setAxisMinimum(100f); // this replaces setStartAtZero(true)
         rightAxis.setDrawAxisLine(false);
         rightAxis.setDrawLabels(true);
         rightAxis.setTextColor(Color.WHITE);
+        rightAxis.setAxisMinimum(maxBaseHr * 0.5f);
+        rightAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                int maxBaseHr = IndoorExerciseActivity.maxBaseHr;
+                String percentStr = MyStringUtils.decimalsToPercent(value / maxBaseHr);
+                return percentStr;
+            }
+        });
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
-        leftAxis.setAxisMinimum(100f); // this replaces setStartAtZero(true)
-        leftAxis.setDrawLabels(false);
-        leftAxis.setDrawAxisLine(true);
+        leftAxis.setDrawAxisLine(false);
+        leftAxis.setDrawLabels(true);
+        leftAxis.setDrawGridLines(true);
         leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setAxisMinimum(maxBaseHr * 0.5f);
+        leftAxis.enableGridDashedLine(10f, 10f, 0f); //设置横向表格为虚线
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -170,7 +209,7 @@ public class IndoorRunHrFragment extends LsmBaseFragment {
         xAxis.setTextColor(Color.WHITE);
         xAxis.setEnabled(true);
         xAxis.setDrawGridLines(false);
-        xAxis.setDrawAxisLine(true);
+        xAxis.setDrawAxisLine(false);
     }
 
 }

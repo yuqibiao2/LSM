@@ -105,6 +105,7 @@
                 android:layout_marginTop="30dp">
 
                 <ImageView
+                    android:id="@+id/iv_suggestion_easy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -112,6 +113,15 @@
                     android:layout_marginLeft="20dp"
                     android:src="@mipmap/ic_exe_suggestion"
                     android:visibility="gone" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:visibility="gone"
+                    android:src="@mipmap/ic_exe_suggestion" />
 
                 <ImageView
                     android:id="@+id/iv_easy"
@@ -139,11 +149,13 @@
                 android:layout_marginTop="30dp">
 
                 <ImageView
+                    android:id="@+id/iv_suggestion_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
+                    android:visibility="gone"
                     android:src="@mipmap/ic_exe_suggestion" />
 
                 <ImageView
@@ -169,6 +181,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp">
+                <ImageView
+                    android:id="@+id/iv_suggestion_hard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:visibility="gone"
+                    android:src="@mipmap/ic_exe_suggestion" />
 
                 <ImageView
                     android:layout_width="wrap_content"

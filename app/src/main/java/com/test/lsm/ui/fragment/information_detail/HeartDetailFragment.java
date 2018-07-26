@@ -132,6 +132,7 @@ public class HeartDetailFragment extends LsmBaseFragment {
                     GetHRVInfoReturn.HRVIndexBean hrvIndexBean = hrvIndex.get(0);
                     //---体力状态
                     Integer bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());
+                    Constant.lastedBodyFitness = bodyFitness;
                     if (bodyFitness >= 30) {
                         chgStatus1(ivPhysical, 1);
                         tvPhysical.setText("过度暴动");

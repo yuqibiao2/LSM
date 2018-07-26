@@ -103,7 +103,11 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
     /**
      * Sets the minimum offset (padding) around the chart, defaults to 15
      */
-    protected float mMinOffset = 15.f;
+    public float mMinOffset = 15.f;
+
+    public void setmMinOffset(float mMinOffset) {
+        this.mMinOffset = mMinOffset;
+    }
 
     /**
      * flag indicating if the chart should stay at the same position after a rotation. Default is false.

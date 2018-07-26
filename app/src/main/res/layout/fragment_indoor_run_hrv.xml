@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="#242536"
     android:padding="20dp">
 
     <!--体力-->
@@ -13,7 +14,7 @@
         <ImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@mipmap/ic_strong" />
+            android:src="@mipmap/ic_strong_white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -43,6 +44,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="体力"
+            android:textColor="@color/my_white"
             android:textSize="16sp" />
 
     </RelativeLayout>
@@ -56,7 +58,7 @@
         <ImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@mipmap/ic_brain" />
+            android:src="@mipmap/ic_brain_white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -87,6 +89,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="0dp"
             android:text="脑力"
+            android:textColor="@color/my_white"
             android:textSize="16sp" />
 
     </RelativeLayout>
@@ -100,7 +103,7 @@
         <ImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@mipmap/ic_emotion" />
+            android:src="@mipmap/ic_emotion_white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -130,6 +133,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="紧张"
+            android:textColor="@color/my_white"
             android:textSize="16sp" />
 
     </RelativeLayout>
@@ -152,6 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="身体疲脑"
+                android:textColor="@color/my_white"
                 android:textSize="16sp" />
 
             <TextView
@@ -176,7 +181,7 @@
             android:layout_height="45dp"
             android:layout_gravity="top"
             android:layout_weight="0"
-            android:src="@mipmap/ic_down" />
+            android:src="@mipmap/ic_down_white" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -189,6 +194,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="身体疲脑"
+                android:textColor="@color/my_white"
                 android:textSize="16sp" />
 
             <TextView

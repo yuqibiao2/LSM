@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--底层使用蓝色填充色-->
+    <item>
+        <shape>
+            <solid android:color="#DD0D59"/>
+        </shape>
+    </item>
+    <item android:top="40dp">
+        <shape>
+            <solid android:color="#FECC2D"/>
+        </shape>
+    </item>
+    <item android:top="80dp">
+        <shape>
+            <solid android:color="#9DBE49"/>
+        </shape>
+    </item>
+    <item android:top="120dp">
+        <shape>
+            <solid android:color="#47C7EE"/>
+        </shape>
+    </item>
+    <item android:top="160dp">
+        <shape>
+            <solid android:color="#C4CACA"/>
+        </shape>
+    </item>
+</layer-list>

@@ -12,6 +12,7 @@ import com.test.lsm.adapter.DownLineCourseAdapter;
 import com.test.lsm.adapter.OnLineCourseAdapter;
 import com.test.lsm.bean.json.GetCoachByCourseType;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.global.Constant;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.ExeIntensiveChoiceActivity;
@@ -106,7 +107,7 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
                         onLineData.get(position).getCOURSE_IMG(),
                         onLineData.get(position).getNAME(),
                         onLineData.get(position).getCOURSE_TYPE(),
-                        0);
+                        Constant.lastedBodyFitness);
             }
         });
         downLineCourseAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -116,7 +117,7 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
                         downLineData.get(position).getCOURSE_IMG(),
                         downLineData.get(position).getNAME(),
                         downLineData.get(position).getCOURSE_TYPE(),
-                        0);
+                        Constant.lastedBodyFitness);
             }
         });
     }
