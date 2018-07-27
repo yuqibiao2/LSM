@@ -1,6 +1,7 @@
 package com.test.lsm.ui.fragment.hr_record;
 
 import android.graphics.Color;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -37,6 +38,8 @@ public class HourHrFragment extends HrBaseFragment {
 
     @BindView(R.id.bc_hr)
     LineChart bcHr;
+    @BindView(R.id.tv_current_hour)
+    TextView tvCurrentHour;
 
     private List<Entry> mValues;
 
@@ -68,7 +71,9 @@ public class HourHrFragment extends HrBaseFragment {
 
     @Override
     protected void initView() {
-
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        tvCurrentHour.setText("心率紀錄 - "+hour+"时");
     }
 
     @Override
@@ -98,13 +103,13 @@ public class HourHrFragment extends HrBaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isResumed()){
+        if (isVisibleToUser && isResumed()) {
             getData();
         }
-        MyLog.e(TAG , "isVisibleToUser："+isVisibleToUser+"   isResumed："+isResumed());
+        MyLog.e(TAG, "isVisibleToUser：" + isVisibleToUser + "   isResumed：" + isResumed());
     }
 
-    private void getData(){
+    private void getData() {
         mValues.clear();
         for (int i = 0; i < 60; i++) {
             mValues.add(new Entry(i, 0));
@@ -116,21 +121,25 @@ public class HourHrFragment extends HrBaseFragment {
                 int minHr = Integer.MAX_VALUE;
                 int avgHr = 0;
                 int total = 0;
+                int count = 0;
                 List<GetHeartChart.PdBean> pd = result.getPd();
                 for (GetHeartChart.PdBean pdBean : pd) {
                     int hrValue = Integer.parseInt(pdBean.getHEART_VALUE());
                     int x = Integer.parseInt(pdBean.getHEART_TIME());
                     mValues.get(x).setY(hrValue);
-                    total += hrValue;
-                    if (hrValue > maxHr &&hrValue>0) {
+                    if (hrValue > 0) {
+                        total += hrValue;
+                        count++;
+                    }
+                    if (hrValue > maxHr && hrValue > 0) {
                         maxHr = hrValue;
                     }
-                    if (hrValue < minHr &&hrValue>0) {
+                    if (hrValue < minHr && hrValue > 0) {
                         minHr = hrValue;
                     }
                 }
-                if (pd.size() > 0) {
-                    avgHr = total / pd.size();
+                if (count> 0) {
+                    avgHr = total /count;
                 }
 
                 if (mOnLoadDataSuccess != null) {
@@ -155,13 +164,20 @@ public class HourHrFragment extends HrBaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
-    public void updateHrDate(UpdateHrRecordEvent event){
+    public void updateHrDate(UpdateHrRecordEvent event) {
         dateTime = event.getDateTime();
+        Calendar calendar = event.getCalendar();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        tvCurrentHour.setText("心率紀錄 - "+hour+"时");
         getData();
     }
+
     @Subscribe(threadMode = ThreadMode.MainThread)
-    public void updateHrDate2(UpdateHourHrRecordEvent event){
+    public void updateHrDate2(UpdateHourHrRecordEvent event) {
         dateTime = event.getDateTime();
+        Calendar calendar = event.getCalendar();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        tvCurrentHour.setText("心率紀錄 - "+hour+"时");
         getData();
     }
 

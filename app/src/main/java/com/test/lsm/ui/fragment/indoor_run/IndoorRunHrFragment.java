@@ -176,18 +176,23 @@ public class IndoorRunHrFragment extends LsmBaseFragment {
         mChart.setDrawBarShadow(false);
         mChart.setHighlightFullBarEnabled(false);
         mChart.setVisibleXRangeMaximum(6);
+        mChart.setAutoScaleMinMaxEnabled(false);
+        mChart.setScaleYEnabled(false);
+        mChart.setVisibleYRangeMaximum(150, YAxis.AxisDependency.LEFT);
+        mChart.setVisibleYRangeMinimum(50, YAxis.AxisDependency.LEFT);
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setDrawGridLines(false);
         rightAxis.setDrawAxisLine(false);
         rightAxis.setDrawLabels(true);
         rightAxis.setTextColor(Color.WHITE);
-        rightAxis.setAxisMinimum(maxBaseHr * 0.5f);
+        rightAxis.setAxisMinimum(maxBaseHr * 0.6f);
+        rightAxis.setLabelCount(6, true);
         rightAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 int maxBaseHr = IndoorExerciseActivity.maxBaseHr;
-                String percentStr = MyStringUtils.decimalsToPercent(value / maxBaseHr);
+                String percentStr = MyStringUtils.decimalsToPercent(value / maxBaseHr , 0);
                 return percentStr;
             }
         });
@@ -198,9 +203,10 @@ public class IndoorRunHrFragment extends LsmBaseFragment {
         leftAxis.setDrawLabels(true);
         leftAxis.setDrawGridLines(true);
         leftAxis.setTextColor(Color.WHITE);
-        leftAxis.setAxisMinimum(maxBaseHr * 0.5f);
+        leftAxis.setAxisMaximum(maxBaseHr);
+        leftAxis.setAxisMinimum(maxBaseHr * 0.6f);
+        leftAxis.setLabelCount(6, true);
         leftAxis.enableGridDashedLine(10f, 10f, 0f); //设置横向表格为虚线
-
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setAxisMinimum(0f);

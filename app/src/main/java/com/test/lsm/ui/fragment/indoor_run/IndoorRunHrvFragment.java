@@ -112,98 +112,100 @@ public class IndoorRunHrvFragment extends LsmBaseFragment {
                     //---体力状态
                     Integer bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());
                     if (bodyFitness >= 30) {
-                        chgStatus1(ivPhysical, 1);
+                        chgStatus1(ivPhysical, 5);
                         tvPhysical.setText("过度暴动");
                     } else if (bodyFitness >= 10) {
-                        chgStatus1(ivPhysical, 2);
+                        chgStatus1(ivPhysical, 4);
                         tvPhysical.setText("拼劲十足");
                     } else if (bodyFitness >= -10) {
                         chgStatus1(ivPhysical, 3);
                         tvPhysical.setText("正常范围");
                     } else if (bodyFitness >= -30) {
-                        chgStatus1(ivPhysical, 4);
+                        chgStatus1(ivPhysical, 2);
                         tvPhysical.setText("疲劳");
                     } else if (bodyFitness >= -50) {
-                        chgStatus1(ivPhysical, 5);
+                        chgStatus1(ivPhysical, 1);
                         tvPhysical.setText("体力透支");
                     } else {
-                        chgStatus1(ivPhysical, 5);
+                        chgStatus1(ivPhysical, 1);
                         tvPhysical.setText("体力透支");
                     }
                     //---脑力
-                    Integer bodyFatigue = Integer.parseInt(hrvIndexBean.getBodyFatigue());
-                    if (bodyFatigue <= 20) {
-                        chgStatus2(ivMental, 1);
+                    int mindFitness = Integer.parseInt(hrvIndexBean.getMindFitness());
+                    if (mindFitness >= 30) {
+                        chgStatus1(ivMental, 5);
+                        tvMental.setText("心烦易怒");
+                    } else if (mindFitness >= 10) {
+                        chgStatus1(ivMental, 4);
+                        tvMental.setText("琐事烧脑");
+                    } else if (mindFitness >= -10) {
+                        chgStatus1(ivMental, 3);
                         tvMental.setText("正常范围");
-                    } else if (bodyFatigue <= 40) {
-                        chgStatus2(ivMental, 2);
-                        tvMental.setText("略疲劳");
-                    } else if (bodyFatigue <= 60) {
-                        chgStatus2(ivMental, 3);
-                        tvMental.setText("疲劳");
-                    } else if (bodyFatigue <= 80) {
-                        chgStatus2(ivMental, 4);
-                        tvMental.setText("太疲劳");
-                    } else if (bodyFatigue <= 100) {
-                        chgStatus2(ivMental, 5);
-                        tvMental.setText("过度疲劳");
+                    } else if (mindFitness >= -30) {
+                        chgStatus1(ivMental, 2);
+                        tvMental.setText("心累");
+                    } else if (mindFitness >= -50) {
+                        chgStatus1(ivMental, 1);
+                        tvMental.setText("心灰意冷");
                     } else {
-                        chgStatus2(ivMental, 5);
-                        tvMental.setText("过度疲劳");
+                        chgStatus1(ivMental, 1);
+                        tvMental.setText("心灰意冷");
                     }
-                    //---压力紧张
-                    Integer stressTension = Integer.parseInt(hrvIndexBean.getStressTension());
-                    if (stressTension <= -30) {//过渡松散
-                        tvEmotion.setText("过度松散");
-                        chgStatus2(ivEmotion, 3);
-                    } else if (stressTension <= -10) {//松散
-                        tvEmotion.setText("松散");
-                        chgStatus2(ivEmotion, 2);
-                    } else if (stressTension <= 10) {//正常
-                        chgStatus2(ivEmotion, 1);
-                        tvEmotion.setText("正常范围");
-                    } else if (stressTension <= 30) {//紧张
-                        tvEmotion.setText("紧张");
-                        chgStatus2(ivEmotion, 4);
-                    } else if (stressTension <= 50) {//过渡紧张
-                        tvEmotion.setText("过度紧张");
-                        chgStatus2(ivEmotion, 5);
-                    } else {
-                        chgStatus2(ivEmotion, 5);
-                        tvEmotion.setText("过度紧张");
-                    }
+
                     //---心情稳定
-                    Integer moodStability = Integer.parseInt(hrvIndexBean.getMoodStability());
-                    if (moodStability <= -30) {//过渡低落
-                        chgStatus2(ivDown1, 5);
-                        tvDown1.setText("过度低落");
-                        chgStatus2(ivDown2, 5);
-                        tvDown2.setText("过度低落");
-                    } else if (moodStability <= -10) {//低落
-                        chgStatus2(ivDown1, 4);
-                        tvDown1.setText("低落");
-                        chgStatus2(ivDown2, 4);
-                        tvDown2.setText("低落");
-                    } else if (moodStability <= 10) {//良好
-                        tvDown1.setText("良好");
-                        chgStatus2(ivDown1, 1);
-                        tvDown2.setText("良好");
-                        chgStatus2(ivDown2, 1);
-                    } else if (moodStability <= 30) {//兴奋
-                        chgStatus2(ivDown1, 2);
-                        tvDown1.setText("兴奋");
-                        chgStatus2(ivDown2, 2);
-                        tvDown2.setText("兴奋");
-                    } else if (moodStability <= 50) {//过渡兴奋
-                        chgStatus2(ivDown1, 3);
-                        tvDown1.setText("过度兴奋");
-                        chgStatus2(ivDown2, 3);
-                        tvDown2.setText("过度兴奋");
+                    Integer mood = Integer.parseInt(hrvIndexBean.getMoodStability());
+                    if (mood <= -30) {//过渡松散
+                        tvEmotion.setText("超低落");
+                        chgStatus1(ivEmotion, 1);
+                    } else if (mood <= -10) {//松散
+                        tvEmotion.setText("低落");
+                        chgStatus1(ivEmotion, 2);
+                    } else if (mood <= 10) {//正常
+                        chgStatus1(ivEmotion, 3);
+                        tvEmotion.setText("正常范围");
+                    } else if (mood <= 30) {//紧张
+                        tvEmotion.setText("亢奋");
+                        chgStatus1(ivEmotion, 4);
+                    } else if (mood <= 50) {//过渡紧张
+                        tvEmotion.setText("超亢奋");
+                        chgStatus1(ivEmotion, 5);
                     } else {
+                        chgStatus1(ivEmotion, 5);
+                        tvEmotion.setText("超亢奋");
+                    }
+
+                    //---身体疲劳
+                    Integer bodyFatigue = Integer.parseInt(hrvIndexBean.getBodyFatigue());
+                    if (bodyFatigue <= 20) {//过渡低落
+                        chgStatus2(ivDown1, 1);
+                        tvDown1.setText("正常范围");
+                        chgStatus2(ivDown2, 1);
+                        tvDown2.setText("正常范围");
+                    } else if (bodyFatigue <= 40) {//低落
+                        chgStatus2(ivDown1, 2);
+                        tvDown1.setText("略疲劳");
+                        chgStatus2(ivDown2, 2);
+                        tvDown2.setText("略疲劳");
+                    } else if (bodyFatigue <= 60) {//良好
+                        tvDown1.setText("疲劳");
                         chgStatus2(ivDown1, 3);
-                        tvDown1.setText("过度兴奋");
+                        tvDown2.setText("疲劳");
                         chgStatus2(ivDown2, 3);
-                        tvDown2.setText("过度兴奋");
+                    } else if (bodyFatigue <= 80) {//兴奋
+                        chgStatus2(ivDown1, 4);
+                        tvDown1.setText("太疲劳");
+                        chgStatus2(ivDown2, 4);
+                        tvDown2.setText("太疲劳");
+                    } else if (bodyFatigue <= 100) {//过渡兴奋
+                        chgStatus2(ivDown1, 5);
+                        tvDown1.setText("过度疲劳");
+                        chgStatus2(ivDown2, 5);
+                        tvDown2.setText("过度疲劳");
+                    } else {
+                        chgStatus2(ivDown1, 5);
+                        tvDown1.setText("过度疲劳");
+                        chgStatus2(ivDown2, 5);
+                        tvDown2.setText("过度疲劳");
                     }
                 }
             }

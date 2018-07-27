@@ -130,30 +130,9 @@ public class HeartDetailFragment extends LsmBaseFragment {
                 if (hrvIndex != null && hrvIndex.size() > 0) {
                     tvUpdateTime.setText("更新时间："+ MyTimeUtils.getCurrentDateTime());
                     GetHRVInfoReturn.HRVIndexBean hrvIndexBean = hrvIndex.get(0);
-                    //---体力状态
-                    Integer bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());
-                    Constant.lastedBodyFitness = bodyFitness;
-                    if (bodyFitness >= 30) {
-                        chgStatus1(ivPhysical, 1);
-                        tvPhysical.setText("过度暴动");
-                    } else if (bodyFitness >= 10) {
-                        chgStatus1(ivPhysical, 2);
-                        tvPhysical.setText("拼劲十足");
-                    } else if (bodyFitness >= -10) {
-                        chgStatus1(ivPhysical, 3);
-                        tvPhysical.setText("正常范围");
-                    } else if (bodyFitness >= -30) {
-                        chgStatus1(ivPhysical, 4);
-                        tvPhysical.setText("疲劳");
-                    } else if (bodyFitness >= -50) {
-                        chgStatus1(ivPhysical, 5);
-                        tvPhysical.setText("体力透支");
-                    } else {
-                        chgStatus1(ivPhysical, 5);
-                        tvPhysical.setText("体力透支");
-                    }
-                    //---脑力
-                    Integer bodyFatigue = Integer.parseInt(hrvIndexBean.getBodyFatigue());
+
+                    //---身体疲劳
+                 /*   Integer bodyFatigue = Integer.parseInt(hrvIndexBean.getBodyFatigue());
                     if (bodyFatigue <= 20) {
                         chgStatus2(ivMental, 1);
                         tvMental.setText("正常范围");
@@ -172,53 +151,98 @@ public class HeartDetailFragment extends LsmBaseFragment {
                     } else {
                         chgStatus2(ivMental, 5);
                         tvMental.setText("过度疲劳");
+                    }*/
+                    //---体力状态
+                    Integer bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());
+                    Constant.lastedBodyFitness = bodyFitness;
+                    if (bodyFitness >= 30) {
+                        chgStatus1(ivPhysical, 5);
+                        tvPhysical.setText("过度暴动");
+                    } else if (bodyFitness >= 10) {
+                        chgStatus1(ivPhysical, 4);
+                        tvPhysical.setText("拼劲十足");
+                    } else if (bodyFitness >= -10) {
+                        chgStatus1(ivPhysical, 3);
+                        tvPhysical.setText("正常范围");
+                    } else if (bodyFitness >= -30) {
+                        chgStatus1(ivPhysical, 2);
+                        tvPhysical.setText("疲劳");
+                    } else if (bodyFitness >= -50) {
+                        chgStatus1(ivPhysical, 1);
+                        tvPhysical.setText("体力透支");
+                    } else {
+                        chgStatus1(ivPhysical, 1);
+                        tvPhysical.setText("体力透支");
                     }
+
+                    //---脑力
+                    int mindFitness = Integer.parseInt(hrvIndexBean.getMindFitness());
+                    if (mindFitness >= 30) {
+                        chgStatus1(ivMental, 5);
+                        tvMental.setText("心烦易怒");
+                    } else if (mindFitness >= 10) {
+                        chgStatus1(ivMental, 4);
+                        tvMental.setText("琐事烧脑");
+                    } else if (mindFitness >= -10) {
+                        chgStatus1(ivMental, 3);
+                        tvMental.setText("正常范围");
+                    } else if (mindFitness >= -30) {
+                        chgStatus1(ivMental, 2);
+                        tvMental.setText("心累");
+                    } else if (mindFitness >= -50) {
+                        chgStatus1(ivMental, 1);
+                        tvMental.setText("心灰意冷");
+                    } else {
+                        chgStatus1(ivMental, 1);
+                        tvMental.setText("心灰意冷");
+                    }
+
                     //---情绪
                     Integer mood = Integer.parseInt(hrvIndexBean.getMoodStability());
                     if (mood <= -30) {//过渡松散
-                        tvEmotion.setText("过度松散");
-                        chgStatus2(ivEmotion, 3);
+                        tvEmotion.setText("超低落");
+                        chgStatus1(ivEmotion, 1);
                     } else if (mood <= -10) {//松散
-                        tvEmotion.setText("松散");
-                        chgStatus2(ivEmotion, 2);
+                        tvEmotion.setText("低落");
+                        chgStatus1(ivEmotion, 2);
                     } else if (mood <= 10) {//正常
-                        chgStatus2(ivEmotion, 1);
+                        chgStatus1(ivEmotion, 3);
                         tvEmotion.setText("正常范围");
                     } else if (mood <= 30) {//紧张
-                        tvEmotion.setText("紧张");
-                        chgStatus2(ivEmotion, 4);
+                        tvEmotion.setText("亢奋");
+                        chgStatus1(ivEmotion, 4);
                     } else if (mood <= 50) {//过渡紧张
-                        tvEmotion.setText("过度紧张");
-                        chgStatus2(ivEmotion, 5);
+                        tvEmotion.setText("超亢奋");
+                        chgStatus1(ivEmotion, 5);
                     } else {
-                        chgStatus2(ivEmotion, 5);
-                        tvEmotion.setText("过度紧张");
+                        chgStatus1(ivEmotion, 5);
+                        tvEmotion.setText("超亢奋");
                     }
                     //---压力
                     Integer stress = Integer.parseInt(hrvIndexBean.getStressTension());
                     if (stress <= -30) {//过渡低落
-                        chgStatus2(ivPressure, 5);
-                        tvPressure.setText("过度低落");
+                        chgStatus2(ivPressure, 1);
+                        tvPressure.setText("过度松散");
                         ivPressureIcon.setImageResource(R.mipmap.ic_emotion1);
                     } else if (stress <= -10) {//低落
-                        chgStatus2(ivPressure, 4);
-                        tvPressure.setText("低落");
+                        chgStatus2(ivPressure, 2);
+                        tvPressure.setText("松散");
                         ivPressureIcon.setImageResource(R.mipmap.ic_emotion2);
                     } else if (stress <= 10) {//良好
-                        chgStatus2(ivPressure, 1);
-                        tvPressure.setText("良好");
+                        chgStatus2(ivPressure, 3);
+                        tvPressure.setText("正常范围");
                         ivPressureIcon.setImageResource(R.mipmap.ic_emotion3);
                     } else if (stress <= 30) {//兴奋
-                        chgStatus2(ivPressure, 2);
-                        tvPressure.setText("兴奋");
+                        chgStatus2(ivPressure, 4);
+                        tvPressure.setText("紧张");
                         ivPressureIcon.setImageResource(R.mipmap.ic_emotion4);
                     } else if (stress <= 50) {//过渡兴奋
-                        chgStatus2(ivPressure, 3);
-                        tvPressure.setText("过度兴奋");
+                        chgStatus2(ivPressure, 5);
+                        tvPressure.setText("过度紧张");
                         ivPressureIcon.setImageResource(R.mipmap.ic_emotion5);
                     } else {
-                        chgStatus2(ivPressure, 3);
-                        tvPressure.setText("过度兴奋");
+                        chgStatus2(ivPressure, 5);
+                        tvPressure.setText("过度紧张");
                         ivPressureIcon.setImageResource(R.mipmap.ic_emotion5);
                     }
                 }

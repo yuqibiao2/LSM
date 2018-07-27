@@ -166,7 +166,8 @@
                 <ImageView
                     android:id="@+id/iv_physical"
                     android:layout_width="150dp"
-                    android:layout_height="15dp" />
+                    android:layout_height="15dp"
+                    android:background="@mipmap/ic_bar13"/>
             </LinearLayout>
 
             <TextView
@@ -208,7 +209,8 @@
                 <ImageView
                     android:id="@+id/iv_mental"
                     android:layout_width="150dp"
-                    android:layout_height="15dp" />
+                    android:layout_height="15dp"
+                    android:background="@mipmap/ic_bar13"/>
             </LinearLayout>
 
             <TextView
@@ -252,7 +254,8 @@
                 <ImageView
                     android:id="@+id/iv_pressure"
                     android:layout_width="150dp"
-                    android:layout_height="15dp" />
+                    android:layout_height="15dp"
+                    android:background="@mipmap/ic_bar13"/>
             </LinearLayout>
 
             <TextView
@@ -296,7 +299,8 @@
                 <ImageView
                     android:id="@+id/iv_emotion"
                     android:layout_width="150dp"
-                    android:layout_height="15dp" />
+                    android:layout_height="15dp"
+                    android:background="@mipmap/ic_bar13"/>
             </LinearLayout>
 
             <TextView

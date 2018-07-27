@@ -125,7 +125,7 @@
                 android:id="@+id/tv_max"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="163"
+                android:text="0"
                 android:textColor="#FF4A4A4A"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -158,7 +158,7 @@
                 android:id="@+id/tv_avg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="63"
+                android:text="0"
                 android:textColor="@color/my_blue"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -191,7 +191,7 @@
                 android:id="@+id/tv_min"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="58"
+                android:text="0"
                 android:textColor="#FF4A4A4A"
                 android:textSize="20sp"
                 android:textStyle="bold" />

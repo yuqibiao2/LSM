@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="#242536"
+    android:orientation="vertical"
     android:padding="20dp">
 
     <!--体力-->
@@ -35,7 +35,8 @@
             <ImageView
                 android:id="@+id/iv_physical"
                 android:layout_width="150dp"
-                android:layout_height="15dp" />
+                android:layout_height="15dp"
+                android:background="@mipmap/ic_bar13" />
         </LinearLayout>
 
         <TextView
@@ -79,7 +80,8 @@
             <ImageView
                 android:id="@+id/iv_mental"
                 android:layout_width="150dp"
-                android:layout_height="15dp" />
+                android:layout_height="15dp"
+                android:background="@mipmap/ic_bar13" />
         </LinearLayout>
 
         <TextView
@@ -124,7 +126,8 @@
             <ImageView
                 android:id="@+id/iv_emotion"
                 android:layout_width="150dp"
-                android:layout_height="15dp" />
+                android:layout_height="15dp"
+                android:background="@mipmap/ic_bar13" />
         </LinearLayout>
 
         <TextView
@@ -173,7 +176,8 @@
                 android:id="@+id/iv_down1"
                 android:layout_width="120dp"
                 android:layout_height="15dp"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="5dp"
+                android:background="@mipmap/ic_bar23" />
         </LinearLayout>
 
         <ImageView
@@ -211,7 +215,8 @@
                 android:id="@+id/iv_down2"
                 android:layout_width="120dp"
                 android:layout_height="15dp"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="5dp"
+                android:background="@mipmap/ic_bar23" />
         </LinearLayout>
 
     </LinearLayout>

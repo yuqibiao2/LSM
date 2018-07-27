@@ -1,6 +1,7 @@
 package com.test.lsm.ui.fragment.hr_record;
 
 import android.graphics.Color;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -17,7 +18,6 @@ import com.yyyu.baselibrary.utils.MyTimeUtils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import de.greenrobot.event.EventBus;
@@ -35,6 +35,8 @@ public class MouthHrFragment extends HrBaseFragment {
 
     @BindView(R.id.bc_hr)
     LineChart bcHr;
+    @BindView(R.id.tv_current_mouth)
+    TextView tvCurrentMouth;
     private List<Entry> mValues;
 
     private int userId;
@@ -64,7 +66,9 @@ public class MouthHrFragment extends HrBaseFragment {
 
     @Override
     protected void initView() {
-
+        Calendar calendar = Calendar.getInstance();
+        int mouth = calendar.get(Calendar.MONTH) + 1;
+        tvCurrentMouth.setText("心率紀錄 - "+mouth+"月");
     }
 
     @Override
@@ -86,7 +90,7 @@ public class MouthHrFragment extends HrBaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isResumed()){
+        if (isVisibleToUser && isResumed()) {
             getData();
         }
     }
@@ -97,7 +101,7 @@ public class MouthHrFragment extends HrBaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
-    private void getData(){
+    private void getData() {
         mValues.clear();
         for (int i = 1; i <= 31; i++) {
             mValues.add(new Entry(i, 0));
@@ -109,6 +113,7 @@ public class MouthHrFragment extends HrBaseFragment {
                 int minHr = Integer.MAX_VALUE;
                 int avgHr = 0;
                 int total = 0;
+                int count = 0;
                 List<GetHeartChart.PdBean> pd = result.getPd();
                 for (GetHeartChart.PdBean pdBean : pd) {
                     String heartTime = pdBean.getHEART_TIME();
@@ -120,16 +125,19 @@ public class MouthHrFragment extends HrBaseFragment {
                     Entry entry1 = mValues.get(day - 1);
                     int hrValue = Integer.parseInt(pdBean.getHEART_VALUE());
                     entry1.setY(hrValue);
-                    total += hrValue;
-                    if (hrValue > maxHr &&hrValue>0) {
+                    if (hrValue > 0) {
+                        total += hrValue;
+                        count++;
+                    }
+                    if (hrValue > maxHr && hrValue > 0) {
                         maxHr = hrValue;
                     }
-                    if (hrValue < minHr &&hrValue>0) {
+                    if (hrValue < minHr && hrValue > 0) {
                         minHr = hrValue;
                     }
                 }
-                if (pd.size() > 0) {
-                    avgHr = total / pd.size();
+                if (count > 0) {
+                    avgHr = total / count;
                 }
 
                 if (mOnLoadDataSuccess != null) {
@@ -148,14 +156,20 @@ public class MouthHrFragment extends HrBaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
-    public void updateHrDate(UpdateHrRecordEvent event){
+    public void updateHrDate(UpdateHrRecordEvent event) {
         dateTime = event.getDateTime();
+        Calendar calendar = event.getCalendar();
+        int mouth = calendar.get(Calendar.MONTH) + 1;
+        tvCurrentMouth.setText("心率紀錄 - "+mouth+"月");
         getData();
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
-    public void updateHrDate2(UpdateMouthHrRecordEvent event){
+    public void updateHrDate2(UpdateMouthHrRecordEvent event) {
         dateTime = event.getDateTime();
+        Calendar calendar = event.getCalendar();
+        int mouth = calendar.get(Calendar.MONTH) + 1;
+        tvCurrentMouth.setText("心率紀錄 - "+mouth+"月");
         getData();
     }
 

@@ -305,7 +305,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                     for (GetCourseParams.PdBean bean : pd) {
 
                         int paramLevel = Integer.parseInt(bean.getPARAM_LEVEL().trim());
-                        double proportion = 0.5;
+                        double proportion = 0;
                         switch (paramLevel) {
                             case 1://50%
                                 proportion = 0.5;
@@ -534,14 +534,16 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setDrawGridLines(false);
-        //rightAxis.setAxisMaximum(maxBaseHr);
+        rightAxis.setLabelCount(6, true);
+        rightAxis.setAxisMaximum(maxBaseHr);
         rightAxis.setAxisMinimum(maxBaseHr * 0.5f); // this replaces setStartAtZero(true)
         rightAxis.setDrawAxisLine(false);
         rightAxis.setDrawLabels(false);
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
-        //leftAxis.setAxisMaximum(maxBaseHr);
+        leftAxis.setLabelCount(6, true);
+        leftAxis.setAxisMaximum(maxBaseHr);
         leftAxis.setAxisMinimum(maxBaseHr * 0.5f); // this replaces setStartAtZero(true)
         leftAxis.setDrawLabels(false);
         leftAxis.setDrawAxisLine(false);

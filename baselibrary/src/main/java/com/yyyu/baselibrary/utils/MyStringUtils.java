@@ -29,16 +29,20 @@ public class MyStringUtils {
         return 0;
     }
 
+    public static String decimalsToPercent(float decimals) {
+        return decimalsToPercent(decimals , 1);
+    }
+
     /**
      * 小数转百分比
      *
      * @param decimals
      * @return
      */
-    public static String decimalsToPercent(float decimals) {
+    public static String decimalsToPercent(float decimals , int decimalPlace) {
 
         NumberFormat nf = NumberFormat.getPercentInstance();
-        nf.setMaximumFractionDigits(1);
+        nf.setMaximumFractionDigits(decimalPlace);
 
         return nf.format(decimals);
     }

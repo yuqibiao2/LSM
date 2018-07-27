@@ -6,9 +6,10 @@
     android:paddingTop="16dp">
 
     <TextView
+        android:id="@+id/tv_current_mouth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="心率紀錄 - 23日"
+        android:text=""
         android:textColor="#FF121958"
         android:paddingLeft="26dp"
         android:paddingRight="16dp"

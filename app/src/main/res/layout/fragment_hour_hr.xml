@@ -6,11 +6,12 @@
     android:paddingTop="16dp">
 
     <TextView
+        android:id="@+id/tv_current_hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="26dp"
         android:paddingRight="16dp"
-        android:text="心率紀錄 - 23分"
+        android:text="心率紀錄 - 10时"
         android:textColor="#FF121958"
         android:textSize="18sp" />
 

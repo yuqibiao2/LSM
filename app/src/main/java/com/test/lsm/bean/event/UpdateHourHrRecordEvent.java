@@ -1,5 +1,7 @@
 package com.test.lsm.bean.event;
 
+import java.util.Calendar;
+
 /**
  * 功能：更新年、月、天
  *
@@ -10,9 +12,19 @@ package com.test.lsm.bean.event;
 public class UpdateHourHrRecordEvent {
 
     private String dateTime;
+    private Calendar calendar;
 
-    public UpdateHourHrRecordEvent(String dateTime) {
+    public UpdateHourHrRecordEvent(String dateTime, Calendar calendar) {
         this.dateTime = dateTime;
+        this.calendar = calendar;
+    }
+
+    public Calendar getCalendar() {
+        return calendar;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
     }
 
     public String getDateTime() {

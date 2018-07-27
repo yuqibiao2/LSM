@@ -9,11 +9,14 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.UpdateDayHrRecordEvent;
 import com.test.lsm.bean.event.UpdateHourHrRecordEvent;
 import com.test.lsm.bean.event.UpdateHrRecordEvent;
 import com.test.lsm.bean.event.UpdateMouthHrRecordEvent;
+import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.net.GlidUtils;
 import com.test.lsm.ui.dialog.DateTimeSelectDialog;
 import com.test.lsm.ui.fragment.hr_record.DayHrFragment;
 import com.test.lsm.ui.fragment.hr_record.HourHrFragment;
@@ -72,6 +75,7 @@ public class HrRecordActivity extends LsmBaseActivity {
     private HourHrFragment hourHrFragment;
     private DayHrFragment dayHrFragment;
     private MouthHrFragment mouthHrFragment;
+    private UserLoginReturn.PdBean user;
 
     private enum HrType{
         Mouth, DAY, HOUR
@@ -85,6 +89,8 @@ public class HrRecordActivity extends LsmBaseActivity {
     @Override
     public void beforeInit() {
         super.beforeInit();
+        MyApplication application = (MyApplication) getApplication();
+        user = application.getUser();
         fragmentList = new ArrayList<>();
         hourHrFragment = new HourHrFragment();
         dayHrFragment = new DayHrFragment();
@@ -96,9 +102,14 @@ public class HrRecordActivity extends LsmBaseActivity {
 
     @Override
     protected void initView() {
+
+        GlidUtils.load(this , rvUserIcon , user.getUSER_IMAGE());
+
         vpHr.setOffscreenPageLimit(3);
         calendar = Calendar.getInstance();
         setDateTimeView();
+        String dateTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", calendar.getTime());
+        EventBus.getDefault().post(new UpdateHrRecordEvent(dateTime , calendar));
     }
 
     private void setDateTimeView(){
@@ -181,7 +192,7 @@ public class HrRecordActivity extends LsmBaseActivity {
                         calendar.set(currentYear , currentMouth-1 , currentDay , currentHour,0);
                         // 更新图表数据
                         String dateTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", calendar.getTime());
-                        EventBus.getDefault().post(new UpdateHrRecordEvent(dateTime));
+                        EventBus.getDefault().post(new UpdateHrRecordEvent(dateTime , calendar));
                     }
                 });
                 dateTimeSelectDialog.show();
@@ -249,20 +260,20 @@ public class HrRecordActivity extends LsmBaseActivity {
             case HOUR:{
                 calendar.add(Calendar.HOUR, -1);
                 String dateTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", calendar.getTime());
-                EventBus.getDefault().post(new UpdateHourHrRecordEvent(dateTime));
+                EventBus.getDefault().post(new UpdateHourHrRecordEvent(dateTime , calendar));
                 break;
             }
             case DAY:{
                 calendar.add(Calendar.DATE, -1);
                 String dateTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", calendar.getTime());
-                EventBus.getDefault().post(new UpdateDayHrRecordEvent(dateTime));
+                EventBus.getDefault().post(new UpdateDayHrRecordEvent(dateTime , calendar));
                 break;
             }
 
             case Mouth:{
                 calendar.add(Calendar.MONTH, -1);
                 String dateTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", calendar.getTime());
-                EventBus.getDefault().post(new UpdateMouthHrRecordEvent(dateTime));
+                EventBus.getDefault().post(new UpdateMouthHrRecordEvent(dateTime , calendar));
                 break;
             }
         }
@@ -278,20 +289,20 @@ public class HrRecordActivity extends LsmBaseActivity {
             case HOUR:{
                 calendar.add(Calendar.HOUR, 1);
                 String dateTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", calendar.getTime());
-                EventBus.getDefault().post(new UpdateHourHrRecordEvent(dateTime));
+                EventBus.getDefault().post(new UpdateHourHrRecordEvent(dateTime , calendar));
                 break;
             }
             case DAY:{
                 calendar.add(Calendar.DATE, 1);
                 String dateTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", calendar.getTime());
-                EventBus.getDefault().post(new UpdateDayHrRecordEvent(dateTime));
+                EventBus.getDefault().post(new UpdateDayHrRecordEvent(dateTime , calendar));
                 break;
             }
 
             case Mouth:{
                 calendar.add(Calendar.MONTH, 1);
                 String dateTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", calendar.getTime());
-                EventBus.getDefault().post(new UpdateMouthHrRecordEvent(dateTime));
+                EventBus.getDefault().post(new UpdateMouthHrRecordEvent(dateTime , calendar));
                 break;
             }
         }
