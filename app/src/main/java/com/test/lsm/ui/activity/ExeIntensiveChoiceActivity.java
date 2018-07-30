@@ -1,5 +1,6 @@
 package com.test.lsm.ui.activity;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -7,8 +8,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.test.lsm.MyApplication;
 import com.test.lsm.R;
+import com.test.lsm.bean.form.UserJoinCourseVo;
+import com.test.lsm.bean.json.UserJoinCourseReturn;
+import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
+import com.test.lsm.net.IRequestCallback;
+import com.yyyu.baselibrary.utils.MyToast;
 import com.yyyu.baselibrary.utils.StatusBarCompat;
 
 import butterknife.BindView;
@@ -62,6 +69,10 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
     private Integer courseLevel = 1; // 0：简单 1：一般  2：困难
     private String courseName;
     private String courseType;
+    private APIMethodManager apiMethodManager;
+    private int userId;
+    private int ccType;
+    private int coachId;
 
     @Override
     public int getLayoutId() {
@@ -81,7 +92,12 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         imgUrl = intent.getStringExtra("imgUrl");
         courseName = intent.getStringExtra("courseName");
         courseType = intent.getStringExtra("courseType");
+        coachId = intent.getIntExtra("coachId", -1);
+        ccType = intent.getIntExtra("ccType", -1);
         bodyFitness = intent.getIntExtra("bodyFitness", 0);
+        apiMethodManager = APIMethodManager.getInstance();
+        MyApplication application = (MyApplication) getApplication();
+        userId = application.getUser().getUSER_ID();
     }
 
     @Override
@@ -95,54 +111,54 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
 
         GlidUtils.load(this, ivIcon, imgUrl);
         tvCourseName.setText("# " + courseName);
-        if (bodyFitness >= 30) {
+        if (bodyFitness >= 0) {
             ivSuggestionHard.setVisibility(View.VISIBLE);
             courseLevel = 2;
             ivHard.setImageResource(R.mipmap.ic_hard_selected);
             ivHardSelected.setVisibility(View.VISIBLE);
 
-            chgStatus1(ivPhysical, 1);
-            tvPhysical.setText("过度暴动");
-        } else if (bodyFitness >= 10) {
-            ivSuggestionHard.setVisibility(View.VISIBLE);
-            courseLevel = 2;
-            ivHard.setImageResource(R.mipmap.ic_hard_selected);
-            ivHardSelected.setVisibility(View.VISIBLE);
-
-            chgStatus1(ivPhysical, 2);
-            tvPhysical.setText("拼劲十足");
-        } else if (bodyFitness >= -10) {
-            ivSuggestionNormal.setVisibility(View.VISIBLE);
-            courseLevel = 1;
-            ivNormal.setImageResource(R.mipmap.ic_normal_selected);
-            ivNormalSelected.setVisibility(View.VISIBLE);
-
-            chgStatus1(ivPhysical, 3);
+            chgStatus2(ivPhysical, 1);
             tvPhysical.setText("正常范围");
-        } else if (bodyFitness >= -30) {
+        } else if (bodyFitness >= 20) {
+            ivSuggestionHard.setVisibility(View.VISIBLE);
+            courseLevel = 2;
+            ivHard.setImageResource(R.mipmap.ic_hard_selected);
+            ivHardSelected.setVisibility(View.VISIBLE);
+
+            chgStatus2(ivPhysical, 2);
+            tvPhysical.setText("略疲劳");
+        } else if (bodyFitness >= 40) {
             ivSuggestionNormal.setVisibility(View.VISIBLE);
             courseLevel = 1;
             ivNormal.setImageResource(R.mipmap.ic_normal_selected);
             ivNormalSelected.setVisibility(View.VISIBLE);
 
-            chgStatus1(ivPhysical, 4);
+            chgStatus2(ivPhysical, 3);
             tvPhysical.setText("疲劳");
-        } else if (bodyFitness >= -50) {
+        } else if (bodyFitness >= 60) {
+            ivSuggestionNormal.setVisibility(View.VISIBLE);
+            courseLevel = 1;
+            ivNormal.setImageResource(R.mipmap.ic_normal_selected);
+            ivNormalSelected.setVisibility(View.VISIBLE);
+
+            chgStatus2(ivPhysical, 4);
+            tvPhysical.setText("太疲劳");
+        } else if (bodyFitness >= 80) {
             ivSuggestionHard.setVisibility(View.VISIBLE);
             courseLevel = 0;
             ivEasy.setImageResource(R.mipmap.ic_easy_selected);
             ivEasySelected.setVisibility(View.VISIBLE);
 
-            chgStatus1(ivPhysical, 5);
-            tvPhysical.setText("体力透支");
+            chgStatus2(ivPhysical, 5);
+            tvPhysical.setText("过度疲劳");
         } else {
             ivSuggestionHard.setVisibility(View.VISIBLE);
             courseLevel = 0;
             ivEasy.setImageResource(R.mipmap.ic_easy_selected);
             ivEasySelected.setVisibility(View.VISIBLE);
 
-            chgStatus1(ivPhysical, 5);
-            tvPhysical.setText("体力透支");
+            chgStatus2(ivPhysical, 5);
+            tvPhysical.setText("过度疲劳");
         }
     }
 
@@ -179,37 +195,67 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
     }
 
     public void toNext(View view) {
-        IndoorExerciseActivity.startAction(this, courseLevel, courseType , courseName);
+        showLoadDialog();
+        UserJoinCourseVo userJoinCourseVo = new UserJoinCourseVo();
+        userJoinCourseVo.setUSER_ID(userId);
+        userJoinCourseVo.setCOURSE_LEVEL(courseLevel);
+        userJoinCourseVo.setCOACH_ID(coachId);
+        userJoinCourseVo.setCC_TYPE(ccType);
+        userJoinCourseVo.setCOURSE_TYPE(courseType);
+        apiMethodManager.userJoinCourse(userJoinCourseVo, new IRequestCallback<UserJoinCourseReturn>() {
+            @Override
+            public void onSuccess(UserJoinCourseReturn result) {
+                dismissLoadDialog();
+                if ("01".equals(result.getResult())){
+                    int ucId = result.getPd().getUC_ID();
+                    IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName , ucId);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                dismissLoadDialog();
+                MyToast.showLong(getApplicationContext(), "网络异常");
+            }
+        });
     }
 
-    public static void startAction(Context context, String imgUrl, String courseName, String courseType, Integer bodyFitness) {
+    public static void startAction(Context context,
+                                   String imgUrl,
+                                   String courseName,
+                                   String courseType,
+                                   Integer coachId,
+                                   Integer ccType,
+                                   Integer bodyFitness) {
         Intent intent = new Intent(context, ExeIntensiveChoiceActivity.class);
         intent.putExtra("imgUrl", imgUrl);
         intent.putExtra("courseName", courseName);
         intent.putExtra("courseType", courseType);
+        intent.putExtra("coachId", coachId);
+        intent.putExtra("ccType", ccType);
         intent.putExtra("bodyFitness", bodyFitness);
         context.startActivity(intent);
     }
 
-    public void chgStatus1(View view, int status) {
+    public void chgStatus2(View view, int status) {
         switch (status) {
             case 0:
                 view.setEnabled(false);
                 break;
             case 1:
-                view.setBackgroundResource(R.mipmap.ic_bar11);
+                view.setBackgroundResource(R.mipmap.ic_bar21);
                 break;
             case 2:
-                view.setBackgroundResource(R.mipmap.ic_bar12);
+                view.setBackgroundResource(R.mipmap.ic_bar22);
                 break;
             case 3:
-                view.setBackgroundResource(R.mipmap.ic_bar13);
+                view.setBackgroundResource(R.mipmap.ic_bar23);
                 break;
             case 4:
-                view.setBackgroundResource(R.mipmap.ic_bar14);
+                view.setBackgroundResource(R.mipmap.ic_bar24);
                 break;
             case 5:
-                view.setBackgroundResource(R.mipmap.ic_bar15);
+                view.setBackgroundResource(R.mipmap.ic_bar25);
                 break;
         }
     }

@@ -8,7 +8,9 @@ import com.test.lsm.bean.form.QueryRunInfoVo;
 import com.test.lsm.bean.form.RunRecord;
 import com.test.lsm.bean.form.SaveHeartByMinVo;
 import com.test.lsm.bean.form.SaveUserHRVVo;
+import com.test.lsm.bean.form.UserCourseTimeVo;
 import com.test.lsm.bean.form.UserHealthInfo;
+import com.test.lsm.bean.form.UserJoinCourseVo;
 import com.test.lsm.bean.form.UserRegVo;
 import com.test.lsm.bean.form.UserUpdateVo;
 import com.test.lsm.bean.json.DoFooBean;
@@ -24,6 +26,8 @@ import com.test.lsm.bean.json.SaveHeartByMin;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
 import com.test.lsm.bean.json.SaveUserHRV;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
+import com.test.lsm.bean.json.UserCourseTimeReturn;
+import com.test.lsm.bean.json.UserJoinCourseReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.json.UserRegReturn;
 import com.test.lsm.net.api.LsmApi;
@@ -67,6 +71,80 @@ public class APIMethodManager {
         return SingletonHolder.INSTANCE;
     }
 
+    /**
+     * 更新会员参加课程运动起止时间
+     *
+     * @param userCourseTimeVo
+     * @param callback
+     * @return
+     */
+    public Subscription userCourseTime(UserCourseTimeVo userCourseTimeVo , final IRequestCallback<UserCourseTimeReturn> callback){
+
+        Map<String, String> map = new HashMap<>();
+        map.put("UC_ID" ,""+ userCourseTimeVo.getUC_ID());
+        map.put("START_TIME" ,""+ userCourseTimeVo.getSTART_TIME());
+        map.put("END_TIME" ,""+ userCourseTimeVo.getEND_TIME());
+        Subscription subscribe = lsmApi.userCourseTime(map)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<UserCourseTimeReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(UserCourseTimeReturn userCourseTimeReturn) {
+                        callback.onSuccess(userCourseTimeReturn);
+                    }
+                });
+
+        return  subscribe;
+    }
+
+
+    /**
+     * 会员加入教练课程
+     *
+     * @param userJoinCourseVo
+     * @param callback
+     * @return
+     */
+    public Subscription userJoinCourse(UserJoinCourseVo userJoinCourseVo , final IRequestCallback<UserJoinCourseReturn> callback){
+
+        Map<String, String> map = new HashMap<>();
+        map.put("USER_ID" ,""+ userJoinCourseVo.getUSER_ID());
+        map.put("COURSE_TYPE" ,""+ userJoinCourseVo.getCOURSE_TYPE());
+        map.put("COURSE_LEVEL" ,""+ userJoinCourseVo.getCOURSE_LEVEL());
+        map.put("COACH_ID" ,""+ userJoinCourseVo.getCOACH_ID());
+        map.put("CC_TYPE" ,""+ userJoinCourseVo.getCC_TYPE());
+        Subscription subscribe = lsmApi.userJsonCourse(map)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<UserJoinCourseReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(UserJoinCourseReturn userJoinCourseReturn) {
+                        callback.onSuccess(userJoinCourseReturn);
+                    }
+                });
+
+        return  subscribe;
+    }
 
     /**
      * 室内运动 心跳参照数据

@@ -1,6 +1,8 @@
 package com.test.lsm.net.api;
 
 import com.test.lsm.bean.form.GetHeartChart;
+import com.test.lsm.bean.form.UserCourseTimeVo;
+import com.test.lsm.bean.form.UserJoinCourseVo;
 import com.test.lsm.bean.json.DoFooBean;
 import com.test.lsm.bean.json.GetActiveUser;
 import com.test.lsm.bean.json.GetCoachByCourseType;
@@ -14,6 +16,8 @@ import com.test.lsm.bean.json.SaveHeartByMin;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
 import com.test.lsm.bean.json.SaveUserHRV;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
+import com.test.lsm.bean.json.UserCourseTimeReturn;
+import com.test.lsm.bean.json.UserJoinCourseReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.json.UserRegReturn;
 
@@ -38,6 +42,13 @@ import rx.Observable;
 
 public interface LsmApi {
 
+    @FormUrlEncoded
+    @POST("userCourseTime")
+    Observable<UserCourseTimeReturn> userCourseTime(@FieldMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST("userJoinCourse")
+    Observable<UserJoinCourseReturn> userJsonCourse(@FieldMap Map<String, String> map);
 
     @GET("queryCourseParamByCourse")
     Observable<GetCourseParams> getCourseParamsByType(@Query("COURSE_TYPE") String courseType , @Query("COURSE_LEVEL") Integer courseLevel);

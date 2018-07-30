@@ -111,13 +111,17 @@ public class IndoorHrStatsFragment extends LsmBaseFragment {
 
     public void resetChartData() {
         hrValueList.clear();
-        lcHr.getLineData().clearValues();
+        if (lcHr.getLineData()!=null){
+            lcHr.getLineData().clearValues();
+        }
         hrLevel1.clear();
         hrLevel2.clear();
         hrLevel3.clear();
         hrLevel4.clear();
         hrLevel5.clear();
-        bcHr.getBarData().clearValues();
+        if (bcHr.getBarData()!=null){
+            bcHr.getBarData().clearValues();
+        }
     }
 
     private void putHrWithLevel(int hrValue) {

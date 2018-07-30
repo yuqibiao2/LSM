@@ -27,7 +27,9 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.UpdateIndoorRunDataEvent;
+import com.test.lsm.bean.form.UserCourseTimeVo;
 import com.test.lsm.bean.json.GetCourseParams;
+import com.test.lsm.bean.json.UserCourseTimeReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
@@ -42,6 +44,7 @@ import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -115,6 +118,9 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     private IndoorRunHrFragment indoorRunHrFragment;
     private IndoorHrStatsFragment indoorHrStatsFragment;
     private String courseName;
+    private int ucId;
+    private String startTime;
+    private String stopTime;
 
     public enum RunStatus {
         NONE,
@@ -145,13 +151,14 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         courseLevel = intent.getIntExtra("courseLevel", 0);
         courseType = intent.getStringExtra("courseType");
         courseName = intent.getStringExtra("courseName");
+        ucId = intent.getIntExtra("ucId", -1);
         MyApplication application = (MyApplication) getApplication();
         user = application.getUser();
 
         String birthday = application.getUser().getBIRTHDAY();
 
         int age = 30;
-        if (!TextUtils.isEmpty(birthday)){
+        if (!TextUtils.isEmpty(birthday)) {
             age = MyTimeUtils.getAge(birthday);
         }
 
@@ -186,7 +193,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
 
         String userImage = user.getUSER_IMAGE();
         GlidUtils.load(this, rvUserIcon, userImage);
-        tvRealTimeTip.setText("# "+courseName);
+        tvRealTimeTip.setText("# " + courseName);
 
         initChart(ccHt);
     }
@@ -207,6 +214,25 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                     ivRight.setImageResource(R.mipmap.ic_run_pause_disable);
                     runStatus = STOP;
                     MyToast.showLong(IndoorExerciseActivity.this, "停止");
+
+                    stopTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", new Date(System.currentTimeMillis()));
+
+                    UserCourseTimeVo userCourseTimeVo = new UserCourseTimeVo();
+                    userCourseTimeVo.setUC_ID(ucId);
+                    userCourseTimeVo.setSTART_TIME(startTime);
+                    userCourseTimeVo.setEND_TIME(stopTime);
+                    APIMethodManager.getInstance().userCourseTime(userCourseTimeVo, new IRequestCallback<UserCourseTimeReturn>() {
+                        @Override
+                        public void onSuccess(UserCourseTimeReturn result) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Throwable throwable) {
+
+                        }
+                    });
+
                 }
             }
         });
@@ -220,7 +246,10 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                     MyToast.showLong(IndoorExerciseActivity.this, "蓝牙设备未连接");
                     return;
                 }
-                if (runStatus==STOP){//stop-->start 重新开始
+                if (runStatus != PAUSE) {
+                    startTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", new Date(System.currentTimeMillis()));
+                }
+                if (runStatus == STOP) {//stop-->start 重新开始
                     resetLineChart();
                 }
                 if (runStatus == NONE || runStatus == STOP || runStatus == PAUSE) {
@@ -232,6 +261,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                     runStatus = START;
                     MyToast.showLong(IndoorExerciseActivity.this, "开始");
                 }
+
             }
         });
 
@@ -333,7 +363,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                             realTimeValues.add(entry);
                         }
 
-                        int y1 = (int) (maxBaseHr *proportion);
+                        int y1 = (int) (maxBaseHr * proportion);
                         BarEntry entry = new BarEntry(index2++, new float[]{y1, maxBaseHr * 0.1f});
                         endTimeValues.add(entry);
                     }
@@ -568,11 +598,12 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         isActDestroy = true;
     }
 
-    public static void startAction(Context context, Integer courseLevel, String courseType , String courseName) {
+    public static void startAction(Context context, Integer courseLevel, String courseType, String courseName, Integer ucId) {
         Intent intent = new Intent(context, IndoorExerciseActivity.class);
         intent.putExtra("courseLevel", courseLevel);
         intent.putExtra("courseType", courseType);
         intent.putExtra("courseName", courseName);
+        intent.putExtra("ucId", ucId);
         context.startActivity(intent);
     }
 

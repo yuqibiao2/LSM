@@ -107,6 +107,8 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
                         onLineData.get(position).getCOURSE_IMG(),
                         onLineData.get(position).getNAME(),
                         onLineData.get(position).getCOURSE_TYPE(),
+                        onLineData.get(position).getCOACH_ID(),
+                        0,
                         Constant.lastedBodyFitness);
             }
         });
@@ -117,6 +119,8 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
                         downLineData.get(position).getCOURSE_IMG(),
                         downLineData.get(position).getNAME(),
                         downLineData.get(position).getCOURSE_TYPE(),
+                        onLineData.get(position).getCOACH_ID(),
+                        1,
                         Constant.lastedBodyFitness);
             }
         });
