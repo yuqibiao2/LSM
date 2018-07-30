@@ -359,6 +359,7 @@ public class RunFragment extends LsmBaseFragment {
 
             if (isFirstInit) {
                 mLocationClient.stop();
+                mLocationClient.unRegisterLocationListener(mLocationListener);
               /*  if (mLocationClient.isStarted()) {
                     mLocationClient.stop();
                     MyLog.e(TAG , "mLocationClient.stop()=================================");
@@ -458,7 +459,7 @@ public class RunFragment extends LsmBaseFragment {
         }*/
 
         LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-        // MyLog.e(TAG, "latitude：" + ll.latitude + "  longitude：" + ll.longitude);
+       //  MyLog.e(TAG, "latitude：" + ll.latitude + "  longitude：" + ll.longitude);
 
         if (DistanceUtil.getDistance(last, ll) > 10) {
             last = ll;
@@ -485,6 +486,7 @@ public class RunFragment extends LsmBaseFragment {
 
     @OnClick(R.id.iv_run_start)
     public void onRunStart() {
+        mLocationClient.registerLocationListener(mLocationListener);
         isStartRun = true;
         showLoadingDialog();
         if (mLocationClient != null && !isRunning) {

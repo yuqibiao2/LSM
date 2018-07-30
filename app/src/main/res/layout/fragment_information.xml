@@ -37,7 +37,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginEnd="15dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/avril" />
+            android:src="@mipmap/ic_user_df" />
     </RelativeLayout>
 
     <com.yyyu.baselibrary.ui.widget.BounceScrollView

@@ -44,8 +44,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
-                android:src="@mipmap/avril"
-                android:scaleType="centerCrop" />
+                android:src="@mipmap/ic_user_df" />
         </RelativeLayout>
 
         <com.baidu.mapapi.map.MapView

@@ -98,7 +98,7 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
         };
         String userVoJsonStr = getIntent().getStringExtra("userVoJsonStr");
         MyLog.e(TAG, "userVoJsonStr：" + userVoJsonStr);
-        Gson mGson = new Gson();
+        mGson = new Gson();
         userUpdateVo = mGson.fromJson(userVoJsonStr, UserUpdateVo.class);
         apiMethodManager = APIMethodManager.getInstance();
 
@@ -113,6 +113,7 @@ public class UpdateUserActivity2 extends LsmBaseActivity {
         String username = userUpdateVo.getUSERNAME();
         String urgent_user = userUpdateVo.getURGENT_USER();
         String urgent_phone = userUpdateVo.getURGENT_PHONE();
+        //userUpdateVo.setUSER_IMAGE("");
         if (!TextUtils.isEmpty(username)){
             etUsername.setText(""+username);
         }

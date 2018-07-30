@@ -19,7 +19,7 @@ public class UserUpdateVo {
     private String BIRTHDAY;
     private String URGENT_USER;
     private String URGENT_PHONE;
-    private String USER_IMAGE;
+    private String USER_IMAGE="";
     private String HEALTH_PARAM;
 
 

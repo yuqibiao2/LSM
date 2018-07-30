@@ -152,7 +152,7 @@ public class IndoorHrStatsFragment extends LsmBaseFragment {
     }
 
     private void initLineChart() {
-        lcHr.setMinOffset(0f);
+        //lcHr.setMinOffset(0f);
         lcHr.setNoDataText("没有数据");//没有数据时显示的文字
         lcHr.setTouchEnabled(false);     //能否点击
         lcHr.setDragEnabled(false);   //能否拖拽
@@ -168,14 +168,16 @@ public class IndoorHrStatsFragment extends LsmBaseFragment {
         rightAxis.setDrawGridLines(false);
         rightAxis.setDrawAxisLine(false);
         rightAxis.setDrawLabels(true);
-        rightAxis.setAxisMaximum(maxBaseHr);
-        rightAxis.setAxisMinimum(maxBaseHr * 0.5f);
+        rightAxis.setAxisMaximum(100);
+        rightAxis.setAxisMinimum(50);
+        rightAxis.setSpaceBottom(0);
+        rightAxis.setSpaceTop(0);
+        rightAxis.setLabelCount(6 , true);
         rightAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                int maxBaseHr = IndoorExerciseActivity.maxBaseHr;
-                String percentStr = MyStringUtils.decimalsToPercent(value / maxBaseHr);
-                return percentStr;
+                int i = new Float(value).intValue();
+                return i+" %";
             }
         });
 
@@ -184,8 +186,11 @@ public class IndoorHrStatsFragment extends LsmBaseFragment {
         leftAxis.setDrawAxisLine(false);
         leftAxis.setDrawLabels(true);
         leftAxis.setDrawGridLines(false);
+        leftAxis.setSpaceTop(0);
+        leftAxis.setSpaceBottom(0);
         leftAxis.setAxisMaximum(maxBaseHr);
         leftAxis.setAxisMinimum(maxBaseHr * 0.5f);
+        leftAxis.setLabelCount(6 ,true);
 
         XAxis xAxis = lcHr.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);

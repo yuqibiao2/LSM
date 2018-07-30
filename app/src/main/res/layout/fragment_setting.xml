@@ -28,7 +28,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="36dp"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/avril" />
+                android:src="@mipmap/ic_user_df" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="36dp"
                 android:layout_toRightOf="@+id/tv_waring_tip"
-                android:text="160 bpm"
+                android:text="180 bpm"
                 android:textColor="#FF273D52"
                 android:textSize="20sp" />
 
@@ -113,7 +113,7 @@
             android:layout_marginTop="25dp"
             android:max="200"
             android:maxHeight="4dp"
-            android:progress="160"
+            android:progress="180"
             android:progressDrawable="@drawable/pro_seek_bar"
             android:thumbTint="@color/my_white" />
 
@@ -195,7 +195,7 @@
                 android:id="@+id/ri_urgent_icon"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
-                android:src="@mipmap/avril" />
+                android:src="@mipmap/ic_user_df" />
 
             <TextView
                 android:id="@+id/tv_urgent_name"

@@ -181,15 +181,14 @@ public class InformationFragment extends LsmBaseFragment {
                             MyLog.e(TAG, "tvHeartNum：" + heartNum);
                             //Algorithm.initialForModeChange(1);
                             Algorithm.getRtoRIntervalData(rriAry, timeAry);
-
-                           /*
+                            /*
                             //TODO删除(测试用)
                             for (int i = 50; i <269 ; i++) {
                                 int i1 = new Random().nextInt(100) + 500;
                                 rriAry[i] =i1;
                             }
+                            //MyLog.e(TAG, "rriAry==111=" + Arrays.toString(rriAry));
                             MyLog.e(TAG, "rriAry==111=" + Arrays.toString(rriAry));*/
-                            MyLog.e(TAG, "rriAry==111=" + Arrays.toString(rriAry));
 
                             rriList.clear();
                             for (double value : rriAry) {

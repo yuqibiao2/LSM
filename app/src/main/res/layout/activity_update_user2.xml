@@ -23,7 +23,7 @@
             android:layout_height="120dp"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
-            android:src="@mipmap/avril"/>
+            android:src="@mipmap/ic_user_df"/>
 
         <TextView
             android:id="@+id/tv_user_icon"

@@ -40,7 +40,7 @@
             android:layout_height="35dp"
             android:layout_gravity="center_vertical"
             android:scaleType="centerCrop"
-            android:src="@mipmap/avril" />
+            android:src="@mipmap/ic_user_df" />
 
     </LinearLayout>
 

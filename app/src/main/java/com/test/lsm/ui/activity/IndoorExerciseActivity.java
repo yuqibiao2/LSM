@@ -256,7 +256,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         rvUserIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-           /*     int nextInt = new Random().nextInt(80) + 100;
+      /*          int nextInt = new Random().nextInt(80) + 100;
                 addLineEntry(nextInt);
                 indoorRunHrFragment.addLineEntry(nextInt);
                 indoorHrStatsFragment.initLineChartData(nextInt);*/
@@ -328,12 +328,12 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                         }
 
                         for (int i = 0; i < 30; i++) {//5分钟一个数据 转换为10s间隔一个数据
-                            int y1 = (int) (maxBaseHr * (proportion - 0.1));
+                            int y1 = (int) (maxBaseHr * proportion);
                             BarEntry entry = new BarEntry(index++, new float[]{y1, maxBaseHr * 0.1f});
                             realTimeValues.add(entry);
                         }
 
-                        int y1 = (int) (maxBaseHr * (proportion - 0.1));
+                        int y1 = (int) (maxBaseHr *proportion);
                         BarEntry entry = new BarEntry(index2++, new float[]{y1, maxBaseHr * 0.1f});
                         endTimeValues.add(entry);
                     }
@@ -423,7 +423,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
             public void run() {
                 while (!isActDestroy) {
                     try {
-                        Thread.sleep(5 * 60 * 1000);
+                        Thread.sleep(1 * 60 * 1000);
                         if (isActDestroy || runStatus != START) {
                             continue;
                         }
@@ -537,6 +537,8 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         rightAxis.setLabelCount(6, true);
         rightAxis.setAxisMaximum(maxBaseHr);
         rightAxis.setAxisMinimum(maxBaseHr * 0.5f); // this replaces setStartAtZero(true)
+        rightAxis.setSpaceTop(0);
+        rightAxis.setSpaceBottom(0);
         rightAxis.setDrawAxisLine(false);
         rightAxis.setDrawLabels(false);
 
@@ -545,6 +547,8 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         leftAxis.setLabelCount(6, true);
         leftAxis.setAxisMaximum(maxBaseHr);
         leftAxis.setAxisMinimum(maxBaseHr * 0.5f); // this replaces setStartAtZero(true)
+        leftAxis.setSpaceTop(0);
+        leftAxis.setSpaceBottom(0);
         leftAxis.setDrawLabels(false);
         leftAxis.setDrawAxisLine(false);
 
