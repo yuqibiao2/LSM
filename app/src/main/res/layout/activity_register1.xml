@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:drawableRight="@mipmap/ic_et_user"
                 android:hint="Phone"
-                android:inputType="textPhonetic"
+                android:inputType="number"
                 android:paddingBottom="15dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp"
