@@ -31,6 +31,8 @@ import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 
+import static com.test.lsm.global.SpConstant.LASTED_HRV_UPDATE_TIME;
+
 /**
  * 功能：心率详情
  *
@@ -95,9 +97,13 @@ public class HeartDetailFragment extends LsmBaseFragment {
     protected void initData() {
         super.initData();
         String hrvIndexBeanJsonStr = (String) MySPUtils.get(getContext(), SpConstant.HRV_INFO, "");
+        String lastedHrvUpdateTime = (String) MySPUtils.get(getContext(), SpConstant.LASTED_HRV_UPDATE_TIME, "");
         if (!TextUtils.isEmpty(hrvIndexBeanJsonStr)) {
             GetHRVInfoReturn.HRVIndexBean hrvIndexBean = mGson.fromJson(hrvIndexBeanJsonStr, GetHRVInfoReturn.HRVIndexBean.class);
             updateHrvValue(hrvIndexBean);
+        }
+        if (!TextUtils.isEmpty(lastedHrvUpdateTime)) {
+            tvUpdateTime.setText("更新时间：" + lastedHrvUpdateTime);
         }
     }
 
@@ -143,11 +149,13 @@ public class HeartDetailFragment extends LsmBaseFragment {
             public void onSuccess(GetHRVInfoReturn result) {
                 List<GetHRVInfoReturn.HRVIndexBean> hrvIndex = result.getHRVIndex();
                 if (hrvIndex != null && hrvIndex.size() > 0) {
-                    tvUpdateTime.setText("更新时间：" + MyTimeUtils.getCurrentDateTime());
+                    String currentDateTime = MyTimeUtils.getCurrentDateTime();
+                    tvUpdateTime.setText("更新时间：" + currentDateTime);
                     GetHRVInfoReturn.HRVIndexBean hrvIndexBean = hrvIndex.get(0);
                     //保存最新一次HRV值
                     String hrvIndexBeanJsonStr = new Gson().toJson(hrvIndexBean);
                     MySPUtils.put(getContext(), SpConstant.HRV_INFO, hrvIndexBeanJsonStr);
+                    MySPUtils.put(getContext(), LASTED_HRV_UPDATE_TIME, currentDateTime);
                     updateHrvValue(hrvIndexBean);
                 }
             }
@@ -206,52 +214,53 @@ public class HeartDetailFragment extends LsmBaseFragment {
             tvMental.setText("心灰意冷");
         }
 
+        //---压力
+        Integer stress = Integer.parseInt(hrvIndexBean.getStressTension());
+        if (stress <= -30) {//过渡低落
+            chgStatus1(ivPressure, 1);
+            tvPressure.setText("过度松散");
+        } else if (stress <= -10) {//低落
+            chgStatus1(ivPressure, 2);
+            tvPressure.setText("松散");
+        } else if (stress <= 10) {//良好
+            chgStatus1(ivPressure, 3);
+            tvPressure.setText("正常范围");
+        } else if (stress <= 30) {//兴奋
+            chgStatus1(ivPressure, 4);
+            tvPressure.setText("紧张");
+        } else if (stress <= 50) {//过渡兴奋
+            chgStatus1(ivPressure, 5);
+            tvPressure.setText("过度紧张");
+        } else {
+            chgStatus2(ivPressure, 5);
+            tvPressure.setText("过度紧张");
+        }
+
         //---情绪
         Integer mood = Integer.parseInt(hrvIndexBean.getMoodStability());
         if (mood <= -30) {//过渡松散
             tvEmotion.setText("超低落");
             chgStatus1(ivEmotion, 1);
+            ivPressureIcon.setImageResource(R.mipmap.ic_emotion1);
         } else if (mood <= -10) {//松散
             tvEmotion.setText("低落");
             chgStatus1(ivEmotion, 2);
+            ivPressureIcon.setImageResource(R.mipmap.ic_emotion2);
         } else if (mood <= 10) {//正常
             chgStatus1(ivEmotion, 3);
             tvEmotion.setText("正常范围");
+            ivPressureIcon.setImageResource(R.mipmap.ic_emotion3);
         } else if (mood <= 30) {//紧张
             tvEmotion.setText("亢奋");
             chgStatus1(ivEmotion, 4);
+            ivPressureIcon.setImageResource(R.mipmap.ic_emotion4);
         } else if (mood <= 50) {//过渡紧张
             tvEmotion.setText("超亢奋");
             chgStatus1(ivEmotion, 5);
+            ivPressureIcon.setImageResource(R.mipmap.ic_emotion5);
         } else {
             chgStatus1(ivEmotion, 5);
             tvEmotion.setText("超亢奋");
-        }
-        //---压力
-        Integer stress = Integer.parseInt(hrvIndexBean.getStressTension());
-        if (stress <= -30) {//过渡低落
-            chgStatus2(ivPressure, 1);
-            tvPressure.setText("过度松散");
-            ivPressureIcon.setImageResource(R.mipmap.ic_emotion1);
-        } else if (stress <= -10) {//低落
-            chgStatus2(ivPressure, 2);
-            tvPressure.setText("松散");
-            ivPressureIcon.setImageResource(R.mipmap.ic_emotion2);
-        } else if (stress <= 10) {//良好
-            chgStatus2(ivPressure, 3);
-            tvPressure.setText("正常范围");
-            ivPressureIcon.setImageResource(R.mipmap.ic_emotion3);
-        } else if (stress <= 30) {//兴奋
-            chgStatus2(ivPressure, 4);
-            tvPressure.setText("紧张");
-            ivPressureIcon.setImageResource(R.mipmap.ic_emotion4);
-        } else if (stress <= 50) {//过渡兴奋
-            chgStatus2(ivPressure, 5);
-            tvPressure.setText("过度紧张");
-            ivPressureIcon.setImageResource(R.mipmap.ic_emotion5);
-        } else {
-            chgStatus2(ivPressure, 5);
-            tvPressure.setText("过度紧张");
             ivPressureIcon.setImageResource(R.mipmap.ic_emotion5);
         }
     }

@@ -11,4 +11,6 @@ public class SpConstant {
 
     public static final String HRV_INFO = "hrvIndexBeanJsonStr";
 
+    public static final String LASTED_HRV_UPDATE_TIME ="lasted_hrv_update_time";
+
 }
