@@ -1,8 +1,8 @@
 package com.test.lsm.ui.activity;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -11,10 +11,13 @@ import android.widget.TextView;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.form.UserJoinCourseVo;
+import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.UserJoinCourseReturn;
+import com.test.lsm.global.SpConstant;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
 import com.test.lsm.net.IRequestCallback;
+import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 import com.yyyu.baselibrary.utils.StatusBarCompat;
 
@@ -65,7 +68,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
     @BindView(R.id.iv_suggestion_hard)
     ImageView ivSuggestionHard;
     private String imgUrl;
-    private Integer bodyFitness;
+    private Integer bodyFitness = 0;
     private Integer courseLevel = 1; // 0：简单 1：一般  2：困难
     private String courseName;
     private String courseType;
@@ -94,7 +97,11 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         courseType = intent.getStringExtra("courseType");
         coachId = intent.getIntExtra("coachId", -1);
         ccType = intent.getIntExtra("ccType", -1);
-        bodyFitness = intent.getIntExtra("bodyFitness", 0);
+        String hrvIndexBeanJsonStr = (String) MySPUtils.get(this, SpConstant.HRV_INFO, "");
+        if (!TextUtils.isEmpty(hrvIndexBeanJsonStr)) {
+            GetHRVInfoReturn.HRVIndexBean hrvIndexBean = mGson.fromJson(hrvIndexBeanJsonStr, GetHRVInfoReturn.HRVIndexBean.class);
+            bodyFitness =Integer.parseInt( hrvIndexBean.getBodyFitness());
+        }
         apiMethodManager = APIMethodManager.getInstance();
         MyApplication application = (MyApplication) getApplication();
         userId = application.getUser().getUSER_ID();
@@ -111,55 +118,58 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
 
         GlidUtils.load(this, ivIcon, imgUrl);
         tvCourseName.setText("# " + courseName);
-        if (bodyFitness >= 0) {
+
+        if (bodyFitness >= 30) {
             ivSuggestionHard.setVisibility(View.VISIBLE);
             courseLevel = 2;
             ivHard.setImageResource(R.mipmap.ic_hard_selected);
             ivHardSelected.setVisibility(View.VISIBLE);
 
-            chgStatus2(ivPhysical, 1);
+            chgStatus1(ivPhysical, 5);
+            tvPhysical.setText("过度暴动");
+        } else if (bodyFitness >= 10) {
+
+            ivSuggestionNormal.setVisibility(View.VISIBLE);
+            courseLevel = 1;
+            ivNormal.setImageResource(R.mipmap.ic_normal_selected);
+            ivNormalSelected.setVisibility(View.VISIBLE);
+
+            chgStatus1(ivPhysical, 4);
+            tvPhysical.setText("拼劲十足");
+        } else if (bodyFitness >= -10) {
+            ivSuggestionNormal.setVisibility(View.VISIBLE);
+            courseLevel = 1;
+            ivNormal.setImageResource(R.mipmap.ic_normal_selected);
+            ivNormalSelected.setVisibility(View.VISIBLE);
+
+            chgStatus1(ivPhysical, 3);
             tvPhysical.setText("正常范围");
-        } else if (bodyFitness >= 20) {
-            ivSuggestionHard.setVisibility(View.VISIBLE);
-            courseLevel = 2;
-            ivHard.setImageResource(R.mipmap.ic_hard_selected);
-            ivHardSelected.setVisibility(View.VISIBLE);
-
-            chgStatus2(ivPhysical, 2);
-            tvPhysical.setText("略疲劳");
-        } else if (bodyFitness >= 40) {
-            ivSuggestionNormal.setVisibility(View.VISIBLE);
-            courseLevel = 1;
-            ivNormal.setImageResource(R.mipmap.ic_normal_selected);
-            ivNormalSelected.setVisibility(View.VISIBLE);
-
-            chgStatus2(ivPhysical, 3);
-            tvPhysical.setText("疲劳");
-        } else if (bodyFitness >= 60) {
-            ivSuggestionNormal.setVisibility(View.VISIBLE);
-            courseLevel = 1;
-            ivNormal.setImageResource(R.mipmap.ic_normal_selected);
-            ivNormalSelected.setVisibility(View.VISIBLE);
-
-            chgStatus2(ivPhysical, 4);
-            tvPhysical.setText("太疲劳");
-        } else if (bodyFitness >= 80) {
+        } else if (bodyFitness >= -30) {
             ivSuggestionHard.setVisibility(View.VISIBLE);
             courseLevel = 0;
             ivEasy.setImageResource(R.mipmap.ic_easy_selected);
             ivEasySelected.setVisibility(View.VISIBLE);
 
-            chgStatus2(ivPhysical, 5);
-            tvPhysical.setText("过度疲劳");
+            chgStatus1(ivPhysical, 2);
+            tvPhysical.setText("疲劳");
+        } else if (bodyFitness >= -50) {
+            ivSuggestionHard.setVisibility(View.VISIBLE);
+            courseLevel = 0;
+            ivEasy.setImageResource(R.mipmap.ic_easy_selected);
+            ivEasySelected.setVisibility(View.VISIBLE);
+
+            chgStatus1(ivPhysical, 1);
+            tvPhysical.setText("体力透支");
         } else {
             ivSuggestionHard.setVisibility(View.VISIBLE);
             courseLevel = 0;
             ivEasy.setImageResource(R.mipmap.ic_easy_selected);
             ivEasySelected.setVisibility(View.VISIBLE);
 
-            chgStatus2(ivPhysical, 5);
-            tvPhysical.setText("过度疲劳");
+            chgStatus1(ivPhysical, 1);
+            tvPhysical.setText("体力透支");
         }
+
     }
 
     @Override
@@ -236,26 +246,25 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         intent.putExtra("bodyFitness", bodyFitness);
         context.startActivity(intent);
     }
-
-    public void chgStatus2(View view, int status) {
+    public void chgStatus1(View view, int status) {
         switch (status) {
             case 0:
                 view.setEnabled(false);
                 break;
             case 1:
-                view.setBackgroundResource(R.mipmap.ic_bar21);
+                view.setBackgroundResource(R.mipmap.ic_bar11);
                 break;
             case 2:
-                view.setBackgroundResource(R.mipmap.ic_bar22);
+                view.setBackgroundResource(R.mipmap.ic_bar12);
                 break;
             case 3:
-                view.setBackgroundResource(R.mipmap.ic_bar23);
+                view.setBackgroundResource(R.mipmap.ic_bar13);
                 break;
             case 4:
-                view.setBackgroundResource(R.mipmap.ic_bar24);
+                view.setBackgroundResource(R.mipmap.ic_bar14);
                 break;
             case 5:
-                view.setBackgroundResource(R.mipmap.ic_bar25);
+                view.setBackgroundResource(R.mipmap.ic_bar15);
                 break;
         }
     }

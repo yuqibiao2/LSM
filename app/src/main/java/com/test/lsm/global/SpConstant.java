@@ -1,0 +1,14 @@
+package com.test.lsm.global;
+
+/**
+ * 功能：
+ *
+ * @author yu
+ * @version 1.0
+ * @date 2018/8/1
+ */
+public class SpConstant {
+
+    public static final String HRV_INFO = "hrvIndexBeanJsonStr";
+
+}
