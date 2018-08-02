@@ -18,12 +18,40 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+
+    signingConfigs {
+        debug {
+            keyAlias 'lsm_ks'
+            keyPassword 'lsm20180802'
+            storeFile file('../lsm.jks')
+            storePassword 'lsm20180802'
+            v2SigningEnabled false
+        }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            keyAlias 'lsm_ks'
+            keyPassword 'lsm20180802'
+            storeFile file('../lsm.jks')
+            storePassword 'lsm20180802'
+            v2SigningEnabled false
         }
     }
+
+    buildTypes {
+    /*    release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }*/
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
     sourceSets {
         main() {
             jniLibs.srcDirs = ['libs']
