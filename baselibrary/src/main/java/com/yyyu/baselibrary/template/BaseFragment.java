@@ -79,6 +79,16 @@ public abstract class BaseFragment extends Fragment {
     protected void afterInit() {
     }
 
+    /**
+     * 得到资源文件中得String
+     *
+     * @param resId
+     * @return
+     */
+    protected String getStr(int resId){
+        return getResources().getString(resId);
+    }
+
 
     @Override
     public void onDestroy() {

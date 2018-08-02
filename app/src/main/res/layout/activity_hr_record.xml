@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="心率记录"
+            android:text="@string/hr_record"
             android:textColor="#4A4A4A"
             android:textSize="18sp" />
 
@@ -115,7 +115,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="最大"
+                android:text="@string/max_hr"
                 android:textColor="#FF4A4A4A"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -148,7 +148,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="平均"
+                android:text="@string/avg_hr"
                 android:textColor="#FF4A4A4A"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -181,7 +181,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="最小"
+                android:text="@string/min_hr"
                 android:textColor="#FF4A4A4A"
                 android:textSize="18sp"
                 android:textStyle="bold" />

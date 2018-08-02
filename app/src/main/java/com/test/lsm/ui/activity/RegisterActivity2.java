@@ -83,6 +83,7 @@ public class RegisterActivity2 extends LsmBaseActivity {
         pwd = intent.getStringExtra("pwd");
         getDate();
         userRegVo = new UserRegVo();
+        userRegVo.setUSER_SEX(0 + "");
     }
 
     @Override
@@ -139,20 +140,20 @@ public class RegisterActivity2 extends LsmBaseActivity {
         String weight = etUserWeight.getText().toString();
 
     if (TextUtils.isEmpty(birthday)) {
-            MyToast.showShort(this, "生日不能为空");
+            MyToast.showShort(this, getStr(R.string.birthday_not_empty));
             return;
         } else if (TextUtils.isEmpty(birthday)) {
-            MyToast.showShort(this, "身高不能为空");
+            MyToast.showShort(this, getStr(R.string.height_not_empty));
             return;
         } else if (TextUtils.isEmpty(birthday)) {
-            MyToast.showShort(this, "体重不能为空");
+            MyToast.showShort(this, getStr(R.string.weight_not_empty));
             return;
         }
 
       /*  userRegVo.setUSERNAME(username);*/
         userRegVo.setPASSWORD(pwd);
         userRegVo.setPHONE(tel);
-        userRegVo.setUSER_SEX(0 + "");//TODO
+        //userRegVo.setUSER_SEX(0 + "");
         userRegVo.setBIRTHDAY(birthday);
         userRegVo.setUSER_HEIGHT(height);
         userRegVo.setUSER_WEIGHT(weight);

@@ -159,13 +159,13 @@ public class UpdateUserActivity1 extends LsmBaseActivity {
         String weight = etUserWeight.getText().toString();
 
         if (TextUtils.isEmpty(birthday)) {
-            MyToast.showShort(this, "生日不能为空");
+            MyToast.showShort(this, getStr(R.string.birthday_not_empty));
             return;
         } else if (TextUtils.isEmpty(birthday)) {
-            MyToast.showShort(this, "身高不能为空");
+            MyToast.showShort(this, getStr(R.string.height_not_empty));
             return;
         } else if (TextUtils.isEmpty(birthday)) {
-            MyToast.showShort(this, "体重不能为空");
+            MyToast.showShort(this, getStr(R.string.weight_not_empty));
             return;
         }
 

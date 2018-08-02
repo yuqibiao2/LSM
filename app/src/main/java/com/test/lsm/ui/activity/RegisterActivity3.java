@@ -138,14 +138,14 @@ public class RegisterActivity3 extends LsmBaseActivity {
         String linkman = tvLinkman.getText().toString();
         String username = etUsername.getText().toString();
         if (TextUtils.isEmpty(username)) {
-            MyToast.showLong(this, "请填写用户名");
+            MyToast.showLong(this, getStr(R.string.fill_in_username));
             return;
         } else if (TextUtils.isEmpty(linkman)) {
-            MyToast.showLong(this, "请选择紧急联系人");
+            MyToast.showLong(this, getStr(R.string.choice_link_man));
             return;
         }
         userRegVo.setUSERNAME(username);
-        showLoadDialog("注册中....");
+        showLoadDialog(getStr(R.string.register_loading));
         apiMethodManager.register(userRegVo, new IRequestCallback<UserRegReturn>() {
 
             @Override
@@ -153,10 +153,10 @@ public class RegisterActivity3 extends LsmBaseActivity {
                 String code = result.getResult();
                 if ("01".equals(code)) {
                     EventBus.getDefault().post("register_finished");
-                    MyToast.showLong(RegisterActivity3.this, "注册成功！");
+                    MyToast.showLong(RegisterActivity3.this, getStr(R.string.register_success));
                     finish();
                 } else if ("06".equals(code)) {
-                    MyToast.showLong(RegisterActivity3.this, "该用户名已存在！");
+                    MyToast.showLong(RegisterActivity3.this, getStr(R.string.user_is_exists));
                 }
                 //MyLog.e(TAG, "code：" + code);
                 hiddenLoadDialog();

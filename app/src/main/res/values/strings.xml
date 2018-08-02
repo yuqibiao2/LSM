@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">BeatInfo</string>
 
-    <string name="connect">连接</string>
-    <string name="connected">已连接</string>
-    <string name="disconnect">断开连接</string>
-    <string name="enter">进入操作</string>
+    <string name="connect">連接</string>
+    <string name="connected">已連接</string>
+    <string name="disconnect">斷開連接</string>
+    <string name="enter">進入操作</string>
     <string name="title_activity_run_record">RunRecordActivity</string>
     <string name="title_activity_login2">Sign in</string>
 
@@ -20,5 +20,110 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!--net-->
+    <string name="net_error">網絡異常</string>
+
+    <!--BT Device-->
+    <string name="ble_connect_failed">連接失敗</string>
+    <string name="ble_not_connect">連接失敗</string>
+
+    <!--form-->
+    <string name="input_empty">"輸入存在空值！</string>
+    <string name="input_illegal">輸入數據格式不正確</string>
+
+    <!--MainActivity-->
+
+    <!--ExeIntensiveChoiceActivity-->
+    <string name="excessive_violence">過度暴動</string>
+    <string name="fight_hard">拼勁十足</string>
+    <string name="normal_range">正常範圍</string>
+    <string name="tried">疲勞</string>
+    <string name="exhausted">體力透支</string>
+    <string name="body_fitness">體力</string>
+    <string name="body_fitness_detection">身體狀態檢測:</string>
+    <string name="choice_exercise_level">選擇運動強度</string>
+
+    <!--HrRecordActivity-->
+    <string name="hr_record">心率記錄</string>
+    <string name="max_hr">最大</string>
+    <string name="min_hr">最小</string>
+    <string name="avg_hr">平均</string>
+
+    <!--IndoorExerciseActivity-->
+    <string name="start">開始</string>
+    <string name="pause">暫停</string>
+    <string name="are_you_ready">準備好了嗎？</string>
+    <string name="indoor_exercise">室內運動</string>
+
+    <!--LoginActivity-->
+    <string name="login_loading">登錄中....</string>
+    <string name="username_or_pwd_error">用戶名或密碼錯誤</string>
+    <string name="not_register">尚未註冊？</string>
+    <string name="to_register_right_now">馬上註冊!</string>
+
+    <!--RegisterActivity-->
+    <string name="birthday_not_empty">生日不能為空</string>
+    <string name="height_not_empty">身高不能為空</string>
+    <string name="weight_not_empty">體重不能為空</string>
+    <string name="birthday">生日</string>
+    <string name="height">身高</string>
+    <string name="weight">體重</string>
+    <string name="fill_in_username">請填寫用戶名</string>
+    <string name="choice_link_man">請選擇緊急聯繫人</string>
+    <string name="register_loading">"註冊中....</string>
+    <string name="register_success">註冊成功！</string>
+    <string name="user_is_exists">該用戶名已存在！</string>
+
+    <!--RunRecordActivity-->
+    <string name="operate">操作</string>
+    <string name="sure_to_delete">確認要刪除本條記錄嗎？</string>
+    <string name="sure">確認</string>
+    <string name="cancel">取消</string>
+    <string name="delete_failed">刪除失敗</string>
+
+    <string name="physical_level1">體力透支</string>
+    <string name="physical_level2">疲勞</string>
+    <string name="physical_level3">正常範圍</string>
+    <string name="physical_level4">拼勁十足</string>
+    <string name="physical_level5">過度暴動</string>
+
+    <string name="mind_level1">心灰意冷</string>
+    <string name="mind_level2">心累</string>
+    <string name="mind_level3">正常範圍</string>
+    <string name="mind_level4">瑣事燒腦</string>
+    <string name="mind_level5">心煩易怒</string>
+
+    <string name="mood_level1">超低落</string>
+    <string name="mood_level2">低落</string>
+    <string name="mood_level3">正常範圍</string>
+    <string name="mood_level4">亢奮</string>
+    <string name="mood_level5">超亢奮</string>
+
+    <string name="fatigue_level1">正常範圍</string>
+    <string name="fatigue_level2">略疲勞</string>
+    <string name="fatigue_level3">疲勞</string>
+    <string name="fatigue_level4">太疲勞</string>
+    <string name="fatigue_level5">過度疲勞</string>
+
+    <string name="fitness_level1">心灰意冷</string>
+    <string name="fitness_level2">心累</string>
+    <string name="fitness_level3">正常範圍</string>
+    <string name="fitness_level4">瑣事燒腦</string>
+    <string name="fitness_level5">心煩易怒</string>
+
+    <string name="stress_level_1">過度鬆散</string>
+    <string name="stress_level_2">鬆散</string>
+    <string name="stress_level_3">正常範圍</string>
+    <string name="stress_level_4">緊張</string>
+    <string name="stress_level_5">過度緊張</string>
+
+    <!--CalorieDetailFragment-->
+    <string name="calorie_tip1">上個小時你消耗了一份番茄的熱量</string>
+    <string name="calorie_tip2">上個小時你消耗了一份沙拉的熱量</string>
+    <string name="calorie_tip3">上個小時你消耗了一份三明治的熱量</string>
+    <string name="calorie_tip4">上個小時你消耗了一份薯條的熱量</string>
+    <string name="calorie_tip5">上個小時你消耗了一份漢堡的熱量</string>
+    <string name="calorie_tip6">上個小時你消耗了一份燒雞的熱量</string>
 
 </resources>

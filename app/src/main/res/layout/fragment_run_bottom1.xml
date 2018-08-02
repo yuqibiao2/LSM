@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="正常范围"
+                android:text="正常範圍"
                 android:textColor="#4A90E2"
                 android:textSize="14sp" />
 
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="体力"
+            android:text="體力"
             android:textSize="16sp" />
 
     </RelativeLayout>
@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="正常范围"
+                android:text="正常範圍"
                 android:textColor="#4A90E2"
                 android:textSize="14sp" />
 
@@ -88,7 +88,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="0dp"
-            android:text="脑力"
+            android:text="腦力"
             android:textSize="16sp" />
 
     </RelativeLayout>
@@ -116,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="正常范围"
+                android:text="正常範圍"
                 android:textColor="#4A90E2"
                 android:textSize="14sp" />
 
@@ -132,7 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="紧张"
+            android:text="緊張"
             android:textSize="16sp" />
 
     </RelativeLayout>
@@ -154,7 +154,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="身体疲脑"
+                android:text="身體疲勞"
                 android:textSize="16sp" />
 
             <TextView
@@ -163,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:text="正常范围"
+                android:text="正常範圍"
                 android:textColor="#4A90E2"
                 android:textSize="14sp" />
 
@@ -192,7 +192,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="身体疲脑"
+                android:text="身體疲勞"
                 android:textSize="16sp" />
 
             <TextView
@@ -201,7 +201,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:text="正常范围"
+                android:text="正常範圍"
                 android:textColor="#4A90E2"
                 android:textSize="14sp" />
 

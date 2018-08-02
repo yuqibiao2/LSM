@@ -106,6 +106,16 @@ public abstract class BaseDialog extends Dialog implements View.OnClickListener 
     }
 
     /**
+     * 得到资源文件中得String
+     *
+     * @param resId
+     * @return
+     */
+    protected String getStr(int resId){
+        return mContext.getResources().getString(resId);
+    }
+
+    /**
      * 得到Dialog界面上的控件
      *
      * @param viewId

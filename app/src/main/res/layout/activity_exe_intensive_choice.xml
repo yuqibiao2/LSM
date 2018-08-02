@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="身體狀態檢測:"
+                android:text="@string/body_fitness_detection"
                 android:textColor="#FF323643"
                 android:textSize="18sp" />
 
@@ -70,7 +70,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:text="正常范围"
+                        android:text="@string/normal_range"
                         android:textColor="#4A90E2"
                         android:textSize="14sp" />
 
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="体力"
+                    android:text="@string/body_fitness"
                     android:textSize="16sp" />
 
             </RelativeLayout>
@@ -94,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="選擇運動強度"
+                android:text="@string/choice_exercise_level"
                 android:textColor="#FF323643"
                 android:textSize="20sp" />
 

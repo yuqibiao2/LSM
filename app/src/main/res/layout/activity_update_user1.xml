@@ -122,7 +122,7 @@
                 android:id="@+id/et_user_weight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="体重"
+                android:hint="體重"
                 android:inputType="number"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"

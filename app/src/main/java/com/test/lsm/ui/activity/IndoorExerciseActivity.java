@@ -245,7 +245,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
             public void onClick(View view) {
 
                 if (!application.isBleConnected()) {
-                    MyToast.showLong(IndoorExerciseActivity.this, "蓝牙设备未连接");
+                    MyToast.showLong(IndoorExerciseActivity.this, getStr(R.string.ble_not_connect));
                     return;
                 }
                 if (runStatus != PAUSE) {
@@ -261,7 +261,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                     ivRight.setVisibility(View.VISIBLE);
                     ivRight.setImageResource(R.mipmap.ic_run_pause);
                     runStatus = START;
-                    MyToast.showLong(IndoorExerciseActivity.this, "开始");
+                    MyToast.showLong(IndoorExerciseActivity.this, getStr(R.string.start));
                 }
 
             }
@@ -278,7 +278,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                     ivCenter.setImageResource(R.mipmap.ic_indoor_run_start);
                     ivRight.setVisibility(View.VISIBLE);
                     ivRight.setImageResource(R.mipmap.ic_run_pause_disable);
-                    MyToast.showLong(IndoorExerciseActivity.this, "暂停");
+                    MyToast.showLong(IndoorExerciseActivity.this, getStr(R.string.pause));
                     runStatus = PAUSE;
                 }
             }

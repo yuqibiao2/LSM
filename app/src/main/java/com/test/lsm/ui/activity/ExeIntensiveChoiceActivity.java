@@ -126,7 +126,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
             ivHardSelected.setVisibility(View.VISIBLE);
 
             chgStatus1(ivPhysical, 5);
-            tvPhysical.setText("过度暴动");
+            tvPhysical.setText(getStr(R.string.excessive_violence));
         } else if (bodyFitness >= 10) {
 
             ivSuggestionNormal.setVisibility(View.VISIBLE);
@@ -135,7 +135,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
             ivNormalSelected.setVisibility(View.VISIBLE);
 
             chgStatus1(ivPhysical, 4);
-            tvPhysical.setText("拼劲十足");
+            tvPhysical.setText(getStr(R.string.fight_hard));
         } else if (bodyFitness >= -10) {
             ivSuggestionNormal.setVisibility(View.VISIBLE);
             courseLevel = 1;
@@ -143,7 +143,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
             ivNormalSelected.setVisibility(View.VISIBLE);
 
             chgStatus1(ivPhysical, 3);
-            tvPhysical.setText("正常范围");
+            tvPhysical.setText(getStr(R.string.normal_range));
         } else if (bodyFitness >= -30) {
             ivSuggestionHard.setVisibility(View.VISIBLE);
             courseLevel = 0;
@@ -151,7 +151,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
             ivEasySelected.setVisibility(View.VISIBLE);
 
             chgStatus1(ivPhysical, 2);
-            tvPhysical.setText("疲劳");
+            tvPhysical.setText(getStr(R.string.tried));
         } else if (bodyFitness >= -50) {
             ivSuggestionHard.setVisibility(View.VISIBLE);
             courseLevel = 0;
@@ -159,7 +159,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
             ivEasySelected.setVisibility(View.VISIBLE);
 
             chgStatus1(ivPhysical, 1);
-            tvPhysical.setText("体力透支");
+            tvPhysical.setText(getStr(R.string.exhausted));
         } else {
             ivSuggestionHard.setVisibility(View.VISIBLE);
             courseLevel = 0;
@@ -167,7 +167,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
             ivEasySelected.setVisibility(View.VISIBLE);
 
             chgStatus1(ivPhysical, 1);
-            tvPhysical.setText("体力透支");
+            tvPhysical.setText(getStr(R.string.exhausted));
         }
 
     }
@@ -225,7 +225,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
             @Override
             public void onFailure(Throwable throwable) {
                 dismissLoadDialog();
-                MyToast.showLong(getApplicationContext(), "网络异常");
+                MyToast.showLong(getApplicationContext(), getStr(R.string.net_error));
             }
         });
     }

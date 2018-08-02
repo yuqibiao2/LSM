@@ -92,8 +92,8 @@ public class RunRecordActivity extends LsmBaseActivity {
             @Override
             public boolean onItemLongClick(final BaseQuickAdapter adapter, View view, final int position) {
                 new AlertDialog.Builder(RunRecordActivity.this)
-                        .setTitle("操作")
-                        .setMessage("确认要删除本条记录吗？")
+                        .setTitle(getStr(R.string.operate))
+                        .setMessage(getStr(R.string.sure_to_delete))
                         .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(final DialogInterface dialogInterface, int i) {
@@ -118,12 +118,12 @@ public class RunRecordActivity extends LsmBaseActivity {
 
                                     @Override
                                     public void onFailure(Throwable throwable) {
-                                        MyToast.showLong(RunRecordActivity.this , "删除失败");
+                                        MyToast.showLong(RunRecordActivity.this , getStr(R.string.delete_failed));
                                     }
                                 });
                             }
                         })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getStr(R.string.cancel), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();

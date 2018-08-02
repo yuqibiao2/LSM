@@ -159,7 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="正常范围"
+                    android:text="正常範圍"
                     android:textColor="#4A90E2"
                     android:textSize="14sp" />
 
@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="体力"
+                android:text="體力"
                 android:textSize="16sp" />
 
         </RelativeLayout>
@@ -202,7 +202,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="正常范围"
+                    android:text="正常範圍"
                     android:textColor="#4A90E2"
                     android:textSize="14sp" />
 
@@ -219,7 +219,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="0dp"
-                android:text="脑力"
+                android:text="腦力"
                 android:textSize="16sp" />
 
         </RelativeLayout>
@@ -247,7 +247,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="正常范围"
+                    android:text="正常範圍"
                     android:textColor="#4A90E2"
                     android:textSize="14sp" />
 
@@ -263,7 +263,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="压力"
+                android:text="壓力"
                 android:textSize="16sp" />
 
         </RelativeLayout>
@@ -292,7 +292,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="正常范围"
+                    android:text="正常範圍"
                     android:textColor="#4A90E2"
                     android:textSize="14sp" />
 
@@ -308,7 +308,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="情绪"
+                android:text="情緒"
                 android:textSize="16sp" />
 
         </RelativeLayout>

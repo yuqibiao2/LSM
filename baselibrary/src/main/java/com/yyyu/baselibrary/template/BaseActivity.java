@@ -87,6 +87,17 @@ public  abstract  class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * 得到资源文件中得String
+     *
+     * @param resId
+     * @return
+     */
+    protected String getStr(int resId){
+
+        return getResources().getString(resId);
+    }
+
+    /**
      * 显示加载框
      *
      * @param tip
@@ -122,5 +133,6 @@ public  abstract  class BaseActivity extends AppCompatActivity {
             getWindow().setSharedElementEnterTransition(new ChangeBounds());
         }
     }
+
 
 }

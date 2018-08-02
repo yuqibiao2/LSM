@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="室内运动"
+            android:text="@string/indoor_exercise"
             android:textColor="#4A4A4A"
             android:textSize="18sp" />
 
@@ -153,7 +153,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="16dp"
-                    android:text="准备好了嗎？"
+                    android:text="@string/are_you_ready"
                     android:textColor="#FFFFFFFF"
                     android:textSize="24sp" />
 

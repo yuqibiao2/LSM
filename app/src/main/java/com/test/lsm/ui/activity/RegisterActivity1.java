@@ -60,11 +60,11 @@ public class RegisterActivity1 extends LsmBaseActivity {
         String tel = etUserTel.getText().toString();
         String pwd = etUserPwd.getText().toString();
         if(TextUtils.isEmpty(tel) || TextUtils.isEmpty(pwd)){
-            MyToast.showShort(this , "输入存在空值！");
+            MyToast.showShort(this , getStr(R.string.input_empty));
             return;
         }
         if (tilTel.isErrorEnabled() || tilPwd.isErrorEnabled()){
-            MyToast.showShort(this , "输入数据格式不正确");
+            MyToast.showShort(this , getStr(R.string.input_illegal));
             return;
         }
 

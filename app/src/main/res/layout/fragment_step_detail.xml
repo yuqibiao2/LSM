@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:gravity="right"
         android:paddingRight="10dp"
-        android:text="今天你的步数能量"
+        android:text="今天你的步數能量"
         android:textSize="12sp" />
 
     <HorizontalScrollView
@@ -99,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:text="每小时的步数"
+        android:text="每小時的步數"
         android:textSize="12sp" />
 
 </LinearLayout>

@@ -142,22 +142,22 @@ public class CalorieDetailFragment extends LsmBaseFragment {
         //float calorieNum = calorieChgEvent.getCalorieNum();
         if (calorieNum < 100) {
             ivCalorieStatus.setImageResource(R.mipmap.ic_caloria1);
-            tvCalorieTip.setText("上个小时你消耗了一份番茄的热量");
+            tvCalorieTip.setText(getStr(R.string.calorie_tip1));
         } else if (calorieNum < 200) {
             ivCalorieStatus.setImageResource(R.mipmap.ic_caloria2);
-            tvCalorieTip.setText("上个小时你消耗了一份沙拉的热量");
+            tvCalorieTip.setText(getStr(R.string.calorie_tip2));
         } else if (calorieNum < 300) {
             ivCalorieStatus.setImageResource(R.mipmap.ic_caloria3);
-            tvCalorieTip.setText("上个小时你消耗了一份三明治的热量");
+            tvCalorieTip.setText(getStr(R.string.calorie_tip3));
         } else if (calorieNum < 400) {
             ivCalorieStatus.setImageResource(R.mipmap.ic_caloria4);
-            tvCalorieTip.setText("上个小时你消耗了一份薯条的热量");
+            tvCalorieTip.setText(getStr(R.string.calorie_tip4));
         } else if (calorieNum < 500) {
             ivCalorieStatus.setImageResource(R.mipmap.ic_caloria5);
-            tvCalorieTip.setText("上个小时你消耗了一份汉堡的热量");
+            tvCalorieTip.setText(getStr(R.string.calorie_tip5));
         } else {
             ivCalorieStatus.setImageResource(R.mipmap.ic_caloria6);
-            tvCalorieTip.setText("上个小时你消耗了一份烧鸡的热量");
+            tvCalorieTip.setText(getStr(R.string.calorie_tip6));
         }
         setData();
 

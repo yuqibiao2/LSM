@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="身体讯息"
+            android:text="身體訊號"
             android:textColor="#4A4A4A"
             android:textSize="18sp" />
 
@@ -114,7 +114,7 @@
                             android:layout_alignRight="@+id/ll_con"
                             android:layout_below="@+id/ll_con"
                             android:layout_marginTop="5dp"
-                            android:text="目前状态"
+                            android:text="目前狀態"
                             android:textColor="@color/colorAccent"
                             android:textSize="10sp" />
                     </RelativeLayout>
@@ -197,7 +197,7 @@
                             android:layout_alignRight="@+id/ll_con3"
                             android:layout_below="@+id/ll_con3"
                             android:layout_marginTop="3dp"
-                            android:text="目前状态"
+                            android:text="目前狀態"
                             android:textColor="@color/colorAccent"
                             android:textSize="10sp" />
                     </RelativeLayout>
@@ -282,7 +282,7 @@
                             android:layout_alignRight="@+id/ll_con2"
                             android:layout_below="@+id/ll_con2"
                             android:layout_marginTop="3dp"
-                            android:text="今日累计"
+                            android:text="今日纍計"
                             android:textColor="@color/colorAccent"
                             android:textSize="10sp" />
                     </RelativeLayout>
@@ -353,7 +353,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="5dp"
-                                    android:text="生理讯号"
+                                    android:text="生理訊號"
                                     android:textColor="#000"
                                     android:textSize="18sp" />
                             </LinearLayout>
@@ -428,7 +428,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="5dp"
-                                    android:text="心率记录"
+                                    android:text="心率記錄"
                                     android:textColor="#000"
                                     android:textSize="18sp" />
                             </LinearLayout>

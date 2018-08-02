@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:gravity="right"
         android:paddingRight="10dp"
-        android:text="上个小时你消耗了一份汉堡的能量"
+        android:text="@string/calorie_tip5"
         android:textSize="12sp" />
 
     <HorizontalScrollView
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:text="每小消耗的热量"
+        android:text="每小時消耗的熱量"
         android:textSize="12sp" />
 
 </LinearLayout>

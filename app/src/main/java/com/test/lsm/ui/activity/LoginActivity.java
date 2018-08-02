@@ -70,7 +70,7 @@ public class LoginActivity extends LsmBaseActivity {
         String tel = etUserTel.getText().toString();
         String pwd = etUserPwd.getText().toString();
 
-        showLoadDialog("登录中....");
+        showLoadDialog(getStr(R.string.login_loading));
 
         apiMethodManager.login(tel, pwd, new IRequestCallback<UserLoginReturn>() {
             @Override
@@ -88,7 +88,7 @@ public class LoginActivity extends LsmBaseActivity {
                    MainActivity.startAction(LoginActivity.this);
                    finish();
                }else /*if("07".equals(code))*/{//用户名密码错误
-                   MyToast.showShort(LoginActivity.this, "用户名或密码错误");
+                   MyToast.showShort(LoginActivity.this, getStr(R.string.username_or_pwd_error));
                }
                 hiddenLoadDialog();
             }

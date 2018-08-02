@@ -171,6 +171,7 @@ public class RunBottomFragment2 extends LsmBaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isStartTimer = false;
         EventBus.getDefault().unregister(this);
     }
 

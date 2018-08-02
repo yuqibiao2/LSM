@@ -145,14 +145,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="17dp"
-            android:text="尚未注册？"
+            android:text="@string/not_register"
             android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tv_to_register"
             android:layout_width="wrap_content"
             android:layout_height="17dp"
-            android:text="馬上註冊!"
+            android:text="@string/to_register_right_now"
             android:onClick="toRegister"
             android:textColor="#FF000000"
             android:textSize="12sp" />
