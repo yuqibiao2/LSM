@@ -384,6 +384,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-60dp"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -453,11 +454,11 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone">
 
-                    <fragment
+                <!--    <fragment
                         android:id="@+id/frag_hr_chart"
                         android:name="com.test.lsm.ui.fragment.information_detail.HRChartDetailFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content" />-->
                 </FrameLayout>
             </LinearLayout>
 

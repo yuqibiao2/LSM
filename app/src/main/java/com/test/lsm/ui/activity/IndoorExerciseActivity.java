@@ -1,11 +1,14 @@
 package com.test.lsm.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
@@ -207,39 +210,58 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (runStatus == START || runStatus == PAUSE) {
-                    ivLeft.setVisibility(View.VISIBLE);
-                    ivLeft.setImageResource(R.mipmap.ic_run_stop_disable);
-                    ivCenter.setVisibility(View.VISIBLE);
-                    ivCenter.setImageResource(R.mipmap.ic_indoor_run_start);
-                    ivRight.setVisibility(View.VISIBLE);
-                    ivRight.setImageResource(R.mipmap.ic_run_pause_disable);
-                    runStatus = STOP;
-                    MyToast.showLong(IndoorExerciseActivity.this, "停止");
 
-                    stopTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", new Date(System.currentTimeMillis()));
+                    new AlertDialog.Builder(IndoorExerciseActivity.this)
+                            .setTitle("操作")
+                            .setMessage("確認要結束？")
+                            .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
 
-                    UserCourseTimeVo userCourseTimeVo = new UserCourseTimeVo();
-                    userCourseTimeVo.setUC_ID(ucId);
-                    userCourseTimeVo.setSTART_TIME(startTime);
-                    userCourseTimeVo.setEND_TIME(stopTime);
+                                    ivLeft.setVisibility(View.VISIBLE);
+                                    ivLeft.setImageResource(R.mipmap.ic_run_stop_disable);
+                                    ivCenter.setVisibility(View.VISIBLE);
+                                    ivCenter.setImageResource(R.mipmap.ic_indoor_run_start);
+                                    ivRight.setVisibility(View.VISIBLE);
+                                    ivRight.setImageResource(R.mipmap.ic_run_pause_disable);
+                                    runStatus = STOP;
+                                    MyToast.showLong(IndoorExerciseActivity.this, "停止");
 
-                    if (ucId==-1){//线下课程
+                                    stopTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", new Date(System.currentTimeMillis()));
 
-                    }else{
-                        APIMethodManager.getInstance().userCourseTime(userCourseTimeVo, new IRequestCallback<UserCourseTimeReturn>() {
-                            @Override
-                            public void onSuccess(UserCourseTimeReturn result) {
+                                    UserCourseTimeVo userCourseTimeVo = new UserCourseTimeVo();
+                                    userCourseTimeVo.setUC_ID(ucId);
+                                    userCourseTimeVo.setSTART_TIME(startTime);
+                                    userCourseTimeVo.setEND_TIME(stopTime);
 
-                            }
+                                    if (ucId == -1) {//线下课程
 
-                            @Override
-                            public void onFailure(Throwable throwable) {
+                                    } else {
+                                        APIMethodManager.getInstance().userCourseTime(userCourseTimeVo, new IRequestCallback<UserCourseTimeReturn>() {
+                                            @Override
+                                            public void onSuccess(UserCourseTimeReturn result) {
 
-                            }
-                        });
-                    }
+                                            }
 
+                                            @Override
+                                            public void onFailure(Throwable throwable) {
+
+                                            }
+                                        });
+                                    }
+
+                                    dialogInterface.dismiss();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            })
+                            .show();
                 }
             }
         });
@@ -485,7 +507,27 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     }
 
     public void back(View view) {
-        finish();
+        toHandleBack();
+    }
+
+    private void toHandleBack() {
+        new AlertDialog.Builder(this)
+                .setTitle("操作")
+                .setMessage("確認要退出嗎？")
+                .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .show();
     }
 
     public void toSetting(View view) {
@@ -501,7 +543,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         lineDataSet.notifyDataSetChanged();
         data.notifyDataChanged();
         ccHt.setVisibleXRangeMaximum(30);
-        ccHt.moveViewTo(lineDataSet.getEntryCount() - (30+1), 50f, YAxis.AxisDependency.LEFT);
+        ccHt.moveViewTo(lineDataSet.getEntryCount() - (30 + 1), 50f, YAxis.AxisDependency.LEFT);
     }
 
     private void setChartData(CombinedChart mLineChart, List<BarEntry> mValues) {
@@ -622,4 +664,10 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         context.startActivity(intent);
     }
 
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        toHandleBack();
+    }
 }
