@@ -3,13 +3,16 @@ package com.yyyu.baselibrary.template;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.transition.ChangeBounds;
 import android.transition.Fade;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.trello.navi.component.support.NaviAppCompatActivity;
+import com.trello.rxlifecycle.LifecycleProvider;
+import com.trello.rxlifecycle.android.ActivityEvent;
+import com.trello.rxlifecycle.navi.NaviLifecycle;
 import com.yyyu.baselibrary.utils.ActivityHolder;
 import com.yyyu.baselibrary.utils.ResourceUtils;
 
@@ -20,9 +23,12 @@ import com.yyyu.baselibrary.utils.ResourceUtils;
  * @version 1.0
  * @date 2017/3/13
  */
-public  abstract  class BaseActivity extends AppCompatActivity {
+public  abstract  class BaseActivity extends NaviAppCompatActivity {
 
     private static final String TAG = "BaseActivity";
+
+    protected final LifecycleProvider<ActivityEvent> provider
+            = NaviLifecycle.createActivityLifecycleProvider(this);
 
     protected Gson mGson;
     private KProgressHUD loadingDialog;

@@ -50,6 +50,9 @@ dependencies {
     /*------------------RxJava依赖*/
     compile 'io.reactivex:rxjava:1.0.14'
     compile 'io.reactivex:rxandroid:1.0.1'
+
+    compile 'com.trello:rxlifecycle-navi:1.0'
+
     /*-----------------okhttp3*/
     compile 'com.squareup.okhttp3:okhttp:3.3.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'

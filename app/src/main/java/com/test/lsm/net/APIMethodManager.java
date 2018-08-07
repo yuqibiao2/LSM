@@ -31,6 +31,8 @@ import com.test.lsm.bean.json.UserJoinCourseReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.json.UserRegReturn;
 import com.test.lsm.net.api.LsmApi;
+import com.trello.rxlifecycle.LifecycleProvider;
+import com.trello.rxlifecycle.android.ActivityEvent;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 
 import java.util.HashMap;
@@ -425,10 +427,11 @@ public class APIMethodManager {
      * @param callback
      * @return
      */
-    public Subscription getMsgList(Integer userId, Integer page, Integer pageSize, final IRequestCallback<GetMsgListReturn> callback) {
+    public Subscription getMsgList(LifecycleProvider<ActivityEvent> provider , Integer userId, Integer page, Integer pageSize, final IRequestCallback<GetMsgListReturn> callback) {
         Subscription subscribe = lsmApi.getMsgList(userId, page, pageSize)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .compose(provider.<GetMsgListReturn>bindToLifecycle())
                 .subscribe(new Subscriber<GetMsgListReturn>() {
                     @Override
                     public void onCompleted() {

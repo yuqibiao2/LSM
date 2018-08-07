@@ -148,7 +148,7 @@ public class TodayFragment extends LsmBaseFragment {
             return;
         }
         int userId = application.getUser().getUSER_ID();
-        apiMethodManager.getMsgList(userId, page, pageSize, new IRequestCallback<GetMsgListReturn>() {
+        apiMethodManager.getMsgList(provider , userId, page, pageSize, new IRequestCallback<GetMsgListReturn>() {
             @Override
             public void onSuccess(GetMsgListReturn result) {
                 List<GetMsgListReturn.PdBean> pd = result.getPd();

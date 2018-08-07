@@ -2,13 +2,16 @@ package com.yyyu.baselibrary.template;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.trello.navi.component.support.NaviFragment;
+import com.trello.rxlifecycle.LifecycleProvider;
+import com.trello.rxlifecycle.android.ActivityEvent;
+import com.trello.rxlifecycle.navi.NaviLifecycle;
 import com.yyyu.baselibrary.utils.ResourceUtils;
 
 
@@ -19,7 +22,10 @@ import com.yyyu.baselibrary.utils.ResourceUtils;
  * @version 1.0
  * @date 2017/03/15
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends NaviFragment {
+
+    protected final LifecycleProvider<ActivityEvent> provider
+            = NaviLifecycle.createActivityLifecycleProvider(this);
 
     protected Gson mGson;
     protected View rootView;
@@ -29,6 +35,7 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.from(getActivity()).inflate(getLayoutId(), container, false);
         mGson = new Gson();
         resourceUtils = ResourceUtils.getInstance(getContext());
