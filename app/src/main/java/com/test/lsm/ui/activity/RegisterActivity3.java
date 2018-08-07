@@ -25,6 +25,7 @@ import com.test.lsm.net.IRequestCallback;
 import com.yyyu.baselibrary.ui.pop.PicChoicePop;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MediaUtils;
+import com.yyyu.baselibrary.utils.MyFileOprateUtils;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyToast;
 
@@ -191,6 +192,8 @@ public class RegisterActivity3 extends LsmBaseActivity {
                 if (RESULT_OK != resultCode) break;
                 Bitmap bitmap = BitmapFactory.decodeFile(MediaUtils.filePath + MediaUtils.cropName);
                 ivUserIcon.setImageBitmap(bitmap);
+                String cropPicPath = MediaUtils.filePath + MediaUtils.cropName;
+                userRegVo.setUSER_IMAGE(MyFileOprateUtils.imgToBase64(cropPicPath , this));
                 break;
             }
             case PICK_CONTACT_REQUEST: {

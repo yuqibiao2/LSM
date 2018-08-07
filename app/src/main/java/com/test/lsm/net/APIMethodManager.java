@@ -705,7 +705,10 @@ public class APIMethodManager {
         paras.put("BIRTHDAY", userRegVo.getBIRTHDAY());
         paras.put("URGENT_USER", userRegVo.getURGENT_USER());
         paras.put("URGENT_PHONE", userRegVo.getURGENT_PHONE());
-
+        String userImage = userRegVo.getUSER_IMAGE();
+        if (!TextUtils.isEmpty(userImage)) {
+            paras.put("USER_IMAGE", userImage);
+        }
         Subscription subscribe = lsmApi.register(paras)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

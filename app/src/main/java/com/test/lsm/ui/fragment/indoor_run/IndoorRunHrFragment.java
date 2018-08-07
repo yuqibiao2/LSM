@@ -85,7 +85,8 @@ public class IndoorRunHrFragment extends LsmBaseFragment {
         CombinedData data = ccHt.getData();
         LineDataSet lineDataSet = (LineDataSet) data.getDataSetByIndex(0);
         int i = lineDataSet.getEntryCount() - 1;
-        lineDataSet.addEntry(new Entry(i*0.2f, hrValue));
+        final float x = i / 30f;
+        lineDataSet.addEntry(new Entry(x, hrValue));
         lineDataSet.notifyDataSetChanged();
         data.notifyDataChanged();
         ccHt.setVisibleXRangeMaximum(7);

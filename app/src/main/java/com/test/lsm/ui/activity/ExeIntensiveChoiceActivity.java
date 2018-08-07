@@ -205,29 +205,37 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
     }
 
     public void toNext(View view) {
-        showLoadDialog();
-        UserJoinCourseVo userJoinCourseVo = new UserJoinCourseVo();
-        userJoinCourseVo.setUSER_ID(userId);
-        userJoinCourseVo.setCOURSE_LEVEL(courseLevel);
-        userJoinCourseVo.setCOACH_ID(coachId);
-        userJoinCourseVo.setCC_TYPE(ccType);
-        userJoinCourseVo.setCOURSE_TYPE(courseType);
-        apiMethodManager.userJoinCourse(userJoinCourseVo, new IRequestCallback<UserJoinCourseReturn>() {
-            @Override
-            public void onSuccess(UserJoinCourseReturn result) {
-                dismissLoadDialog();
-                if ("01".equals(result.getResult())){
-                    int ucId = result.getPd().getUC_ID();
-                    IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName , ucId);
-                }
-            }
 
-            @Override
-            public void onFailure(Throwable throwable) {
-                dismissLoadDialog();
-                MyToast.showLong(getApplicationContext(), getStr(R.string.net_error));
-            }
-        });
+        if (ccType==0){//现场课程
+            showLoadDialog();
+            UserJoinCourseVo userJoinCourseVo = new UserJoinCourseVo();
+            userJoinCourseVo.setUSER_ID(userId);
+            userJoinCourseVo.setCOURSE_LEVEL(courseLevel);
+            userJoinCourseVo.setCOACH_ID(coachId);
+            userJoinCourseVo.setCC_TYPE(ccType);
+            userJoinCourseVo.setCOURSE_TYPE(courseType);
+            apiMethodManager.userJoinCourse(userJoinCourseVo, new IRequestCallback<UserJoinCourseReturn>() {
+                @Override
+                public void onSuccess(UserJoinCourseReturn result) {
+                    dismissLoadDialog();
+                    if ("01".equals(result.getResult())){
+                        int ucId = result.getPd().getUC_ID();
+                        IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName , ucId);
+                    }else{
+                        MyToast.showLong(getApplicationContext(), getStr(R.string.undefine_error));
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable throwable) {
+                    dismissLoadDialog();
+                    MyToast.showLong(getApplicationContext(), getStr(R.string.net_error));
+                }
+            });
+        }else{//线下课程 直接跳转
+            IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName , -1);
+        }
+
     }
 
     public static void startAction(Context context,

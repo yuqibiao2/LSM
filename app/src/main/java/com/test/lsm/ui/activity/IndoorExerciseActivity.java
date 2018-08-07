@@ -223,17 +223,22 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                     userCourseTimeVo.setUC_ID(ucId);
                     userCourseTimeVo.setSTART_TIME(startTime);
                     userCourseTimeVo.setEND_TIME(stopTime);
-                    APIMethodManager.getInstance().userCourseTime(userCourseTimeVo, new IRequestCallback<UserCourseTimeReturn>() {
-                        @Override
-                        public void onSuccess(UserCourseTimeReturn result) {
 
-                        }
+                    if (ucId==-1){//线下课程
 
-                        @Override
-                        public void onFailure(Throwable throwable) {
+                    }else{
+                        APIMethodManager.getInstance().userCourseTime(userCourseTimeVo, new IRequestCallback<UserCourseTimeReturn>() {
+                            @Override
+                            public void onSuccess(UserCourseTimeReturn result) {
 
-                        }
-                    });
+                            }
+
+                            @Override
+                            public void onFailure(Throwable throwable) {
+
+                            }
+                        });
+                    }
 
                 }
             }
@@ -288,7 +293,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         rvUserIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-      /*          int nextInt = new Random().nextInt(80) + 100;
+             /*   int nextInt = new Random().nextInt(80) + 100;
                 addLineEntry(nextInt);
                 indoorRunHrFragment.addLineEntry(nextInt);
                 indoorHrStatsFragment.initLineChartData(nextInt);*/
@@ -359,7 +364,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                                 break;
                         }
 
-                        for (int i = 0; i < 30; i++) {//5分钟一个数据 转换为10s间隔一个数据
+                        for (int i = 0; i < 150; i++) {//5分钟一个数据 转换为2s间隔一个数据
                             int y1 = (int) (maxBaseHr * proportion);
                             BarEntry entry = new BarEntry(index++, new float[]{y1, maxBaseHr * 0.1f});
                             realTimeValues.add(entry);
@@ -402,7 +407,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     }
 
     private void toRecordHr() {
-        //10s中记录一次平均心跳
+        //1s中记录一次平均心跳
         new Thread(new Runnable() {
             private int qualifiedNum = 0;
 
@@ -410,7 +415,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
             public void run() {
                 while (!isActDestroy) {
                     try {
-                        Thread.sleep(10 * 1000);
+                        Thread.sleep(2 * 1000);
                         if (isActDestroy || runStatus != START) {
                             continue;
                         }
@@ -449,13 +454,13 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
             }
         }).start();
 
-        //5min记录一次平均心跳
+        //10s记录一次平均心跳
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!isActDestroy) {
                     try {
-                        Thread.sleep(1 * 60 * 1000);
+                        Thread.sleep(10 * 1000);
                         if (isActDestroy || runStatus != START) {
                             continue;
                         }
@@ -491,11 +496,12 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         CombinedData data = ccHt.getData();
         LineDataSet lineDataSet = (LineDataSet) data.getDataSetByIndex(0);
         int i = lineDataSet.getEntryCount() - 1;
-        lineDataSet.addEntry(new Entry(i, hrValue));
+        float x = i;
+        lineDataSet.addEntry(new Entry(x, hrValue));
         lineDataSet.notifyDataSetChanged();
         data.notifyDataChanged();
         ccHt.setVisibleXRangeMaximum(30);
-        ccHt.moveViewTo(lineDataSet.getEntryCount() - 31, 50f, YAxis.AxisDependency.LEFT);
+        ccHt.moveViewTo(lineDataSet.getEntryCount() - (30+1), 50f, YAxis.AxisDependency.LEFT);
     }
 
     private void setChartData(CombinedChart mLineChart, List<BarEntry> mValues) {
@@ -595,7 +601,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                int result = new Float(10 * value).intValue();
+                int result = new Float(2 * value).intValue();
                 return "" + result;
             }
         });

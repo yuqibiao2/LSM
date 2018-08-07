@@ -23,6 +23,7 @@
 
     <!--net-->
     <string name="net_error">網絡異常</string>
+    <string name="undefine_error">未知錯誤</string>
 
     <!--BT Device-->
     <string name="ble_connect_failed">連接失敗</string>
