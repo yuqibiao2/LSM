@@ -1,6 +1,5 @@
 package com.test.lsm.ui.fragment;
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
@@ -39,24 +38,17 @@ import com.test.lsm.bean.event.HeartChgEvent;
 import com.test.lsm.bean.event.OnUserInfoChg;
 import com.test.lsm.bean.event.RunStartEvent;
 import com.test.lsm.bean.event.RunStopEvent;
-import com.test.lsm.bean.form.RunRecord;
-import com.test.lsm.bean.json.SaveRunRecordReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
-import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.RunRecordActivity;
 import com.test.lsm.ui.activity.SettingActivity;
-import com.test.lsm.ui.activity.UpdateUserActivity1;
 import com.test.lsm.ui.fragment.run_bottom.RunBottomFragment1;
 import com.test.lsm.ui.fragment.run_bottom.RunBottomFragment2;
-import com.test.lsm.utils.TimeUtils;
 import com.test.lsm.utils.map.MyOrientationListener;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyLog;
-import com.yyyu.baselibrary.utils.MyTimeUtils;
-import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,6 +126,7 @@ public class RunFragment extends LsmBaseFragment {
     private List<Fragment> frgList;
     private BDLocation crtLocation;
     private MyApplication application;
+    private InitLocationListener initLocationListener;
 
     @Override
     protected void beforeInit() {
@@ -322,8 +315,9 @@ public class RunFragment extends LsmBaseFragment {
         //定位客户端的设置
         mLocationClient = new LocationClient(getContext());
         mLocationListener = new MyLocationListener();
+        initLocationListener = new InitLocationListener();
         //注册监听
-        mLocationClient.registerLocationListener(mLocationListener);
+        mLocationClient.registerLocationListener(initLocationListener);
         //配置定位
         LocationClientOption option = new LocationClientOption();
         option.setCoorType("bd09ll");//坐标类型
@@ -341,12 +335,13 @@ public class RunFragment extends LsmBaseFragment {
     }
 
     /**
-     * 位置监听
+     *
+     * 首次定位用
      */
-    private class MyLocationListener implements BDLocationListener {
+    private class InitLocationListener implements BDLocationListener{
+
         @Override
         public void onReceiveLocation(BDLocation location) {
-
             crtLocation = location;
             //将获取的location信息给百度map
             MyLocationData data = new MyLocationData.Builder()
@@ -356,22 +351,26 @@ public class RunFragment extends LsmBaseFragment {
                     .longitude(location.getLongitude())
                     .build();
             mBaiduMap.setMyLocationData(data);
+            mLocationClient.stop();
+            mLocationClient.unRegisterLocationListener(initLocationListener);
+        }
+    }
 
-            if (isFirstInit) {
-                mLocationClient.stop();
-                mLocationClient.unRegisterLocationListener(mLocationListener);
-              /*  if (mLocationClient.isStarted()) {
-                    mLocationClient.stop();
-                    MyLog.e(TAG , "mLocationClient.stop()=================================");
-                }*/
-                isFirstInit = false;
-                return;
-            }
-
-            //获取经纬度
-            //LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-          /*  MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(ll);
-            mBaiduMap.animateMapStatus(status);//动画的方式到中间*/
+    /**
+     * 位置监听
+     */
+    private class MyLocationListener implements BDLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            crtLocation = location;
+            //将获取的location信息给百度map
+            MyLocationData data = new MyLocationData.Builder()
+                    .accuracy(location.getRadius())
+                    .latitude(location.getLatitude())
+                    .direction(mLastX)
+                    .longitude(location.getLongitude())
+                    .build();
+            mBaiduMap.setMyLocationData(data);
 
             if (isFirstLoc) {//第一次定位
                 LatLng mostAccuracyLocation = getMostAccuracyLocation(location);
