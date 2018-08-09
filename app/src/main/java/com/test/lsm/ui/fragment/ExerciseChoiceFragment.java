@@ -3,6 +3,7 @@ package com.test.lsm.ui.fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -16,6 +17,7 @@ import com.test.lsm.global.Constant;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.ExeIntensiveChoiceActivity;
+import com.test.lsm.ui.activity.ExerciseRankingActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,8 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
     RecyclerView rvExerciseType;
     @BindView(R.id.rv_lesson)
     RecyclerView rvLesson;
+    @BindView(R.id.ib_list)
+    ImageButton ibList;
 
     private UserLoginReturn.PdBean user;
     private OnLineCourseAdapter onLineCourseAdapter;
@@ -122,6 +126,13 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
                         downLineData.get(position).getCOACH_ID(),
                         1,
                         Constant.lastedBodyFitness);
+            }
+        });
+
+        ibList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ExerciseRankingActivity.startAction(getActivity());
             }
         });
     }

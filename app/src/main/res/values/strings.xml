@@ -27,7 +27,7 @@
 
     <!--BT Device-->
     <string name="ble_connect_failed">連接失敗</string>
-    <string name="ble_not_connect">連接失敗</string>
+    <string name="ble_not_connect">藍牙裝置未連接</string>
 
     <!--form-->
     <string name="input_empty">"輸入存在空值！</string>

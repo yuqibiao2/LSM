@@ -41,7 +41,7 @@ public abstract class LsmBaseFragment extends BaseFragment {
     }
 
     protected void hiddenLoadingDialog() {
-        loadingDialog.hide();
+        loadingDialog.dismiss();
     }
 
 }

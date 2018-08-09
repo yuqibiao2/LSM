@@ -168,7 +168,7 @@ public class InformationFragment extends LsmBaseFragment {
                         if (heartNum > 0) {
 
                             //得到心跳值得回调
-                            if (application.mOnGetHrValueListener!=null){
+                            if (application.mOnGetHrValueListener != null) {
                                 application.mOnGetHrValueListener.onGet(heartNum);
                             }
 
@@ -179,8 +179,8 @@ public class InformationFragment extends LsmBaseFragment {
                             application.setHeartNum(heartNum);
                             EventBus.getDefault().post(new HeartChgEvent(heartNum, "心跳变化了"));
                             MyLog.e(TAG, "tvHeartNum：" + heartNum);
+
                             //Algorithm.initialForModeChange(1);
-                            Algorithm.getRtoRIntervalData(rriAry, timeAry);
                             /*
                             //TODO删除(测试用)
                             for (int i = 50; i <269 ; i++) {
@@ -189,7 +189,7 @@ public class InformationFragment extends LsmBaseFragment {
                             }
                             //MyLog.e(TAG, "rriAry==111=" + Arrays.toString(rriAry));
                             MyLog.e(TAG, "rriAry==111=" + Arrays.toString(rriAry));*/
-
+                           /* Algorithm.getRtoRIntervalData(rriAry, timeAry);
                             rriList.clear();
                             for (double value : rriAry) {
                                 if (value > 200 && value < 2000) {
@@ -203,6 +203,18 @@ public class InformationFragment extends LsmBaseFragment {
                                         rriAry = new double[196000];
                                         MyLog.e(TAG , "====================归零");
                                     }
+                                }
+                            }*/
+
+                            double rriValue = Algorithm.getEstimateRRI(heartNum);
+                            if (rriValue > 200 && rriValue < 2000) {
+                                rriList.add(Double.valueOf(rriValue).intValue());
+                                // 通知刷新 HRV
+                                EventBus.getDefault().post(new RefreshHearthInfoEvent("更新HRV", rriList));
+                                if (rriList.size() >= 220) {//
+                                    Constant.lastedUsefulRriList.clear();
+                                    Constant.lastedUsefulRriList.addAll(rriList);
+                                    rriList.clear();
                                 }
                             }
 
@@ -558,7 +570,7 @@ public class InformationFragment extends LsmBaseFragment {
      *
      * @param bleDevice
      */
-    private void handleBatteryService( BleDevice bleDevice) {
+    private void handleBatteryService(BleDevice bleDevice) {
 
         isHandBatteryService = true;
 
@@ -569,8 +581,8 @@ public class InformationFragment extends LsmBaseFragment {
                     @Override
                     public void onReadSuccess(byte[] data) {
                         String hexString = HexUtil.formatHexString(data).substring(0, 2);
-                       // MyLog.e(TAG, "hexString：" + Integer.parseInt(hexString, 16));
-                        if (tvBryPct!=null){
+                        // MyLog.e(TAG, "hexString：" + Integer.parseInt(hexString, 16));
+                        if (tvBryPct != null) {
                             tvBryPct.setText(Integer.parseInt(hexString, 16) + "%");
                         }
                     }
@@ -709,8 +721,8 @@ public class InformationFragment extends LsmBaseFragment {
                                                 mHandler.sendMessage(message);
 
                                                 //--处理电池电量service
-                                                if (!isHandBatteryService){
-                                                    handleBatteryService( bleDevice);
+                                                if (!isHandBatteryService) {
+                                                    handleBatteryService(bleDevice);
                                                 }
 
                                             }

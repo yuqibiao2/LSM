@@ -78,6 +78,7 @@
         <activity android:name=".ui.activity.ExeIntensiveChoiceActivity" />
         <activity android:name=".ui.activity.IndoorExerciseActivity" />
         <activity android:name=".ui.activity.HrRecordActivity" />
+        <activity android:name=".ui.activity.ExerciseRankingActivity"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -115,9 +116,6 @@
             </intent-filter>
             -->
         </activity>
-        <activity
-            android:name=".ui.activity.LoginActivity2"
-            android:label="@string/title_activity_login2" />
     </application>
 
 </manifest>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.yyyu.baselibrary.ui.widget.BounceScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/my_white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_trophy"
+                android:layout_width="match_parent"
+                android:layout_height="500dp">
+
+            </android.support.v4.view.ViewPager>
+
+            <!-- <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:orientation="vertical">
+
+                 <RelativeLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+
+                     <ImageView
+                         android:id="@+id/iv_trophy"
+                         android:layout_width="220dp"
+                         android:layout_height="220dp"
+                         android:layout_centerHorizontal="true"
+                         android:scaleType="centerCrop"
+                         android:src="@mipmap/avril" />
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_alignBottom="@id/iv_trophy"
+                         android:layout_marginRight="10dp"
+                         android:layout_toLeftOf="@id/iv_trophy"
+                         android:text="08/23"
+                         android:textColor="#FF323643"
+                         android:textSize="18sp" />
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_alignBottom="@id/iv_trophy"
+                         android:layout_marginLeft="10dp"
+                         android:layout_toRightOf="@id/iv_trophy"
+                         android:text="08/30"
+                         android:textColor="#FF323643"
+                         android:textSize="18sp" />
+                 </RelativeLayout>
+
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_marginLeft="50dp"
+                     android:layout_marginTop="15dp"
+                     android:text="戰利品"
+                     android:textColor="#FF000000"
+                     android:textSize="18sp" />
+
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_marginLeft="50dp"
+                     android:text="Beats Studio Headphone"
+                     android:textColor="#FF323643"
+                     android:textSize="20sp" />
+
+                 <RelativeLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="195dp"
+                     android:layout_marginLeft="25dp"
+                     android:layout_marginRight="25dp"
+                     android:layout_marginTop="15dp"
+                     android:background="@drawable/bg_ranking1">
+
+                     <com.yyyu.baselibrary.ui.widget.RoundImageView
+                         android:id="@+id/iv_ranking_user_icon"
+                         android:layout_width="78dp"
+                         android:layout_height="78dp"
+                         android:layout_marginLeft="30dp"
+                         android:layout_marginTop="40dp"
+                         android:src="@mipmap/avril" />
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_below="@+id/iv_ranking_user_icon"
+                         android:layout_marginLeft="28dp"
+                         android:layout_marginTop="10dp"
+                         android:text="Hank Lee"
+                         android:textColor="#FFFFFFFF"
+                         android:textSize="20sp" />
+
+                     <LinearLayout
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_alignParentRight="true"
+                         android:layout_marginRight="20dp"
+                         android:layout_marginTop="40dp"
+                         android:gravity="center"
+                         android:orientation="vertical">
+
+                         <TextView
+                             android:id="@+id/tv_ranking"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:text="NO.1"
+                             android:textColor="#FFFFFFFF"
+                             android:textSize="48sp" />
+
+                         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_alignRight="@+id/tv_ranking"
+                             android:layout_below="@+id/tv_ranking"
+                             android:text="分數"
+                             android:textColor="#FFFFFFFF"
+                             android:textSize="20sp" />
+
+                         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:text="13883820"
+                             android:textColor="#FFFFFFFF"
+                             android:textSize="24sp" />
+                     </LinearLayout>
+
+                 </RelativeLayout>
+
+             </LinearLayout>-->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/bg_ranking_bar" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="54"
+                    android:textColor="#FF323643"
+                    android:textSize="24sp" />
+
+                <com.yyyu.baselibrary.ui.widget.RoundImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/avril" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Michael Lee"
+                    android:textColor="#FF323643"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="13820"
+                    android:textColor="#FF4A4A4A"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="45dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@mipmap/ic_ranking_up"
+                    android:gravity="center"
+                    android:text="55"
+                    android:textColor="#FF323643"
+                    android:textSize="48sp" />
+
+                <com.yyyu.baselibrary.ui.widget.RoundImageView
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/avril" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="3820"
+                    android:textColor="#FF323643"
+                    android:textSize="36sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="Donoven Mitchell"
+                android:textColor="#FF323643"
+                android:layout_marginBottom="25dp"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:src="@mipmap/ic_back" />
+
+        <ImageView
+            android:id="@+id/iv_left"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="100dp"
+            android:padding="15dp"
+            android:src="@mipmap/ic_trophy_left" />
+
+        <ImageView
+            android:id="@+id/iv_right"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="45dp"
+            android:layout_marginTop="100dp"
+            android:padding="15dp"
+            android:src="@mipmap/ic_trophy_right" />
+
+    </RelativeLayout>
+
+</com.yyyu.baselibrary.ui.widget.BounceScrollView>

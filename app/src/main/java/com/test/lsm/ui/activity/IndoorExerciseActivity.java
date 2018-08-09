@@ -460,7 +460,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                             if (avgHr > startY && avgHr < endY) {//满足计分条件
                                 qualifiedNum++;
                             }
-                            final int point = qualifiedNum * 100 / realTimeValues.size();
+                            final int point = qualifiedNum;//qualifiedNum * 100 / realTimeValues.size();
                             tvRealTimePoint.post(new Runnable() {
                                 @Override
                                 public void run() {
