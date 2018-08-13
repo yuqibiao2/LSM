@@ -63,6 +63,10 @@ public class ExerciseRankingActivity extends LsmBaseActivity {
     TextView tvUserScore;
     @BindView(R.id.tv_username)
     TextView tvUsername;
+    @BindView(R.id.iv_arrow_up)
+    ImageView ivArrowUp;
+    @BindView(R.id.iv_arrow_down)
+    ImageView ivArrowDown;
     private APIMethodManager apiMethodManager;
     private UserLoginReturn.PdBean user;
 
@@ -132,7 +136,9 @@ public class ExerciseRankingActivity extends LsmBaseActivity {
             public void onSuccess(QueryAmongReturn result) {
                 String code = result.getResult();
                 if ("01".equals(code)) {
-                    List<QueryAmongReturn.PdBean> pdBeanList = result.getPd();
+                    List<QueryAmongReturn.PdBean.PdBeanItem> pdBeanList = new ArrayList<>();
+                    pdBeanList.add(result.getPd().getOnePd());
+                    pdBeanList.add(result.getPd().getTwoPd());
                     vpRanking.setAdapter(new RankingAdapter(ExerciseRankingActivity.this, pdBeanList));
                 }
             }
@@ -148,20 +154,27 @@ public class ExerciseRankingActivity extends LsmBaseActivity {
             public void onSuccess(QueryUserRakingReturn result) {
                 String code = result.getResult();
                 if ("01".equals(code)) {
-                    QueryUserRakingReturn.PdBean pd = result.getPd();
-                    if (pd == null || pd.getUSER_ID() == 0) {
+                    QueryUserRakingReturn.PdBean.CurrentPdBean currentPd = result.getPd().getCurrentPd();
+                    int arrow = result.getPd().getArrow();
+                    if (arrow == 0) {//退步
+                        ivArrowDown.setVisibility(View.VISIBLE);
+                    } else if (arrow == 1) {//进步
+                        ivArrowDown.setVisibility(View.VISIBLE);
+                    } else {
+                    }
+                    if (currentPd == null || currentPd.getUSER_ID() == 0) {
 
                     } else {
-                        tvUserRaking.setText("" + pd.getRownum());
-                        GlidUtils.load(ExerciseRankingActivity.this, rivUserIcon, pd.getUSER_IMAGE());
-                        tvUserScore.setText("" + pd.getTOTAL_VALUE());
-                        tvUsername.setText("" + pd.getUSERNAME());
+                        tvUserRaking.setText("" + currentPd.getUSER_SORT());
+                        GlidUtils.load(ExerciseRankingActivity.this, rivUserIcon, currentPd.getUSER_IMAGE());
+                        tvUserScore.setText("" + currentPd.getTOTAL_VALUE());
+                        tvUsername.setText("" + currentPd.getUSERNAME());
                     }
-                    QueryUserRakingReturn.PrePdBean prePd = result.getPrePd();
+                    QueryUserRakingReturn.PdBean.PrePdBean prePd = result.getPd().getPrePd();
                     if (prePd == null || prePd.getUSER_ID() == 0) {
                         llPreUser.setVisibility(View.GONE);
                     } else {
-                        tvPreRanking.setText("" + prePd.getRownum());
+                        tvPreRanking.setText("" + prePd.getUSER_SORT());
                         GlidUtils.load(ExerciseRankingActivity.this, rivPreUserIcon, prePd.getUSER_IMAGE());
                         tvPreUsername.setText("" + prePd.getUSERNAME());
                         tvPreScore.setText("" + prePd.getTOTAL_VALUE());

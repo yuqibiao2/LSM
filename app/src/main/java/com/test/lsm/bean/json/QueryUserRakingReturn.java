@@ -9,10 +9,8 @@ package com.test.lsm.bean.json;
  */
 public class QueryUserRakingReturn {
 
-
     private String result;
     private PdBean pd;
-    private PrePdBean prePd;
 
     public String getResult() {
         return result;
@@ -30,125 +28,149 @@ public class QueryUserRakingReturn {
         this.pd = pd;
     }
 
-    public PrePdBean getPrePd() {
-        return prePd;
-    }
-
-    public void setPrePd(PrePdBean prePd) {
-        this.prePd = prePd;
-    }
-
     public static class PdBean {
-        private int rownum;
-        private String USER_IMAGE;
-        private int TOTAL_VALUE;
-        private String PHONE;
-        private int USER_ID;
-        private String USERNAME;
+        private int arrow;
+        private PrePdBean prePd;
+        private CurrentPdBean currentPd;
 
-        public int getRownum() {
-            return rownum;
+        public int getArrow() {
+            return arrow;
         }
 
-        public void setRownum(int rownum) {
-            this.rownum = rownum;
+        public void setArrow(int arrow) {
+            this.arrow = arrow;
         }
 
-        public String getUSER_IMAGE() {
-            return USER_IMAGE;
+        public PrePdBean getPrePd() {
+            return prePd;
         }
 
-        public void setUSER_IMAGE(String USER_IMAGE) {
-            this.USER_IMAGE = USER_IMAGE;
+        public void setPrePd(PrePdBean prePd) {
+            this.prePd = prePd;
         }
 
-        public int getTOTAL_VALUE() {
-            return TOTAL_VALUE;
+        public CurrentPdBean getCurrentPd() {
+            return currentPd;
         }
 
-        public void setTOTAL_VALUE(int TOTAL_VALUE) {
-            this.TOTAL_VALUE = TOTAL_VALUE;
+        public void setCurrentPd(CurrentPdBean currentPd) {
+            this.currentPd = currentPd;
         }
 
-        public String getPHONE() {
-            return PHONE;
+        public static class PrePdBean {
+
+            private String USER_IMAGE;
+            private int TOTAL_VALUE;
+            private int USER_SORT;
+            private String PHONE;
+            private int USER_ID;
+            private String USERNAME;
+
+            public String getUSER_IMAGE() {
+                return USER_IMAGE;
+            }
+
+            public void setUSER_IMAGE(String USER_IMAGE) {
+                this.USER_IMAGE = USER_IMAGE;
+            }
+
+            public int getTOTAL_VALUE() {
+                return TOTAL_VALUE;
+            }
+
+            public void setTOTAL_VALUE(int TOTAL_VALUE) {
+                this.TOTAL_VALUE = TOTAL_VALUE;
+            }
+
+            public int getUSER_SORT() {
+                return USER_SORT;
+            }
+
+            public void setUSER_SORT(int USER_SORT) {
+                this.USER_SORT = USER_SORT;
+            }
+
+            public String getPHONE() {
+                return PHONE;
+            }
+
+            public void setPHONE(String PHONE) {
+                this.PHONE = PHONE;
+            }
+
+            public int getUSER_ID() {
+                return USER_ID;
+            }
+
+            public void setUSER_ID(int USER_ID) {
+                this.USER_ID = USER_ID;
+            }
+
+            public String getUSERNAME() {
+                return USERNAME;
+            }
+
+            public void setUSERNAME(String USERNAME) {
+                this.USERNAME = USERNAME;
+            }
         }
 
-        public void setPHONE(String PHONE) {
-            this.PHONE = PHONE;
-        }
+        public static class CurrentPdBean {
 
-        public int getUSER_ID() {
-            return USER_ID;
-        }
+            private String USER_IMAGE;
+            private int TOTAL_VALUE;
+            private int USER_SORT;
+            private String PHONE;
+            private int USER_ID;
+            private String USERNAME;
 
-        public void setUSER_ID(int USER_ID) {
-            this.USER_ID = USER_ID;
-        }
+            public String getUSER_IMAGE() {
+                return USER_IMAGE;
+            }
 
-        public String getUSERNAME() {
-            return USERNAME;
-        }
+            public void setUSER_IMAGE(String USER_IMAGE) {
+                this.USER_IMAGE = USER_IMAGE;
+            }
 
-        public void setUSERNAME(String USERNAME) {
-            this.USERNAME = USERNAME;
-        }
-    }
+            public int getTOTAL_VALUE() {
+                return TOTAL_VALUE;
+            }
 
-    public static class PrePdBean {
-        private int rownum;
-        private String USER_IMAGE;
-        private int TOTAL_VALUE;
-        private String PHONE;
-        private int USER_ID;
-        private String USERNAME;
+            public void setTOTAL_VALUE(int TOTAL_VALUE) {
+                this.TOTAL_VALUE = TOTAL_VALUE;
+            }
 
-        public int getRownum() {
-            return rownum;
-        }
+            public int getUSER_SORT() {
+                return USER_SORT;
+            }
 
-        public void setRownum(int rownum) {
-            this.rownum = rownum;
-        }
+            public void setUSER_SORT(int USER_SORT) {
+                this.USER_SORT = USER_SORT;
+            }
 
-        public String getUSER_IMAGE() {
-            return USER_IMAGE;
-        }
+            public String getPHONE() {
+                return PHONE;
+            }
 
-        public void setUSER_IMAGE(String USER_IMAGE) {
-            this.USER_IMAGE = USER_IMAGE;
-        }
+            public void setPHONE(String PHONE) {
+                this.PHONE = PHONE;
+            }
 
-        public int getTOTAL_VALUE() {
-            return TOTAL_VALUE;
-        }
+            public int getUSER_ID() {
+                return USER_ID;
+            }
 
-        public void setTOTAL_VALUE(int TOTAL_VALUE) {
-            this.TOTAL_VALUE = TOTAL_VALUE;
-        }
+            public void setUSER_ID(int USER_ID) {
+                this.USER_ID = USER_ID;
+            }
 
-        public String getPHONE() {
-            return PHONE;
-        }
+            public String getUSERNAME() {
+                return USERNAME;
+            }
 
-        public void setPHONE(String PHONE) {
-            this.PHONE = PHONE;
-        }
-
-        public int getUSER_ID() {
-            return USER_ID;
-        }
-
-        public void setUSER_ID(int USER_ID) {
-            this.USER_ID = USER_ID;
-        }
-
-        public String getUSERNAME() {
-            return USERNAME;
-        }
-
-        public void setUSERNAME(String USERNAME) {
-            this.USERNAME = USERNAME;
+            public void setUSERNAME(String USERNAME) {
+                this.USERNAME = USERNAME;
+            }
         }
     }
 }

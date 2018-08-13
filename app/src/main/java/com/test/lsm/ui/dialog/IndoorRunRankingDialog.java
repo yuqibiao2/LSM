@@ -3,6 +3,7 @@ package com.test.lsm.ui.dialog;
 import android.content.Context;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.test.lsm.MyApplication;
@@ -33,6 +34,10 @@ public class IndoorRunRankingDialog extends LsmBaseDialog {
     TextView tvRaking;
     @BindView(R.id.tv_total_score)
     TextView tvTotalScore;
+    @BindView(R.id.iv_arrow_up)
+    ImageView ivArrowUp;
+    @BindView(R.id.iv_arrow_down)
+    ImageView ivArrowDown;
 
 
     private Integer mCurrentScore;
@@ -56,9 +61,9 @@ public class IndoorRunRankingDialog extends LsmBaseDialog {
 
     @Override
     protected void initView() {
-        if (mCurrentScore>=100){
+        if (mCurrentScore >= 100) {
             tvScoring.setTextSize(100);
-        }else if (mCurrentScore>=1000){
+        } else if (mCurrentScore >= 1000) {
             tvScoring.setTextSize(80);
         }
         tvScoring.setText("" + mCurrentScore);
@@ -80,10 +85,19 @@ public class IndoorRunRankingDialog extends LsmBaseDialog {
             public void onSuccess(QueryUserRakingReturn result) {
                 String code = result.getResult();
                 if ("01".equals(code)) {
-                    if (result.getPd() != null) {
-                        int ranking = result.getPd().getRownum();
+                    QueryUserRakingReturn.PdBean.CurrentPdBean currentPd = result.getPd().getCurrentPd();
+                    int arrow = result.getPd().getArrow();
+                    if (arrow == 0) {//退步
+                        ivArrowUp.setVisibility(View.VISIBLE);
+                    } else if (arrow == 1) {//进步
+                        ivArrowDown.setVisibility(View.VISIBLE);
+                    } else {
+                        ivArrowUp.setVisibility(View.VISIBLE);
+                    }
+                    if (currentPd != null) {
+                        int ranking = currentPd.getUSER_SORT();
                         tvRaking.setText("" + ranking);
-                        tvTotalScore.setText("" + result.getPd().getTOTAL_VALUE());
+                        tvTotalScore.setText("" + currentPd.getTOTAL_VALUE());
                     }
                 }
             }

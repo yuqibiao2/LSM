@@ -1,7 +1,5 @@
 package com.test.lsm.bean.json;
 
-import java.util.List;
-
 /**
  * 功能：
  *
@@ -11,9 +9,8 @@ import java.util.List;
  */
 public class QueryAmongReturn {
 
-
     private String result;
-    private List<PdBean> pd;
+    private PdBean pd;
 
     public String getResult() {
         return result;
@@ -23,68 +20,83 @@ public class QueryAmongReturn {
         this.result = result;
     }
 
-    public List<PdBean> getPd() {
+    public PdBean getPd() {
         return pd;
     }
 
-    public void setPd(List<PdBean> pd) {
+    public void setPd(PdBean pd) {
         this.pd = pd;
     }
 
     public static class PdBean {
-        private double rownum;
-        private String USER_IMAGE;
-        private int TOTAL_VALUE;
-        private String PHONE;
-        private int USER_ID;
-        private String USERNAME;
 
-        public double getRownum() {
-            return rownum;
+        private PdBeanItem onePd;
+        private PdBeanItem twoPd;
+
+        public PdBeanItem getOnePd() {
+            return onePd;
         }
 
-        public void setRownum(double rownum) {
-            this.rownum = rownum;
+        public void setOnePd(PdBeanItem onePd) {
+            this.onePd = onePd;
         }
 
-        public String getUSER_IMAGE() {
-            return USER_IMAGE;
+        public PdBeanItem getTwoPd() {
+            return twoPd;
         }
 
-        public void setUSER_IMAGE(String USER_IMAGE) {
-            this.USER_IMAGE = USER_IMAGE;
+        public void setTwoPd(PdBeanItem twoPd) {
+            this.twoPd = twoPd;
         }
 
-        public int getTOTAL_VALUE() {
-            return TOTAL_VALUE;
+        public static class PdBeanItem {
+
+            private String USER_IMAGE;
+            private int TOTAL_VALUE;
+            private String PHONE;
+            private int USER_ID;
+            private String USERNAME;
+
+            public String getUSER_IMAGE() {
+                return USER_IMAGE;
+            }
+
+            public void setUSER_IMAGE(String USER_IMAGE) {
+                this.USER_IMAGE = USER_IMAGE;
+            }
+
+            public int getTOTAL_VALUE() {
+                return TOTAL_VALUE;
+            }
+
+            public void setTOTAL_VALUE(int TOTAL_VALUE) {
+                this.TOTAL_VALUE = TOTAL_VALUE;
+            }
+
+            public String getPHONE() {
+                return PHONE;
+            }
+
+            public void setPHONE(String PHONE) {
+                this.PHONE = PHONE;
+            }
+
+            public int getUSER_ID() {
+                return USER_ID;
+            }
+
+            public void setUSER_ID(int USER_ID) {
+                this.USER_ID = USER_ID;
+            }
+
+            public String getUSERNAME() {
+                return USERNAME;
+            }
+
+            public void setUSERNAME(String USERNAME) {
+                this.USERNAME = USERNAME;
+            }
         }
 
-        public void setTOTAL_VALUE(int TOTAL_VALUE) {
-            this.TOTAL_VALUE = TOTAL_VALUE;
-        }
-
-        public String getPHONE() {
-            return PHONE;
-        }
-
-        public void setPHONE(String PHONE) {
-            this.PHONE = PHONE;
-        }
-
-        public int getUSER_ID() {
-            return USER_ID;
-        }
-
-        public void setUSER_ID(int USER_ID) {
-            this.USER_ID = USER_ID;
-        }
-
-        public String getUSERNAME() {
-            return USERNAME;
-        }
-
-        public void setUSERNAME(String USERNAME) {
-            this.USERNAME = USERNAME;
-        }
     }
 }

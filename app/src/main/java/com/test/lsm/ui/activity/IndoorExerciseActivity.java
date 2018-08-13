@@ -301,9 +301,9 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                 if (getLineDataSize() >=exeBarTotal ){//本次课程结束
                     doStop();
                 }*/
-            /*    IndoorRunRankingDialog rankingDialog = new IndoorRunRankingDialog(IndoorExerciseActivity.this , 101);
-                rankingDialog.show();
-               doUpdateUserScore("123");*/
+              /*  IndoorRunRankingDialog rankingDialog = new IndoorRunRankingDialog(IndoorExerciseActivity.this , 101);
+                rankingDialog.show();*/
+               //doUpdateUserScore("123");
             }
         });
 

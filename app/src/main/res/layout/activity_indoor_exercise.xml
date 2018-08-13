@@ -132,7 +132,7 @@
                                     android:id="@+id/tv_real_time_point"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="011"
+                                    android:text="0"
                                     android:textColor="#FFFFFFFF"
                                     android:textSize="55sp" />
 

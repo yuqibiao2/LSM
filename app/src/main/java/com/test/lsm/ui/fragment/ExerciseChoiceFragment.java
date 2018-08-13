@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -47,6 +48,10 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
     ImageButton ibList;
     @BindView(R.id.tv_raking)
     TextView tvRaking;
+    @BindView(R.id.iv_arrow_up)
+    ImageView ivArrowUp;
+    @BindView(R.id.iv_arrow_down)
+    ImageView ivArrowDown;
 
     private UserLoginReturn.PdBean user;
     private OnLineCourseAdapter onLineCourseAdapter;
@@ -111,9 +116,17 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
             @Override
             public void onSuccess(QueryUserRakingReturn result) {
                 String code = result.getResult();
-                if ("01".equals(code)){
-                    int ranking = result.getPd().getRownum();
-                    tvRaking.setText(""+ranking);
+                if ("01".equals(code)) {
+                    QueryUserRakingReturn.PdBean.CurrentPdBean currentPd = result.getPd().getCurrentPd();
+                    int ranking = currentPd.getUSER_SORT();
+                    tvRaking.setText("" + ranking);
+                    int arrow = result.getPd().getArrow();
+                    if (arrow == 0) {//退步
+                        ivArrowDown.setVisibility(View.VISIBLE);
+                    } else if (arrow == 1) {//进步
+                        ivArrowDown.setVisibility(View.VISIBLE);
+                    } else {
+                    }
                 }
             }
 

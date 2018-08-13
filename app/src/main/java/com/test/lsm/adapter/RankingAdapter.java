@@ -25,9 +25,9 @@ import java.util.List;
 public class RankingAdapter extends PagerAdapter {
 
     private Context mContext;
-    private List<QueryAmongReturn.PdBean> mData;
+    private List<QueryAmongReturn.PdBean.PdBeanItem> mData;
 
-    public RankingAdapter(Context context , List<QueryAmongReturn.PdBean> data) {
+    public RankingAdapter(Context context , List<QueryAmongReturn.PdBean.PdBeanItem> data) {
         this.mContext = context;
         this.mData = data;
     }
@@ -52,13 +52,13 @@ public class RankingAdapter extends PagerAdapter {
         TextView tvRanking = (TextView) view.findViewById(R.id.tv_ranking);
         TextView tvUserPoint = (TextView) view.findViewById(R.id.tv_user_point);
 
-        QueryAmongReturn.PdBean item = mData.get(position);
+        QueryAmongReturn.PdBean.PdBeanItem item = mData.get(position);
 
         GlidUtils.load(mContext , ivUserIcon,item.getUSER_IMAGE());
         tvUsername.setText(""+item.getUSERNAME());
-        tvRanking.setText("NO."+new Double(item.getRownum()).intValue());
+        tvRanking.setText("NO."+(position+1));
         tvUserPoint.setText(""+item.getTOTAL_VALUE());
-        if (item.getRownum()==1){
+        if (position==0){
             rlItem.setBackground(mContext.getDrawable(R.drawable.bg_ranking1));
         }else{
             rlItem.setBackground(mContext.getDrawable(R.drawable.bg_ranking2));

@@ -17,19 +17,38 @@
             android:background="@color/trans"
             android:src="@mipmap/ic_search" />
 
-        <TextView
-            android:id="@+id/tv_raking"
+
+        <LinearLayout
+            android:id="@+id/ll_ranking"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@color/trans"
-            android:drawableBottom="@mipmap/ic_ranking_down_small"
-            android:drawableTop="@mipmap/ic_ranking_up_small"
             android:gravity="center"
-            android:layout_centerVertical="true"
-            android:text="0"
-            android:textColor="#FF323643"
-            android:textSize="20dp" />
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/iv_arrow_up"
+                android:layout_width="15dp"
+                android:layout_height="10dp"
+                android:visibility="invisible"
+                android:src="@mipmap/ic_ranking_up" />
+            <TextView
+                android:id="@+id/tv_raking"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@color/trans"
+                android:gravity="center"
+                android:layout_centerVertical="true"
+                android:text="0"
+                android:textColor="#FF323643"
+                android:textSize="20dp" />
+            <ImageView
+                android:id="@+id/iv_arrow_down"
+                android:layout_width="15dp"
+                android:layout_height="10dp"
+                android:visibility="invisible"
+                android:src="@mipmap/ic_ranking_down" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/ib_list"
@@ -38,7 +57,7 @@
             android:layout_centerVertical="true"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@id/tv_raking"
+            android:layout_toLeftOf="@+id/ll_ranking"
             android:background="@mipmap/ic_trophy" />
 
     </RelativeLayout>

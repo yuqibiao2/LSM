@@ -56,8 +56,10 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/iv_arrow_up"
                 android:layout_width="30dp"
                 android:layout_height="16dp"
+                android:visibility="invisible"
                 android:src="@mipmap/ic_ranking_up" />
 
             <TextView
@@ -67,6 +69,13 @@
                 android:text="55"
                 android:textColor="#FFFFFFFF"
                 android:textSize="48sp" />
+
+            <ImageView
+                android:id="@+id/iv_arrow_down"
+                android:layout_width="30dp"
+                android:layout_height="16dp"
+                android:visibility="invisible"
+                android:src="@mipmap/ic_ranking_down" />
         </LinearLayout>
 
         <LinearLayout
