@@ -1,6 +1,7 @@
 package com.test.lsm.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,11 +35,13 @@ import com.test.lsm.R;
 import com.test.lsm.bean.event.UpdateIndoorRunDataEvent;
 import com.test.lsm.bean.form.UserCourseTimeVo;
 import com.test.lsm.bean.json.GetCourseParams;
+import com.test.lsm.bean.json.ModifyScoreReturn;
 import com.test.lsm.bean.json.UserCourseTimeReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
 import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.ui.dialog.IndoorRunRankingDialog;
 import com.test.lsm.ui.fragment.indoor_run.IndoorHrStatsFragment;
 import com.test.lsm.ui.fragment.indoor_run.IndoorRunHrFragment;
 import com.test.lsm.ui.fragment.indoor_run.IndoorRunHrvFragment;
@@ -127,6 +130,10 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     private String startTime;
     private String stopTime;
 
+    private int exeBarTotal = 0;//一共多少蓝条
+    private int usId;
+    private int point;
+
     public enum RunStatus {
         NONE,
         START,
@@ -157,6 +164,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         courseType = intent.getStringExtra("courseType");
         courseName = intent.getStringExtra("courseName");
         ucId = intent.getIntExtra("ucId", -1);
+        usId = intent.getIntExtra("usId", -1);
         MyApplication application = (MyApplication) getApplication();
         user = application.getUser();
 
@@ -220,37 +228,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
 
-                                    ivLeft.setVisibility(View.VISIBLE);
-                                    ivLeft.setImageResource(R.mipmap.ic_run_stop_disable);
-                                    ivCenter.setVisibility(View.VISIBLE);
-                                    ivCenter.setImageResource(R.mipmap.ic_indoor_run_start);
-                                    ivRight.setVisibility(View.VISIBLE);
-                                    ivRight.setImageResource(R.mipmap.ic_run_pause_disable);
-                                    runStatus = STOP;
-                                    MyToast.showLong(IndoorExerciseActivity.this, "停止");
-
-                                    stopTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", new Date(System.currentTimeMillis()));
-
-                                    UserCourseTimeVo userCourseTimeVo = new UserCourseTimeVo();
-                                    userCourseTimeVo.setUC_ID(ucId);
-                                    userCourseTimeVo.setSTART_TIME(startTime);
-                                    userCourseTimeVo.setEND_TIME(stopTime);
-
-                                    if (ucId == -1) {//线下课程
-
-                                    } else {
-                                        APIMethodManager.getInstance().userCourseTime(userCourseTimeVo, new IRequestCallback<UserCourseTimeReturn>() {
-                                            @Override
-                                            public void onSuccess(UserCourseTimeReturn result) {
-
-                                            }
-
-                                            @Override
-                                            public void onFailure(Throwable throwable) {
-
-                                            }
-                                        });
-                                    }
+                                    doStop();
 
                                     dialogInterface.dismiss();
                                 }
@@ -280,6 +258,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                 }
                 if (runStatus == STOP) {//stop-->start 重新开始
                     resetLineChart();
+                    point = 0;
                 }
                 if (runStatus == NONE || runStatus == STOP || runStatus == PAUSE) {
                     ivCenter.setVisibility(View.INVISIBLE);
@@ -315,10 +294,16 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         rvUserIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             /*   int nextInt = new Random().nextInt(80) + 100;
+               /* int nextInt = new Random().nextInt(80) + 100;
                 addLineEntry(nextInt);
                 indoorRunHrFragment.addLineEntry(nextInt);
-                indoorHrStatsFragment.initLineChartData(nextInt);*/
+                indoorHrStatsFragment.initLineChartData(nextInt);
+                if (getLineDataSize() >=exeBarTotal ){//本次课程结束
+                    doStop();
+                }*/
+            /*    IndoorRunRankingDialog rankingDialog = new IndoorRunRankingDialog(IndoorExerciseActivity.this , 101);
+                rankingDialog.show();
+               doUpdateUserScore("123");*/
             }
         });
 
@@ -331,22 +316,65 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                 if (isActDestroy) {
                     return;
                 }
-
-                hrBufferPerTenSec.add(hrValue);
-                hrBufferPerFiveMin.add(hrValue);
-
                 if (runStatus == START) {
+                    hrBufferPerTenSec.add(hrValue);
+                    hrBufferPerFiveMin.add(hrValue);
                     tvRealTimeHr.setText(hrValue + " bpm");
                     if (hrValue > maxHr) {
                         maxHr = hrValue;
                     }
                     tvMaxHr.setText(maxHr + " bpm");
                     indoorHrStatsFragment.initLineChartData(hrValue);
+                    if (getLineDataSize() >= exeBarTotal) {//本次课程结束
+                        doStop();
+                    }
                 }
 
             }
         });
 
+
+        toUpdateUserScore();
+
+    }
+
+    private void doStop() {
+        if (runStatus == STOP) {
+            return;
+        }
+        ivLeft.setVisibility(View.VISIBLE);
+        ivLeft.setImageResource(R.mipmap.ic_run_stop_disable);
+        ivCenter.setVisibility(View.VISIBLE);
+        ivCenter.setImageResource(R.mipmap.ic_indoor_run_start);
+        ivRight.setVisibility(View.VISIBLE);
+        ivRight.setImageResource(R.mipmap.ic_run_pause_disable);
+        runStatus = STOP;
+        MyToast.showLong(IndoorExerciseActivity.this, "停止");
+
+        stopTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", new Date(System.currentTimeMillis()));
+
+        UserCourseTimeVo userCourseTimeVo = new UserCourseTimeVo();
+        userCourseTimeVo.setUC_ID(ucId);
+        userCourseTimeVo.setSTART_TIME(startTime);
+        userCourseTimeVo.setEND_TIME(stopTime);
+
+        if (ucId == -1) {//线下课程
+
+        } else {
+            IndoorRunRankingDialog rankingDialog = new IndoorRunRankingDialog(this, point);
+            rankingDialog.show();
+            APIMethodManager.getInstance().userCourseTime(userCourseTimeVo, new IRequestCallback<UserCourseTimeReturn>() {
+                @Override
+                public void onSuccess(UserCourseTimeReturn result) {
+
+                }
+
+                @Override
+                public void onFailure(Throwable throwable) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -361,6 +389,9 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                     List<GetCourseParams.PdBean> pd = result.getPd();
                     int index = 1;
                     float index2 = 0.5f;
+
+                    exeBarTotal = 150 * pd.size();
+
                     for (GetCourseParams.PdBean bean : pd) {
 
                         int paramLevel = Integer.parseInt(bean.getPARAM_LEVEL().trim());
@@ -385,7 +416,6 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                                 proportion = 1.0;
                                 break;
                         }
-
                         for (int i = 0; i < 150; i++) {//5分钟一个数据 转换为2s间隔一个数据
                             int y1 = (int) (maxBaseHr * proportion);
                             BarEntry entry = new BarEntry(index++, new float[]{y1, maxBaseHr * 0.1f});
@@ -414,6 +444,40 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         });
     }
 
+
+    private void toUpdateUserScore() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!isActDestroy) {
+                    try {
+                        if (runStatus == START) {
+                            Thread.sleep(60 * 1000);
+                            doUpdateUserScore("" + point);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+    }
+
+    private void doUpdateUserScore(String scoreValue) {
+        APIMethodManager.getInstance().modifyUserScoreByMin(provider, "" + usId, scoreValue, new IRequestCallback<ModifyScoreReturn>() {
+            @Override
+            public void onSuccess(ModifyScoreReturn result) {
+
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
+    }
+
     private void resetLineChart() {
         avgHrPerTenSec.clear();
         avgHrPerFiveMin.clear();
@@ -428,8 +492,14 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         indoorHrStatsFragment.resetChartData();
     }
 
+    private int getLineDataSize() {
+        CombinedData data = ccHt.getData();
+        LineDataSet lineDataSet = (LineDataSet) data.getDataSetByIndex(0);
+        return lineDataSet.getEntryCount();
+    }
+
     private void toRecordHr() {
-        //1s中记录一次平均心跳
+        //2s中记录一次平均心跳
         new Thread(new Runnable() {
             private int qualifiedNum = 0;
 
@@ -460,10 +530,14 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                             if (avgHr > startY && avgHr < endY) {//满足计分条件
                                 qualifiedNum++;
                             }
-                            final int point = qualifiedNum;//qualifiedNum * 100 / realTimeValues.size();
+                            //qualifiedNum * 100 / realTimeValues.size();
+                            point = qualifiedNum;
                             tvRealTimePoint.post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    if (point >= 1000) {
+                                        tvRealTimePoint.setTextSize(45);
+                                    }
                                     tvRealTimePoint.setText("" + point);
                                 }
                             });
@@ -655,12 +729,13 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         isActDestroy = true;
     }
 
-    public static void startAction(Context context, Integer courseLevel, String courseType, String courseName, Integer ucId) {
+    public static void startAction(Context context, Integer courseLevel, String courseType, String courseName, Integer ucId, Integer usId) {
         Intent intent = new Intent(context, IndoorExerciseActivity.class);
         intent.putExtra("courseLevel", courseLevel);
         intent.putExtra("courseType", courseType);
         intent.putExtra("courseName", courseName);
         intent.putExtra("ucId", ucId);
+        intent.putExtra("usId", usId);
         context.startActivity(intent);
     }
 

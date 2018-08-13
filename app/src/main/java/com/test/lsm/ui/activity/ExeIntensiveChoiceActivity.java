@@ -67,6 +67,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
     ImageView ivSuggestionNormal;
     @BindView(R.id.iv_suggestion_hard)
     ImageView ivSuggestionHard;
+
     private String imgUrl;
     private Integer bodyFitness = 0;
     private Integer courseLevel = 1; // 0：简单 1：一般  2：困难
@@ -220,7 +221,8 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
                     dismissLoadDialog();
                     if ("01".equals(result.getResult())){
                         int ucId = result.getPd().getUC_ID();
-                        IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName , ucId);
+                        int usId = result.getPd().getUS_ID();
+                        IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName , ucId , usId);
                     }else{
                         MyToast.showLong(getApplicationContext(), getStr(R.string.undefine_error));
                     }
@@ -233,7 +235,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
                 }
             });
         }else{//线下课程 直接跳转
-            IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName , -1);
+            IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName , -1 , userId);
         }
 
     }

@@ -21,6 +21,10 @@ import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
 import com.test.lsm.bean.json.GetMsgListReturn;
+import com.test.lsm.bean.json.ModifyScoreReturn;
+import com.test.lsm.bean.json.QueryActivityGoodsReturn;
+import com.test.lsm.bean.json.QueryAmongReturn;
+import com.test.lsm.bean.json.QueryUserRakingReturn;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.bean.json.SaveHeartByMin;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
@@ -74,18 +78,159 @@ public class APIMethodManager {
     }
 
     /**
+     * 查询当前用户得排名
+     *
+     * @param provider
+     * @param userId
+     * @param queryTime
+     * @param callback
+     * @return
+     */
+    public Subscription queryUserRankingByDate(LifecycleProvider<ActivityEvent> provider, Integer userId, String queryTime, final IRequestCallback<QueryUserRakingReturn> callback) {
+
+        Subscription subscribe = lsmApi.queryUserRankingByDate(userId, queryTime)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<QueryUserRakingReturn>bindToLifecycle())
+                .subscribe(new Subscriber<QueryUserRakingReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(QueryUserRakingReturn queryUserRakingReturn) {
+                        callback.onSuccess(queryUserRakingReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 根据日期，查询用户分数排行
+     *
+     * @param provider
+     * @param queryTime
+     * @param callback
+     * @return
+     */
+    public Subscription queryAmongByDate(LifecycleProvider<ActivityEvent> provider, String queryTime, final IRequestCallback<QueryAmongReturn> callback) {
+
+        Subscription subscribe = lsmApi.queryAmongByDate(queryTime)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<QueryAmongReturn>bindToLifecycle())
+                .subscribe(new Subscriber<QueryAmongReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(QueryAmongReturn queryAmongReturn) {
+                        callback.onSuccess(queryAmongReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 每分钟修改用户活动分数
+     *
+     * @param provider
+     * @param usId
+     * @param scoreValue
+     * @param callback
+     * @return
+     */
+    public Subscription modifyUserScoreByMin(LifecycleProvider<ActivityEvent> provider, String usId, String scoreValue, final IRequestCallback<ModifyScoreReturn> callback) {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("US_ID", usId);
+        map.put("SCORE_VALUE", scoreValue);
+        Subscription subscribe = lsmApi.modifyUserScoreByMin(map)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<ModifyScoreReturn>bindToLifecycle())
+                .subscribe(new Subscriber<ModifyScoreReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(ModifyScoreReturn modifyScoreReturn) {
+                        callback.onSuccess(modifyScoreReturn);
+                    }
+                });
+
+        return subscribe;
+
+    }
+
+
+    /**
+     * 用户查询当期和下期奖品
+     *
+     * @param provider
+     * @param callback
+     * @return
+     */
+    public Subscription queryActivityGoods(LifecycleProvider<ActivityEvent> provider, final IRequestCallback<QueryActivityGoodsReturn> callback) {
+        Subscription subscribe = lsmApi.queryActivityGoods()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<QueryActivityGoodsReturn>bindToLifecycle())
+                .subscribe(new Subscriber<QueryActivityGoodsReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(QueryActivityGoodsReturn queryActivityGoodsReturn) {
+                        callback.onSuccess(queryActivityGoodsReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
      * 更新会员参加课程运动起止时间
      *
      * @param userCourseTimeVo
      * @param callback
      * @return
      */
-    public Subscription userCourseTime(UserCourseTimeVo userCourseTimeVo , final IRequestCallback<UserCourseTimeReturn> callback){
+    public Subscription userCourseTime(UserCourseTimeVo userCourseTimeVo, final IRequestCallback<UserCourseTimeReturn> callback) {
 
         Map<String, String> map = new HashMap<>();
-        map.put("UC_ID" ,""+ userCourseTimeVo.getUC_ID());
-        map.put("START_TIME" ,""+ userCourseTimeVo.getSTART_TIME());
-        map.put("END_TIME" ,""+ userCourseTimeVo.getEND_TIME());
+        map.put("UC_ID", "" + userCourseTimeVo.getUC_ID());
+        map.put("START_TIME", "" + userCourseTimeVo.getSTART_TIME());
+        map.put("END_TIME", "" + userCourseTimeVo.getEND_TIME());
         Subscription subscribe = lsmApi.userCourseTime(map)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -106,7 +251,7 @@ public class APIMethodManager {
                     }
                 });
 
-        return  subscribe;
+        return subscribe;
     }
 
 
@@ -117,14 +262,14 @@ public class APIMethodManager {
      * @param callback
      * @return
      */
-    public Subscription userJoinCourse(UserJoinCourseVo userJoinCourseVo , final IRequestCallback<UserJoinCourseReturn> callback){
+    public Subscription userJoinCourse(UserJoinCourseVo userJoinCourseVo, final IRequestCallback<UserJoinCourseReturn> callback) {
 
         Map<String, String> map = new HashMap<>();
-        map.put("USER_ID" ,""+ userJoinCourseVo.getUSER_ID());
-        map.put("COURSE_TYPE" ,""+ userJoinCourseVo.getCOURSE_TYPE());
-        map.put("COURSE_LEVEL" ,""+ userJoinCourseVo.getCOURSE_LEVEL());
-        map.put("COACH_ID" ,""+ userJoinCourseVo.getCOACH_ID());
-        map.put("CC_TYPE" ,""+ userJoinCourseVo.getCC_TYPE());
+        map.put("USER_ID", "" + userJoinCourseVo.getUSER_ID());
+        map.put("COURSE_TYPE", "" + userJoinCourseVo.getCOURSE_TYPE());
+        map.put("COURSE_LEVEL", "" + userJoinCourseVo.getCOURSE_LEVEL());
+        map.put("COACH_ID", "" + userJoinCourseVo.getCOACH_ID());
+        map.put("CC_TYPE", "" + userJoinCourseVo.getCC_TYPE());
         Subscription subscribe = lsmApi.userJsonCourse(map)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -145,7 +290,7 @@ public class APIMethodManager {
                     }
                 });
 
-        return  subscribe;
+        return subscribe;
     }
 
     /**
@@ -156,7 +301,7 @@ public class APIMethodManager {
      * @param callback
      * @return
      */
-    public Subscription getCourseParamByType(String courseType , Integer courseLevel , final IRequestCallback<GetCourseParams> callback){
+    public Subscription getCourseParamByType(String courseType, Integer courseLevel, final IRequestCallback<GetCourseParams> callback) {
 
         Subscription subscribe = lsmApi.getCourseParamsByType(courseType, courseLevel)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -427,7 +572,7 @@ public class APIMethodManager {
      * @param callback
      * @return
      */
-    public Subscription getMsgList(LifecycleProvider<ActivityEvent> provider , Integer userId, Integer page, Integer pageSize, final IRequestCallback<GetMsgListReturn> callback) {
+    public Subscription getMsgList(LifecycleProvider<ActivityEvent> provider, Integer userId, Integer page, Integer pageSize, final IRequestCallback<GetMsgListReturn> callback) {
         Subscription subscribe = lsmApi.getMsgList(userId, page, pageSize)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -576,9 +721,9 @@ public class APIMethodManager {
         paras.put("coordinateInfo", "" + runRecord.getCoordinateInfo());
         paras.put("distance", "" + runRecord.getDistance());
         paras.put("runTime", "" + runRecord.getRunTime());
-        paras.put("avgHeart",runRecord.getAvgHeart());
-        paras.put("maxHeart" ,runRecord.getMaxHeart() );
-        paras.put("calorieValue" , runRecord.getCalorieValue());
+        paras.put("avgHeart", runRecord.getAvgHeart());
+        paras.put("maxHeart", runRecord.getMaxHeart());
+        paras.put("calorieValue", runRecord.getCalorieValue());
         final Subscription subscribe = lsmApi.saveRunRecord(paras)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

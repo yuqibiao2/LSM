@@ -18,15 +18,16 @@
             android:src="@mipmap/ic_search" />
 
         <TextView
-            android:id="@+id/ib_raking"
+            android:id="@+id/tv_raking"
             android:layout_width="50dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@color/trans"
-            android:drawableBottom="@mipmap/ic_ranking_down"
-            android:drawableTop="@mipmap/ic_ranking_up"
+            android:drawableBottom="@mipmap/ic_ranking_down_small"
+            android:drawableTop="@mipmap/ic_ranking_up_small"
             android:gravity="center"
-            android:text="55"
+            android:layout_centerVertical="true"
+            android:text="0"
             android:textColor="#FF323643"
             android:textSize="20dp" />
 
@@ -37,7 +38,7 @@
             android:layout_centerVertical="true"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@id/ib_raking"
+            android:layout_toLeftOf="@id/tv_raking"
             android:background="@mipmap/ic_trophy" />
 
     </RelativeLayout>

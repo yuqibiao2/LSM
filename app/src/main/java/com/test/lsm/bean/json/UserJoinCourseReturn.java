@@ -32,6 +32,7 @@ public class UserJoinCourseReturn {
     public static class PdBean {
 
         private int UC_ID;
+        private  int US_ID;
         private String COACH_ID;
         private int COURSE_ID;
         private String USER_ID;
@@ -48,6 +49,14 @@ public class UserJoinCourseReturn {
 
         public String getCOACH_ID() {
             return COACH_ID;
+        }
+
+        public int getUS_ID() {
+            return US_ID;
+        }
+
+        public void setUS_ID(int US_ID) {
+            this.US_ID = US_ID;
         }
 
         public void setCOACH_ID(String COACH_ID) {

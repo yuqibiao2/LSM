@@ -12,14 +12,17 @@ import com.test.lsm.R;
 import com.test.lsm.adapter.DownLineCourseAdapter;
 import com.test.lsm.adapter.OnLineCourseAdapter;
 import com.test.lsm.bean.json.GetCoachByCourseType;
+import com.test.lsm.bean.json.QueryUserRakingReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.global.Constant;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.ExeIntensiveChoiceActivity;
 import com.test.lsm.ui.activity.ExerciseRankingActivity;
+import com.yyyu.baselibrary.utils.MyTimeUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,6 +45,8 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
     RecyclerView rvLesson;
     @BindView(R.id.ib_list)
     ImageButton ibList;
+    @BindView(R.id.tv_raking)
+    TextView tvRaking;
 
     private UserLoginReturn.PdBean user;
     private OnLineCourseAdapter onLineCourseAdapter;
@@ -100,6 +105,24 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
 
             }
         });
+
+        String currentDate = MyTimeUtils.formatDateTime("yyyy-MM-dd", new Date(System.currentTimeMillis()));
+        apiMethodManager.queryUserRankingByDate(provider, user.getUSER_ID(), currentDate, new IRequestCallback<QueryUserRakingReturn>() {
+            @Override
+            public void onSuccess(QueryUserRakingReturn result) {
+                String code = result.getResult();
+                if ("01".equals(code)){
+                    int ranking = result.getPd().getRownum();
+                    tvRaking.setText(""+ranking);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
+
     }
 
     @Override

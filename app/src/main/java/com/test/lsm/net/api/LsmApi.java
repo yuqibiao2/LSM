@@ -1,8 +1,6 @@
 package com.test.lsm.net.api;
 
 import com.test.lsm.bean.form.GetHeartChart;
-import com.test.lsm.bean.form.UserCourseTimeVo;
-import com.test.lsm.bean.form.UserJoinCourseVo;
 import com.test.lsm.bean.json.DoFooBean;
 import com.test.lsm.bean.json.GetActiveUser;
 import com.test.lsm.bean.json.GetCoachByCourseType;
@@ -11,6 +9,10 @@ import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
 import com.test.lsm.bean.json.GetMsgListReturn;
+import com.test.lsm.bean.json.ModifyScoreReturn;
+import com.test.lsm.bean.json.QueryActivityGoodsReturn;
+import com.test.lsm.bean.json.QueryAmongReturn;
+import com.test.lsm.bean.json.QueryUserRakingReturn;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.bean.json.SaveHeartByMin;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
@@ -41,6 +43,19 @@ import rx.Observable;
  */
 
 public interface LsmApi {
+
+    @GET("queryUserAmongByDate")
+    Observable<QueryUserRakingReturn> queryUserRankingByDate(@Query("USER_ID") Integer userId , @Query("QUERY_TIME")String queryTime);
+
+    @GET("queryAmongByDate")
+    Observable<QueryAmongReturn> queryAmongByDate(@Query("QUERY_TIME")String queryTime);
+
+    @FormUrlEncoded
+    @POST("modifyUserScoreByMin")
+    Observable<ModifyScoreReturn> modifyUserScoreByMin(@FieldMap Map<String, String> map);
+
+    @GET("queryActivityGoods")
+    Observable<QueryActivityGoodsReturn> queryActivityGoods();
 
     @FormUrlEncoded
     @POST("userCourseTime")

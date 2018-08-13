@@ -27,7 +27,7 @@ public  abstract  class BaseActivity extends NaviAppCompatActivity {
 
     private static final String TAG = "BaseActivity";
 
-    protected final LifecycleProvider<ActivityEvent> provider
+    public final LifecycleProvider<ActivityEvent> provider
             = NaviLifecycle.createActivityLifecycleProvider(this);
 
     protected Gson mGson;

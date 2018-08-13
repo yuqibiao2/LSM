@@ -13,10 +13,10 @@
             android:layout_width="220dp"
             android:layout_height="220dp"
             android:layout_centerHorizontal="true"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/avril" />
+            android:scaleType="centerCrop" />
 
         <TextView
+            android:id="@+id/tv_upper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/iv_trophy"
@@ -27,6 +27,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/tv_lower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/iv_trophy"
@@ -37,83 +38,28 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:text="戰利品"
         android:textColor="#FF000000"
         android:textSize="18sp" />
 
     <TextView
+        android:id="@+id/tv_goods_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:text="Beats Studio Headphone"
         android:textColor="#FF323643"
+        android:layout_marginBottom="5dp"
         android:textSize="20sp" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="195dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/bg_ranking1">
-
-        <com.yyyu.baselibrary.ui.widget.RoundImageView
-            android:id="@+id/iv_ranking_user_icon"
-            android:layout_width="78dp"
-            android:layout_height="78dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="40dp"
-            android:src="@mipmap/avril" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/iv_ranking_user_icon"
-            android:layout_marginLeft="28dp"
-            android:layout_marginTop="10dp"
-            android:text="Hank Lee"
-            android:textColor="#FFFFFFFF"
-            android:textSize="20sp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="40dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_ranking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="NO.1"
-                android:textColor="#FFFFFFFF"
-                android:textSize="48sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/tv_ranking"
-                android:layout_below="@+id/tv_ranking"
-                android:text="分數"
-                android:textColor="#FFFFFFFF"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="13883820"
-                android:textColor="#FFFFFFFF"
-                android:textSize="24sp" />
-        </LinearLayout>
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
