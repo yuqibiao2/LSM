@@ -20,8 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/iv_trophy"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/iv_trophy"
+            android:layout_marginLeft="10dp"
             android:text="08/23"
             android:textColor="#FF323643"
             android:textSize="18sp" />
@@ -31,8 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/iv_trophy"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/iv_trophy"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
             android:text="08/30"
             android:textColor="#FF323643"
             android:textSize="18sp" />

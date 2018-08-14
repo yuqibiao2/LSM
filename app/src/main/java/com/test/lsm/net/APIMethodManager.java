@@ -21,6 +21,7 @@ import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
 import com.test.lsm.bean.json.GetMsgListReturn;
+import com.test.lsm.bean.json.GetUserInfoReturn;
 import com.test.lsm.bean.json.ModifyScoreReturn;
 import com.test.lsm.bean.json.QueryActivityGoodsReturn;
 import com.test.lsm.bean.json.QueryAmongReturn;
@@ -874,6 +875,41 @@ public class APIMethodManager {
                     @Override
                     public void onNext(UserRegReturn userRegReturn) {
                         callback.onSuccess(userRegReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     *
+     * 根据用户名（手机号）获取用户信息
+     *
+     * @param provider
+     * @param username  手机号
+     * @param callback
+     * @return
+     */
+    public Subscription getUserInfoByUsername(LifecycleProvider<ActivityEvent> provider, String username , final IRequestCallback<GetUserInfoReturn> callback) {
+
+        Subscription subscribe = lsmApi.getAppuserByUm(username)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(provider.<GetUserInfoReturn>bindToLifecycle())
+                .subscribe(new Subscriber<GetUserInfoReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetUserInfoReturn getUserInfoReturn) {
+                        callback.onSuccess(getUserInfoReturn);
                     }
                 });
 

@@ -275,11 +275,18 @@
             android:src="@mipmap/ic_back" />
 
         <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/ic_no1"/>
+
+        <ImageView
             android:id="@+id/iv_left"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="100dp"
             android:padding="15dp"
             android:src="@mipmap/ic_trophy_left" />
@@ -289,7 +296,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="25dp"
+            android:layout_marginRight="5dp"
             android:layout_marginTop="100dp"
             android:padding="15dp"
             android:src="@mipmap/ic_trophy_right" />

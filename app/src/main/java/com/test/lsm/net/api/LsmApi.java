@@ -12,6 +12,7 @@ import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.ModifyScoreReturn;
 import com.test.lsm.bean.json.QueryActivityGoodsReturn;
 import com.test.lsm.bean.json.QueryAmongReturn;
+import com.test.lsm.bean.json.GetUserInfoReturn;
 import com.test.lsm.bean.json.QueryUserRakingReturn;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.bean.json.SaveHeartByMin;
@@ -120,6 +121,9 @@ public interface LsmApi {
     @FormUrlEncoded
     @POST("appUserReg")
     Observable<UserRegReturn> register(@FieldMap Map<String, String> map);
+
+    @GET("getAppuserByUm")
+    Observable<GetUserInfoReturn> getAppuserByUm(@Query("USERNAME") String username);
 
     @FormUrlEncoded
     @POST("modifyAppUser")

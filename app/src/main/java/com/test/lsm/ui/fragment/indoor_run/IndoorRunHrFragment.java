@@ -147,7 +147,7 @@ public class IndoorRunHrFragment extends LsmBaseFragment {
             set2.setHighlightEnabled(true);//是否使用点击高亮线
             set2.setDrawCircles(true);
             set2.setValueTextColor(Color.parseColor("#FBA165"));
-            set2.setLineWidth(DimensChange.dp2px(getContext(), 1.5f));//设置线宽
+            set2.setLineWidth(1);//设置线宽
             set2.setDrawCircles(false);//是否画焦点
             set2.setDrawValues(false);
             LineData lineData = new LineData(set2);

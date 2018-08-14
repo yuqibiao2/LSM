@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.test.lsm.R;
+import com.test.lsm.bean.json.GetUserInfoReturn;
+import com.test.lsm.net.APIMethodManager;
+import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.utils.LoginRegUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
@@ -57,8 +60,8 @@ public class RegisterActivity1 extends LsmBaseActivity {
     }
 
     public void toNext(View view) {
-        String tel = etUserTel.getText().toString();
-        String pwd = etUserPwd.getText().toString();
+        final String tel = etUserTel.getText().toString();
+        final String pwd = etUserPwd.getText().toString();
         if(TextUtils.isEmpty(tel) || TextUtils.isEmpty(pwd)){
             MyToast.showShort(this , getStr(R.string.input_empty));
             return;
@@ -68,7 +71,28 @@ public class RegisterActivity1 extends LsmBaseActivity {
             return;
         }
 
-        RegisterActivity2.startAction(this , tel , pwd);
+        //判断手机号是否已经被注册
+        showLoadDialog();
+        APIMethodManager.getInstance().getUserInfoByUsername(provider, tel, new IRequestCallback<GetUserInfoReturn>() {
+            @Override
+            public void onSuccess(GetUserInfoReturn result) {
+                dismissLoadDialog();
+                String code = result.getResult();
+                if ("02".equals(code)){//没有被注册
+                    RegisterActivity2.startAction(RegisterActivity1.this , tel , pwd);
+                }else{
+                    MyToast.showLong(RegisterActivity1.this , getStr(R.string.account_is_already_exist));
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                MyToast.showLong(RegisterActivity1.this , getStr(R.string.net_error));
+                dismissLoadDialog();
+            }
+        });
+
+
         //finish();
     }
 
