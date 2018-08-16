@@ -29,6 +29,7 @@ import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
 import com.swm.algorithm.Algorithm;
 import com.swm.algorithm.support.IirFilter;
+import com.swm.algorithm.support.heat.SwmQuantityOfHeat;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.BleConnectMessage;
@@ -39,7 +40,10 @@ import com.test.lsm.bean.event.HeartChgEvent;
 import com.test.lsm.bean.event.OnUserInfoChg;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
 import com.test.lsm.bean.event.StepChgEvent;
+import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.db.bean.Calorie;
 import com.test.lsm.db.bean.Step;
+import com.test.lsm.db.service.CalorieService;
 import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.global.Constant;
@@ -60,9 +64,7 @@ import com.yyyu.lsmalgorithm.MyLib;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -278,7 +280,13 @@ public class InformationFragment extends LsmBaseFragment {
     private IStepService stepService;
     private List<FrameLayout> itemContainer;
     private BleDevice bleDevice;
+    private boolean isDestory = false;
+    private boolean isGirl;
+    private int weight;
+    private int age;
+    private CalorieService calorieService;
 
+    private float totalBleCalorie;
 
     /**
      * 得到数据转成short
@@ -326,6 +334,7 @@ public class InformationFragment extends LsmBaseFragment {
         infoBeanList.add(new InfoBean(2, "265"));
 
         stepService = new StepService();
+        calorieService = new CalorieService();
 
         itemContainer = new ArrayList<>();
         itemContainer.add(flHeart);
@@ -333,6 +342,16 @@ public class InformationFragment extends LsmBaseFragment {
         itemContainer.add(flCalorie);
         itemContainer.add(flHrChart);
 
+        UserLoginReturn.PdBean user = application.getUser();
+        String userSex = user.getUSER_SEX();
+        isGirl = userSex.equals("0");
+        weight = Integer.parseInt(user.getUSER_WEIGHT());
+        String birthday = user.getBIRTHDAY();
+        age = 30;
+        if (!TextUtils.isEmpty(birthday)) {
+            age = MyTimeUtils.getAge(birthday);
+        }
+        totalBleCalorie = calorieService.getCurrentDateTotalCalorie();
     }
 
     @Override
@@ -388,6 +407,53 @@ public class InformationFragment extends LsmBaseFragment {
                 BleBTUtils.saveConnectDevice(getContext(), bleDevice.getMac());
             }
         });
+
+        //---根据一分钟心跳计算卡路里值
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!isDestory) {
+                    try {
+                        Thread.sleep(60 * 1000);
+                        if (!application.isBleConnected()) {
+                            continue;
+                        }
+                        //计算平均值
+                        CircularFifoQueue<Integer> oneMinHeart = Constant.oneMinHeart;
+                        int total = 0;
+                        for (Integer heartNum : oneMinHeart) {
+                            total += heartNum;
+                        }
+                        int size = oneMinHeart.size();
+                        int avgHearNum = size > 0 ? total / size : 0;
+                        SwmQuantityOfHeat quantityOfHeat = Algorithm.newQuantityOfHeat();
+                        double calorieOnMinute = quantityOfHeat.getQuantityOfHeatMinutes(200, isGirl, age, weight, 1);
+
+                        MyLog.e(TAG , "calorieOnMinute=="+calorieOnMinute);
+
+                        totalBleCalorie = (float) (totalBleCalorie + calorieOnMinute);
+                        Calorie calorie = new Calorie();
+                        calorie.setDate(MyTimeUtils.getCurrentDate());
+                        calorie.setHour(MyTimeUtils.getCurrentHour());
+                        calorie.setCalorieValue(totalBleCalorie);
+                        calorieService.addCurrentDayCalorie(calorie);
+
+                        String calorieByStep = SportStepJsonUtils.getCalorieByStep(mStepSum);
+                        float calorieSys = Float.valueOf(calorieByStep);
+                        final String calorieStr = String.format("%.1f", totalBleCalorie / 1000 + calorieSys);
+                        MyLog.e(TAG , "calorieStr=="+totalBleCalorie / 1000 + calorieSys);
+                        tvCalorie.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvCalorie.setText("" + calorieStr);
+                            }
+                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
 
     }
 
@@ -530,14 +596,16 @@ public class InformationFragment extends LsmBaseFragment {
 
         Log.e(TAG, "updateStepCount : " + mStepSum);
         tvStepNum.setText(mStepSum + "");
-        tvCalorie.setText(SportStepJsonUtils.getCalorieByStep(mStepSum) + "");
+        String calorieByStep = SportStepJsonUtils.getCalorieByStep(mStepSum);
+        float calorieSys = Float.valueOf(calorieByStep);
+        final String calorieStr = String.format("%.1f", totalBleCalorie / 1000 + calorieSys);
+        tvCalorie.setText( calorieStr+ "");
         String distanceByStep = SportStepJsonUtils.getDistanceByStep(mStepSum);
         String caloriesValue = SportStepJsonUtils.getCalorieByStep(mStepSum);
         application.setStepNum(mStepSum);
         application.setStepDistance(Double.parseDouble(distanceByStep));
         application.setCalorieValue(Double.parseDouble(caloriesValue));
         EventBus.getDefault().post(new StepChgEvent(mStepSum, "步数值更新"));
-
     }
 
     /**
@@ -811,6 +879,7 @@ public class InformationFragment extends LsmBaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isDestory = true;
         mHandler.removeMessages(0);
         mHandler.removeMessages(1);
         EventBus.getDefault().unregister(this);

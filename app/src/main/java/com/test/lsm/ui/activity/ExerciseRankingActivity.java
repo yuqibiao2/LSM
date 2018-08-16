@@ -137,8 +137,14 @@ public class ExerciseRankingActivity extends LsmBaseActivity {
                 String code = result.getResult();
                 if ("01".equals(code)) {
                     List<QueryAmongReturn.PdBean.PdBeanItem> pdBeanList = new ArrayList<>();
-                    pdBeanList.add(result.getPd().getOnePd());
-                    pdBeanList.add(result.getPd().getTwoPd());
+                    QueryAmongReturn.PdBean.PdBeanItem onePd = result.getPd().getOnePd();
+                    if (onePd!=null && onePd.getUSER_ID()!=0){
+                        pdBeanList.add(onePd);
+                    }
+                    QueryAmongReturn.PdBean.PdBeanItem twoPd = result.getPd().getTwoPd();
+                    if (twoPd!=null && twoPd.getUSER_ID()!=0){
+                        pdBeanList.add(twoPd);
+                    }
                     vpRanking.setAdapter(new RankingAdapter(ExerciseRankingActivity.this, pdBeanList));
                 }
             }

@@ -8,9 +8,47 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:onClick="back"
+            android:padding="10dp"
+            android:src="@mipmap/ic_back" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/ic_no1"/>
+
+        <ImageView
+            android:id="@+id/iv_left"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="100dp"
+            android:padding="15dp"
+            android:src="@mipmap/ic_trophy_left" />
+
+        <ImageView
+            android:id="@+id/iv_right"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="100dp"
+            android:padding="15dp"
+            android:src="@mipmap/ic_trophy_right" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:orientation="vertical">
 
             <android.support.v4.view.ViewPager
@@ -211,12 +249,14 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
+
                     <ImageView
                         android:id="@+id/iv_arrow_up"
                         android:layout_width="25dp"
                         android:layout_height="15dp"
-                        android:visibility="invisible"
-                        android:src="@mipmap/ic_ranking_up" />
+                        android:src="@mipmap/ic_ranking_up"
+                        android:visibility="invisible" />
+
                     <TextView
                         android:id="@+id/tv_user_raking"
                         android:layout_width="wrap_content"
@@ -224,12 +264,13 @@
                         android:text="0"
                         android:textColor="#FF323643"
                         android:textSize="42sp" />
+
                     <ImageView
                         android:id="@+id/iv_arrow_down"
                         android:layout_width="25dp"
                         android:layout_height="15dp"
-                        android:visibility="invisible"
-                        android:src="@mipmap/ic_ranking_down" />
+                        android:src="@mipmap/ic_ranking_down"
+                        android:visibility="invisible" />
                 </LinearLayout>
 
 
@@ -264,42 +305,6 @@
                 android:textSize="20sp" />
 
         </LinearLayout>
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:onClick="back"
-            android:padding="10dp"
-            android:src="@mipmap/ic_back" />
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="5dp"
-            android:src="@mipmap/ic_no1"/>
-
-        <ImageView
-            android:id="@+id/iv_left"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="100dp"
-            android:padding="15dp"
-            android:src="@mipmap/ic_trophy_left" />
-
-        <ImageView
-            android:id="@+id/iv_right"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="100dp"
-            android:padding="15dp"
-            android:src="@mipmap/ic_trophy_right" />
 
     </RelativeLayout>
 

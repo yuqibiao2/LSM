@@ -316,14 +316,14 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                 if (isActDestroy) {
                     return;
                 }
+                hrBufferPerTenSec.add(hrValue);
+                hrBufferPerFiveMin.add(hrValue);
+                tvRealTimeHr.setText(hrValue + " bpm");
+                if (hrValue > maxHr) {
+                    maxHr = hrValue;
+                }
+                tvMaxHr.setText(maxHr + " bpm");
                 if (runStatus == START) {
-                    hrBufferPerTenSec.add(hrValue);
-                    hrBufferPerFiveMin.add(hrValue);
-                    tvRealTimeHr.setText(hrValue + " bpm");
-                    if (hrValue > maxHr) {
-                        maxHr = hrValue;
-                    }
-                    tvMaxHr.setText(maxHr + " bpm");
                     indoorHrStatsFragment.initLineChartData(hrValue);
                     if (getLineDataSize() >= exeBarTotal) {//本次课程结束
                         doStop();
@@ -501,6 +501,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     private void toRecordHr() {
         //2s中记录一次平均心跳
         new Thread(new Runnable() {
+            private int avgHr;
             private int qualifiedNum = 0;
 
             @Override
@@ -518,7 +519,8 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                                     total += hrValue;
                                 }
                             }
-                            int avgHr = total / hrBufferPerTenSec.size();
+                            avgHr = total / hrBufferPerTenSec.size();
+                        }
                             avgHrPerTenSec.add(avgHr);
                             hrBufferPerTenSec.clear();
                             addLineEntry(avgHr);
@@ -532,6 +534,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                             }
                             //qualifiedNum * 100 / realTimeValues.size();
                             point = qualifiedNum;
+                            //MyLog.e(TAG , "====point"+point+"  avgHr: "+avgHr+"   startY: "+startY+"    endY: "+endY);
                             tvRealTimePoint.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -541,8 +544,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                                     tvRealTimePoint.setText("" + point);
                                 }
                             });
-                        }
-                        MyLog.e(TAG, "==============toRecordHr=======");
+
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -552,6 +554,9 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
 
         //10s记录一次平均心跳
         new Thread(new Runnable() {
+
+            private int avgHr;
+
             @Override
             public void run() {
                 while (!isActDestroy) {
@@ -567,11 +572,11 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                                     total += hrValue;
                                 }
                             }
-                            int avgHr = total / hrBufferPerFiveMin.size();
+                            avgHr = total / hrBufferPerFiveMin.size();
+                        }
                             avgHrPerFiveMin.add(avgHr);
                             hrBufferPerFiveMin.clear();
-                            indoorRunHrFragment.addLineEntry(avgHr);
-                        }
+                            indoorRunHrFragment.addLineEntry( avgHr);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

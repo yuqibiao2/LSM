@@ -1,25 +1,21 @@
 package com.test.lsm.ui.fragment.information_detail;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.CandleEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.utils.MPPointF;
-import com.github.mikephil.charting.utils.Utils;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.CalorieChgEvent;
+import com.test.lsm.db.bean.Calorie;
 import com.test.lsm.db.bean.Step;
+import com.test.lsm.db.service.CalorieService;
 import com.test.lsm.db.service.StepService;
+import com.test.lsm.db.service.inter.ICalorieService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.test.lsm.ui.wdiget.MyMarkerView;
@@ -28,7 +24,6 @@ import com.yyyu.baselibrary.utils.MyTimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import de.greenrobot.event.EventBus;
@@ -53,12 +48,14 @@ public class CalorieDetailFragment extends LsmBaseFragment {
     TextView tvCalorieTip;
 
     private IStepService stepService;
+    private ICalorieService calorieService;
 
     @Override
     protected void beforeInit() {
         super.beforeInit();
         EventBus.getDefault().register(this);
         stepService = new StepService();
+        calorieService = new CalorieService();
     }
 
     @Override
@@ -85,6 +82,7 @@ public class CalorieDetailFragment extends LsmBaseFragment {
     private void setData() {
 
         List<Step> currentDatStep = stepService.getCurrentDateStep();
+        List<Calorie> currentDateCalorie = calorieService.getCurrentDateCalorie();
 
         ArrayList<BarEntry> yVals = new ArrayList<BarEntry>();
 
@@ -100,6 +98,15 @@ public class CalorieDetailFragment extends LsmBaseFragment {
             int stepNum = step.getStepNum();
             String calorieByStep = SportStepJsonUtils.getCalorieByStep(stepNum);
             barEntry.setY(Float.parseFloat(calorieByStep));
+        }
+
+        for (int i = 0; i < currentDateCalorie.size(); i++) {
+            Calorie calorie = currentDateCalorie.get(i);
+            int hour = calorie.getHour();
+            BarEntry barEntry = yVals.get(hour);
+            float calorieValue = calorie.getCalorieValue()/1000;
+            float y = barEntry.getY();
+            barEntry.setY(y + calorieValue);
         }
 
 
@@ -127,18 +134,19 @@ public class CalorieDetailFragment extends LsmBaseFragment {
         //---设置marker
         MyMarkerView mv = new MyMarkerView(getActivity(), R.layout.custom_marker_view2);
         mv.setChartView(bcCalorie);
-        mv.setDigitCount(1);
+        mv.setDigitCount(2);
         bcCalorie.setMarker(mv);  //设置 marker ,点击后显示的功能 ，布局可以自定义
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void updateCalorie(CalorieChgEvent calorieChgEvent) {
         Step step = stepService.getStepByHourOnCurrentDay(MyTimeUtils.getCurrentHour());
-        if(step==null){
+        if (step == null) {
             return;
         }
         String calorieByStep = SportStepJsonUtils.getCalorieByStep(step.getStepNum());
-        float calorieNum = Float.parseFloat(calorieByStep);
+        float currentDateTotalCalorie = calorieService.getCurrentDateTotalCalorie();
+        float calorieNum = Float.parseFloat(calorieByStep)+currentDateTotalCalorie;
         //float calorieNum = calorieChgEvent.getCalorieNum();
         if (calorieNum < 100) {
             ivCalorieStatus.setImageResource(R.mipmap.ic_caloria1);

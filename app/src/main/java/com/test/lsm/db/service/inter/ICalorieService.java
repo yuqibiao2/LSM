@@ -1,5 +1,6 @@
 package com.test.lsm.db.service.inter;
 
+import com.test.lsm.db.bean.Calorie;
 import com.test.lsm.db.bean.Step;
 
 import java.util.List;
@@ -9,31 +10,37 @@ import java.util.List;
  *
  * @author yu
  * @version 1.0
- * @date 2018/5/15
+ * @date 2018/8/16
  */
-public interface IStepService {
+public interface ICalorieService {
+
 
     /**
-     * 记录步数
-     * 当前天 当前小时 下只有一条记录 存在则更新
-     *step中的步数为总步数
-     * @param step
-     */
-    void addCurrentDayStep(Step step);
-
-    /**
-     * 得到当前天的步数(所有小时的)
+     * 得到当前的所有卡路里值
      *
      * @return
      */
-    List<Step> getCurrentDateStep();
+    float getCurrentDateTotalCalorie();
+
+    /**
+     * 记录卡路里
+     * 当前天 当前小时 下只有一条记录 存在则更新
+     *
+     * @param calorie
+     */
+    void addCurrentDayCalorie(Calorie calorie);
+
+    /**
+     * 得到当前天的步数(所有小时的)
+     */
+    List<Calorie> getCurrentDateCalorie();
 
     /**
      * 得到当天除了某个小时的其他信息
      *
      * @return
      */
-    List<Step> getOtherStepByHour(int hour);
+    List<Calorie> getOtherCalorieByHour(int hour);
 
     /**
      * 得到当前天某一小时的步数
@@ -41,6 +48,6 @@ public interface IStepService {
      * @param hour
      * @return
      */
-    Step getStepByHourOnCurrentDay(int hour);
+    Calorie getCalorieByHourOnCurrentDay(int hour);
 
 }

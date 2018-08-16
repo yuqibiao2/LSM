@@ -66,7 +66,8 @@ public class StepService implements IStepService {
         long currentDate = MyTimeUtils.getCurrentDate();
         List<Step> list = stepDao.queryBuilder()
                 .where(StepDao.Properties.Date.eq(currentDate))
-                .where(StepDao.Properties.Hour.notEq(hour)).list();//防止时间被修改了
+                .where(StepDao.Properties.Hour.notEq(hour))
+                .list();//防止时间被修改了
         return list;
     }
 
@@ -75,7 +76,8 @@ public class StepService implements IStepService {
         long currentDate = MyTimeUtils.getCurrentDate();
         List<Step> list = stepDao.queryBuilder()
                 .where(StepDao.Properties.Date.eq(currentDate))
-                .where(StepDao.Properties.Hour.eq(hour)).list();//防止时间被修改了
+                .where(StepDao.Properties.Hour.eq(hour))
+                .list();//防止时间被修改了
         return (list!=null&&list.size()>0)?list.get(0):null;
     }
 
