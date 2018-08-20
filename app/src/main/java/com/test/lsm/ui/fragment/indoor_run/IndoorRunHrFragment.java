@@ -142,7 +142,7 @@ public class IndoorRunHrFragment extends LsmBaseFragment {
             //设置数据1  参数1：数据源 参数2：图例名称
             set2 = new LineDataSet(lineValues, "测试数据1");
             set2.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-            set2.setColor(Color.parseColor("#aaFBA165"));
+            set2.setColor(Color.parseColor("#FBA165"));
             set2.setHighLightColor(Color.WHITE);//设置点击交点后显示交高亮线的颜色
             set2.setHighlightEnabled(true);//是否使用点击高亮线
             set2.setDrawCircles(true);

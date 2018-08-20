@@ -19,11 +19,13 @@ import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.PushMsgAdapter;
 import com.test.lsm.bean.event.OnUserInfoChg;
+import com.test.lsm.bean.event.RefreshTodayMsg;
 import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.PushExtra;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
 import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.ui.activity.ExerciseRankingActivity;
 import com.test.lsm.ui.activity.MsgDetailActivity;
 import com.test.lsm.ui.activity.SettingActivity;
 import com.test.lsm.utils.LoginRegUtils;
@@ -112,10 +114,7 @@ public class TodayFragment extends LsmBaseFragment {
         srlToday.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                page = 1;
-                mData.clear();
-                PushMsgAdapter.tipHolder.clear();
-                initData();
+                toRefreshData();
             }
         });
 
@@ -129,16 +128,34 @@ public class TodayFragment extends LsmBaseFragment {
         pushMsgAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                Bundle bundle = new Bundle();
-                bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, "ttttt");
-                bundle.putString(JPushInterface.EXTRA_ALERT, mData.get(position).getID());
-                PushExtra extra = new PushExtra();
-                extra.setMsgId(mData.get(position).getID());
-                bundle.putString(JPushInterface.EXTRA_EXTRA, mGson.toJson(extra));
-                MsgDetailActivity.startAction(getContext(), bundle);
+
+                String pushTitle = mData.get(position).getPUSH_TITLE();
+                if ("心力挑戰名人賽".trim().equals(pushTitle)){//挑战赛
+                    ExerciseRankingActivity.startAction(getActivity());
+                }else{
+                    Bundle bundle = new Bundle();
+                    bundle.putString(JPushInterface.EXTRA_NOTIFICATION_TITLE, "ttttt");
+                    bundle.putString(JPushInterface.EXTRA_ALERT, mData.get(position).getID());
+                    PushExtra extra = new PushExtra();
+                    extra.setMsgId(mData.get(position).getID());
+                    bundle.putString(JPushInterface.EXTRA_EXTRA, mGson.toJson(extra));
+                    MsgDetailActivity.startAction(getContext(), bundle);
+
+                }
+
             }
         });
 
+    }
+
+    /**
+     * 刷新消息
+     */
+    private void toRefreshData() {
+        page = 1;
+        mData.clear();
+        PushMsgAdapter.tipHolder.clear();
+        initData();
     }
 
     @Override
@@ -183,6 +200,11 @@ public class TodayFragment extends LsmBaseFragment {
         if (!TextUtils.isEmpty(userImage)){
             GlidUtils.load(getContext() , rvUserIcon , userImage);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onRefreshData(RefreshTodayMsg refreshTodayMsg){
+        toRefreshData();
     }
 
 

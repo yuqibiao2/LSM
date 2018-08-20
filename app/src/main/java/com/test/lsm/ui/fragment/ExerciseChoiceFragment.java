@@ -110,32 +110,6 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
 
             }
         });
-
-        String currentDate = MyTimeUtils.formatDateTime("yyyy-MM-dd", new Date(System.currentTimeMillis()));
-        apiMethodManager.queryUserRankingByDate(provider, user.getUSER_ID(), currentDate, new IRequestCallback<QueryUserRakingReturn>() {
-            @Override
-            public void onSuccess(QueryUserRakingReturn result) {
-                String code = result.getResult();
-                if ("01".equals(code)) {
-                    QueryUserRakingReturn.PdBean.CurrentPdBean currentPd = result.getPd().getCurrentPd();
-                    int ranking = currentPd.getUSER_SORT();
-                    tvRaking.setText("" + ranking);
-                    int arrow = result.getPd().getArrow();
-                    if (arrow == 0) {//退步
-                        ivArrowDown.setVisibility(View.VISIBLE);
-                    } else if (arrow == 1) {//进步
-                        ivArrowDown.setVisibility(View.VISIBLE);
-                    } else {
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-
-            }
-        });
-
     }
 
     @Override
@@ -169,6 +143,41 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
             @Override
             public void onClick(View view) {
                 ExerciseRankingActivity.startAction(getActivity());
+            }
+        });
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser){
+            updateRaking();
+        }
+    }
+
+    private void updateRaking(){
+        String currentDate = MyTimeUtils.formatDateTime("yyyy-MM-dd", new Date(System.currentTimeMillis()));
+        apiMethodManager.queryUserRankingByDate(provider, user.getUSER_ID(), currentDate, new IRequestCallback<QueryUserRakingReturn>() {
+            @Override
+            public void onSuccess(QueryUserRakingReturn result) {
+                String code = result.getResult();
+                if ("01".equals(code)) {
+                    QueryUserRakingReturn.PdBean.CurrentPdBean currentPd = result.getPd().getCurrentPd();
+                    int ranking = currentPd.getUSER_SORT();
+                    tvRaking.setText("" + ranking);
+                    int arrow = result.getPd().getArrow();
+                    if (arrow == 0) {//退步
+                        ivArrowDown.setVisibility(View.VISIBLE);
+                    } else if (arrow == 1) {//进步
+                        ivArrowDown.setVisibility(View.VISIBLE);
+                    } else {
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
             }
         });
     }

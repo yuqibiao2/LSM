@@ -5,7 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.jpushdemo.MyReceiver;
+import com.test.lsm.bean.event.RefreshTodayMsg;
+import com.test.lsm.ui.activity.ExerciseRankingActivity;
 import com.test.lsm.ui.activity.MsgDetailActivity;
+import com.yyyu.baselibrary.utils.MyLog;
+
+import cn.jpush.android.api.JPushInterface;
+import de.greenrobot.event.EventBus;
 
 /**
  * 功能：
@@ -21,7 +27,16 @@ public class JPushReceiver extends MyReceiver{
     @Override
     protected void onMsgClicked(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
-        MsgDetailActivity.startAction(context , bundle);
+        String title = bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE);
+        String content = bundle.getString(JPushInterface.EXTRA_ALERT);
+        String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
+
+        if ("心力挑戰名人賽".trim().equals(content)){
+            ExerciseRankingActivity.startAction(context);
+        }else{
+            MsgDetailActivity.startAction(context , bundle);
+        }
+        EventBus.getDefault().post(new RefreshTodayMsg());
     }
 
 }
