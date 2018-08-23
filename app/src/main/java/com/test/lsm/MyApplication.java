@@ -3,6 +3,7 @@ package com.test.lsm;
 import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.multidex.MultiDexApplication;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.clj.fastble.BleManager;
@@ -24,7 +25,7 @@ import cn.jpush.android.api.JPushInterface;
  * @date 2018/3/23
  */
 
-public class MyApplication extends Application{
+public class MyApplication extends MultiDexApplication {
 
     public Context aContext;
 

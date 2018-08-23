@@ -2,12 +2,14 @@ package com.test.lsm.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.form.UserJoinCourseVo;
@@ -101,7 +103,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         String hrvIndexBeanJsonStr = (String) MySPUtils.get(this, SpConstant.HRV_INFO, "");
         if (!TextUtils.isEmpty(hrvIndexBeanJsonStr)) {
             GetHRVInfoReturn.HRVIndexBean hrvIndexBean = mGson.fromJson(hrvIndexBeanJsonStr, GetHRVInfoReturn.HRVIndexBean.class);
-            bodyFitness =Integer.parseInt( hrvIndexBean.getBodyFitness());
+            bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());
         }
         apiMethodManager = APIMethodManager.getInstance();
         MyApplication application = (MyApplication) getApplication();
@@ -205,9 +207,48 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         }
     }
 
+    private long enterTime;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        enterTime = System.currentTimeMillis() / 1000;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //--统计
+        long stopTime = System.currentTimeMillis() / 1000;
+        long duration = stopTime - enterTime;
+        Bundle bundle = new Bundle();
+        bundle.putString("classId", "" + coachId);
+        bundle.putString("during", "" + duration);
+        FirebaseAnalytics.getInstance(ExeIntensiveChoiceActivity.this).logEvent("lsm01_leave_class_intensity", bundle);
+    }
+
     public void toNext(View view) {
 
-        if (ccType==0){//现场课程
+        //--统计
+        long stopTime = System.currentTimeMillis() / 1000;
+        long duration = stopTime - enterTime;
+        Bundle bundle = new Bundle();
+        bundle.putString("classId", "" + coachId);
+        switch (courseLevel) {
+            case 0:
+                bundle.putString("intensity", "easy");
+                break;
+            case 1:
+                bundle.putString("intensity", "general");
+                break;
+            case 2:
+                bundle.putString("intensity", "difficult");
+                break;
+        }
+        bundle.putString("during", "" + duration);
+        FirebaseAnalytics.getInstance(ExeIntensiveChoiceActivity.this).logEvent("lsm01_enter_exercise", bundle);
+
+        if (ccType == 0) {//现场课程
             showLoadDialog();
             UserJoinCourseVo userJoinCourseVo = new UserJoinCourseVo();
             userJoinCourseVo.setUSER_ID(userId);
@@ -219,11 +260,11 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
                 @Override
                 public void onSuccess(UserJoinCourseReturn result) {
                     dismissLoadDialog();
-                    if ("01".equals(result.getResult())){
+                    if ("01".equals(result.getResult())) {
                         int ucId = result.getPd().getUC_ID();
                         int usId = result.getPd().getUS_ID();
-                        IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName , ucId , usId);
-                    }else{
+                        IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName, ucId, usId);
+                    } else {
                         MyToast.showLong(getApplicationContext(), getStr(R.string.undefine_error));
                     }
                 }
@@ -234,8 +275,8 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
                     MyToast.showLong(getApplicationContext(), getStr(R.string.net_error));
                 }
             });
-        }else{//线下课程 直接跳转
-            IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName , -1 , userId);
+        } else {//线下课程 直接跳转
+            IndoorExerciseActivity.startAction(ExeIntensiveChoiceActivity.this, courseLevel, courseType, courseName, -1, userId);
         }
 
     }
@@ -256,6 +297,7 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         intent.putExtra("bodyFitness", bodyFitness);
         context.startActivity(intent);
     }
+
     public void chgStatus1(View view, int status) {
         switch (status) {
             case 0:
@@ -278,5 +320,4 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
                 break;
         }
     }
-
 }

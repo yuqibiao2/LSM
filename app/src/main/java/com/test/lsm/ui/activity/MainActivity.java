@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -33,6 +34,7 @@ import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.example.jpushdemo.ExampleUtil;
 import com.example.jpushdemo.LocalBroadcastManager;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.MenuAdapter;
@@ -114,6 +116,21 @@ public class MainActivity extends LsmBaseActivity {
     public void beforeInit() {
         super.beforeInit();
         application = (MyApplication) getApplication();
+
+        //--Firebase统计
+        int currentHour = MyTimeUtils.getCurrentHour();
+        Bundle bundle = new Bundle();
+        if (currentHour < 6) {
+            bundle.putString("time", "midnight");
+        } else if (currentHour < 12) {
+            bundle.putString("time", "morning");
+        } else if (currentHour < 18) {
+            bundle.putString("time", "afternoon");
+        } else {
+            bundle.putString("time", "evening");
+        }
+        FirebaseAnalytics.getInstance(this).logEvent("lsm01_open", bundle);
+
     }
 
     @Override
@@ -193,7 +210,7 @@ public class MainActivity extends LsmBaseActivity {
                 return TabFragment.values().length;
             }
         });
-        vp_content.setCurrentItem(1 , false);
+        vp_content.setCurrentItem(1, false);
     }
 
     @Override
@@ -204,16 +221,22 @@ public class MainActivity extends LsmBaseActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int radioId) {
                 switch (radioId) {
                     case R.id.rb_information:
-                        vp_content.setCurrentItem(0 , false);
+
+                        //--统计
+                        Bundle bundle = new Bundle();
+                        bundle.putString("click", "heart");
+                        FirebaseAnalytics.getInstance(MainActivity.this).logEvent("lsm01_test", bundle);
+
+                        vp_content.setCurrentItem(0, false);
                         break;
                     case R.id.rb_today:
-                        vp_content.setCurrentItem(1 , false);
+                        vp_content.setCurrentItem(1, false);
                         break;
                     case R.id.rb_run:
-                        vp_content.setCurrentItem(2 , false);
+                        vp_content.setCurrentItem(2, false);
                         break;
                     case R.id.rb_more:
-                        vp_content.setCurrentItem(3 , false);
+                        vp_content.setCurrentItem(3, false);
                         break;
                 }
             }
@@ -282,7 +305,7 @@ public class MainActivity extends LsmBaseActivity {
         information(R.id.rb_information, InformationFragment.class),
         today(R.id.rb_today, TodayFragment.class),
         run(R.id.rb_run, RunFragment.class),
-        setting(R.id.rb_more , ExerciseChoiceFragment.class);
+        setting(R.id.rb_more, ExerciseChoiceFragment.class);
 
         private Fragment fragment;
         private final int tabId;
@@ -374,7 +397,7 @@ public class MainActivity extends LsmBaseActivity {
         super.onDestroy();
         stopService(uploadHealthInfoIntent);
         //断开蓝牙设备
-       // BleManager.getInstance().disconnect(application.getCurrentBleDevice());
+        // BleManager.getInstance().disconnect(application.getCurrentBleDevice());
     }
 
     public static void startAction(Activity activity) {

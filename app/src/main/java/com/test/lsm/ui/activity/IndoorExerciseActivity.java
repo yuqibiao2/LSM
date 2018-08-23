@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -30,6 +31,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.UpdateIndoorRunDataEvent;
@@ -134,6 +136,8 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     private int usId;
     private int point;
 
+    private long enterTime;
+
     public enum RunStatus {
         NONE,
         START,
@@ -149,6 +153,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     @Override
     public void beforeInit() {
         super.beforeInit();
+        enterTime = System.currentTimeMillis() / 1000;
 
         application = (MyApplication) getApplication();
 
@@ -303,7 +308,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                 }*/
               /*  IndoorRunRankingDialog rankingDialog = new IndoorRunRankingDialog(IndoorExerciseActivity.this , 101);
                 rankingDialog.show();*/
-               //doUpdateUserScore("123");
+                //doUpdateUserScore("123");
             }
         });
 
@@ -375,6 +380,24 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                 }
             });
         }
+
+        //--统计（正常结束）
+        Bundle bundle = new Bundle();
+        bundle.putString("classId", "" + ucId);
+        switch (courseLevel) {
+            case 0:
+                bundle.putString("intensity", "easy");
+                break;
+            case 1:
+                bundle.putString("intensity", "general");
+                break;
+            case 2:
+                bundle.putString("intensity", "difficult");
+                break;
+        }
+        bundle.putString("score", "" + point);
+        FirebaseAnalytics.getInstance(this).logEvent("lsm01_finish_exercise", bundle);
+
     }
 
     @Override
@@ -521,29 +544,29 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                             }
                             avgHr = total / hrBufferPerTenSec.size();
                         }
-                            avgHrPerTenSec.add(avgHr);
-                            hrBufferPerTenSec.clear();
-                            addLineEntry(avgHr);
-                            //判断值是否在标准内
-                            int size = avgHrPerTenSec.size() > realTimeValues.size() ? realTimeValues.size() : avgHrPerTenSec.size();
-                            BarEntry entry = realTimeValues.get(size - 1);
-                            float endY = entry.getY();
-                            float startY = endY - 0.1f * maxBaseHr;
-                            if (avgHr > startY && avgHr < endY) {//满足计分条件
-                                qualifiedNum++;
-                            }
-                            //qualifiedNum * 100 / realTimeValues.size();
-                            point = qualifiedNum;
-                            //MyLog.e(TAG , "====point"+point+"  avgHr: "+avgHr+"   startY: "+startY+"    endY: "+endY);
-                            tvRealTimePoint.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (point >= 1000) {
-                                        tvRealTimePoint.setTextSize(45);
-                                    }
-                                    tvRealTimePoint.setText("" + point);
+                        avgHrPerTenSec.add(avgHr);
+                        hrBufferPerTenSec.clear();
+                        addLineEntry(avgHr);
+                        //判断值是否在标准内
+                        int size = avgHrPerTenSec.size() > realTimeValues.size() ? realTimeValues.size() : avgHrPerTenSec.size();
+                        BarEntry entry = realTimeValues.get(size - 1);
+                        float endY = entry.getY();
+                        float startY = endY - 0.1f * maxBaseHr;
+                        if (avgHr > startY && avgHr < endY) {//满足计分条件
+                            qualifiedNum++;
+                        }
+                        //qualifiedNum * 100 / realTimeValues.size();
+                        point = qualifiedNum;
+                        //MyLog.e(TAG , "====point"+point+"  avgHr: "+avgHr+"   startY: "+startY+"    endY: "+endY);
+                        tvRealTimePoint.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (point >= 1000) {
+                                    tvRealTimePoint.setTextSize(45);
                                 }
-                            });
+                                tvRealTimePoint.setText("" + point);
+                            }
+                        });
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -574,9 +597,9 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                             }
                             avgHr = total / hrBufferPerFiveMin.size();
                         }
-                            avgHrPerFiveMin.add(avgHr);
-                            hrBufferPerFiveMin.clear();
-                            indoorRunHrFragment.addLineEntry( avgHr);
+                        avgHrPerFiveMin.add(avgHr);
+                        hrBufferPerFiveMin.clear();
+                        indoorRunHrFragment.addLineEntry(avgHr);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -598,6 +621,24 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         finish();
                         dialogInterface.dismiss();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("classId", "" + ucId);
+                        switch (courseLevel) {
+                            case 0:
+                                bundle.putString("intensity", "easy");
+                                break;
+                            case 1:
+                                bundle.putString("intensity", "general");
+                                break;
+                            case 2:
+                                bundle.putString("intensity", "difficult");
+                                break;
+                        }
+                        long exitTime = System.currentTimeMillis() / 1000;
+                        long duration = exitTime - enterTime;
+                        bundle.putString("during", "" + duration);
+                        FirebaseAnalytics.getInstance(IndoorExerciseActivity.this).logEvent("lsm01_giveup_exercise", bundle);
+
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {

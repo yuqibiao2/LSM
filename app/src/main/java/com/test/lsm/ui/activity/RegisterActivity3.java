@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.test.lsm.R;
 import com.test.lsm.bean.form.UserRegVo;
@@ -103,14 +104,14 @@ public class RegisterActivity3 extends LsmBaseActivity {
         String username = userRegVo.getUSERNAME();
         String urgent_user = userRegVo.getURGENT_USER();
         String urgent_phone = userRegVo.getURGENT_PHONE();
-        if (!TextUtils.isEmpty(username)){
-            etUsername.setText(""+username);
+        if (!TextUtils.isEmpty(username)) {
+            etUsername.setText("" + username);
         }
-        if (!TextUtils.isEmpty(urgent_user)){
-            tvCstName.setText(""+urgent_user);
+        if (!TextUtils.isEmpty(urgent_user)) {
+            tvCstName.setText("" + urgent_user);
         }
-        if (!TextUtils.isEmpty(urgent_phone)){
-            tvCstTel.setText(""+urgent_phone);
+        if (!TextUtils.isEmpty(urgent_phone)) {
+            tvCstTel.setText("" + urgent_phone);
         }
     }
 
@@ -153,10 +154,19 @@ public class RegisterActivity3 extends LsmBaseActivity {
             public void onSuccess(UserRegReturn result) {
                 String code = result.getResult();
                 if ("01".equals(code)) {
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("result", "success");
+                    FirebaseAnalytics.getInstance(RegisterActivity3.this).logEvent("lsm01_register", bundle);
+
                     EventBus.getDefault().post("register_finished");
                     MyToast.showLong(RegisterActivity3.this, getStr(R.string.register_success));
                     finish();
                 } else if ("06".equals(code)) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("result", "fail");
+                    FirebaseAnalytics.getInstance(RegisterActivity3.this).logEvent("lsm01_register", bundle);
+
                     MyToast.showLong(RegisterActivity3.this, getStr(R.string.user_is_exists));
                 }
                 //MyLog.e(TAG, "code：" + code);
@@ -193,11 +203,11 @@ public class RegisterActivity3 extends LsmBaseActivity {
                 Bitmap bitmap = BitmapFactory.decodeFile(MediaUtils.filePath + MediaUtils.cropName);
                 ivUserIcon.setImageBitmap(bitmap);
                 String cropPicPath = MediaUtils.filePath + MediaUtils.cropName;
-                userRegVo.setUSER_IMAGE(MyFileOprateUtils.imgToBase64(cropPicPath , this));
+                userRegVo.setUSER_IMAGE(MyFileOprateUtils.imgToBase64(cropPicPath, this));
                 break;
             }
             case PICK_CONTACT_REQUEST: {
-                if (data==null) break;
+                if (data == null) break;
                 Uri contactUri = data.getData();
                 //如果需要别的信息,就在这里添加参数
                 String[] projection = {ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
@@ -213,8 +223,8 @@ public class RegisterActivity3 extends LsmBaseActivity {
                 String name = cursor.getString(column2);
                 userRegVo.setURGENT_USER(name);
                 userRegVo.setURGENT_PHONE(number);
-                tvCstName.setText(""+name);
-                tvCstTel.setText(""+number);
+                tvCstName.setText("" + name);
+                tvCstTel.setText("" + number);
                 break;
             }
         }

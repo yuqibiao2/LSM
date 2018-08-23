@@ -16,6 +16,7 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -73,9 +74,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile(name: 'algorithm-release', ext: 'aar')
-    compile 'com.android.support:appcompat-v7:25.4.0'
     compile 'com.android.support.constraint:constraint-layout:1.1.0'
-    compile 'com.android.support:design:25.4.0'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -96,4 +95,12 @@ dependencies {
     /* compile project(':LsmAlgorithm')*/
     debugCompile project(path: ':LsmAlgorithm', configuration: 'debug')
     releaseCompile project(path: ':LsmAlgorithm', configuration: 'release')
+
+    compile 'com.google.firebase:firebase-core:16.0.0'
+
+    compile 'com.android.support:multidex:1.0.3'
+
 }
+
+// ADD THIS AT THE BOTTOM
+apply plugin: 'com.google.gms.google-services'

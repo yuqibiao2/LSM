@@ -1,5 +1,6 @@
 package com.test.lsm.ui.fragment;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.DownLineCourseAdapter;
@@ -112,6 +114,26 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
         });
     }
 
+    private long enterTime;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        enterTime = System.currentTimeMillis() / 1000;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //--统计
+        long stopTime = System.currentTimeMillis() / 1000;
+        long duration = stopTime - enterTime;
+        Bundle bundle = new Bundle();
+        bundle.putString("during", "" + duration);
+        FirebaseAnalytics.getInstance(getActivity()).logEvent("lsm01_enter_class_intensity", bundle);
+    }
+
+
     @Override
     protected void initListener() {
         onLineCourseAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -124,6 +146,15 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
                         onLineData.get(position).getCOACH_ID(),
                         0,
                         Constant.lastedBodyFitness);
+
+                //--统计
+                long stopTime = System.currentTimeMillis() / 1000;
+                long duration = stopTime - enterTime;
+                Bundle bundle = new Bundle();
+                bundle.putString("classId", "" + onLineData.get(position).getCOACH_ID());
+                bundle.putString("during", "" + duration);
+                FirebaseAnalytics.getInstance(getActivity()).logEvent("lsm01_leave_class_list", bundle);
+
             }
         });
         downLineCourseAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -136,6 +167,13 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
                         downLineData.get(position).getCOACH_ID(),
                         1,
                         Constant.lastedBodyFitness);
+                //--统计
+                long stopTime = System.currentTimeMillis() / 1000;
+                long duration = stopTime - enterTime;
+                Bundle bundle = new Bundle();
+                bundle.putString("classId", "" + downLineData.get(position).getCOACH_ID());
+                bundle.putString("during", "" + duration);
+                FirebaseAnalytics.getInstance(getActivity()).logEvent("lsm01_leave_class_list", bundle);
             }
         });
 
@@ -150,12 +188,12 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser){
+        if (isVisibleToUser) {
             updateRaking();
         }
     }
 
-    private void updateRaking(){
+    private void updateRaking() {
         String currentDate = MyTimeUtils.formatDateTime("yyyy-MM-dd", new Date(System.currentTimeMillis()));
         apiMethodManager.queryUserRankingByDate(provider, user.getUSER_ID(), currentDate, new IRequestCallback<QueryUserRakingReturn>() {
             @Override
