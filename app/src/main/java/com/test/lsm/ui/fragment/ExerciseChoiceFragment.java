@@ -188,8 +188,11 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+        if (isVisibleToUser && isResumed()) {
             updateRaking();
+            //---统计
+            FirebaseAnalytics.getInstance(getActivity())
+                    .setCurrentScreen(getActivity(), this.getClass().getSimpleName(), this.getClass().getSimpleName());
         }
     }
 

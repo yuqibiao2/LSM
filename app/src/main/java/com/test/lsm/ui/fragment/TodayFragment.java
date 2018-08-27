@@ -8,8 +8,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -186,6 +186,24 @@ public class TodayFragment extends LsmBaseFragment {
                 srlToday.finishLoadMore();
             }
         });
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isResumed()){
+            //---统计
+            FirebaseAnalytics.getInstance(getActivity())
+                    .setCurrentScreen(getActivity(), this.getClass().getSimpleName(), this.getClass().getSimpleName());
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        //---统计
+        FirebaseAnalytics.getInstance(getActivity())
+                .setCurrentScreen(getActivity(), this.getClass().getSimpleName(), this.getClass().getSimpleName());
     }
 
     @Override

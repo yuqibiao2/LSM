@@ -27,6 +27,7 @@ import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.swm.algorithm.Algorithm;
 import com.swm.algorithm.support.IirFilter;
 import com.swm.algorithm.support.heat.SwmQuantityOfHeat;
@@ -873,6 +874,16 @@ public class InformationFragment extends LsmBaseFragment {
         if (currentBleDevice != null &&
                 BleManager.getInstance().isConnected(currentBleDevice)) {
             EventBus.getDefault().post(new BleConnectMessage(1, currentBleDevice));
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isResumed()){
+            //---统计
+            FirebaseAnalytics.getInstance(getActivity())
+                    .setCurrentScreen(getActivity(), this.getClass().getSimpleName(), this.getClass().getSimpleName());
         }
     }
 

@@ -31,6 +31,7 @@ import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.bumptech.glide.Glide;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
@@ -560,11 +561,14 @@ public class RunFragment extends LsmBaseFragment {
     }
 
     @Override
-    public void onResume() {
-        map_run.onResume();
-        super.onResume();
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isResumed()){
+            //---统计
+            FirebaseAnalytics.getInstance(getActivity())
+                    .setCurrentScreen(getActivity(), this.getClass().getSimpleName(), this.getClass().getSimpleName());
+        }
     }
-
     @Override
     public void onPause() {
         map_run.onPause();
