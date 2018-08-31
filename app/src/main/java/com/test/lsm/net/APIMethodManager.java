@@ -299,12 +299,14 @@ public class APIMethodManager {
      *
      * @param courseType
      * @param courseLevel
+     * @param coachId
+     * @param ccType
      * @param callback
      * @return
      */
-    public Subscription getCourseParamByType(String courseType, Integer courseLevel, final IRequestCallback<GetCourseParams> callback) {
+    public Subscription getCourseParamByType(String courseType, Integer courseLevel,  Integer coachId, Integer ccType ,final IRequestCallback<GetCourseParams> callback) {
 
-        Subscription subscribe = lsmApi.getCourseParamsByType(courseType, courseLevel)
+        Subscription subscribe = lsmApi.getCourseParamsByType(courseType, courseLevel , coachId , ccType)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribe(new Subscriber<GetCourseParams>() {
                     @Override

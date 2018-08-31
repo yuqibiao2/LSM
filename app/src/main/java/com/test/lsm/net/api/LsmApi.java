@@ -67,7 +67,10 @@ public interface LsmApi {
     Observable<UserJoinCourseReturn> userJsonCourse(@FieldMap Map<String, String> map);
 
     @GET("queryCourseParamByCourse")
-    Observable<GetCourseParams> getCourseParamsByType(@Query("COURSE_TYPE") String courseType , @Query("COURSE_LEVEL") Integer courseLevel);
+    Observable<GetCourseParams> getCourseParamsByType(@Query("COURSE_TYPE") String courseType ,
+                                                      @Query("COURSE_LEVEL") Integer courseLevel,
+                                                      @Query("COACH_ID") Integer coachId,
+                                                      @Query("CC_TYPE") Integer ccType);
 
     @GET("queryAppUserHeartEchart")
     Observable<GetHeartChart> getHeartChart(@Query("USER_ID") Integer userId, @Query("SELECT_TYPE") Integer type ,@Query("CREATE_DATE") String dateTime);

@@ -137,6 +137,8 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     private int point;
 
     private long enterTime;
+    private int coachId;
+    private int ccType;
 
     public enum RunStatus {
         NONE,
@@ -170,6 +172,9 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         courseName = intent.getStringExtra("courseName");
         ucId = intent.getIntExtra("ucId", -1);
         usId = intent.getIntExtra("usId", -1);
+        coachId = intent.getIntExtra("coachId", -1);
+        ccType = intent.getIntExtra("ccType", -1);
+
         MyApplication application = (MyApplication) getApplication();
         user = application.getUser();
 
@@ -404,7 +409,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     protected void initData() {
         super.initData();
         showLoadDialog();
-        APIMethodManager.getInstance().getCourseParamByType(courseType, courseLevel, new IRequestCallback<GetCourseParams>() {
+        APIMethodManager.getInstance().getCourseParamByType(courseType, courseLevel, coachId , ccType,new IRequestCallback<GetCourseParams>() {
             @Override
             public void onSuccess(GetCourseParams result) {
                 dismissLoadDialog();
@@ -775,13 +780,22 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         isActDestroy = true;
     }
 
-    public static void startAction(Context context, Integer courseLevel, String courseType, String courseName, Integer ucId, Integer usId) {
+    public static void startAction(Context context,
+                                   Integer courseLevel,
+                                   String courseType,
+                                   String courseName,
+                                   Integer ucId,
+                                   Integer usId,
+                                   Integer coachId ,
+                                   Integer ccType) {
         Intent intent = new Intent(context, IndoorExerciseActivity.class);
         intent.putExtra("courseLevel", courseLevel);
         intent.putExtra("courseType", courseType);
         intent.putExtra("courseName", courseName);
         intent.putExtra("ucId", ucId);
         intent.putExtra("usId", usId);
+        intent.putExtra("coachId", coachId);//教练Id
+        intent.putExtra("ccType", ccType);//线上、线下
         context.startActivity(intent);
     }
 
