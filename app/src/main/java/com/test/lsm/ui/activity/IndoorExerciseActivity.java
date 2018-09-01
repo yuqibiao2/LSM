@@ -530,7 +530,6 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         //2s中记录一次平均心跳
         new Thread(new Runnable() {
             private int avgHr;
-            private int qualifiedNum = 0;
 
             @Override
             public void run() {
@@ -558,10 +557,9 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                         float endY = entry.getY();
                         float startY = endY - 0.1f * maxBaseHr;
                         if (avgHr > startY && avgHr < endY) {//满足计分条件
-                            qualifiedNum++;
+                            point++;
                         }
                         //qualifiedNum * 100 / realTimeValues.size();
-                        point = qualifiedNum;
                         //MyLog.e(TAG , "====point"+point+"  avgHr: "+avgHr+"   startY: "+startY+"    endY: "+endY);
                         tvRealTimePoint.post(new Runnable() {
                             @Override

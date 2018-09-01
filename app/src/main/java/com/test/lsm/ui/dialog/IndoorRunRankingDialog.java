@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
+import com.test.lsm.bean.json.ModifyScoreReturn;
 import com.test.lsm.bean.json.QueryUserRakingReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
@@ -77,35 +78,52 @@ public class IndoorRunRankingDialog extends LsmBaseDialog {
     @Override
     protected void initData() {
         super.initData();
-        LsmBaseActivity act = (LsmBaseActivity) this.mContext;
-        MyApplication application = (MyApplication) act.getApplication();
-        String currentDate = MyTimeUtils.formatDateTime("yyyy-MM-dd", new Date(System.currentTimeMillis()));
-        APIMethodManager.getInstance().queryUserRankingByDate(act.provider, application.getUser().getUSER_ID(), currentDate, new IRequestCallback<QueryUserRakingReturn>() {
-            @Override
-            public void onSuccess(QueryUserRakingReturn result) {
-                String code = result.getResult();
-                if ("01".equals(code)) {
-                    QueryUserRakingReturn.PdBean.CurrentPdBean currentPd = result.getPd().getCurrentPd();
-                    int arrow = result.getPd().getArrow();
-                    if (arrow == 0) {//退步
-                        ivArrowUp.setVisibility(View.VISIBLE);
-                    } else if (arrow == 1) {//进步
-                        ivArrowDown.setVisibility(View.VISIBLE);
-                    } else {
-                        ivArrowUp.setVisibility(View.VISIBLE);
-                    }
-                    if (currentPd != null) {
-                        int ranking = currentPd.getUSER_SORT();
-                        tvRaking.setText("" + ranking);
-                        tvTotalScore.setText("" + currentPd.getTOTAL_VALUE());
-                    }
-                }
-            }
+        final LsmBaseActivity act = (LsmBaseActivity) this.mContext;
+        final MyApplication application = (MyApplication) act.getApplication();
+        final String currentDate = MyTimeUtils.formatDateTime("yyyy-MM-dd", new Date(System.currentTimeMillis()));
 
-            @Override
-            public void onFailure(Throwable throwable) {
+        APIMethodManager.getInstance().modifyUserScoreByMin(act.provider,
+                "" + application.getUser().getUSER_ID(),
+                "" + mCurrentScore,
+                new IRequestCallback<ModifyScoreReturn>() {
+                    @Override
+                    public void onSuccess(ModifyScoreReturn result) {
 
-            }
-        });
+                        APIMethodManager.getInstance().queryUserRankingByDate(act.provider, application.getUser().getUSER_ID(), currentDate, new IRequestCallback<QueryUserRakingReturn>() {
+                            @Override
+                            public void onSuccess(QueryUserRakingReturn result) {
+                                String code = result.getResult();
+                                if ("01".equals(code)) {
+                                    QueryUserRakingReturn.PdBean.CurrentPdBean currentPd = result.getPd().getCurrentPd();
+                                    int arrow = result.getPd().getArrow();
+                                    if (arrow == 0) {//退步
+                                        ivArrowUp.setVisibility(View.VISIBLE);
+                                    } else if (arrow == 1) {//进步
+                                        ivArrowDown.setVisibility(View.VISIBLE);
+                                    } else {
+                                        ivArrowUp.setVisibility(View.VISIBLE);
+                                    }
+                                    if (currentPd != null) {
+                                        int ranking = currentPd.getUSER_SORT();
+                                        tvRaking.setText("" + ranking);
+                                        tvTotalScore.setText("" + currentPd.getTOTAL_VALUE());
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Throwable throwable) {
+
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onFailure(Throwable throwable) {
+
+                    }
+                });
+
     }
 }
