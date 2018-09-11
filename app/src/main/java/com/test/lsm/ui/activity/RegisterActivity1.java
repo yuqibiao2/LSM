@@ -3,18 +3,20 @@ package com.test.lsm.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.test.lsm.R;
 import com.test.lsm.bean.json.GetUserInfoReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
-import com.test.lsm.utils.LoginRegUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
@@ -36,6 +38,10 @@ public class RegisterActivity1 extends LsmBaseActivity {
     EditText etUserPwd;
     @BindView(R.id.til_pwd)
     TextInputLayout tilPwd;
+    @BindView(R.id.tv_service)
+    TextView tvService;
+    @BindView(R.id.tv_privacy)
+    TextView tvPrivacy;
 
     @Override
     public int getLayoutId() {
@@ -50,6 +56,8 @@ public class RegisterActivity1 extends LsmBaseActivity {
 
     @Override
     protected void initView() {
+        tvService.setText(Html.fromHtml("<u>"+"服務條款"+"</u>"));
+        tvPrivacy.setText(Html.fromHtml("<u>"+"隱私權政策"+"</u>"));
         //LoginRegUtils.checkEdit(tilTel , LoginRegUtils.CheckType.tel);
         //LoginRegUtils.checkEdit(tilPwd , LoginRegUtils.CheckType.pwd);
     }
@@ -62,12 +70,12 @@ public class RegisterActivity1 extends LsmBaseActivity {
     public void toNext(View view) {
         final String tel = etUserTel.getText().toString();
         final String pwd = etUserPwd.getText().toString();
-        if(TextUtils.isEmpty(tel) || TextUtils.isEmpty(pwd)){
-            MyToast.showShort(this , getStr(R.string.input_empty));
+        if (TextUtils.isEmpty(tel) || TextUtils.isEmpty(pwd)) {
+            MyToast.showShort(this, getStr(R.string.input_empty));
             return;
         }
-        if (tilTel.isErrorEnabled() || tilPwd.isErrorEnabled()){
-            MyToast.showShort(this , getStr(R.string.input_illegal));
+        if (tilTel.isErrorEnabled() || tilPwd.isErrorEnabled()) {
+            MyToast.showShort(this, getStr(R.string.input_illegal));
             return;
         }
 
@@ -78,22 +86,27 @@ public class RegisterActivity1 extends LsmBaseActivity {
             public void onSuccess(GetUserInfoReturn result) {
                 dismissLoadDialog();
                 String code = result.getResult();
-                if ("02".equals(code)){//没有被注册
-                    RegisterActivity2.startAction(RegisterActivity1.this , tel , pwd);
-                }else{
-                    MyToast.showLong(RegisterActivity1.this , getStr(R.string.account_is_already_exist));
+                if ("02".equals(code)) {//没有被注册
+                    RegisterActivity2.startAction(RegisterActivity1.this, tel, pwd);
+                } else {
+                    MyToast.showLong(RegisterActivity1.this, getStr(R.string.account_is_already_exist));
                 }
             }
 
             @Override
             public void onFailure(Throwable throwable) {
-                MyToast.showLong(RegisterActivity1.this , getStr(R.string.net_error));
+                MyToast.showLong(RegisterActivity1.this, getStr(R.string.net_error));
                 dismissLoadDialog();
             }
         });
 
 
         //finish();
+    }
+
+    @OnClick({R.id.tv_service ,R.id.tv_privacy })
+    public void toPrivacy(){
+        PrivacyPolicyActivity.startAction(this);
     }
 
     public static void startAction(Activity activity) {
@@ -103,7 +116,7 @@ public class RegisterActivity1 extends LsmBaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void helloEventBus(String message) {
-        if ("register_finished".equals(message)){
+        if ("register_finished".equals(message)) {
             finish();
         }
     }

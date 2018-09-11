@@ -7,6 +7,8 @@ apply plugin: 'com.jakewharton.butterknife'
 /*greenDao*/
 apply plugin: 'org.greenrobot.greendao'
 
+apply plugin: 'io.fabric'
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -15,7 +17,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0911"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -99,6 +101,10 @@ dependencies {
     compile 'com.google.firebase:firebase-core:16.0.0'
 
     compile 'com.android.support:multidex:1.0.3'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
+        transitive = true;
+    }
 
 }
 

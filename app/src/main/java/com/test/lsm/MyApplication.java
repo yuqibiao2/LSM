@@ -8,6 +8,7 @@ import android.support.multidex.MultiDexApplication;
 import com.baidu.mapapi.SDKInitializer;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.data.BleDevice;
+import com.crashlytics.android.Crashlytics;
 import com.test.lsm.bean.UserBean;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.db.DaoMaster;
@@ -15,6 +16,7 @@ import com.test.lsm.db.DaoSession;
 import com.today.step.lib.TodayStepManager;
 
 import cn.jpush.android.api.JPushInterface;
+import io.fabric.sdk.android.Fabric;
 
 
 /**
@@ -55,6 +57,8 @@ public class MyApplication extends MultiDexApplication {
         /*初始化Jpush推送*/
         JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
         JPushInterface.init(this);
+        /*crash统计平台接入*/
+        Fabric.with(this, new Crashlytics());
     }
 
     private void setupDateBase() {

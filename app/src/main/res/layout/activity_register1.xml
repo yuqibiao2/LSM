@@ -72,12 +72,52 @@
         android:textSize="38sp" />-->
 
     <ImageButton
-        android:layout_width="320dp"
-        android:layout_height="90dp"
+        android:id="@+id/ib_to_next"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="86dp"
-        android:background="@mipmap/ic_btn_next"
+        android:background="@mipmap/ic_sign_up"
         android:onClick="toNext" />
+
+    <LinearLayout
+        android:id="@+id/ll_privacy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginBottom="60dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:text="注冊即表示您同意BeatInfo的"/>
+        <TextView
+            android:id="@+id/tv_service"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:text=""/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:text="及"/>
+        <TextView
+            android:id="@+id/tv_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:text=""/>
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -85,10 +85,15 @@
         <activity android:name=".ui.activity.IndoorExerciseActivity" />
         <activity android:name=".ui.activity.HrRecordActivity" />
         <activity android:name=".ui.activity.ExerciseRankingActivity"/>
+        <activity android:name=".ui.activity.PrivacyPolicyActivity"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="vjTe28gWUxqDk0HpU8nTaMSV92eYBl9R" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="d643ea9fe1e50b4c39d982ebd50043592289bbe8" />
 
         <service
             android:name="com.baidu.location.f"
@@ -122,6 +127,8 @@
             </intent-filter>
             -->
         </activity>
+
+
     </application>
 
 </manifest>
