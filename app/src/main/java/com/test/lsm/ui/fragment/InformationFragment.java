@@ -141,6 +141,8 @@ public class InformationFragment extends LsmBaseFragment {
 
     private IirFilter iirFilter = Algorithm.newIirFilterInstance();
 
+    private Integer lastHrNum = -1;//过滤用
+
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -169,7 +171,13 @@ public class InformationFragment extends LsmBaseFragment {
                     AlgorithmWrapper.startRRI();
 
                     int heartNum = Integer.parseInt(hrStr , 16);
-                    if (heartNum > 0) {
+
+                    if (lastHrNum==-1){//第一次初始化用
+                        lastHrNum = heartNum;
+                    }
+
+                    if (heartNum > 0 && Math.abs(heartNum-lastHrNum)<40) {
+                        lastHrNum = heartNum;
 
                         //得到心跳值得回调
                         if (application.mOnGetHrValueListener != null) {
