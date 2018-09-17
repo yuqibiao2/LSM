@@ -160,7 +160,7 @@ public class InformationFragment extends LsmBaseFragment {
 
                     String hexString = HexUtil.formatHexString(obj);
                     String hrStr = hexString.substring(0, 2);
-                    //MyLog.e(TAG , "HR============="+Integer.parseInt(hrStr , 16));
+                    MyLog.e(TAG , "HR============="+Integer.parseInt(hrStr , 16));
                     String RRIStrL = hexString.substring(2,4);
                     String RRIStrH = hexString.substring(4,6);
                     String RRIStr = RRIStrH+RRIStrL;
@@ -175,8 +175,12 @@ public class InformationFragment extends LsmBaseFragment {
                     if (lastHrNum==-1){//第一次初始化用
                         lastHrNum = heartNum;
                     }
+                    boolean filter = true;
+                    if (heartNum>100 &&Math.abs(heartNum-lastHrNum)>30){
+                        filter = false;
+                    }
 
-                    if (heartNum > 0 && Math.abs(heartNum-lastHrNum)<40) {
+                    if (heartNum > 0 && filter) {
                         lastHrNum = heartNum;
 
                         //得到心跳值得回调
@@ -191,19 +195,20 @@ public class InformationFragment extends LsmBaseFragment {
                         application.setHeartNum(heartNum);
                         EventBus.getDefault().post(new HeartChgEvent(heartNum, "心跳变化了"));
                         MyLog.e(TAG, "tvHeartNum：" + heartNum);
-                        //double rriValue = Algorithm.getEstimateRRI(heartNum);
-                        double rriValue = Integer.parseInt(RRIStr , 16);
-                        if (rriValue > 200 && rriValue < 2000) {
-                            rriList.add(Double.valueOf(rriValue).intValue());
-                            // 通知刷新 HRV
-                            EventBus.getDefault().post(new RefreshHearthInfoEvent("更新HRV", rriList));
-                            if (rriList.size() >= 220) {//
-                                Constant.lastedUsefulRriList.clear();
-                                Constant.lastedUsefulRriList.addAll(rriList);
-                                rriList.clear();
-                            }
-                        }
 
+                    }
+
+                    //double rriValue = Algorithm.getEstimateRRI(heartNum);
+                    double rriValue = Integer.parseInt(RRIStr , 16);
+                    if (rriValue > 200 && rriValue < 2000) {
+                        rriList.add(Double.valueOf(rriValue).intValue());
+                        // 通知刷新 HRV
+                        EventBus.getDefault().post(new RefreshHearthInfoEvent("更新HRV", rriList));
+                        if (rriList.size() >= 220) {//
+                            Constant.lastedUsefulRriList.clear();
+                            Constant.lastedUsefulRriList.addAll(rriList);
+                            rriList.clear();
+                        }
                     }
 
 
