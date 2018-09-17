@@ -146,6 +146,7 @@ public class InformationFragment extends LsmBaseFragment {
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
+            if (isDestroy) return false;
             switch (msg.what) {
                 case 0: {//心电图
 
@@ -176,7 +177,7 @@ public class InformationFragment extends LsmBaseFragment {
                         lastHrNum = heartNum;
                     }
                     boolean filter = true;
-                    if (heartNum>100 &&Math.abs(heartNum-lastHrNum)>30){
+                    if (heartNum>100 &&Math.abs(heartNum-lastHrNum)>20){
                         filter = false;
                     }
 
@@ -298,7 +299,7 @@ public class InformationFragment extends LsmBaseFragment {
     private IStepService stepService;
     private List<FrameLayout> itemContainer;
     private BleDevice bleDevice;
-    private boolean isDestory = false;
+    private boolean isDestroy = false;
     private boolean isGirl;
     private int weight;
     private int age;
@@ -430,7 +431,7 @@ public class InformationFragment extends LsmBaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (!isDestory) {
+                while (!isDestroy) {
                     try {
                         Thread.sleep(60 * 1000);
                         if (!application.isBleConnected()) {
@@ -463,6 +464,7 @@ public class InformationFragment extends LsmBaseFragment {
                         tvCalorie.post(new Runnable() {
                             @Override
                             public void run() {
+                                if (isDestroy) return;
                                 tvCalorie.setText("" + calorieStr);
                             }
                         });
@@ -605,6 +607,10 @@ public class InformationFragment extends LsmBaseFragment {
     }
 
     private void updateStepCount() {
+
+        if (isDestroy){
+            return;
+        }
 
         Step step = new Step();
         step.setStepNum(mStepSum);
@@ -908,7 +914,7 @@ public class InformationFragment extends LsmBaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        isDestory = true;
+        isDestroy = true;
         mHandler.removeMessages(0);
         mHandler.removeMessages(1);
         EventBus.getDefault().unregister(this);
