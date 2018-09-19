@@ -1,5 +1,6 @@
 package com.test.lsm.ui.fragment;
 
+import android.Manifest;
 import android.bluetooth.BluetoothGatt;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,6 +48,8 @@ import butterknife.BindView;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * 功能：设置界面
@@ -55,7 +58,7 @@ import de.greenrobot.event.ThreadMode;
  * @version 1.0
  * @date 2018/7/2
  */
-public class SettingFragment extends LsmBaseFragment {
+public class SettingFragment extends LsmBaseFragment implements EasyPermissions.PermissionCallbacks{
 
     private static final String TAG = "SettingFragment";
 
@@ -211,7 +214,17 @@ public class SettingFragment extends LsmBaseFragment {
         rlUrgency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyInetntUtils.toCall(getContext() ,tvUrgentTel.getText().toString() );
+
+                String[] perms = {Manifest.permission.CALL_PHONE};
+                if (EasyPermissions.hasPermissions(getContext(), perms)) {
+                    MyInetntUtils.toCall(getContext() ,tvUrgentTel.getText().toString() );
+                } else {
+                    EasyPermissions.requestPermissions(getActivity(),
+                            "缺少撥打電話權限，是否開啓？",
+                            10002,
+                            perms);
+                }
+
             }
         });
 
@@ -330,6 +343,24 @@ public class SettingFragment extends LsmBaseFragment {
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onUserInfoChanged(OnUserInfoChg onUserInfoChg) {
         initView();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this).build().show();
+        }
     }
 
 }

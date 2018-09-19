@@ -49,6 +49,9 @@ public class LoginActivity extends LsmBaseActivity {
     @Override
     public void beforeInit() {
         super.beforeInit();
+
+        toRequestPermission();
+
         application = (MyApplication) getApplication();
         apiMethodManager = APIMethodManager.getInstance();
         mGson = new Gson();
@@ -76,27 +79,27 @@ public class LoginActivity extends LsmBaseActivity {
             @Override
             public void onSuccess(UserLoginReturn result) {
                 String code = result.getResult();
-               if ("01".equals(code)){//登录成功
-                   UserLoginReturn.PdBean pd = result.getPd();
+                if ("01".equals(code)) {//登录成功
+                    UserLoginReturn.PdBean pd = result.getPd();
 
-                   setJPushAlias(""+pd.getUSER_ID());
+                    setJPushAlias("" + pd.getUSER_ID());
 
-                   String pdStr = mGson.toJson(pd);
-                   //保存用户信息
-                   MySPUtils.put(LoginActivity.this , LoginRegUtils.USER_INFO , pdStr);
-                   application.setUser(LoginRegUtils.getLoginUser(LoginActivity.this));
-                   MainActivity.startAction(LoginActivity.this);
-                   finish();
-               }else /*if("07".equals(code))*/{//用户名密码错误
-                   MyToast.showShort(LoginActivity.this, getStr(R.string.username_or_pwd_error));
-               }
+                    String pdStr = mGson.toJson(pd);
+                    //保存用户信息
+                    MySPUtils.put(LoginActivity.this, LoginRegUtils.USER_INFO, pdStr);
+                    application.setUser(LoginRegUtils.getLoginUser(LoginActivity.this));
+                    MainActivity.startAction(LoginActivity.this);
+                    finish();
+                } else /*if("07".equals(code))*/ {//用户名密码错误
+                    MyToast.showShort(LoginActivity.this, getStr(R.string.username_or_pwd_error));
+                }
                 hiddenLoadDialog();
             }
 
             @Override
             public void onFailure(Throwable throwable) {
                 hiddenLoadDialog();
-                MyToast.showShort(LoginActivity.this, "网络异常："+throwable.getMessage());
+                MyToast.showShort(LoginActivity.this, "网络异常：" + throwable.getMessage());
             }
         });
 
@@ -106,8 +109,8 @@ public class LoginActivity extends LsmBaseActivity {
         TagAliasOperatorHelper.TagAliasBean tagAliasBean = new TagAliasOperatorHelper.TagAliasBean();
         tagAliasBean.action = ACTION_SET;
         tagAliasBean.isAliasAction = true;
-        tagAliasBean.alias =userId ;
-        TagAliasOperatorHelper.getInstance().handleAction(getApplicationContext(),1,tagAliasBean);
+        tagAliasBean.alias = userId;
+        TagAliasOperatorHelper.getInstance().handleAction(getApplicationContext(), 1, tagAliasBean);
     }
 
     public void toRegister(View view) {

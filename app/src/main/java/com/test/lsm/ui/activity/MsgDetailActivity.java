@@ -92,8 +92,8 @@ public class MsgDetailActivity extends LsmBaseActivity {
                 String imageUrlSmall = record.getFILE_ICON_URL();
                 String desc = record.getPUSH_DESC();
                 String title = record.getPUSH_TITLE();
-                Glide.with(MsgDetailActivity.this).load(imageUrl).crossFade().into(ivMsgIcon);
-                Glide.with(MsgDetailActivity.this).load(imageUrlSmall).crossFade().into(ivMsgIconSmall);
+                Glide.with(MsgDetailActivity.this).load(imageUrl).into(ivMsgIcon);
+                Glide.with(MsgDetailActivity.this).load(imageUrlSmall).into(ivMsgIconSmall);
                 tvMsgTitle.setText("" + title);
                 String str = "<html><head>" +
                         "<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0'/>" +

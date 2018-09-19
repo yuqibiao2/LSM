@@ -49,7 +49,7 @@ public class PushMsgAdapter extends BaseQuickAdapter<GetMsgListReturn.PdBean , B
     protected void convert(BaseViewHolder helper, GetMsgListReturn.PdBean item) {
 
         int position = helper.getAdapterPosition();
-        Glide.with(mContext).load(item.getPUSH_IMAGE_URL()).crossFade().into((ImageView) helper.getView(R.id.iv_msg_icon));
+        Glide.with(mContext).load(item.getPUSH_IMAGE_URL()).into((ImageView) helper.getView(R.id.iv_msg_icon));
         helper.setText(R.id.tv_msg_title , item.getPUSH_TITLE());
         String push_time = item.getPUSH_TIME();
         if (!TextUtils.isEmpty(push_time)){

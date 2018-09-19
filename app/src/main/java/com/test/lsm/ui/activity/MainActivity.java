@@ -1,5 +1,6 @@
 package com.test.lsm.ui.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothGatt;
 import android.content.BroadcastReceiver;
@@ -62,6 +63,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * 功能：首页
@@ -110,6 +113,12 @@ public class MainActivity extends LsmBaseActivity {
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
+    }
+
+    @Override
+    public void beforeSetContentView() {
+        super.beforeSetContentView();
+        toRequestPermission();
     }
 
     @Override

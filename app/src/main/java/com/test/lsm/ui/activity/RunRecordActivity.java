@@ -191,6 +191,7 @@ public class RunRecordActivity extends LsmBaseActivity {
     @Override
     protected void initData() {
         super.initData();
+        showLoadDialog();
         apiMethodManager.queryUserRunInfo(queryRunInfoVo, new IRequestCallback<QueryUserRunInfoReturn>() {
             @Override
             public void onSuccess(QueryUserRunInfoReturn result) {
@@ -200,11 +201,13 @@ public class RunRecordActivity extends LsmBaseActivity {
                     mData.addAll(result.getPd());
                     adapter.notifyDataSetChanged();
                 }
+                dismissLoadDialog();
             }
 
             @Override
             public void onFailure(Throwable throwable) {
                 MyToast.showLong(RunRecordActivity.this, "数据加载失败：" + throwable.getMessage());
+                dismissLoadDialog();
             }
         });
     }
