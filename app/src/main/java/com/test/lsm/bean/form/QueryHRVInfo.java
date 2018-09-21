@@ -19,7 +19,7 @@ public class QueryHRVInfo {
     private String resIndex="1,2,4,6,9,10";
     private String measureTime = "2017-08-05T22:30:00";
     private String account ="singularwins";
-    private String token = "jesse@SW131";
+    private String token = "FExkAaTrxu4gCqmo28KIzmqB1nJiiuI8";
 
     public String getServerId() {
         return serverId;
