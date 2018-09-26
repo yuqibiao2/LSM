@@ -143,6 +143,11 @@ public class InformationFragment extends LsmBaseFragment {
 
     private Integer lastHrNum = -1;//过滤用
 
+
+    private int startCount = 0;
+    private int displayHR = -1;
+
+
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -171,8 +176,11 @@ public class InformationFragment extends LsmBaseFragment {
 
                     AlgorithmWrapper.startRRI();
 
-                    int heartNum = Integer.parseInt(hrStr , 16);
 
+
+
+                    int heartNum = Integer.parseInt(hrStr , 16);
+                /*
                     if (lastHrNum==-1){//第一次初始化用
                         lastHrNum = heartNum;
                     }
@@ -196,8 +204,39 @@ public class InformationFragment extends LsmBaseFragment {
                         application.setHeartNum(heartNum);
                         EventBus.getDefault().post(new HeartChgEvent(heartNum, "心跳变化了"));
                         MyLog.e(TAG, "tvHeartNum：" + heartNum);
+                    }*/
 
+                    startCount++;
+                    if ((startCount > 6) && (heartNum >= 30) && (heartNum <= 250)) {
+                        if (displayHR == -1) {
+                            displayHR = heartNum;
+                        } else {
+                            if (Math.abs(heartNum - displayHR) > 10) {
+                                if ((heartNum - displayHR) > 0) {
+                                    displayHR = displayHR + 5;
+                                } else {
+                                    displayHR = displayHR - 5;
+                                }
+                            } else {
+                                displayHR = heartNum;
+                            }
+                        }
                     }
+                    if (displayHR != -1) {
+                        //得到心跳值得回调
+                        if (application.mOnGetHrValueListener != null) {
+                            application.mOnGetHrValueListener.onGet(displayHR);
+                        }
+
+                        Constant.oneMinHeart.add(displayHR);
+                        Constant.hrBuffer.add(displayHR);
+                        Constant.hrBuffer2.add(displayHR);
+                        tvHeartNum.setText("" + displayHR);
+                        application.setHeartNum(displayHR);
+                        EventBus.getDefault().post(new HeartChgEvent(displayHR, "心跳变化了"));
+                        MyLog.e(TAG, "tvHeartNum：" + displayHR);
+                    }
+
 
                     //double rriValue = Algorithm.getEstimateRRI(heartNum);
                     double rriValue = Integer.parseInt(RRIStr , 16);
@@ -212,44 +251,6 @@ public class InformationFragment extends LsmBaseFragment {
                         }
                     }
 
-
-   /*                 index++;
-                    if (ecgBuffer.size() >= 1500 && index % 200 == 0) {
-                        index = 0;
-                        int[] ints = new int[ecgBuffer.size()];
-                        for (int i = 0; i < ecgBuffer.size(); i++) {
-                            ints[i] = ecgBuffer.get(i);
-                        }
-                        int heartNum = Algorithm.getCalculateHeartRate(ints);
-                        if (heartNum > 0) {
-
-                            //得到心跳值得回调
-                            if (application.mOnGetHrValueListener != null) {
-                                application.mOnGetHrValueListener.onGet(heartNum);
-                            }
-
-                            Constant.oneMinHeart.add(heartNum);
-                            Constant.hrBuffer.add(heartNum);
-                            Constant.hrBuffer2.add(heartNum);
-                            tvHeartNum.setText("" + heartNum);
-                            application.setHeartNum(heartNum);
-                            EventBus.getDefault().post(new HeartChgEvent(heartNum, "心跳变化了"));
-                            MyLog.e(TAG, "tvHeartNum：" + heartNum);
-                            double rriValue = Algorithm.getEstimateRRI(heartNum);
-                            if (rriValue > 200 && rriValue < 2000) {
-                                rriList.add(Double.valueOf(rriValue).intValue());
-                                // 通知刷新 HRV
-                                EventBus.getDefault().post(new RefreshHearthInfoEvent("更新HRV", rriList));
-                                if (rriList.size() >= 220) {//
-                                    Constant.lastedUsefulRriList.clear();
-                                    Constant.lastedUsefulRriList.addAll(rriList);
-                                    rriList.clear();
-                                }
-                            }
-
-                        }
-                    }
-*/
                     //MyLog.e(TAG , epcData);
                     if (Constant.sbHeartData.length() < 500) {
                         Short ecg0 = ecgData[0];
@@ -295,7 +296,6 @@ public class InformationFragment extends LsmBaseFragment {
             return false;
         }
     });
-    private int heartNum;
     private IStepService stepService;
     private List<FrameLayout> itemContainer;
     private BleDevice bleDevice;
