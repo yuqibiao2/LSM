@@ -27,6 +27,7 @@ import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
+import com.google.code.microlog4android.format.command.util.StringUtil;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.swm.algorithm.Algorithm;
 import com.swm.algorithm.support.IirFilter;
@@ -301,7 +302,7 @@ public class InformationFragment extends LsmBaseFragment {
     private BleDevice bleDevice;
     private boolean isDestroy = false;
     private boolean isGirl;
-    private int weight;
+    private int weight = 64;
     private int age;
     private CalorieService calorieService;
 
@@ -364,7 +365,14 @@ public class InformationFragment extends LsmBaseFragment {
         UserLoginReturn.PdBean user = application.getUser();
         String userSex = user.getUSER_SEX();
         isGirl = userSex.equals("0");
-        weight = Integer.parseInt(user.getUSER_WEIGHT());
+        String userWeight = user.getUSER_WEIGHT();
+        if (!TextUtils.isEmpty(userWeight)){
+            try {
+                weight = Integer.parseInt(userWeight);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
         String birthday = user.getBIRTHDAY();
         age = 30;
         if (!TextUtils.isEmpty(birthday)) {
@@ -405,7 +413,9 @@ public class InformationFragment extends LsmBaseFragment {
         BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
             @Override
             public void dismiss(BleDevice device) {
-                rlConnectedDevice.setVisibility(View.GONE);
+                if (!isDestroy){
+                    rlConnectedDevice.setVisibility(View.GONE);
+                }
             }
         });
 
