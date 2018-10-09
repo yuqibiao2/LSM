@@ -42,10 +42,12 @@ public class IndoorRunRankingDialog extends LsmBaseDialog {
 
 
     private Integer mCurrentScore;
+    private Integer usId;
 
-    public IndoorRunRankingDialog(Context context, Integer currentScore) {
+    public IndoorRunRankingDialog(Context context, Integer currentScore  , Integer usId) {
         super(context);
         this.mCurrentScore = currentScore;
+        this.usId = usId;
     }
 
     @Override
@@ -83,7 +85,7 @@ public class IndoorRunRankingDialog extends LsmBaseDialog {
         final String currentDate = MyTimeUtils.formatDateTime("yyyy-MM-dd", new Date(System.currentTimeMillis()));
 
         APIMethodManager.getInstance().modifyUserScoreByMin(act.provider,
-                "" + application.getUser().getUSER_ID(),
+                "" + usId,
                 "" + mCurrentScore,
                 new IRequestCallback<ModifyScoreReturn>() {
                     @Override

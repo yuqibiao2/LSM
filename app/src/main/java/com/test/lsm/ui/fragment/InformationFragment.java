@@ -67,6 +67,7 @@ import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -147,6 +148,7 @@ public class InformationFragment extends LsmBaseFragment {
 
     private int startCount = 0;
     private int displayHR = -1;
+    private int zeroCount = 0;
 
 
     private Handler mHandler = new Handler(new Handler.Callback() {
@@ -207,7 +209,7 @@ public class InformationFragment extends LsmBaseFragment {
                         MyLog.e(TAG, "tvHeartNum：" + heartNum);
                     }*/
 
-                    startCount++;
+                /*    startCount++;
                     if ((startCount > 6) && (heartNum >= 30) && (heartNum <= 250)) {
                         if (displayHR == -1) {
                             displayHR = heartNum;
@@ -222,7 +224,38 @@ public class InformationFragment extends LsmBaseFragment {
                                 displayHR = heartNum;
                             }
                         }
+                    }*/
+
+                    int heartRate = heartNum;
+                    startCount++;
+                    if(startCount > 6) {
+                        if (heartRate == 0) {
+                            zeroCount++;
+                        } else {
+                            zeroCount = 0;
+                        }
+                        if (zeroCount > 3) {
+                            displayHR = 0;
+                            zeroCount = 0;
+                        } else {
+                            if ((heartRate >= 30) && (heartRate <= 250)){
+                                if (displayHR == -1) {
+                                    displayHR = heartRate;
+                                } else {
+                                    if (Math.abs(heartRate - displayHR) > 8) {
+                                        if ((heartRate - displayHR) > 0){
+                                            displayHR = displayHR + 5;
+                                        } else {
+                                            displayHR = displayHR - 5;
+                                        }
+                                    } else {
+                                        displayHR = heartRate;
+                                    }
+                                }
+                            }
+                        }
                     }
+
                     if (displayHR != -1) {
                         //得到心跳值得回调
                         if (application.mOnGetHrValueListener != null) {
@@ -397,6 +430,34 @@ public class InformationFragment extends LsmBaseFragment {
             //---处理Service
             handleService(services, currentBleDevice);
         }
+
+        // 删除
+        //genTestHr();
+        // 删除
+    }
+
+    private void genTestHr() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    try {
+                        if (application.mOnGetHrValueListener != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    int num = new Random().nextInt(20);
+                                    application.mOnGetHrValueListener.onGet(100+num);
+                                }
+                            });
+                        }
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
 
     }
 

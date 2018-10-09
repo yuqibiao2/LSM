@@ -36,9 +36,11 @@ import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.UpdateIndoorRunDataEvent;
 import com.test.lsm.bean.form.UserCourseTimeVo;
+import com.test.lsm.bean.form.UserJoinCourseVo;
 import com.test.lsm.bean.json.GetCourseParams;
 import com.test.lsm.bean.json.ModifyScoreReturn;
 import com.test.lsm.bean.json.UserCourseTimeReturn;
+import com.test.lsm.bean.json.UserJoinCourseReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
@@ -258,7 +260,6 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         ivCenter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (!application.isBleConnected()) {
                     MyToast.showLong(IndoorExerciseActivity.this, getStr(R.string.ble_not_connect));
                     return;
@@ -267,17 +268,40 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                     startTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", new Date(System.currentTimeMillis()));
                 }
                 if (runStatus == STOP) {//stop-->start 重新开始
-                    resetLineChart();
-                    point = 0;
-                }
-                if (runStatus == NONE || runStatus == STOP || runStatus == PAUSE) {
-                    ivCenter.setVisibility(View.INVISIBLE);
-                    ivLeft.setVisibility(View.VISIBLE);
-                    ivLeft.setImageResource(R.mipmap.ic_run_stop);
-                    ivRight.setVisibility(View.VISIBLE);
-                    ivRight.setImageResource(R.mipmap.ic_run_pause);
-                    runStatus = START;
-                    MyToast.showLong(IndoorExerciseActivity.this, getStr(R.string.start));
+                    //重新加入课程（更新usId）
+                    showLoadDialog("加入課程....");
+                    UserJoinCourseVo userJoinCourseVo = new UserJoinCourseVo();
+                    userJoinCourseVo.setUSER_ID(user.getUSER_ID());
+                    userJoinCourseVo.setCOURSE_LEVEL(courseLevel);
+                    userJoinCourseVo.setCOACH_ID(coachId);
+                    userJoinCourseVo.setCC_TYPE(ccType);
+                    userJoinCourseVo.setCOURSE_TYPE(courseType);
+                    APIMethodManager.getInstance().userJoinCourse(userJoinCourseVo, new IRequestCallback<UserJoinCourseReturn>() {
+                        @Override
+                        public void onSuccess(UserJoinCourseReturn result) {
+                            dismissLoadDialog();
+                            if ("01".equals(result.getResult())) {
+                                ucId = result.getPd().getUC_ID();
+                                usId = result.getPd().getUS_ID();
+
+                                resetLineChart();
+                                point = 0;
+
+                                doStart();
+                            } else {
+                                MyToast.showLong(getApplicationContext(), getStr(R.string.undefine_error));
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            dismissLoadDialog();
+                            MyToast.showLong(IndoorExerciseActivity.this, getStr(R.string.net_error));
+                        }
+                    });
+
+                } else {
+                    doStart();
                 }
 
             }
@@ -348,6 +372,18 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
 
     }
 
+    private void doStart() {
+        if (runStatus == NONE || runStatus == STOP || runStatus == PAUSE) {
+            ivCenter.setVisibility(View.INVISIBLE);
+            ivLeft.setVisibility(View.VISIBLE);
+            ivLeft.setImageResource(R.mipmap.ic_run_stop);
+            ivRight.setVisibility(View.VISIBLE);
+            ivRight.setImageResource(R.mipmap.ic_run_pause);
+            runStatus = START;
+            MyToast.showLong(IndoorExerciseActivity.this, getStr(R.string.start));
+        }
+    }
+
     private void doStop() {
         if (runStatus == STOP) {
             return;
@@ -363,20 +399,19 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
 
         stopTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", new Date(System.currentTimeMillis()));
 
-        UserCourseTimeVo userCourseTimeVo = new UserCourseTimeVo();
-        userCourseTimeVo.setUC_ID(ucId);
-        userCourseTimeVo.setSTART_TIME(startTime);
-        userCourseTimeVo.setEND_TIME(stopTime);
-
         if (ucId == -1) {//线下课程
 
         } else {
-            IndoorRunRankingDialog rankingDialog = new IndoorRunRankingDialog(this, point);
+            IndoorRunRankingDialog rankingDialog = new IndoorRunRankingDialog(this, point, usId);
             rankingDialog.show();
+
+            UserCourseTimeVo userCourseTimeVo = new UserCourseTimeVo();
+            userCourseTimeVo.setUC_ID(ucId);
+            userCourseTimeVo.setSTART_TIME(startTime);
+            userCourseTimeVo.setEND_TIME(stopTime);
             APIMethodManager.getInstance().userCourseTime(userCourseTimeVo, new IRequestCallback<UserCourseTimeReturn>() {
                 @Override
                 public void onSuccess(UserCourseTimeReturn result) {
-
                 }
 
                 @Override
@@ -409,7 +444,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     protected void initData() {
         super.initData();
         showLoadDialog();
-        APIMethodManager.getInstance().getCourseParamByType(courseType, courseLevel, coachId , ccType,new IRequestCallback<GetCourseParams>() {
+        APIMethodManager.getInstance().getCourseParamByType(courseType, courseLevel, coachId, ccType, new IRequestCallback<GetCourseParams>() {
             @Override
             public void onSuccess(GetCourseParams result) {
                 dismissLoadDialog();
@@ -480,8 +515,9 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                 while (!isActDestroy) {
                     try {
                         if (runStatus == START) {
-                            Thread.sleep(60 * 1000);
+                            //Thread.sleep(60 * 1000);
                             doUpdateUserScore("" + point);
+                            Thread.sleep(60 * 1000);
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -784,7 +820,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                                    String courseName,
                                    Integer ucId,
                                    Integer usId,
-                                   Integer coachId ,
+                                   Integer coachId,
                                    Integer ccType) {
         Intent intent = new Intent(context, IndoorExerciseActivity.class);
         intent.putExtra("courseLevel", courseLevel);

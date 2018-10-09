@@ -22,7 +22,7 @@
     </string>
 
     <!--net-->
-    <string name="net_error">網絡異常</string>
+    <string name="net_error">網絡異常,請重試！</string>
     <string name="undefine_error">未知錯誤</string>
 
     <!--BT Device-->

@@ -51,7 +51,8 @@
         android:layout_height="match_parent"
         android:background="@color/my_white"
         app:srlAccentColor="@color/colorPrimary"
-        app:srlPrimaryColor="@color/colorAccent">
+        app:srlPrimaryColor="@color/colorAccent"
+        app:srlEnablePreviewInEditMode="true">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_today"
         android:layout_width="match_parent"

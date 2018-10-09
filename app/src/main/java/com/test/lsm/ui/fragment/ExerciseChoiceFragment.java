@@ -1,15 +1,20 @@
 package com.test.lsm.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.DownLineCourseAdapter;
@@ -54,6 +59,10 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
     ImageView ivArrowUp;
     @BindView(R.id.iv_arrow_down)
     ImageView ivArrowDown;
+    @BindView(R.id.ll_ranking)
+    LinearLayout llRanking;
+    @BindView(R.id.srl_exercise)
+    SmartRefreshLayout srlExercise;
 
     private UserLoginReturn.PdBean user;
     private OnLineCourseAdapter onLineCourseAdapter;
@@ -88,6 +97,9 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
         rvLesson.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         downLineCourseAdapter = new DownLineCourseAdapter(R.layout.rv_item_offline, downLineData);
         rvLesson.setAdapter(downLineCourseAdapter);
+
+        //---禁用下拉加载
+        srlExercise.setEnableLoadMore(false);
     }
 
     @Override
@@ -157,6 +169,7 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
 
             }
         });
+
         downLineCourseAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -177,12 +190,28 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
             }
         });
 
+        srlExercise.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                initData();
+                updateRaking();
+            }
+        });
+
         ibList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ExerciseRankingActivity.startAction(getActivity());
             }
         });
+
+        llRanking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ExerciseRankingActivity.startAction(getActivity());
+            }
+        });
+
     }
 
     @Override
@@ -214,6 +243,7 @@ public class ExerciseChoiceFragment extends LsmBaseFragment {
                     } else {
                     }
                 }
+                srlExercise.finishRefresh();
             }
 
             @Override
