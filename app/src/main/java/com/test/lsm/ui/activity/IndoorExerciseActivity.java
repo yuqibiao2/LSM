@@ -588,12 +588,14 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                         hrBufferPerTenSec.clear();
                         addLineEntry(avgHr);
                         //判断值是否在标准内
-                        int size = avgHrPerTenSec.size() > realTimeValues.size() ? realTimeValues.size() : avgHrPerTenSec.size();
-                        BarEntry entry = realTimeValues.get(size - 1);
-                        float endY = entry.getY();
-                        float startY = endY - 0.1f * maxBaseHr;
-                        if (avgHr > startY && avgHr < endY) {//满足计分条件
-                            point++;
+                        if (realTimeValues.size()>0){
+                            int size = avgHrPerTenSec.size() > realTimeValues.size() ? realTimeValues.size() : avgHrPerTenSec.size();
+                            BarEntry entry = realTimeValues.get(size - 1);
+                            float endY = entry.getY();
+                            float startY = endY - 0.1f * maxBaseHr;
+                            if (avgHr > startY && avgHr < endY) {//满足计分条件
+                                point++;
+                            }
                         }
                         //qualifiedNum * 100 / realTimeValues.size();
                         //MyLog.e(TAG , "====point"+point+"  avgHr: "+avgHr+"   startY: "+startY+"    endY: "+endY);

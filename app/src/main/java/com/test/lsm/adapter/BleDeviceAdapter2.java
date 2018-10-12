@@ -35,7 +35,7 @@ public class BleDeviceAdapter2 extends BaseQuickAdapter<BleDevice, BaseViewHolde
     @Override
     protected void convert(BaseViewHolder helper, final BleDevice item) {
 
-        String dName = item.getName();
+        String dName = ""+item.getName();
         ImageView ivDeviceIcon = helper.getView(R.id.iv_bt_device_icon);
         if (dName.contains("CC") || dName.contains("Sensor") || dName.contains("Tag")) {
             Glide.with(mContext).load(R.mipmap.ic_cca10).into(ivDeviceIcon);

@@ -26,6 +26,7 @@ import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.test.lsm.BuildConfig;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.BleDeviceAdapter2;
@@ -35,7 +36,6 @@ import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.GlidUtils;
 import com.test.lsm.ui.activity.UpdateUserActivity1;
 import com.test.lsm.utils.LoginRegUtils;
-import com.test.lsm.utils.bt.ble.BleBTUtils;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MyInetntUtils;
 import com.yyyu.baselibrary.utils.MySPUtils;
@@ -58,7 +58,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * @version 1.0
  * @date 2018/7/2
  */
-public class SettingFragment extends LsmBaseFragment implements EasyPermissions.PermissionCallbacks{
+public class SettingFragment extends LsmBaseFragment implements EasyPermissions.PermissionCallbacks {
 
     private static final String TAG = "SettingFragment";
 
@@ -98,6 +98,8 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
     TextView tvUrgentTel;
     @BindView(R.id.rl_urgency)
     RelativeLayout rlUrgency;
+    @BindView(R.id.tv_version_name)
+    TextView tvVersionName;
     private MyApplication application;
     private UserLoginReturn.PdBean user;
     private BleDeviceAdapter2 bleDeviceAdapter;
@@ -123,6 +125,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
     @Override
     protected void initView() {
         //---inflate date
+        tvVersionName.setText("beatInfo and."+ BuildConfig.VERSION_NAME);
         user = application.getUser();
         tvUsername.setText("" + user.getUSERNAME());
         tvHeight.setText("" + user.getUSER_HEIGHT() + " cm");
@@ -217,7 +220,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
 
                 String[] perms = {Manifest.permission.CALL_PHONE};
                 if (EasyPermissions.hasPermissions(getContext(), perms)) {
-                    MyInetntUtils.toCall(getContext() ,tvUrgentTel.getText().toString() );
+                    MyInetntUtils.toCall(getContext(), tvUrgentTel.getText().toString());
                 } else {
                     EasyPermissions.requestPermissions(getActivity(),
                             "缺少撥打電話權限，是否開啓？",

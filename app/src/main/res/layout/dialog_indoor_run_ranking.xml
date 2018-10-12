@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="78 "
+        android:text=" "
         android:minHeight="200dp"
         android:gravity="center"
         android:textColor="#FF4A90E2"
@@ -66,7 +66,7 @@
                 android:id="@+id/tv_raking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="55"
+                android:text=""
                 android:textColor="#FFFFFFFF"
                 android:textSize="48sp" />
 
@@ -93,7 +93,7 @@
                 android:id="@+id/tv_total_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12883910"
+                android:text=""
                 android:textColor="#FFFFFFFF"
                 android:textSize="24sp" />
         </LinearLayout>

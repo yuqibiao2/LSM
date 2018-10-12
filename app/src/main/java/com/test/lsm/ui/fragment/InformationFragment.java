@@ -436,7 +436,7 @@ public class InformationFragment extends LsmBaseFragment {
         // 删除
     }
 
-    private void genTestHr() {
+  /*  private void genTestHr() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -459,7 +459,7 @@ public class InformationFragment extends LsmBaseFragment {
             }
         }).start();
 
-    }
+    }*/
 
     @Override
     protected void initListener() {
@@ -504,7 +504,6 @@ public class InformationFragment extends LsmBaseFragment {
             public void run() {
                 while (!isDestroy) {
                     try {
-                        Thread.sleep(60 * 1000);
                         if (!application.isBleConnected()) {
                             continue;
                         }
@@ -519,7 +518,7 @@ public class InformationFragment extends LsmBaseFragment {
                         SwmQuantityOfHeat quantityOfHeat = Algorithm.newQuantityOfHeat();
                         double calorieOnMinute = quantityOfHeat.getQuantityOfHeatMinutes(avgHearNum, isGirl, age, weight, 1);
 
-                        MyLog.e(TAG , "calorieOnMinute=="+calorieOnMinute);
+                        //MyLog.e(TAG , "calorieOnMinute=="+calorieOnMinute);
 
                         totalBleCalorie = (float) (totalBleCalorie + calorieOnMinute);
                         Calorie calorie = new Calorie();
@@ -531,7 +530,7 @@ public class InformationFragment extends LsmBaseFragment {
                         String calorieByStep = SportStepJsonUtils.getCalorieByStep(mStepSum);
                         float calorieSys = Float.valueOf(calorieByStep);
                         final String calorieStr = String.format("%.1f", totalBleCalorie / 1000 + calorieSys);
-                        MyLog.e(TAG , "calorieStr=="+totalBleCalorie / 1000 + calorieSys);
+                        //MyLog.e(TAG , "calorieStr=="+totalBleCalorie / 1000 + calorieSys);
                         tvCalorie.post(new Runnable() {
                             @Override
                             public void run() {
@@ -539,6 +538,7 @@ public class InformationFragment extends LsmBaseFragment {
                                 tvCalorie.setText("" + calorieStr);
                             }
                         });
+                        Thread.sleep(60 * 1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

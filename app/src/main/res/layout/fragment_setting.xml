@@ -224,7 +224,6 @@
             android:id="@+id/btn_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
             android:layout_marginLeft="56dp"
             android:layout_marginRight="56dp"
             android:layout_marginTop="50dp"
@@ -232,6 +231,16 @@
             android:text="登出"
             android:textColor="#acacac"
             android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_version_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
+            android:text="beatInfo"/>
     </LinearLayout>
 
 </com.yyyu.baselibrary.ui.widget.BounceScrollView>
