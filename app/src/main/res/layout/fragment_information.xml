@@ -40,7 +40,16 @@
             android:src="@mipmap/ic_user_df" />
     </RelativeLayout>
 
-    <com.yyyu.baselibrary.ui.widget.BounceScrollView
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/srl_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/my_white"
+        app:srlAccentColor="@color/colorPrimary"
+        app:srlPrimaryColor="@color/colorAccent"
+        app:srlEnablePreviewInEditMode="true">
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/my_white">
@@ -88,6 +97,8 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:minWidth="150dp"
+                                android:gravity="right"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -171,6 +182,8 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:minWidth="150dp"
+                                android:gravity="right"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -256,6 +269,8 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:minWidth="150dp"
+                                android:gravity="right"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -516,6 +531,7 @@
             </RelativeLayout>
 
         </LinearLayout>
-    </com.yyyu.baselibrary.ui.widget.BounceScrollView>
+    </android.support.v4.widget.NestedScrollView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </LinearLayout>

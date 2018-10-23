@@ -16,8 +16,8 @@ android {
         applicationId "com.test.lsm"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 8
-        versionName "1.0.1012"
+        versionCode 9
+        versionName "1.0.1023"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
