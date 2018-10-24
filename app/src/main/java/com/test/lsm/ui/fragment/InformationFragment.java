@@ -311,6 +311,7 @@ public class InformationFragment extends LsmBaseFragment {
     @Override
     protected void beforeInit() {
         super.beforeInit();
+        isDestroy = false;
         EventBus.getDefault().register(this);
         mAct = getActivity();
         application = (MyApplication) getActivity().getApplication();
@@ -637,6 +638,7 @@ public class InformationFragment extends LsmBaseFragment {
         stepService.addCurrentDayStep(step);
 
         Log.e(TAG, "updateStepCount : " + mStepSum);
+        //MyToast.showLong(getContext() ,"当前步数======updateStepCount======"+mStepSum );
         tvStepNum.setText(mStepSum + "");
         String calorieByStep = SportStepJsonUtils.getCalorieByStep(mStepSum);
         float calorieSys = Float.valueOf(calorieByStep);
