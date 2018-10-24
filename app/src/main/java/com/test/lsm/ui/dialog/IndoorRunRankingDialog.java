@@ -15,6 +15,7 @@ import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.LsmBaseActivity;
 import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
+import com.yyyu.baselibrary.utils.WindowUtils;
 
 import java.util.Date;
 
@@ -39,20 +40,25 @@ public class IndoorRunRankingDialog extends LsmBaseDialog {
     ImageView ivArrowUp;
     @BindView(R.id.iv_arrow_down)
     ImageView ivArrowDown;
+    @BindView(R.id.tv_calorie_burned)
+    TextView tvCalorieBurned;
 
 
     private Integer mCurrentScore;
     private Integer usId;
+    private double calorieBurned;
 
-    public IndoorRunRankingDialog(Context context, Integer currentScore  , Integer usId) {
+    public IndoorRunRankingDialog(Context context, Integer currentScore, Integer usId, double calorieBurned) {
         super(context);
         this.mCurrentScore = currentScore;
         this.usId = usId;
+        this.calorieBurned = calorieBurned;
     }
 
     @Override
     protected WindowManager.LayoutParams getLayoutParams() {
-        lp.width = DimensChange.dp2px(mContext, 350);
+        int width = WindowUtils.getSize(mContext)[0];
+        lp.width = width * 4 / 5;
         lp.dimAmount = 0f;
         return lp;
     }
@@ -70,6 +76,8 @@ public class IndoorRunRankingDialog extends LsmBaseDialog {
             tvScoring.setTextSize(80);
         }
         tvScoring.setText("" + mCurrentScore);
+        final String calorieStr = String.format("%.1f", calorieBurned);
+        tvCalorieBurned.setText(calorieStr+"大卡");
     }
 
     @Override

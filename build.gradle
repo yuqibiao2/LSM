@@ -2,12 +2,11 @@
 
 buildscript {
     repositories {
-        jcenter()
-        mavenCentral()
         maven {
             url 'https://maven.google.com/'
-            name 'Google'
         }
+        jcenter()
+        mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
@@ -33,12 +32,11 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
         maven {
             url 'https://maven.google.com/'
-            name 'Google'
         }
+        jcenter()
+        maven { url "https://jitpack.io" }
     }
 }
 

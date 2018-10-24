@@ -141,6 +141,8 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
     private long enterTime;
     private int coachId;
     private int ccType;
+    private double startCalorie;
+    private double stopCalorie;
 
     public enum RunStatus {
         NONE,
@@ -233,6 +235,8 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
 
                 if (runStatus == START || runStatus == PAUSE) {
 
+                    stopCalorie = application.getCalorieValue();
+
                     new AlertDialog.Builder(IndoorExerciseActivity.this)
                             .setTitle("操作")
                             .setMessage("確認要結束？")
@@ -264,6 +268,7 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
                     MyToast.showLong(IndoorExerciseActivity.this, getStr(R.string.ble_not_connect));
                     return;
                 }
+                startCalorie = application.getCalorieValue();
                 if (runStatus != PAUSE) {
                     startTime = MyTimeUtils.formatDateTime("yyyy-MM-dd HH:mm", new Date(System.currentTimeMillis()));
                 }
@@ -402,7 +407,8 @@ public class IndoorExerciseActivity extends LsmBaseActivity {
         if (ucId == -1) {//线下课程
 
         } else {
-            IndoorRunRankingDialog rankingDialog = new IndoorRunRankingDialog(this, point, usId);
+            double calorieBurned = stopCalorie - startCalorie;
+            IndoorRunRankingDialog rankingDialog = new IndoorRunRankingDialog(this, point, usId , calorieBurned);
             rankingDialog.show();
 
             UserCourseTimeVo userCourseTimeVo = new UserCourseTimeVo();

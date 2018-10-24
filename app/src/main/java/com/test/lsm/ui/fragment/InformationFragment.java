@@ -477,7 +477,9 @@ public class InformationFragment extends LsmBaseFragment {
 
                         String calorieByStep = SportStepJsonUtils.getCalorieByStep(mStepSum);
                         float calorieSys = Float.valueOf(calorieByStep);
-                        final String calorieStr = String.format("%.1f", totalBleCalorie / 1000 + calorieSys);
+                        float totalCalorie = totalBleCalorie / 1000 + calorieSys;
+                        application.setCalorieValue(totalCalorie);
+                        final String calorieStr = String.format("%.1f", totalCalorie);
                         //MyLog.e(TAG , "calorieStr=="+totalBleCalorie / 1000 + calorieSys);
                         tvCalorie.post(new Runnable() {
                             @Override
