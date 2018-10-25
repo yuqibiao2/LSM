@@ -51,12 +51,11 @@ public class AFibDetailActivity extends LsmBaseActivity {
 
     @Override
     protected void initListener() {
-        ibNavBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+
+    }
+
+    public void back(View view){
+        finish();
     }
 
     public static void startAction(Context context){

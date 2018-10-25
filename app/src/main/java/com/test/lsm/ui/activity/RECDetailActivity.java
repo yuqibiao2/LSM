@@ -110,6 +110,9 @@ public class RECDetailActivity extends LsmBaseActivity {
 
     }
 
+    public void back(View view){
+        finish();
+    }
 
     public static void startAction(Context context){
         Intent intent = new Intent(context , RECDetailActivity.class);
