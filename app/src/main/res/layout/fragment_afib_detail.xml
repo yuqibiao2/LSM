@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="32dp"
+    android:layout_marginRight="32dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="0"
+            android:src="@mipmap/ic_afib_scan" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="AFib 自動偵測"
+            android:textColor="#FFF13564"
+            android:textSize="18sp" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/sc_auto_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0" />
+    </LinearLayout>
+
+    <include layout="@layout/all_afib_item_top"/>
+    <com.yyyu.baselibrary.ui.widget.AdapterLinearLayout
+        android:id="@+id/all_afib"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+    <include layout="@layout/all_afib_item_bottom"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="** 本檢測僅提供參考，請以醫院診斷為主。"
+        android:textColor="#FF4A4A4A"
+        android:textSize="14sp"
+        android:layout_marginBottom="50dp"/>
+
+</LinearLayout>

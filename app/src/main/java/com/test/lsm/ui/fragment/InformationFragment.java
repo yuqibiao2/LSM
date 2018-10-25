@@ -1,9 +1,6 @@
 package com.test.lsm.ui.fragment;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +14,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,7 +62,6 @@ import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
-import com.yyyu.lsmalgorithm.MyLib;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
@@ -127,8 +124,50 @@ public class InformationFragment extends LsmBaseFragment {
     @BindView(R.id.srl_info)
     SmartRefreshLayout srlInfo;
 
-    private static final int ECG_CODE=1001;
-    private static final int BATTERY_CODE=1002;
+    private static final int ECG_CODE = 1001;
+    private static final int BATTERY_CODE = 1002;
+    @BindView(R.id.tv_tb_info)
+    ImageView tvTbInfo;
+    @BindView(R.id.rr_bt)
+    RelativeLayout rrBt;
+    @BindView(R.id.ll_con4)
+    LinearLayout llCon4;
+    @BindView(R.id.rl_ecg)
+    RelativeLayout rlEcg;
+    @BindView(R.id.fl_ecg)
+    FrameLayout flEcg;
+    @BindView(R.id.ll_con5)
+    LinearLayout llCon5;
+    @BindView(R.id.rl_hr_chart)
+    RelativeLayout rlHrChart;
+    @BindView(R.id.tv_afib_status)
+    TextView tvAfibStatus;
+    @BindView(R.id.ll_con6)
+    LinearLayout llCon6;
+    @BindView(R.id.rl_afib)
+    RelativeLayout rlAfib;
+    @BindView(R.id.fl_afib)
+    FrameLayout flAfib;
+    @BindView(R.id.tv_rec_status)
+    TextView tvRecStatus;
+    @BindView(R.id.ll_con7)
+    LinearLayout llCon7;
+    @BindView(R.id.rl_rec)
+    RelativeLayout rlRec;
+    @BindView(R.id.fl_rec)
+    FrameLayout flRec;
+    @BindView(R.id.tv_group_status)
+    TextView tvGroupStatus;
+    @BindView(R.id.ll_con8)
+    LinearLayout llCon8;
+    @BindView(R.id.rl_care_group)
+    RelativeLayout rlCareGroup;
+    @BindView(R.id.fl_care_group)
+    FrameLayout flCareGroup;
+    @BindView(R.id.iv_bt_icon)
+    ImageView ivBtIcon;
+    @BindView(R.id.iv_cc)
+    ImageView ivCc;
 
     private Activity mAct;
     private MyApplication application;
@@ -170,7 +209,7 @@ public class InformationFragment extends LsmBaseFragment {
                     String RRIStr = RRIStrH + RRIStrL;
                     //MyLog.e(TAG , "RRIL==============="+Integer.parseInt(RRIStrL , 16));
                     //MyLog.e(TAG , "RRIH==============="+Integer.parseInt(RRIStrH , 16));
-                    MyLog.e(TAG , "RRI==============="+Integer.parseInt(RRIStr , 16));
+                    MyLog.e(TAG, "RRI===============" + Integer.parseInt(RRIStr, 16));
 
                     AlgorithmWrapper.startRRI();
 
@@ -258,7 +297,7 @@ public class InformationFragment extends LsmBaseFragment {
                 }
 
                 case BATTERY_CODE: {
-                    if (application.isBleConnected()){
+                    if (application.isBleConnected()) {
                         handleBatteryService(application.getCurrentBleDevice());
                     }
                     break;
@@ -331,6 +370,9 @@ public class InformationFragment extends LsmBaseFragment {
         itemContainer.add(flStep);
         itemContainer.add(flCalorie);
         itemContainer.add(flHrChart);
+        itemContainer.add(flAfib);
+        itemContainer.add(flRec);
+        itemContainer.add(flCareGroup);
 
         UserLoginReturn.PdBean user = application.getUser();
         String userSex = user.getUSER_SEX();
@@ -504,7 +546,15 @@ public class InformationFragment extends LsmBaseFragment {
         initStepCount();
     }
 
-    @OnClick({R.id.rl_heart, R.id.rl_step, R.id.rl_calorie, R.id.rl_ecg, R.id.rl_hr_chart})
+    @OnClick({
+            R.id.rl_heart,
+            R.id.rl_step,
+            R.id.rl_calorie,
+            R.id.rl_ecg,
+            R.id.rl_hr_chart  ,
+            R.id.rl_afib ,
+            R.id.rl_rec ,
+            R.id.rl_care_group})
     public void onItemClick(View view) {
 
         // TransitionManager.beginDelayedTransition(llContainer);
@@ -539,6 +589,15 @@ public class InformationFragment extends LsmBaseFragment {
                 if (flHrChart.getVisibility() == View.VISIBLE) {
                     Constant.isHRChartDetailShow = true;
                 }
+                break;
+            case R.id.rl_afib:
+                openItem(4);
+                break;
+            case R.id.rl_rec:
+                openItem(5);
+                break;
+            case R.id.rl_care_group:
+                openItem(6);
                 break;
         }
         view.setVisibility(View.VISIBLE);
@@ -687,7 +746,7 @@ public class InformationFragment extends LsmBaseFragment {
                                 if (tvBryPct != null) {
                                     tvBryPct.setText(Integer.parseInt(hexString, 16) + "%");
                                 }
-                                mHandler.sendEmptyMessageDelayed(BATTERY_CODE , 15*1000);
+                                mHandler.sendEmptyMessageDelayed(BATTERY_CODE, 15 * 1000);
                             }
 
                             @Override
@@ -734,7 +793,7 @@ public class InformationFragment extends LsmBaseFragment {
                                     public void onNotifySuccess() {
                                         MyLog.d(TAG, "AA71通知开始成功===============");
                                         //发送通知读取电量
-                                        mHandler.sendEmptyMessageDelayed(BATTERY_CODE , 10*1000);
+                                        mHandler.sendEmptyMessageDelayed(BATTERY_CODE, 10 * 1000);
                                     }
 
                                     @Override

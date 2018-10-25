@@ -20,6 +20,7 @@ public class AdapterLinearLayout extends LinearLayout {
 
     public AdapterLinearLayout(Context context) {
         super(context);
+        setOrientation(VERTICAL);
     }
 
     public AdapterLinearLayout(Context context, AttributeSet attrs) {

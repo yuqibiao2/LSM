@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_record_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2018/10/28  14:28  錄製時間   85分鐘"
+        android:textColor="#FF4A90E2"
+        android:textSize="14sp" />
+
+</LinearLayout>

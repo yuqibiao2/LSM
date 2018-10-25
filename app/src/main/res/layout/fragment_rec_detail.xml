@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="32dp"
+    android:layout_marginRight="32dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="身體訊號紀錄"
+        android:textColor="#FF4A4A4A"
+        android:textSize="18sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="錄製時間設置"
+            android:textSize="18sp"
+            android:layout_centerVertical="true"
+            android:textColor="#FF4A4A4A"/>
+        <Spinner
+            android:id="@+id/sp_time_interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="20dp"
+        android:layout_marginTop="10dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/iv_rec"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:src="@mipmap/ic_info_rec_to_start"/>
+            <TextView
+                android:id="@+id/tv_rec_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="開始錄製"
+                android:textColor="#FF4A4A4A"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/iv_sny"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:src="@mipmap/ic_info_rec_to_sny"/>
+            <TextView
+                android:id="@+id/iv_sny_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="同步上傳"
+                android:textColor="#FF4A4A4A"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="未上傳"
+        android:textColor="#FF4A90E2"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp" />
+
+    <com.yyyu.baselibrary.ui.widget.AdapterLinearLayout
+        android:id="@+id/all_rec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical" />
+
+</LinearLayout>

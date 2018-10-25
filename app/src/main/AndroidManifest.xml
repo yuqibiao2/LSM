@@ -88,6 +88,8 @@
         <activity android:name=".ui.activity.HrRecordActivity" />
         <activity android:name=".ui.activity.ExerciseRankingActivity"/>
         <activity android:name=".ui.activity.PrivacyPolicyActivity"/>
+        <activity android:name=".ui.activity.AFibDetailActivity"/>
+        <activity android:name=".ui.activity.RECDetailActivity"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

@@ -49,6 +49,7 @@
         app:srlAccentColor="@color/colorPrimary"
         app:srlPrimaryColor="@color/colorAccent"
         app:srlEnablePreviewInEditMode="true">
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -231,7 +232,7 @@
                         android:layout_marginRight="35dp" />
                 </FrameLayout>
             </LinearLayout>
-            <!--心率-->
+            <!--步数-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -477,7 +478,288 @@
                         android:layout_height="wrap_content" />-->
                 </FrameLayout>
             </LinearLayout>
+            <!--AFib-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-60dp"
+                android:orientation="vertical">
 
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:background="@mipmap/ic_info_item_bg">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_afib"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="50dp"
+                            android:scaleType="centerCrop"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_info_afib" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_con6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="45dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minWidth="150dp"
+                                android:gravity="right"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=""
+                                    android:textColor="#000"
+                                    android:textSize="30sp" />
+
+                                <TextView
+                                    android:id="@+id/tv_afib_status"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="未開啓"
+                                    android:textColor="#9B9B9B"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/ll_con6"
+                            android:layout_below="@+id/ll_con6"
+                            android:layout_marginTop="3dp"
+                            android:text="目前狀況"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_afib"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <fragment
+                        android:id="@+id/frag_afib_detail"
+                        android:name="com.test.lsm.ui.fragment.information_detail.AFibDetailFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp" />
+                </FrameLayout>
+            </LinearLayout>
+            <!--REC-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-60dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:background="@mipmap/ic_info_item_bg">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_rec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="50dp"
+                            android:scaleType="centerCrop"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_info_rec" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_con7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="45dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minWidth="150dp"
+                                android:gravity="right"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=""
+                                    android:textColor="#000"
+                                    android:textSize="30sp" />
+
+                                <TextView
+                                    android:id="@+id/tv_rec_status"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="無記錄"
+                                    android:textColor="#9B9B9B"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/ll_con7"
+                            android:layout_below="@+id/ll_con7"
+                            android:layout_marginTop="3dp"
+                            android:text="目前狀況"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_rec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <fragment
+                        android:id="@+id/frag_rec_detail"
+                        android:name="com.test.lsm.ui.fragment.information_detail.RECDetailFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp" />
+                </FrameLayout>
+            </LinearLayout>
+            <!--关心群组-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-60dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:background="@mipmap/ic_info_item_bg">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_care_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="50dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:scaleType="centerCrop"
+                                android:src="@mipmap/ic_info_care_group" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="關心群組"
+                                android:textColor="#000"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_con8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="45dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minWidth="100dp"
+                                android:gravity="right"
+                                android:orientation="horizontal">
+
+                                <TextView
+
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=""
+                                    android:textColor="#000"
+                                    android:textSize="30sp" />
+
+                                <TextView
+                                    android:id="@+id/tv_group_status"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="無群組"
+                                    android:textColor="#9B9B9B"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/ll_con8"
+                            android:layout_below="@+id/ll_con8"
+                            android:layout_marginTop="3dp"
+                            android:text="目前狀況"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_care_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <fragment
+                        android:id="@+id/frag_care_group_detail"
+                        android:name="com.test.lsm.ui.fragment.information_detail.CareGroupDetailFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <!--藍牙-->
             <RelativeLayout
                 android:id="@+id/rl_connected_device"
                 android:layout_width="match_parent"
@@ -532,6 +814,7 @@
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </LinearLayout>
