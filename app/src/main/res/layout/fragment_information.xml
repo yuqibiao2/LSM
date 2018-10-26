@@ -742,21 +742,7 @@
                     </RelativeLayout>
 
                 </RelativeLayout>
-
-                <FrameLayout
-                    android:id="@+id/fl_care_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone">
-
-                    <fragment
-                        android:id="@+id/frag_care_group_detail"
-                        android:name="com.test.lsm.ui.fragment.information_detail.CareGroupDetailFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="35dp"
-                        android:layout_marginRight="35dp" />
-                </FrameLayout>
+                
             </LinearLayout>
 
             <!--藍牙-->

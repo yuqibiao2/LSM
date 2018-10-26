@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cv_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:layout_marginTop="8dp"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="42dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:src="@mipmap/ic_group" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_weight="1"
+                android:text="關心人員 1"
+                android:textColor="#FF4A4A4A"
+                android:textSize="18sp" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:trackTint="@color/colorAccent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="電話"
+                android:textColor="#FF4A4A4A"
+                android:textSize="18sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/et_care_group"
+                android:paddingLeft="12dp"
+                android:text="0917789765"
+                android:textColor="#4a90e2"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:padding="0dp"
+                android:text="連接"
+                android:textColor="#FF4A4A4A"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="廖傑西"
+                android:textColor="#FF4A90E2"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

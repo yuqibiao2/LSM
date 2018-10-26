@@ -34,6 +34,7 @@ import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.bean.event.OnUserInfoChg;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.GlidUtils;
+import com.test.lsm.ui.activity.SetCareGroupActivity;
 import com.test.lsm.ui.activity.UpdateUserActivity1;
 import com.test.lsm.utils.LoginRegUtils;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
@@ -50,6 +51,8 @@ import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import static com.test.lsm.global.SpConstant.WARING_HR;
 
 /**
  * 功能：设置界面
@@ -100,6 +103,10 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
     RelativeLayout rlUrgency;
     @BindView(R.id.tv_version_name)
     TextView tvVersionName;
+    @BindView(R.id.sc_care_group)
+    SwitchCompat scCareGroup;
+    @BindView(R.id.tv_to_care_group)
+    TextView tvToCareGroup;
     private MyApplication application;
     private UserLoginReturn.PdBean user;
     private BleDeviceAdapter2 bleDeviceAdapter;
@@ -125,7 +132,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
     @Override
     protected void initView() {
         //---inflate date
-        tvVersionName.setText("beatInfo and."+ BuildConfig.VERSION_NAME);
+        tvVersionName.setText("beatInfo and." + BuildConfig.VERSION_NAME);
         user = application.getUser();
         tvUsername.setText("" + user.getUSERNAME());
         tvHeight.setText("" + user.getUSER_HEIGHT() + " cm");
@@ -143,7 +150,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
                     break;
             }
         }
-        int waringHr = (int) MySPUtils.get(getContext(), "waringHr", -1);
+        int waringHr = (int) MySPUtils.get(getContext(), WARING_HR, -1);
         if (waringHr > 0) {
             tvWaringHr.setText("" + waringHr + " bpm");
             sbWaringHr.setProgress(waringHr);
@@ -163,6 +170,13 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
     @Override
     protected void initListener() {
 
+        tvToCareGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SetCareGroupActivity.startAction(getContext());
+            }
+        });
+
         ibMenuSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,7 +195,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 tvWaringHr.setText("" + i + " bpm");
-                MySPUtils.put(getContext(), "waringHr", i);
+                MySPUtils.put(getContext(), WARING_HR, i);
             }
 
             @Override
@@ -318,7 +332,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
             public void onScanning(BleDevice bleDevice) {
                 String dName = bleDevice.getDevice().getName();
                 //MyLog.e(TAG, "dName：" + dName);
-                if (dName != null) {
+                if (dName != null && tvBtTotal!=null) {
                     if (!TextUtils.isEmpty(dName)/*dName.contains("CC") || dName.contains("Sensor") || dName.contains("Tag")*/) {
                         deviceList.add(bleDevice);
                         bleDeviceAdapter.notifyDataSetChanged();

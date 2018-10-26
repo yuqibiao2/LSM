@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@drawable/datetime_dialog_bg"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/ic_egc_call" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        android:textColor="#F14956"
+        android:text="心率異常超出警戒心率，是否撥出求救電話？" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:id="@+id/tv_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:drawablePadding="4dp"
+            android:drawableLeft="@mipmap/ic_egc_no"
+            android:text="否"/>
+
+        <TextView
+            android:id="@+id/tv_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:drawablePadding="4dp"
+            android:textColor="#F14956"
+            android:layout_alignParentEnd="true"
+            android:drawableLeft="@mipmap/ic_egc_yes"
+            android:text="是"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

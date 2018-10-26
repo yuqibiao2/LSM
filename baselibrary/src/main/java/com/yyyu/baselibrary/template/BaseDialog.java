@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.yyyu.baselibrary.R;
+import com.yyyu.baselibrary.utils.WindowUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,8 @@ public abstract class BaseDialog extends Dialog implements View.OnClickListener 
         super(context, R.style.dialog);
         this.mContext = context;
         lp = getWindow().getAttributes();
+        int width = WindowUtils.getSize(mContext)[0];
+        lp.width = width * 4 / 5;
         getWindow().setWindowAnimations(R.style.dialog_anim);
         this.setCanceledOnTouchOutside(true);//默认点击外面可消失
         rootView = LayoutInflater.from(context).inflate(getLayoutId(), null);

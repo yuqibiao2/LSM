@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/my_white">
@@ -70,8 +71,8 @@
                 android:id="@+id/iv_sex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="30dp" />
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp" />
 
         </RelativeLayout>
 
@@ -116,6 +117,42 @@
             android:progress="180"
             android:progressDrawable="@drawable/pro_seek_bar"
             android:thumbTint="@color/my_white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="是否同意讓關心您的人觀看訊息"
+                android:textColor="#FF4A4A4A"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/sc_care_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                app:thumbTint="@color/white"
+                app:trackTint="#4A90E2"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_to_care_group"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"
+            android:text="進入關心人員設置"
+            android:textColor="#FF4A90E2"
+            android:textSize="16sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -178,10 +215,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="36dp"
             android:layout_marginTop="10dp"
-            android:text="  緊急聯絡人"
-            android:textColor="#FFD0021B"
             android:drawableLeft="@mipmap/ic_urgent_add"
             android:gravity="center"
+            android:text="  緊急聯絡人"
+            android:textColor="#FFD0021B"
             android:textSize="17sp" />
 
         <RelativeLayout
@@ -201,23 +238,23 @@
                 android:id="@+id/tv_urgent_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nicklas Young "
-                android:layout_toRightOf="@+id/ri_urgent_icon"
-                android:textColor="#FFD0021B"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/ri_urgent_icon"
+                android:text="Nicklas Young "
+                android:textColor="#FFD0021B"
                 android:textSize="17sp" />
+
             <TextView
                 android:id="@+id/tv_urgent_tel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_urgent_name"
+                android:layout_below="@+id/tv_urgent_name"
+                android:layout_marginTop="15dp"
                 android:text="0910234567 "
                 android:textColor="#FFD0021B"
-                android:layout_below="@+id/tv_urgent_name"
-                android:layout_alignLeft="@+id/tv_urgent_name"
-                android:layout_marginTop="15dp"
-                android:textSize="17sp"
-                />
+                android:textSize="17sp" />
         </RelativeLayout>
 
         <Button
@@ -236,11 +273,11 @@
             android:id="@+id/tv_version_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="30dp"
-            android:text="beatInfo"/>
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="beatInfo"
+            android:textSize="10sp" />
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

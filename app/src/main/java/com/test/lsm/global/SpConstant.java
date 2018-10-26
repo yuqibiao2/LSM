@@ -13,4 +13,6 @@ public class SpConstant {
 
     public static final String LASTED_HRV_UPDATE_TIME ="lasted_hrv_update_time";
 
+    public static  final  String WARING_HR = "waringHr";
+
 }

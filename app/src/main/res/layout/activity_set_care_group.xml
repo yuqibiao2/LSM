@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/ib_nav_back"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:background="@color/my_trans"
+        android:onClick="back"
+        android:src="@mipmap/ic_back" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="關心人員設置"
+            android:textColor="#FF4A4A4A"
+            android:textSize="17sp" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/sc_care_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            app:thumbTint="@color/white"
+            app:trackTint="#4A90E2" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_care_group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"/>
+
+        <ImageView
+            android:id="@+id/iv_add_care_group"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:src="@mipmap/ic_add_care_group" />
+    </RelativeLayout>
+
+</LinearLayout>

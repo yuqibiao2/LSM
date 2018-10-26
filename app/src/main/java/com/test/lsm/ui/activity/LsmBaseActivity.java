@@ -1,10 +1,18 @@
 package com.test.lsm.ui.activity;
 
 import android.Manifest;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 
+import com.test.lsm.MyApplication;
+import com.test.lsm.R;
+import com.test.lsm.ui.dialog.EmergencyContactDialog;
 import com.test.lsm.ui.dialog.LoadingDialog;
+import com.test.lsm.utils.logic.EmergencyContactJudge;
 import com.yyyu.baselibrary.template.BaseActivity;
+import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.StatusBarCompat;
 
 import java.util.List;
@@ -14,6 +22,8 @@ import butterknife.Unbinder;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static com.test.lsm.global.SpConstant.WARING_HR;
+
 /**
  * 功能：LSM项目的BaseActivity
  *
@@ -22,7 +32,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * @date 2018/3/23
  */
 
-public abstract class LsmBaseActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks{
+public abstract class LsmBaseActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
 
     private Unbinder mUnbind;
     private LoadingDialog loadingDialog;
@@ -32,12 +42,36 @@ public abstract class LsmBaseActivity extends BaseActivity implements EasyPermis
         super.beforeInit();
         mUnbind = ButterKnife.bind(this);
         loadingDialog = new LoadingDialog(this);
-        if (setDefaultStatusBarCompat()){
+        if (setDefaultStatusBarCompat()) {
             StatusBarCompat.compat(this, 0xfff0f0f0);
         }
+
+        //判斷心率 彈出緊急聯係人彈窗
+        final MyApplication application = (MyApplication) getApplication();
+        application.setOnGetHrValueListener(new MyApplication.OnGetHrValueListener() {
+            @Override
+            public void onGet(int hrValue) {
+                int waringHr = (int) MySPUtils.get(LsmBaseActivity.this, WARING_HR, 180);
+                boolean judge = EmergencyContactJudge.doJudge(hrValue, waringHr);
+                if (judge && !EmergencyContactDialog.isShow) {
+                    EmergencyContactDialog emergencyContactDialog = new EmergencyContactDialog(LsmBaseActivity.this);
+                    emergencyContactDialog.show();
+                    //发送通知
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(LsmBaseActivity.this)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle("BeatInfo")
+                            .setContentText("心率異常警示！");
+                    NotificationManager manager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                    manager.notify(123, builder.build());
+
+                }
+            }
+
+        });
+
     }
 
-    protected  boolean setDefaultStatusBarCompat(){
+    protected boolean setDefaultStatusBarCompat() {
 
         return true;
     }
@@ -70,8 +104,8 @@ public abstract class LsmBaseActivity extends BaseActivity implements EasyPermis
     }
 
     protected void toRequestPermission() {
-        String[] perms = {Manifest.permission.CAMERA ,
-                Manifest.permission.ACCESS_FINE_LOCATION ,
+        String[] perms = {Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.CALL_PHONE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};

@@ -50,6 +50,9 @@ import com.test.lsm.db.service.CalorieService;
 import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.global.Constant;
+import com.test.lsm.ui.dialog.EmergencyContactDialog;
+import com.test.lsm.utils.logic.EmergencyContactJudge;
+import com.test.lsm.utils.logic.HeartRateFilter;
 import com.test.lsm.net.GlidUtils;
 import com.test.lsm.ui.activity.ECGShowActivity3;
 import com.test.lsm.ui.activity.SettingActivity;
@@ -60,6 +63,7 @@ import com.today.step.lib.SportStepJsonUtils;
 import com.today.step.lib.TodayStepService;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
@@ -67,12 +71,16 @@ import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
+
+import static com.test.lsm.global.SpConstant.WARING_HR;
 
 /**
  * 功能：数据信息界面
@@ -162,8 +170,6 @@ public class InformationFragment extends LsmBaseFragment {
     LinearLayout llCon8;
     @BindView(R.id.rl_care_group)
     RelativeLayout rlCareGroup;
-    @BindView(R.id.fl_care_group)
-    FrameLayout flCareGroup;
     @BindView(R.id.iv_bt_icon)
     ImageView ivBtIcon;
     @BindView(R.id.iv_cc)
@@ -179,10 +185,6 @@ public class InformationFragment extends LsmBaseFragment {
     private boolean isHandBatteryService = false;
 
     private IirFilter iirFilter = Algorithm.newIirFilterInstance();
-
-    private int startCount = 0;
-    private int displayHR = -1;
-    private int zeroCount = 0;
 
 
     private Handler mHandler = new Handler(new Handler.Callback() {
@@ -215,35 +217,7 @@ public class InformationFragment extends LsmBaseFragment {
 
                     int heartNum = Integer.parseInt(hrStr, 16);
 
-                    int heartRate = heartNum;
-                    startCount++;
-                    if (startCount > 6) {
-                        if (heartRate == 0) {
-                            zeroCount++;
-                        } else {
-                            zeroCount = 0;
-                        }
-                        if (zeroCount > 3) {
-                            displayHR = 0;
-                            zeroCount = 0;
-                        } else {
-                            if ((heartRate >= 30) && (heartRate <= 250)) {
-                                if (displayHR == -1) {
-                                    displayHR = heartRate;
-                                } else {
-                                    if (Math.abs(heartRate - displayHR) > 8) {
-                                        if ((heartRate - displayHR) > 0) {
-                                            displayHR = displayHR + 5;
-                                        } else {
-                                            displayHR = displayHR - 5;
-                                        }
-                                    } else {
-                                        displayHR = heartRate;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    int displayHR = HeartRateFilter.doFilter(heartNum);
 
                     if (displayHR != -1) {
                         //得到心跳值得回调
@@ -372,7 +346,6 @@ public class InformationFragment extends LsmBaseFragment {
         itemContainer.add(flHrChart);
         itemContainer.add(flAfib);
         itemContainer.add(flRec);
-        itemContainer.add(flCareGroup);
 
         UserLoginReturn.PdBean user = application.getUser();
         String userSex = user.getUSER_SEX();
@@ -416,7 +389,7 @@ public class InformationFragment extends LsmBaseFragment {
         // 删除
     }
 
-  /*  private void genTestHr() {
+/*    private void genTestHr() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -597,7 +570,7 @@ public class InformationFragment extends LsmBaseFragment {
                 openItem(5);
                 break;
             case R.id.rl_care_group:
-                openItem(6);
+                
                 break;
         }
         view.setVisibility(View.VISIBLE);
