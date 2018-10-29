@@ -91,8 +91,8 @@
         <activity android:name=".ui.activity.AFibDetailActivity"/>
         <activity android:name=".ui.activity.RECDetailActivity"/>
         <activity android:name=".ui.activity.SetCareGroupActivity"/>
-        <activity android:name=".ui.activity.ChoiceCareGroupActivity"/>
         <activity android:name=".ui.activity.CareGroupDetailActivity"/>
+        <activity android:name=".ui.activity.CareGroupChoiceActivity"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

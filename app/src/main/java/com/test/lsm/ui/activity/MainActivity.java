@@ -1,6 +1,5 @@
 package com.test.lsm.ui.activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothGatt;
 import android.content.BroadcastReceiver;
@@ -44,10 +43,10 @@ import com.test.lsm.bean.MenuItem;
 import com.test.lsm.service.UploadHealthInfoService;
 import com.test.lsm.ui.dialog.BleBTDeviceScanDialog;
 import com.test.lsm.ui.dialog.DeviceInformationDialog;
-import com.test.lsm.ui.fragment.ExerciseChoiceFragment;
-import com.test.lsm.ui.fragment.InformationFragment;
-import com.test.lsm.ui.fragment.RunFragment;
-import com.test.lsm.ui.fragment.TodayFragment;
+import com.test.lsm.ui.fragment.main.ExerciseChoiceFragment;
+import com.test.lsm.ui.fragment.main.InformationFragment;
+import com.test.lsm.ui.fragment.main.RunFragment;
+import com.test.lsm.ui.fragment.main.TodayFragment;
 import com.test.lsm.utils.LoginRegUtils;
 import com.test.lsm.utils.bt.ble.BleBTUtils;
 import com.yyyu.baselibrary.ui.widget.CommonPopupWindow;
@@ -63,8 +62,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
-import pub.devrel.easypermissions.AppSettingsDialog;
-import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * 功能：首页

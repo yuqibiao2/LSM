@@ -1,4 +1,4 @@
-package com.test.lsm.ui.fragment;
+package com.test.lsm.ui.fragment.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,6 +28,7 @@ import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.ExerciseRankingActivity;
 import com.test.lsm.ui.activity.MsgDetailActivity;
 import com.test.lsm.ui.activity.SettingActivity;
+import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.test.lsm.utils.LoginRegUtils;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MyLog;

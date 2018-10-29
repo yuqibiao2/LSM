@@ -1,4 +1,4 @@
-package com.test.lsm.ui.fragment;
+package com.test.lsm.ui.fragment.main;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -44,6 +44,7 @@ import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
 import com.test.lsm.ui.activity.RunRecordActivity;
 import com.test.lsm.ui.activity.SettingActivity;
+import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.test.lsm.ui.fragment.run_bottom.RunBottomFragment1;
 import com.test.lsm.ui.fragment.run_bottom.RunBottomFragment2;
 import com.test.lsm.utils.map.MyOrientationListener;

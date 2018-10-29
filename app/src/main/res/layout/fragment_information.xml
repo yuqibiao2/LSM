@@ -48,6 +48,7 @@
         android:background="@color/my_white"
         app:srlAccentColor="@color/colorPrimary"
         app:srlPrimaryColor="@color/colorAccent"
+        android:layout_marginBottom="45dp"
         app:srlEnablePreviewInEditMode="true">
 
     <android.support.v4.widget.NestedScrollView

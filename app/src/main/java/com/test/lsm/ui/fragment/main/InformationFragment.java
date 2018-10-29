@@ -1,4 +1,4 @@
-package com.test.lsm.ui.fragment;
+package com.test.lsm.ui.fragment.main;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -50,8 +50,8 @@ import com.test.lsm.db.service.CalorieService;
 import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.global.Constant;
-import com.test.lsm.ui.dialog.EmergencyContactDialog;
-import com.test.lsm.utils.logic.EmergencyContactJudge;
+import com.test.lsm.ui.activity.CareGroupChoiceActivity;
+import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.test.lsm.utils.logic.HeartRateFilter;
 import com.test.lsm.net.GlidUtils;
 import com.test.lsm.ui.activity.ECGShowActivity3;
@@ -63,7 +63,6 @@ import com.today.step.lib.SportStepJsonUtils;
 import com.today.step.lib.TodayStepService;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MyLog;
-import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
@@ -71,16 +70,12 @@ import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
-
-import static com.test.lsm.global.SpConstant.WARING_HR;
 
 /**
  * 功能：数据信息界面
@@ -92,7 +87,6 @@ import static com.test.lsm.global.SpConstant.WARING_HR;
 
 public class InformationFragment extends LsmBaseFragment {
 
-    private static final String TAG = "InformationFragment";
     @BindView(R.id.tv_heart_num)
     TextView tvHeartNum;
     @BindView(R.id.ll_con)
@@ -131,9 +125,6 @@ public class InformationFragment extends LsmBaseFragment {
     TextView tvBryPct;
     @BindView(R.id.srl_info)
     SmartRefreshLayout srlInfo;
-
-    private static final int ECG_CODE = 1001;
-    private static final int BATTERY_CODE = 1002;
     @BindView(R.id.tv_tb_info)
     ImageView tvTbInfo;
     @BindView(R.id.rr_bt)
@@ -174,6 +165,10 @@ public class InformationFragment extends LsmBaseFragment {
     ImageView ivBtIcon;
     @BindView(R.id.iv_cc)
     ImageView ivCc;
+
+    private static final String TAG = "InformationFragment";
+    private static final int ECG_CODE = 1001;
+    private static final int BATTERY_CODE = 1002;
 
     private Activity mAct;
     private MyApplication application;
@@ -570,7 +565,7 @@ public class InformationFragment extends LsmBaseFragment {
                 openItem(5);
                 break;
             case R.id.rl_care_group:
-                
+                CareGroupChoiceActivity.startAction(getContext());
                 break;
         }
         view.setVisibility(View.VISIBLE);
