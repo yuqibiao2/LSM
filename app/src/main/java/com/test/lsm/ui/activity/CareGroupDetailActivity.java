@@ -6,14 +6,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.test.lsm.R;
+import com.yyyu.baselibrary.ui.widget.AdapterLinearLayout;
+import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.WindowUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +44,15 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     RecyclerView rvCgDetailNor;
     @BindView(R.id.tv_mask)
     TextView tvMask;
+    @BindView(R.id.rl_bottom_sheet)
+    RelativeLayout rlBottomSheet;
+    @BindView(R.id.ll_top)
+    LinearLayout llTop;
 
 
     private BaseQuickAdapter<String, BaseViewHolder> adapter;
-    private LinearLayoutManager layout;
     private LinearLayoutManager norLayoutManager;
-    private View header;
+    private View header1;
 
     @Override
     public int getLayoutId() {
@@ -54,7 +62,7 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     @Override
     protected void initView() {
 
-        header = LayoutInflater.from(this).inflate(R.layout.pt_gc_detail_rv_header, null);
+        header1 = LayoutInflater.from(this).inflate(R.layout.pt_gc_detail_rv_header1, null);
         View header2 = LayoutInflater.from(this).inflate(R.layout.pt_gc_detail_rv_header2, null);
 
         List<String> temp = new ArrayList<>();
@@ -71,20 +79,31 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
 
             }
         };
-        adapter.addHeaderView(header,0);
-        adapter.addHeaderView(header2 , 1);
+        adapter.addHeaderView(header1);
+        adapter.addHeaderView(header2);
         rvCgDetailNor.setAdapter(adapter);
 
-        RecyclerView rvCgDetailExp = header.findViewById(R.id.rv_cg_detail_exp);
+        AdapterLinearLayout all_cg_detail_exp = header1.findViewById(R.id.all_cg_detail_exp);
+
         LinearLayoutManager expLayoutManager = new LinearLayoutManager(this);
         expLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rvCgDetailExp.setLayoutManager(expLayoutManager);
-        rvCgDetailExp.setAdapter(new BaseQuickAdapter<String, BaseViewHolder>(R.layout.rv_cg_detail_exp_item, temp) {
-            @Override
-            protected void convert(BaseViewHolder helper, String item) {
 
+        all_cg_detail_exp.setAdapter(new AdapterLinearLayout.LinearAdapter() {
+            @Override
+            public int getItemCount() {
+                return 8;
+            }
+
+            @Override
+            public View getView(ViewGroup parent, int position) {
+                return LayoutInflater.from(CareGroupDetailActivity.this).inflate(R.layout.rv_cg_detail_exp_item, parent, false);
             }
         });
+
+        int[] size = WindowUtils.getSize(this);
+        llTop.measure(0, 0);
+        int maxHeight = size[1] - llTop.getMeasuredHeight()- DimensChange.dp2px(this , 28);
+        rlBottomSheet.getLayoutParams().height = maxHeight;
 
     }
 
@@ -92,7 +111,7 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     protected void initListener() {
         rvCgDetailNor.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
-            private int scrollY=0;
+            private int scrollY = 0;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -103,10 +122,10 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                scrollY+=dy;
-                if (scrollY >= header.getMeasuredHeight()) {
+                scrollY += dy;
+                if (scrollY >= header1.getMeasuredHeight()) {
                     tvMask.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     tvMask.setVisibility(View.INVISIBLE);
                 }
             }

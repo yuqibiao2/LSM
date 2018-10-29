@@ -12,10 +12,17 @@
         android:textColor="#FF4A4A4A"
         android:textSize="18sp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_cg_detail_exp"
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
+        <com.yyyu.baselibrary.ui.widget.AdapterLinearLayout
+            android:id="@+id/all_cg_detail_exp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"/>
+
+    </HorizontalScrollView>
 
 </LinearLayout>
