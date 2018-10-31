@@ -1,4 +1,4 @@
-package com.test.lsm.ui.fragment;
+package com.test.lsm.ui.fragment.care_group;
 
 import android.graphics.Color;
 import android.view.Gravity;
@@ -29,6 +29,7 @@ import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
 import com.test.lsm.global.Const;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyToast;
 
@@ -38,9 +39,16 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class RunRecordDetailFragment extends LsmBaseFragment {
+/**
+ * 功能：关心群组成员运动轨迹
+ *
+ * @author yu
+ * @version 1.0
+ * @date 2018/10/29
+ */
+public class CareGroupMemRunTraceFragment extends LsmBaseFragment {
 
-    private static final String TAG = "RunRecordDetailActivity";
+    private static final String TAG = "CareGroupMemRunTraceFra";
 
     @BindView(R.id.map_run)
     MapView map_run;
@@ -64,7 +72,7 @@ public class RunRecordDetailFragment extends LsmBaseFragment {
     @Override
     public int getLayoutId() {
 
-        return R.layout.fragment_run_record_detail;
+        return R.layout.fragment_care_group_mem_run_trace;
     }
 
     @Override
@@ -83,9 +91,32 @@ public class RunRecordDetailFragment extends LsmBaseFragment {
 
     @Override
     protected void initListener() {
+        coordinateConvert();
 
     }
 
+    /**
+     * 讲google地图的wgs84坐标转化为百度地图坐标
+     */
+    private void coordinateConvert() {
+
+        CoordinateConverter converter = new CoordinateConverter();
+        converter.from(CoordinateConverter.CoordType.COMMON);
+        double lanSum = 0;
+        double lonSum = 0;
+        ArrayList<LatLng> latLngs = new ArrayList<>();
+        for (int i = 0; i < Const.googleWGS84.length; i++) {
+            String[] ll = Const.googleWGS84[i].split(",");
+            LatLng sourceLatLng = new LatLng(Double.valueOf(ll[0]), Double.valueOf(ll[1]));
+            converter.coord(sourceLatLng);
+            LatLng desLatLng = converter.convert();
+            latLngs.add(desLatLng);
+            lanSum += desLatLng.latitude;
+            lonSum += desLatLng.longitude;
+        }
+        MyLog.e(TAG, new Gson().toJson(latLngs));
+
+    }
 
     /**
      * 初始化基本地图
@@ -153,7 +184,7 @@ public class RunRecordDetailFragment extends LsmBaseFragment {
                                 //设置信息窗口点击回调
                                 InfoWindow.OnInfoWindowClickListener listener = new InfoWindow.OnInfoWindowClickListener() {
                                     public void onInfoWindowClick() {
-                                        Toast.makeText(getContext(), "这里是起点", Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(getContext(), "这里是起点", Toast.LENGTH_SHORT).show();
                                         mBaiduMap.hideInfoWindow();//隐藏信息窗口
                                     }
                                 };
@@ -173,7 +204,7 @@ public class RunRecordDetailFragment extends LsmBaseFragment {
                                 button.setText("终点");
                                 button.setOnClickListener(new View.OnClickListener() {
                                     public void onClick(View v) {
-                                        Toast.makeText(getContext(), "这里是终点", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(getContext(), "这里是终点", Toast.LENGTH_SHORT).show();
                                         mBaiduMap.hideInfoWindow();
                                     }
                                 });
@@ -219,4 +250,5 @@ public class RunRecordDetailFragment extends LsmBaseFragment {
         map_run.onDestroy();
         super.onDestroy();
     }
+
 }

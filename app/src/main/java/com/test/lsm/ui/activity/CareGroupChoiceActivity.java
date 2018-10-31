@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.test.lsm.R;
+import com.yyyu.baselibrary.utils.MyKeyboardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,8 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
     ImageButton ibSearchEnter;
     @BindView(R.id.rv_care_group)
     RecyclerView rvCareGroup;
+    @BindView(R.id.et_search)
+    EditText etSearch;
     private BaseQuickAdapter<String, BaseViewHolder> adapter;
 
     @Override
@@ -38,7 +43,6 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
 
     @Override
     protected void initView() {
-
         rvCareGroup.setLayoutManager(new LinearLayoutManager(this));
         List<String> temp = new ArrayList<>();
         temp.add("1");
@@ -68,12 +72,12 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
             }
         });
 
-       adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-           @Override
-           public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-               CareGroupDetailActivity.startAction(CareGroupChoiceActivity.this);
-           }
-       });
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                CareGroupDetailActivity.startAction(CareGroupChoiceActivity.this);
+            }
+        });
 
     }
 

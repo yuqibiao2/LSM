@@ -91,8 +91,12 @@
         <activity android:name=".ui.activity.AFibDetailActivity"/>
         <activity android:name=".ui.activity.RECDetailActivity"/>
         <activity android:name=".ui.activity.SetCareGroupActivity"/>
-        <activity android:name=".ui.activity.CareGroupDetailActivity"/>
-        <activity android:name=".ui.activity.CareGroupChoiceActivity"/>
+        <activity android:name=".ui.activity.CareGroupDetailActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".ui.activity.CareGroupChoiceActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".ui.activity.CareGroupMemDetailActivity"
+            android:theme="@style/Theme.ActivityDialogStyle"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

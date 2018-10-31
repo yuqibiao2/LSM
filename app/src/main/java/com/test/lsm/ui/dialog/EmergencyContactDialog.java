@@ -78,21 +78,24 @@ public class EmergencyContactDialog extends LsmBaseDialog {
         tvNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isShowing()){
-                    dismiss();
-                }
+                dismiss();
             }
         });
     }
 
     @Override
     public void dismiss() {
+        if (isShow){
+            super.dismiss();
+        }
         isShow = false;
     }
 
     @Override
     public void show() {
+        if (!isShow){
+            super.show();
+        }
         isShow = true;
-        super.show();
     }
 }

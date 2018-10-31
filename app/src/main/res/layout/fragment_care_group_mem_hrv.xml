@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:gravity="center"
+    android:paddingLeft="@dimen/sp_16"
+    android:paddingRight="@dimen/sp_16"
+    android:orientation="vertical">
+
+    <!--体力-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/ic_strong_white" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_physical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/normal_range"
+                android:textColor="#4A90E2"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_physical"
+                android:layout_width="150dp"
+                android:layout_height="15dp"
+                android:background="@mipmap/ic_bar13" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="體力"
+            android:textColor="@color/my_white"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+    <!--疲劳-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/ic_down_white" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_fatigue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/normal_range"
+                android:textColor="#4A90E2"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_fatigue"
+                android:layout_width="150dp"
+                android:layout_height="15dp"
+                android:background="@mipmap/ic_bar13" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="疲勞"
+            android:textColor="@color/my_white"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+    <!--压力-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/ic_strong_white" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_pressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/normal_range"
+                android:textColor="#4A90E2"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_pressure"
+                android:layout_width="150dp"
+                android:layout_height="15dp"
+                android:background="@mipmap/ic_bar13" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="壓力"
+            android:textColor="@color/my_white"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

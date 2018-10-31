@@ -78,11 +78,11 @@ public class HRChartDetailFragment extends LsmBaseFragment {
         MyLog.e(TAG , "initChartData===========");
         ArrayList<Entry> yVals = new ArrayList<Entry>();
         CircularFifoQueue<Integer> hrBuffer = Constant.hrBuffer2;
-       /* for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             int nextInt = new Random().nextInt(100);
             int value = 100 + nextInt;
             hrBuffer.add(value);
-        }*/
+        }
         for (int i = 0; i < hrBuffer.size(); i++) {
             yVals.add(new Entry(i, hrBuffer.get(i)));
         }

@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:text="異常訊息"
+        android:layout_marginTop="8dp"
         android:textColor="#FF4A4A4A"
         android:textSize="18sp" />
 

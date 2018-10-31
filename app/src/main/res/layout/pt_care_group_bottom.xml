@@ -7,6 +7,7 @@
     app:behavior_hideable="false"
     app:behavior_peekHeight="180dp"
     app:elevation="4dp"
+    android:background="#aaffffff"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
     <android.support.v7.widget.RecyclerView
@@ -18,7 +19,7 @@
         android:id="@+id/tv_mask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FAFAFA"
+        android:background="#ffffff"
         android:paddingBottom="8dp"
         android:paddingLeft="20dp"
         android:paddingTop="8dp"

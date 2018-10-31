@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,7 +19,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.test.lsm.R;
 import com.yyyu.baselibrary.ui.widget.AdapterLinearLayout;
 import com.yyyu.baselibrary.utils.DimensChange;
-import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MyKeyboardUtils;
 import com.yyyu.baselibrary.utils.WindowUtils;
 
 import java.util.ArrayList;
@@ -48,6 +50,8 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     RelativeLayout rlBottomSheet;
     @BindView(R.id.ll_top)
     LinearLayout llTop;
+    @BindView(R.id.et_search)
+    EditText etSearch;
 
 
     private BaseQuickAdapter<String, BaseViewHolder> adapter;
@@ -61,6 +65,8 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
 
     @Override
     protected void initView() {
+
+        MyKeyboardUtils.hidden(this);
 
         header1 = LayoutInflater.from(this).inflate(R.layout.pt_gc_detail_rv_header1, null);
         View header2 = LayoutInflater.from(this).inflate(R.layout.pt_gc_detail_rv_header2, null);
@@ -102,13 +108,22 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
 
         int[] size = WindowUtils.getSize(this);
         llTop.measure(0, 0);
-        int maxHeight = size[1] - llTop.getMeasuredHeight()- DimensChange.dp2px(this , 28);
+        int maxHeight = size[1] - llTop.getMeasuredHeight() - DimensChange.dp2px(this, 28);
         rlBottomSheet.getLayoutParams().height = maxHeight;
 
     }
 
     @Override
     protected void initListener() {
+
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                CareGroupMemDetailActivity.startAction(CareGroupDetailActivity.this);
+            }
+        });
+
+
         rvCgDetailNor.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             private int scrollY = 0;

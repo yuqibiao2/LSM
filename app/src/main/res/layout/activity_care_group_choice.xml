@@ -40,6 +40,7 @@
         android:layout_gravity="center">
 
         <EditText
+            android:id="@+id/et_search"
             android:layout_width="260dp"
             android:layout_height="80dp"
             android:background="@drawable/ic_cg_search_bg"

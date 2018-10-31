@@ -1,78 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/ll_top"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/frg_map"
+            android:name="com.test.lsm.ui.fragment.RunRecordDetailFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <LinearLayout
+            android:id="@+id/ll_top"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <ImageButton
-                android:id="@+id/ib_nav_back"
-                android:layout_width="60dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/my_trans"
-                android:onClick="back"
-                android:src="@mipmap/ic_back" />
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/ib_nav_back"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/my_trans"
+                    android:onClick="back"
+                    android:src="@mipmap/ic_back" />
 
 
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@mipmap/ic_care_group_dark" />
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@mipmap/ic_care_group_dark" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_marginStart="14dp"
-                android:gravity="center"
-                android:text="群組監控"
-                android:textColor="#FF4A4A4A"
-                android:textSize="17sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="14dp"
+                    android:gravity="center"
+                    android:text="群組監控"
+                    android:textColor="#FF4A4A4A"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_search_show"
+                android:layout_width="260dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/et_search"
+                    android:layout_width="260dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/ic_cg_search_bg"
+                    android:drawablePadding="16dp"
+                    android:drawableStart="@mipmap/ic_cg_search"
+                    android:hint="搜尋群組"
+                    android:paddingLeft="26dp"
+                    android:paddingRight="26dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF" />
+
+                <ImageButton
+                    android:id="@+id/ib_search_enter"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="26dp"
+                    android:background="@color/my_trans"
+                    android:src="@mipmap/ic_cg_search_enter" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/rl_search_show"
-            android:layout_width="260dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center">
+    </RelativeLayout>
 
-            <EditText
-                android:layout_width="260dp"
-                android:layout_height="80dp"
-                android:background="@drawable/ic_cg_search_bg"
-                android:drawablePadding="16dp"
-                android:drawableStart="@mipmap/ic_cg_search"
-                android:hint="搜尋群組"
-                android:paddingLeft="26dp"
-                android:paddingRight="26dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
 
-            <ImageButton
-                android:id="@+id/ib_search_enter"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="26dp"
-                android:background="@color/my_trans"
-                android:src="@mipmap/ic_cg_search_enter" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <include layout="@layout/pt_care_group_bottom"/>
+    <include layout="@layout/pt_care_group_bottom" />
 
 </android.support.design.widget.CoordinatorLayout>

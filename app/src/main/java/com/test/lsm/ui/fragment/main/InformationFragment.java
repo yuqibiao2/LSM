@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -50,18 +51,19 @@ import com.test.lsm.db.service.CalorieService;
 import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.global.Constant;
-import com.test.lsm.ui.activity.CareGroupChoiceActivity;
-import com.test.lsm.ui.fragment.LsmBaseFragment;
-import com.test.lsm.utils.logic.HeartRateFilter;
 import com.test.lsm.net.GlidUtils;
+import com.test.lsm.ui.activity.CareGroupChoiceActivity;
 import com.test.lsm.ui.activity.ECGShowActivity3;
 import com.test.lsm.ui.activity.SettingActivity;
+import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.test.lsm.utils.AlgorithmWrapper;
 import com.test.lsm.utils.bt.ble.BleBTUtils;
+import com.test.lsm.utils.logic.HeartRateFilter;
 import com.today.step.lib.ISportStepInterface;
 import com.today.step.lib.SportStepJsonUtils;
 import com.today.step.lib.TodayStepService;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
+import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
@@ -169,6 +171,8 @@ public class InformationFragment extends LsmBaseFragment {
     private static final String TAG = "InformationFragment";
     private static final int ECG_CODE = 1001;
     private static final int BATTERY_CODE = 1002;
+    @BindView(R.id.tv_hr_bpm)
+    TextView tvHrBpm;
 
     private Activity mAct;
     private MyApplication application;
@@ -222,7 +226,20 @@ public class InformationFragment extends LsmBaseFragment {
                         Constant.oneMinHeart.add(displayHR);
                         Constant.hrBuffer.add(displayHR);
                         Constant.hrBuffer2.add(displayHR);
-                        tvHeartNum.setText("" + displayHR);
+
+                        if (displayHR == 0) {
+                            tvHeartNum.setTextColor(Color.parseColor("#F89737"));
+                            tvHeartNum.setTextSize(16);
+                            tvHrBpm.setVisibility(View.GONE);
+                            tvHeartNum.setText("請確認裝置是否配戴正確");
+                        } else {
+                            tvHeartNum.setTextColor(Color.parseColor("#000000"));
+                            tvHeartNum.setTextSize(30);
+                            tvHrBpm.setVisibility(View.VISIBLE);
+                            tvHeartNum.setText("" + displayHR);
+                        }
+
+
                         application.setHeartNum(displayHR);
                         EventBus.getDefault().post(new HeartChgEvent(displayHR, "心跳变化了"));
                         MyLog.e(TAG, "tvHeartNum：" + displayHR);
@@ -519,9 +536,9 @@ public class InformationFragment extends LsmBaseFragment {
             R.id.rl_step,
             R.id.rl_calorie,
             R.id.rl_ecg,
-            R.id.rl_hr_chart  ,
-            R.id.rl_afib ,
-            R.id.rl_rec ,
+            R.id.rl_hr_chart,
+            R.id.rl_afib,
+            R.id.rl_rec,
             R.id.rl_care_group})
     public void onItemClick(View view) {
 
