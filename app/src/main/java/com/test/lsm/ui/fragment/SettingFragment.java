@@ -161,6 +161,11 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
         }
         srlBt.setEnableLoadMore(false);
         srlBt.setRefreshHeader(new MaterialHeader(getContext()));
+
+        infalteBleAdapter();
+    }
+
+    private void infalteBleAdapter() {
         deviceList = BleManager.getInstance().getAllConnectedDevice();//已连接得ble设备
         bleDeviceAdapter = new BleDeviceAdapter2(R.layout.rv_item_bt_device, deviceList);
         rvBtDevice.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -303,6 +308,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
 
             @Override
             public void onDisConnected(boolean isActiveDisConnected, BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                switchCompat.setChecked(false);
                 showToast("取消了连接");
             }
         });
@@ -360,6 +366,13 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onUserInfoChanged(OnUserInfoChg onUserInfoChg) {
         initView();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onBleConnectSuccess(BleConnectMessage bleConnectMessage){
+        if (bleConnectMessage.getStatus()==1){
+            startScan();
+        }
     }
 
     @Override

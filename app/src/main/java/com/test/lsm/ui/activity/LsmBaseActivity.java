@@ -1,24 +1,38 @@
 package com.test.lsm.ui.activity;
 
 import android.Manifest;
+import android.app.Application;
 import android.app.NotificationManager;
+import android.bluetooth.BluetoothGatt;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 
+import com.clj.fastble.BleManager;
+import com.clj.fastble.callback.BleGattCallback;
+import com.clj.fastble.data.BleDevice;
+import com.clj.fastble.exception.BleException;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
+import com.test.lsm.bean.BleConnectMessage;
+import com.test.lsm.ui.dialog.BleBtDeviceDisconnectDialog;
 import com.test.lsm.ui.dialog.EmergencyContactDialog;
 import com.test.lsm.ui.dialog.LoadingDialog;
+import com.test.lsm.utils.bt.ble.BleBTUtils;
 import com.test.lsm.utils.logic.EmergencyContactJudge;
 import com.yyyu.baselibrary.template.BaseActivity;
+import com.yyyu.baselibrary.utils.MyActUtils;
+import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MySPUtils;
+import com.yyyu.baselibrary.utils.MyToast;
 import com.yyyu.baselibrary.utils.StatusBarCompat;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import de.greenrobot.event.EventBus;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -34,8 +48,15 @@ import static com.test.lsm.global.SpConstant.WARING_HR;
 
 public abstract class LsmBaseActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
 
+    private static final String TAG = "LsmBaseActivity";
+
     private Unbinder mUnbind;
     private LoadingDialog loadingDialog;
+    BleBtDeviceDisconnectDialog bleBtDeviceDisconnectDialog;
+
+    //---蓝牙重连次数
+    public static  int RETRY_TIME= 50;
+    public static int bleRetryTime= RETRY_TIME;
 
     @Override
     public void beforeInit() {
@@ -53,7 +74,7 @@ public abstract class LsmBaseActivity extends BaseActivity implements EasyPermis
             public void onGet(int hrValue) {
                 int waringHr = (int) MySPUtils.get(LsmBaseActivity.this, WARING_HR, 180);
                 boolean judge = EmergencyContactJudge.doJudge(hrValue, waringHr);
-                if (judge && !EmergencyContactDialog.isShow) {
+                if (judge && !EmergencyContactDialog.isShow && MyActUtils.isTopAct(LsmBaseActivity.this)) {
                     EmergencyContactDialog emergencyContactDialog = new EmergencyContactDialog(LsmBaseActivity.this);
                     emergencyContactDialog.show();
                     //发送通知
@@ -61,12 +82,24 @@ public abstract class LsmBaseActivity extends BaseActivity implements EasyPermis
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("BeatInfo")
                             .setContentText("心率異常警示！");
-                    NotificationManager manager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.notify(123, builder.build());
 
                 }
             }
 
+        });
+
+        BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
+            @Override
+            public void dismiss(BleDevice bleDevice) {
+                if (!BleBtDeviceDisconnectDialog.isShow && MyActUtils.isTopAct(LsmBaseActivity.this)) {
+                    bleRetryTime= RETRY_TIME;
+                    retryConnect(bleDevice);
+                    bleBtDeviceDisconnectDialog = new BleBtDeviceDisconnectDialog(LsmBaseActivity.this);
+                    bleBtDeviceDisconnectDialog.show();
+                }
+            }
         });
 
     }
@@ -84,6 +117,44 @@ public abstract class LsmBaseActivity extends BaseActivity implements EasyPermis
         }
         dismissLoadDialog();
     }
+
+    private void retryConnect(BleDevice bleDevice) {
+        bleRetryTime--;
+        final MyApplication application = (MyApplication) getApplication();
+        String mac = bleDevice.getMac();
+        String connectDeviceMac = BleBTUtils.getConnectDevice(LsmBaseActivity.this);
+        if (!TextUtils.isEmpty(mac) && mac.equals(connectDeviceMac)) {//已经配对过的设备
+            BleManager.getInstance().connectWrapper(bleDevice, new BleGattCallback() {
+                @Override
+                public void onStartConnect() {
+                }
+
+                @Override
+                public void onConnectFail(BleException exception) {
+                    BleDevice currentBleDevice = application.getCurrentBleDevice();
+                    if (currentBleDevice != null && bleRetryTime>0) {
+                        retryConnect(currentBleDevice);
+                    }
+                    MyLog.e(TAG, "onConnectFail===" + exception.getDescription());
+                    MyToast.showShort(LsmBaseActivity.this, "连接失败" + exception.getDescription());
+                }
+
+                @Override
+                public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                    application.setCurrentBleDevice(bleDevice);
+                    bleBtDeviceDisconnectDialog.dismiss();
+                    EventBus.getDefault().post(new BleConnectMessage(1, bleDevice));
+                    MyLog.d(TAG, "onConnectSuccess===");
+                }
+
+                @Override
+                public void onDisConnected(boolean isActiveDisConnected, BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                    MyLog.d(TAG, "onDisConnected===");
+                }
+            });
+        }
+    }
+
 
     public void showLoadDialog() {
         loadingDialog.show();

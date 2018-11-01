@@ -1,7 +1,6 @@
 package com.test.lsm.ui.activity;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothGatt;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,17 +26,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.clj.fastble.BleManager;
-import com.clj.fastble.callback.BleGattCallback;
-import com.clj.fastble.data.BleDevice;
-import com.clj.fastble.exception.BleException;
 import com.example.jpushdemo.ExampleUtil;
 import com.example.jpushdemo.LocalBroadcastManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.MenuAdapter;
-import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.bean.MenuItem;
 import com.test.lsm.service.UploadHealthInfoService;
 import com.test.lsm.ui.dialog.BleBTDeviceScanDialog;
@@ -48,10 +41,8 @@ import com.test.lsm.ui.fragment.main.InformationFragment;
 import com.test.lsm.ui.fragment.main.RunFragment;
 import com.test.lsm.ui.fragment.main.TodayFragment;
 import com.test.lsm.utils.LoginRegUtils;
-import com.test.lsm.utils.bt.ble.BleBTUtils;
 import com.yyyu.baselibrary.ui.widget.CommonPopupWindow;
 import com.yyyu.baselibrary.utils.DimensChange;
-import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
@@ -61,7 +52,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import de.greenrobot.event.EventBus;
 
 /**
  * 功能：首页
@@ -249,16 +239,16 @@ public class MainActivity extends LsmBaseActivity {
         });
 
 
-        BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
+      /*  BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
             @Override
             public void dismiss(BleDevice bleDevice) {
                 retryConnect(bleDevice);
             }
-        });
+        });*/
 
     }
 
-    private void retryConnect(BleDevice bleDevice) {
+/*    private void retryConnect(BleDevice bleDevice) {
         String mac = bleDevice.getMac();
         String connectDeviceMac = BleBTUtils.getConnectDevice(MainActivity.this);
         if (!TextUtils.isEmpty(mac) && mac.equals(connectDeviceMac)) {//已经配对过的设备
@@ -291,7 +281,7 @@ public class MainActivity extends LsmBaseActivity {
                 }
             });
         }
-    }
+    }*/
 
     @Override
     protected void afterInit() {
