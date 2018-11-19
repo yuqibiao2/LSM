@@ -15,4 +15,6 @@ public class SpConstant {
 
     public static  final  String WARING_HR = "waringHr";
 
+    public static final String SC_AUTO_SCAN="scAutoScan";
+
 }

@@ -62,7 +62,7 @@ android {
     }
     /*greenDao*/
     greendao {
-        schemaVersion 1
+        schemaVersion 2
         daoPackage 'com.test.lsm.db'
         targetGenDir 'src/main/java'
     }
@@ -80,6 +80,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile(name: 'algorithm-release', ext: 'aar')
+    compile(name: 'rrislib-release', ext: 'aar')
     compile 'com.android.support.constraint:constraint-layout:1.1.0'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -98,7 +99,7 @@ dependencies {
     /*compile 'com.github.PhilJay:MPAndroidChart:v3.0.3'*/
     compile project(':MPChartLib')
     compile project(':jpush')
-    /* compile project(':LsmAlgorithm')*/
+  /*   compile project(':LsmAlgorithm')*/
     debugCompile project(path: ':LsmAlgorithm', configuration: 'debug')
     releaseCompile project(path: ':LsmAlgorithm', configuration: 'release')
 

@@ -1,6 +1,5 @@
 package com.test.lsm;
 
-import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.multidex.MultiDexApplication;
@@ -9,7 +8,7 @@ import com.baidu.mapapi.SDKInitializer;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.data.BleDevice;
 import com.crashlytics.android.Crashlytics;
-import com.test.lsm.bean.UserBean;
+import com.test.lsm.bean.LsmBleData;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.db.DaoMaster;
 import com.test.lsm.db.DaoSession;
@@ -104,6 +103,16 @@ public class MyApplication extends MultiDexApplication {
 
     public interface OnGetHrValueListener{
         void onGet(int hrValue);
+    }
+
+    public OnGetBleDataValueListener mOnGetBleDataValueListener;
+
+    public void setOnGetBleDataValueListener( OnGetBleDataValueListener onGetBleDataValueListener){
+        this.mOnGetBleDataValueListener = onGetBleDataValueListener;
+    }
+
+    public interface OnGetBleDataValueListener {
+        void onGet(LsmBleData lsmBleData);
     }
 
     public UserLoginReturn.PdBean getUser() {

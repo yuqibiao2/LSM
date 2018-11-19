@@ -35,6 +35,11 @@
             android:layout_weight="0" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_afib"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <include layout="@layout/all_afib_item_top"/>
     <com.yyyu.baselibrary.ui.widget.AdapterLinearLayout
         android:id="@+id/all_afib"
@@ -42,6 +47,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"/>
     <include layout="@layout/all_afib_item_bottom"/>
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"

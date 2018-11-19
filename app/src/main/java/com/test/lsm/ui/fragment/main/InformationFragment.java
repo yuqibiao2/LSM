@@ -31,6 +31,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.singularwings.rrislib.RRIsVerifier;
 import com.swm.algorithm.Algorithm;
 import com.swm.algorithm.support.IirFilter;
 import com.swm.algorithm.support.heat.SwmQuantityOfHeat;
@@ -38,6 +39,7 @@ import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.bean.InfoBean;
+import com.test.lsm.bean.LsmBleData;
 import com.test.lsm.bean.event.CalorieChgEvent;
 import com.test.lsm.bean.event.ECGChgEvent;
 import com.test.lsm.bean.event.HeartChgEvent;
@@ -185,6 +187,8 @@ public class InformationFragment extends LsmBaseFragment {
 
     private IirFilter iirFilter = Algorithm.newIirFilterInstance();
 
+    private RRIsVerifier mVerifier = new RRIsVerifier();
+
 
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
@@ -215,10 +219,12 @@ public class InformationFragment extends LsmBaseFragment {
                     AlgorithmWrapper.startRRI();
 
                     int heartNum = Integer.parseInt(hrStr, 16);
+                    double rriValue = Integer.parseInt(RRIStr, 16);
 
-                    int displayHR = HeartRateFilter.doFilter(heartNum);
+                    //int displayHR = HeartRateFilter.doFilter(heartNum);
+                    int displayHR = mVerifier.checkDisplayHR(heartNum, Double.valueOf(rriValue).intValue());
 
-                    if (displayHR != -1) {
+                    if (displayHR >= 0) {
                         //得到心跳值得回调
                         if (application.mOnGetHrValueListener != null) {
                             application.mOnGetHrValueListener.onGet(displayHR);
@@ -246,7 +252,7 @@ public class InformationFragment extends LsmBaseFragment {
                     }
 
                     //double rriValue = Algorithm.getEstimateRRI(heartNum);
-                    double rriValue = Integer.parseInt(RRIStr, 16);
+
                     if (rriValue > 200 && rriValue < 2000) {
                         rriList.add(Double.valueOf(rriValue).intValue());
                         // 通知刷新 HRV
@@ -255,6 +261,10 @@ public class InformationFragment extends LsmBaseFragment {
                             Constant.lastedUsefulRriList.clear();
                             Constant.lastedUsefulRriList.addAll(rriList);
                             rriList.clear();
+                        }
+                        LsmBleData lsmBleData = new LsmBleData(displayHR , rriValue);
+                        if (application.mOnGetBleDataValueListener != null ){
+                            application.mOnGetBleDataValueListener.onGet(lsmBleData);
                         }
                     }
 

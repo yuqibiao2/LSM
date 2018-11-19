@@ -8,10 +8,12 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
+import com.test.lsm.db.bean.AFibExpRecord;
 import com.test.lsm.db.bean.Calorie;
 import com.test.lsm.db.bean.PushMsg;
 import com.test.lsm.db.bean.Step;
 
+import com.test.lsm.db.AFibExpRecordDao;
 import com.test.lsm.db.CalorieDao;
 import com.test.lsm.db.PushMsgDao;
 import com.test.lsm.db.StepDao;
@@ -25,10 +27,12 @@ import com.test.lsm.db.StepDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig aFibExpRecordDaoConfig;
     private final DaoConfig calorieDaoConfig;
     private final DaoConfig pushMsgDaoConfig;
     private final DaoConfig stepDaoConfig;
 
+    private final AFibExpRecordDao aFibExpRecordDao;
     private final CalorieDao calorieDao;
     private final PushMsgDao pushMsgDao;
     private final StepDao stepDao;
@@ -36,6 +40,9 @@ public class DaoSession extends AbstractDaoSession {
     public DaoSession(Database db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
+
+        aFibExpRecordDaoConfig = daoConfigMap.get(AFibExpRecordDao.class).clone();
+        aFibExpRecordDaoConfig.initIdentityScope(type);
 
         calorieDaoConfig = daoConfigMap.get(CalorieDao.class).clone();
         calorieDaoConfig.initIdentityScope(type);
@@ -46,19 +53,26 @@ public class DaoSession extends AbstractDaoSession {
         stepDaoConfig = daoConfigMap.get(StepDao.class).clone();
         stepDaoConfig.initIdentityScope(type);
 
+        aFibExpRecordDao = new AFibExpRecordDao(aFibExpRecordDaoConfig, this);
         calorieDao = new CalorieDao(calorieDaoConfig, this);
         pushMsgDao = new PushMsgDao(pushMsgDaoConfig, this);
         stepDao = new StepDao(stepDaoConfig, this);
 
+        registerDao(AFibExpRecord.class, aFibExpRecordDao);
         registerDao(Calorie.class, calorieDao);
         registerDao(PushMsg.class, pushMsgDao);
         registerDao(Step.class, stepDao);
     }
     
     public void clear() {
+        aFibExpRecordDaoConfig.clearIdentityScope();
         calorieDaoConfig.clearIdentityScope();
         pushMsgDaoConfig.clearIdentityScope();
         stepDaoConfig.clearIdentityScope();
+    }
+
+    public AFibExpRecordDao getAFibExpRecordDao() {
+        return aFibExpRecordDao;
     }
 
     public CalorieDao getCalorieDao() {
