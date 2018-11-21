@@ -81,6 +81,9 @@ public class CareGroupMemHRRecordFragment extends LsmBaseFragment {
             int random = new Random().nextInt(50);
             lineValues.add(new Entry(i, 100+random));
         }
+
+
+
         CombinedData data = new CombinedData();
         LineDataSet lineDataSet;
         lineDataSet = new LineDataSet(lineValues, "测试数据1");

@@ -345,6 +345,14 @@
                 android:textSize="12dp" />
         </RelativeLayout>
         <TextView
+            android:id="@+id/tv_hrv_value_num2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FF9B9B9B"
+            android:layout_marginLeft="50dp"
+            android:text="0"
+            android:textSize="12dp" />
+        <TextView
             android:id="@+id/tv_avg_hr"
             android:layout_width="match_parent"
             android:layout_height="32dp"

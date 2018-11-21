@@ -33,4 +33,6 @@ public class Constant {
 
     public static Integer lastedBodyFitness = 0;
 
+    public static List<Integer> rriCounter = new ArrayList<>();
+
 }

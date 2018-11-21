@@ -222,7 +222,12 @@ public class InformationFragment extends LsmBaseFragment {
                     double rriValue = Integer.parseInt(RRIStr, 16);
 
                     //int displayHR = HeartRateFilter.doFilter(heartNum);
-                    int displayHR = mVerifier.checkDisplayHR(heartNum, Double.valueOf(rriValue).intValue());
+                    BleDevice currentBleDevice = application.getCurrentBleDevice();
+                    String bleName  ="";
+                    if (currentBleDevice!=null){
+                        bleName = currentBleDevice.getName();
+                    }
+                    int displayHR = mVerifier.checkDisplayHR(bleName , heartNum, Double.valueOf(rriValue).intValue());
 
                     if (displayHR >= 0) {
                         //得到心跳值得回调
@@ -251,10 +256,17 @@ public class InformationFragment extends LsmBaseFragment {
                         MyLog.e(TAG, "tvHeartNum：" + displayHR);
                     }
 
-                    //double rriValue = Algorithm.getEstimateRRI(heartNum);
-
-                    if (rriValue > 200 && rriValue < 2000) {
-                        rriList.add(Double.valueOf(rriValue).intValue());
+                    int rri = Double.valueOf(rriValue).intValue();
+                    Constant.rriCounter.add(rri);
+                    if (Constant.rriCounter.size()>1000){
+                        Constant.rriCounter.clear();
+                    }
+                    boolean isRRILegal = false;
+                    if (rri > 200 && rri < 2000){
+                        isRRILegal = true;
+                    }
+                    if(isRRILegal){
+                        rriList.add(rri);
                         // 通知刷新 HRV
                         EventBus.getDefault().post(new RefreshHearthInfoEvent("更新HRV", rriList));
                         if (rriList.size() >= 220) {//
@@ -262,11 +274,15 @@ public class InformationFragment extends LsmBaseFragment {
                             Constant.lastedUsefulRriList.addAll(rriList);
                             rriList.clear();
                         }
+                    }
+
+                    if (isRRILegal && displayHR>=0){//HR 、RRI回调
                         LsmBleData lsmBleData = new LsmBleData(displayHR , rriValue);
                         if (application.mOnGetBleDataValueListener != null ){
                             application.mOnGetBleDataValueListener.onGet(lsmBleData);
                         }
                     }
+
 
                     //MyLog.e(TAG , epcData);
                     if (Constant.sbHeartData.length() < 500) {

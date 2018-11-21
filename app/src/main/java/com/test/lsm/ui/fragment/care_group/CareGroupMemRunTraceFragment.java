@@ -133,7 +133,7 @@ public class CareGroupMemRunTraceFragment extends LsmBaseFragment {
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         mBaiduMap.setMapStatus(mMapStatusUpdate);
         // 开启定位图层
-        mBaiduMap.setMyLocationEnabled(true);
+        //mBaiduMap.setMyLocationEnabled(true);
 
     }
 

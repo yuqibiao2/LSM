@@ -53,6 +53,8 @@ public class HeartDetailFragment extends LsmBaseFragment {
     LinearLayout llHrValue;
     @BindView(R.id.tv_hrv_value_num)
     TextView tvHrvValueNum;
+    @BindView(R.id.tv_hrv_value_num2)
+    TextView tvHrvValueNum2;
     @BindView(R.id.tv_physical)
     TextView tvPhysical;
     @BindView(R.id.iv_physical)
@@ -128,6 +130,7 @@ public class HeartDetailFragment extends LsmBaseFragment {
     public void updateHearthInfo(RefreshHearthInfoEvent heartChgEvent) {
         List<Integer> rriList = heartChgEvent.getRriList();
         tvHrvValueNum.setText("" + rriList.size());
+        tvHrvValueNum2.setText(""+Constant.rriCounter.size());
         updateHrValue();
         if (rriList.size() < 220) {
             return;
