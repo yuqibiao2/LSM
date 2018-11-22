@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
 import com.test.lsm.bean.form.QueryHRVInfo;
@@ -76,13 +77,18 @@ public class HeartDetailFragment extends LsmBaseFragment {
 
     private List<View> statusList;
     private APIMethodManager apiMethodManager;
+    private MyApplication application;
+
+    private boolean isDestory;
 
     @Override
     protected void beforeInit() {
         super.beforeInit();
+        isDestory = false;
         statusList = new ArrayList<>(4);
         EventBus.getDefault().register(this);
         apiMethodManager = APIMethodManager.getInstance();
+        application = (MyApplication) getActivity().getApplication();
     }
 
     @Override
@@ -123,6 +129,16 @@ public class HeartDetailFragment extends LsmBaseFragment {
                 HrRecordActivity.startAction(getContext());
             }
         });
+
+        application.setOnGetRriValueListener(new MyApplication.OnGetRriValueListener() {
+            @Override
+            public void onGet(int rriValue) {
+                if (!isDestory){
+                    tvHrvValueNum2.setText(rriValue+"   ---size: "+Constant.rriCounter.size());
+                }
+            }
+        });
+
     }
 
 
@@ -130,7 +146,6 @@ public class HeartDetailFragment extends LsmBaseFragment {
     public void updateHearthInfo(RefreshHearthInfoEvent heartChgEvent) {
         List<Integer> rriList = heartChgEvent.getRriList();
         tvHrvValueNum.setText("" + rriList.size());
-        tvHrvValueNum2.setText(""+Constant.rriCounter.size());
         updateHrValue();
         if (rriList.size() < 220) {
             return;
@@ -335,6 +350,7 @@ public class HeartDetailFragment extends LsmBaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isDestory = true;
         EventBus.getDefault().unregister(this);
     }
 

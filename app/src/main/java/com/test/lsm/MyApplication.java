@@ -95,6 +95,18 @@ public class MyApplication extends MultiDexApplication {
         }
     }
 
+    //---Hr讯号异常回调
+    public OnHrAbnormalListener mOnHrAbnormalListener;
+
+    public  void  setOnHrAbnormalListener(OnHrAbnormalListener onHrAbnormalListener){
+        this.mOnHrAbnormalListener = onHrAbnormalListener;
+    }
+
+    public interface OnHrAbnormalListener{
+        void onExp(String tip);
+    }
+
+    //---得到心跳值得回调
     public OnGetHrValueListener mOnGetHrValueListener;
 
     public void setOnGetHrValueListener(OnGetHrValueListener onGetHrValueListener){
@@ -105,6 +117,18 @@ public class MyApplication extends MultiDexApplication {
         void onGet(int hrValue);
     }
 
+    //---得到RRI值回调
+    public OnGetRriValueListener mOnGetRriValueListener;
+
+    public void setOnGetRriValueListener(OnGetRriValueListener onGetRrriValueListener){
+        this.mOnGetRriValueListener = onGetRrriValueListener;
+    }
+
+    public interface OnGetRriValueListener{
+        void onGet(int rriValue);
+    }
+
+    //--得到心跳值、RRI得回调
     public OnGetBleDataValueListener mOnGetBleDataValueListener;
 
     public void setOnGetBleDataValueListener( OnGetBleDataValueListener onGetBleDataValueListener){

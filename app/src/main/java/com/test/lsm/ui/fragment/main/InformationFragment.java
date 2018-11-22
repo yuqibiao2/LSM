@@ -221,15 +221,15 @@ public class InformationFragment extends LsmBaseFragment {
                     int heartNum = Integer.parseInt(hrStr, 16);
                     double rriValue = Integer.parseInt(RRIStr, 16);
 
-                    //int displayHR = HeartRateFilter.doFilter(heartNum);
-                    BleDevice currentBleDevice = application.getCurrentBleDevice();
-                    String bleName  ="";
-                    if (currentBleDevice!=null){
-                        bleName = currentBleDevice.getName();
+                    int[] result = mVerifier.checkDisplayHR( heartNum, Double.valueOf(rriValue).intValue());
+                    int displayHR = result[0];
+                    int hrAbNormal = result[1];
+                    //讯号异常
+                    if (hrAbNormal ==0 && application.mOnHrAbnormalListener !=null){
+                        application.mOnHrAbnormalListener.onExp("訊號狀狀態異異常");
                     }
-                    int displayHR = mVerifier.checkDisplayHR(bleName , heartNum, Double.valueOf(rriValue).intValue());
-
-                    if (displayHR >= 0) {
+                    //获取到HR值
+                    if (displayHR >= 0 && hrAbNormal==0) {
                         //得到心跳值得回调
                         if (application.mOnGetHrValueListener != null) {
                             application.mOnGetHrValueListener.onGet(displayHR);
@@ -274,6 +274,10 @@ public class InformationFragment extends LsmBaseFragment {
                             Constant.lastedUsefulRriList.addAll(rriList);
                             rriList.clear();
                         }
+                    }
+                    //RRI值回调（不过滤）
+                    if(application.mOnGetRriValueListener!=null){
+                        application.mOnGetRriValueListener.onGet(rri);
                     }
 
                     if (isRRILegal && displayHR>=0){//HR 、RRI回调
@@ -454,6 +458,18 @@ public class InformationFragment extends LsmBaseFragment {
 
     @Override
     protected void initListener() {
+
+        application.setOnHrAbnormalListener(new MyApplication.OnHrAbnormalListener() {
+            @Override
+            public void onExp(String tip) {
+                if (!isDestroy){
+                    tvHeartNum.setTextColor(Color.parseColor("#F89737"));
+                    tvHeartNum.setTextSize(16);
+                    tvHrBpm.setVisibility(View.GONE);
+                    tvHeartNum.setText("請確認裝置是否配戴正確");
+                }
+            }
+        });
 
         srlInfo.setOnRefreshListener(new OnRefreshListener() {
             @Override
