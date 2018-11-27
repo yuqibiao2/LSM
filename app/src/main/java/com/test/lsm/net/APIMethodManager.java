@@ -2,7 +2,9 @@ package com.test.lsm.net;
 
 import android.text.TextUtils;
 
+import com.test.lsm.bean.form.AFibExpRecordVo;
 import com.test.lsm.bean.form.GetHeartChart;
+import com.test.lsm.bean.form.HealthRecordVo;
 import com.test.lsm.bean.form.QueryHRVInfo;
 import com.test.lsm.bean.form.QueryRunInfoVo;
 import com.test.lsm.bean.form.RunRecord;
@@ -14,11 +16,17 @@ import com.test.lsm.bean.form.UserJoinCourseVo;
 import com.test.lsm.bean.form.UserRegVo;
 import com.test.lsm.bean.form.UserUpdateVo;
 import com.test.lsm.bean.json.DoFooBean;
+import com.test.lsm.bean.json.EmptyDataReturn;
+import com.test.lsm.bean.json.GetAFibExpRecordReturn;
 import com.test.lsm.bean.json.GetActiveUser;
 import com.test.lsm.bean.json.GetCoachByCourseType;
 import com.test.lsm.bean.json.GetCourseParams;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
+import com.test.lsm.bean.json.GetHealthRecordReturn;
+import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
+import com.test.lsm.bean.json.GetMonitorGroupMemDetailReturn;
+import com.test.lsm.bean.json.GetMonitorGroupReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
 import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.GetUserInfoReturn;
@@ -77,6 +85,256 @@ public class APIMethodManager {
     public static APIMethodManager getInstance() {
         return SingletonHolder.INSTANCE;
     }
+
+    /**
+     * 得到群组成员的详细信息
+     *
+     * @param provider
+     * @param userId
+     * @param callback
+     * @return
+     */
+    public Subscription getMonitorGroupMemDetail(LifecycleProvider<ActivityEvent> provider,
+                                                 Integer userId ,
+                                                 final IRequestCallback<GetMonitorGroupMemDetailReturn> callback){
+        Subscription subscribe = lsmApi.getMonitorGroupMemDetail(userId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<GetMonitorGroupMemDetailReturn>bindToLifecycle())
+                .subscribe(new Subscriber<GetMonitorGroupMemDetailReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetMonitorGroupMemDetailReturn getMonitorGroupMemDetailReturn) {
+                        callback.onSuccess(getMonitorGroupMemDetailReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 得到某一群组详情
+     *
+     * @param provider
+     * @param groupId
+     * @param callback
+     * @return
+     */
+    public Subscription getMonitorGroupDetail(LifecycleProvider<ActivityEvent> provider,
+                                              Long  groupId ,
+                                              final IRequestCallback<GetMonitorGroupDetailReturn> callback){
+        Subscription subscribe = lsmApi.getMonitorGroupDetail(groupId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<GetMonitorGroupDetailReturn>bindToLifecycle())
+                .subscribe(new Subscriber<GetMonitorGroupDetailReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetMonitorGroupDetailReturn getMonitorGroupDetailReturn) {
+                        callback.onSuccess(getMonitorGroupDetailReturn);
+                    }
+                });
+        return subscribe;
+    }
+
+    /**
+     * 得到用户所创建的群组
+     *
+     * @param provider
+     * @param userId
+     * @param status 1：开启  0：已关闭
+     * @param callback
+     * @return
+     */
+    public Subscription getMonitorGroups(LifecycleProvider<ActivityEvent> provider,
+                                         Integer userId ,
+                                         Integer status,
+                                         final IRequestCallback<GetMonitorGroupReturn> callback){
+        Subscription subscribe = lsmApi.getMonitorGroups(userId, status)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<GetMonitorGroupReturn>bindToLifecycle())
+                .subscribe(new Subscriber<GetMonitorGroupReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetMonitorGroupReturn getMonitorGroupReturn) {
+                        callback.onSuccess(getMonitorGroupReturn);
+                    }
+                });
+        return subscribe;
+    }
+
+    /**
+     * 得到身体讯息记录
+     *
+     * @param provider
+     * @param userId
+     * @param pageNum
+     * @param pageSize
+     * @param callback
+     * @return
+     */
+    public Subscription getHealthRecords(LifecycleProvider<ActivityEvent> provider,
+                                         Integer userId ,
+                                         Integer pageNum ,
+                                         Integer pageSize,
+                                         final IRequestCallback<GetHealthRecordReturn> callback){
+        Subscription subscribe = lsmApi.getHealthRecords(userId, pageNum, pageSize)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<GetHealthRecordReturn>bindToLifecycle())
+                .subscribe(new Subscriber<GetHealthRecordReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetHealthRecordReturn getHealthRecordReturn) {
+                        callback.onSuccess(getHealthRecordReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 保存身体讯息
+     *
+     * @param provider
+     * @param healthRecordVo
+     * @return
+     */
+    public Subscription saveHealthRecords(LifecycleProvider<ActivityEvent> provider,
+                                          HealthRecordVo healthRecordVo,
+                                          final IRequestCallback<EmptyDataReturn> callback){
+        Subscription subscribe = lsmApi.saveHealthRecords(healthRecordVo)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<EmptyDataReturn>bindToLifecycle())
+                .subscribe(new Subscriber<EmptyDataReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(EmptyDataReturn emptyDataReturn) {
+                        callback.onSuccess(emptyDataReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 得到AFib异常信息记录
+     *
+     * @param provider
+     * @param userId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public Subscription getAfibExpRecords(LifecycleProvider<ActivityEvent> provider,
+                                          Integer userId ,
+                                          Integer pageNum ,
+                                          Integer pageSize,
+                                          final IRequestCallback<GetAFibExpRecordReturn> callback){
+        Subscription subscribe = lsmApi.getAfibExpRecords(userId, pageNum, pageSize)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<GetAFibExpRecordReturn>bindToLifecycle())
+                .subscribe(new Subscriber<GetAFibExpRecordReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetAFibExpRecordReturn getAFibExpRecordReturn) {
+                        callback.onSuccess(getAFibExpRecordReturn);
+                    }
+                });
+        return subscribe;
+    }
+
+    /**
+     * 保存AFib异常信息
+     *
+     * @param provider
+     * @param aFibExpRecordVo
+     * @return
+     */
+    public Subscription saveAfibExpRecords(LifecycleProvider<ActivityEvent> provider,
+                                           AFibExpRecordVo aFibExpRecordVo,
+                                           final IRequestCallback<EmptyDataReturn> callback){
+        Subscription subscribe = lsmApi.saveAfibExpRecords(aFibExpRecordVo)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<EmptyDataReturn>bindToLifecycle())
+                .subscribe(new Subscriber<EmptyDataReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(EmptyDataReturn emptyDataReturn) {
+                        callback.onSuccess(emptyDataReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
 
     /**
      * 查询当前用户得排名

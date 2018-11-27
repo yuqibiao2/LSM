@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -17,9 +16,14 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.test.lsm.R;
+import com.test.lsm.adapter.NorMemAdapter;
+import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
+import com.test.lsm.net.APIMethodManager;
+import com.test.lsm.net.IRequestCallback;
 import com.yyyu.baselibrary.ui.widget.AdapterLinearLayout;
 import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyKeyboardUtils;
+import com.yyyu.baselibrary.utils.MyToast;
 import com.yyyu.baselibrary.utils.WindowUtils;
 
 import java.util.ArrayList;
@@ -54,13 +58,24 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     EditText etSearch;
 
 
-    private BaseQuickAdapter<String, BaseViewHolder> adapter;
+    private BaseQuickAdapter<GetMonitorGroupDetailReturn.DataBean.MemInfoListBean, BaseViewHolder> norMemAdapter;
     private LinearLayoutManager norLayoutManager;
     private View header1;
+    private APIMethodManager apiMethodManager;
+    private long groupId;
+    private List<GetMonitorGroupDetailReturn.DataBean.MemInfoListBean> norMemInfoList;
 
     @Override
     public int getLayoutId() {
         return R.layout.activity_care_group_detail;
+    }
+
+    @Override
+    public void beforeInit() {
+        super.beforeInit();
+        groupId = getIntent().getLongExtra("groupId", -1);
+        apiMethodManager = APIMethodManager.getInstance();
+        norMemInfoList = new ArrayList<>();
     }
 
     @Override
@@ -71,23 +86,12 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
         header1 = LayoutInflater.from(this).inflate(R.layout.pt_gc_detail_rv_header1, null);
         View header2 = LayoutInflater.from(this).inflate(R.layout.pt_gc_detail_rv_header2, null);
 
-        List<String> temp = new ArrayList<>();
-        temp.add("1");
-        temp.add("1");
-        temp.add("1");
-        temp.add("1");
-        temp.add("1");
         norLayoutManager = new LinearLayoutManager(this);
         rvCgDetailNor.setLayoutManager(norLayoutManager);
-        adapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.rv_cg_detail_nor_item, temp) {
-            @Override
-            protected void convert(BaseViewHolder helper, String item) {
-
-            }
-        };
-        adapter.addHeaderView(header1);
-        adapter.addHeaderView(header2);
-        rvCgDetailNor.setAdapter(adapter);
+        norMemAdapter = new NorMemAdapter(R.layout.rv_cg_detail_nor_item, norMemInfoList);
+        norMemAdapter.addHeaderView(header1);
+        norMemAdapter.addHeaderView(header2);
+        rvCgDetailNor.setAdapter(norMemAdapter);
 
         AdapterLinearLayout all_cg_detail_exp = header1.findViewById(R.id.all_cg_detail_exp);
 
@@ -116,7 +120,7 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     @Override
     protected void initListener() {
 
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        norMemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 CareGroupMemDetailActivity.startAction(CareGroupDetailActivity.this);
@@ -147,12 +151,42 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
         });
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        showLoadDialog();
+        apiMethodManager.getMonitorGroupDetail(provider, groupId, new IRequestCallback<GetMonitorGroupDetailReturn>() {
+            @Override
+            public void onSuccess(GetMonitorGroupDetailReturn result) {
+                int code = result.getCode();
+                if (code == 200){
+                    GetMonitorGroupDetailReturn.DataBean data = result.getData();
+
+                    List<GetMonitorGroupDetailReturn.DataBean.MemInfoListBean> memInfoList = data.getMemInfoList();
+                    norMemInfoList.addAll(memInfoList);
+                    norMemAdapter.notifyDataSetChanged();
+
+                }else{
+                    MyToast.showLong(CareGroupDetailActivity.this  , ""+result.getMsg());
+                }
+                dismissLoadDialog();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                MyToast.showLong(CareGroupDetailActivity.this , ""+throwable.getMessage());
+                dismissLoadDialog();
+            }
+        });
+    }
+
     public void back(View view) {
         finish();
     }
 
-    public static void startAction(Context context) {
+    public static void startAction(Context context , Long groupId) {
         Intent intent = new Intent(context, CareGroupDetailActivity.class);
+        intent.putExtra("groupId" , groupId);
         context.startActivity(intent);
     }
 

@@ -1,12 +1,20 @@
 package com.test.lsm.net.api;
 
+import com.test.lsm.bean.form.AFibExpRecordVo;
 import com.test.lsm.bean.form.GetHeartChart;
+import com.test.lsm.bean.form.HealthRecordVo;
 import com.test.lsm.bean.json.DoFooBean;
+import com.test.lsm.bean.json.EmptyDataReturn;
+import com.test.lsm.bean.json.GetAFibExpRecordReturn;
 import com.test.lsm.bean.json.GetActiveUser;
 import com.test.lsm.bean.json.GetCoachByCourseType;
 import com.test.lsm.bean.json.GetCourseParams;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
+import com.test.lsm.bean.json.GetHealthRecordReturn;
+import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
+import com.test.lsm.bean.json.GetMonitorGroupMemDetailReturn;
+import com.test.lsm.bean.json.GetMonitorGroupReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
 import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.ModifyScoreReturn;
@@ -26,11 +34,13 @@ import com.test.lsm.bean.json.UserRegReturn;
 
 import java.util.Map;
 
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import rx.Observable;
@@ -44,6 +54,31 @@ import rx.Observable;
  */
 
 public interface LsmApi {
+
+    @GET("monitor/users/{userId}")
+    Observable<GetMonitorGroupMemDetailReturn> getMonitorGroupMemDetail(@Path("userId") Integer userId);
+
+    @GET("monitor/monitorGroups/{groupId}")
+    Observable<GetMonitorGroupDetailReturn> getMonitorGroupDetail(@Path("groupId") Long  groupId);
+
+    @GET("monitor/monitorGroups/users/{userId}/status/{status}")
+    Observable<GetMonitorGroupReturn> getMonitorGroups(@Path("userId") Integer userId , @Path("status") Integer status);
+
+    @GET("health/healthRecords/users/{userId}")
+    Observable<GetHealthRecordReturn> getHealthRecords(@Path("userId") Integer userId ,
+                                                       @Query("pageNum") Integer pageNum ,
+                                                       @Query("pageSize") Integer pageSize);
+
+    @POST("health/healthRecords")
+    Observable<EmptyDataReturn> saveHealthRecords(@Body HealthRecordVo healthRecordVo);
+
+    @GET("/afib/afibExpRecords/users/{userId}")
+    Observable<GetAFibExpRecordReturn> getAfibExpRecords(@Path("userId") Integer userId ,
+                                                         @Query("pageNum") Integer pageNum ,
+                                                         @Query("pageSize") Integer pageSize);
+
+    @POST("afib/afibExpRecords")
+    Observable<EmptyDataReturn> saveAfibExpRecords(@Body AFibExpRecordVo aFibExpRecordVo);
 
     @GET("queryUserAmongByDate")
     Observable<QueryUserRakingReturn> queryUserRankingByDate(@Query("USER_ID") Integer userId , @Query("QUERY_TIME")String queryTime);

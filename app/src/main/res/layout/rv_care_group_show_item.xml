@@ -17,7 +17,7 @@
         android:layout_width="249dp"
         android:layout_height="32dp"
         android:layout_marginLeft="14dp"
-        android:text="監控人員A"
+        android:text=""
         android:textColor="#FFFFFFFF"
         android:textSize="22sp" />
 
