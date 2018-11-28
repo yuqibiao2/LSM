@@ -8,10 +8,11 @@ buildscript {
         jcenter()
         mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
+        google()
     }
     dependencies {
 
-        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.android.tools.build:gradle:3.1.2'
 
         /*butterknife依赖*/
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'

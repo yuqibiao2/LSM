@@ -3,12 +3,20 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FastBleLib/FastBleLib.iml" filepath="$PROJECT_DIR$/FastBleLib/FastBleLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FastBleLib/FastBleLib.iml" filepath="$PROJECT_DIR$/FastBleLib/FastBleLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LSM.iml" filepath="$PROJECT_DIR$/LSM.iml" />
       <module fileurl="file://$PROJECT_DIR$/LSM.iml" filepath="$PROJECT_DIR$/LSM.iml" />
       <module fileurl="file://$PROJECT_DIR$/LsmAlgorithm/LsmAlgorithm.iml" filepath="$PROJECT_DIR$/LsmAlgorithm/LsmAlgorithm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LsmAlgorithm/LsmAlgorithm.iml" filepath="$PROJECT_DIR$/LsmAlgorithm/LsmAlgorithm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MPChartLib/MPChartLib.iml" filepath="$PROJECT_DIR$/MPChartLib/MPChartLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/MPChartLib/MPChartLib.iml" filepath="$PROJECT_DIR$/MPChartLib/MPChartLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/baselibrary/baselibrary.iml" filepath="$PROJECT_DIR$/baselibrary/baselibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/baselibrary/baselibrary.iml" filepath="$PROJECT_DIR$/baselibrary/baselibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/jpush/jpush.iml" filepath="$PROJECT_DIR$/jpush/jpush.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jpush/jpush.iml" filepath="$PROJECT_DIR$/jpush/jpush.iml" />
+      <module fileurl="file://$PROJECT_DIR$/todaystepcounterlib/todaystepcounterlib.iml" filepath="$PROJECT_DIR$/todaystepcounterlib/todaystepcounterlib.iml" />
       <module fileurl="file://$PROJECT_DIR$/todaystepcounterlib/todaystepcounterlib.iml" filepath="$PROJECT_DIR$/todaystepcounterlib/todaystepcounterlib.iml" />
     </modules>
   </component>
