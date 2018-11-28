@@ -8,7 +8,6 @@ import android.widget.ImageView;
 
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleGattCallback;
-import com.clj.fastble.callback.BleScanAndConnectCallback;
 import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;

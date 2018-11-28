@@ -137,8 +137,10 @@ public class RunRecordDetailFragment extends LsmBaseFragment {
     }
 
     private void locateAndZoom(LatLng ll) {
-        MyLocationData locationData = new MyLocationData.Builder().accuracy(0)
-                .direction(0).latitude(ll.latitude)
+        MyLocationData locationData = new MyLocationData.Builder()
+                .accuracy(0)
+                .direction(0)
+                .latitude(ll.latitude)
                 .longitude(ll.longitude)
                 .build();
         mBaiduMap.setMyLocationData(locationData);
