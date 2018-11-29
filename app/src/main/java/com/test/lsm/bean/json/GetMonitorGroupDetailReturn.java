@@ -11,7 +11,6 @@ import java.util.List;
  */
 public class GetMonitorGroupDetailReturn {
 
-
     private int code;
     private String msg;
     private DataBean data;
@@ -48,6 +47,7 @@ public class GetMonitorGroupDetailReturn {
         private String createTime;
         private String updateTime;
         private List<MemInfoListBean> memInfoList;
+        private List<ExpMemInfoListBean> expMemInfoList;
 
         public long getGroupId() {
             return groupId;
@@ -103,6 +103,14 @@ public class GetMonitorGroupDetailReturn {
 
         public void setMemInfoList(List<MemInfoListBean> memInfoList) {
             this.memInfoList = memInfoList;
+        }
+
+        public List<ExpMemInfoListBean> getExpMemInfoList() {
+            return expMemInfoList;
+        }
+
+        public void setExpMemInfoList(List<ExpMemInfoListBean> expMemInfoList) {
+            this.expMemInfoList = expMemInfoList;
         }
 
         public static class MemInfoListBean {
@@ -195,6 +203,37 @@ public class GetMonitorGroupDetailReturn {
 
             public void setWatchingTag(String watchingTag) {
                 this.watchingTag = watchingTag;
+            }
+        }
+
+        public static class ExpMemInfoListBean extends MemInfoListBean{
+
+            private String expTitle;
+            private String expContent;
+            private String expDateTime;
+
+            public String getExpTitle() {
+                return expTitle;
+            }
+
+            public void setExpTitle(String expTitle) {
+                this.expTitle = expTitle;
+            }
+
+            public String getExpContent() {
+                return expContent;
+            }
+
+            public void setExpContent(String expContent) {
+                this.expContent = expContent;
+            }
+
+            public String getExpDateTime() {
+                return expDateTime;
+            }
+
+            public void setExpDateTime(String expDateTime) {
+                this.expDateTime = expDateTime;
             }
         }
     }

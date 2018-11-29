@@ -2,19 +2,14 @@ package com.test.lsm.adapter;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.test.lsm.R;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
-import com.test.lsm.ui.fragment.RunRecordDetailFragment;
-import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 
-import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,14 +23,12 @@ public class RunRecordAdapter2 extends BaseQuickAdapter<QueryUserRunInfoReturn.P
 
     private FragmentActivity mAct;
 
-    private  RunRecordDetailFragment runRecordDetailFragment;
 
 
 
     public RunRecordAdapter2(FragmentActivity act , int layoutResId, @Nullable List<QueryUserRunInfoReturn.PdBean> data) {
         super(layoutResId, data);
         this.mAct = act;
-        runRecordDetailFragment = new RunRecordDetailFragment();
     }
 
     @Override

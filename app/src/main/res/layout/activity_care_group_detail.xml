@@ -8,9 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment
+<!--        <fragment
             android:id="@+id/frg_map"
-            android:name="com.test.lsm.ui.fragment.RunRecordDetailFragment"
+            android:name="com.test.lsm.ui.fragment.care_group.MemLocationShowFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />-->
+        <FrameLayout
+            android:id="@+id/fl_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

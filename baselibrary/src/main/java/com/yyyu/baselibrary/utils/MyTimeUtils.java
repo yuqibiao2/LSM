@@ -66,6 +66,20 @@ public class MyTimeUtils {
         return parseDate("yyyy-MM-dd" ,datetime ).getTime();
     }
 
+    /**
+     * 判断am、pm
+     * @param date
+     * @return
+     * @author zhangsq
+     */
+    public static String getDuringDay(Date date) {
+        int hour = getCurrentHour();
+        if (hour<12){
+            return "am";
+        }else{
+            return "pm";
+        }
+    }
 
     /**
      * 得到当前小时

@@ -3,6 +3,8 @@ package com.yyyu.baselibrary.template;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.transition.ChangeBounds;
 import android.transition.Fade;
 import android.util.Log;
@@ -129,6 +131,12 @@ public  abstract  class BaseActivity extends NaviAppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivityHolder.removeActivity(this);
+    }
+
+    public void replaceFrg(int viewId , Fragment fragment){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(viewId ,fragment );
+        ft.commit();
     }
 
     protected void setTransition() {

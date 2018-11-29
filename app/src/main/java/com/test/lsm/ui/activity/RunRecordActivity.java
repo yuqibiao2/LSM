@@ -1,18 +1,13 @@
 package com.test.lsm.ui.activity;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewParent;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -21,7 +16,6 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
-import com.test.lsm.adapter.RunRecordAdapter;
 import com.test.lsm.adapter.RunRecordAdapter2;
 import com.test.lsm.bean.form.QueryRunInfoVo;
 import com.test.lsm.bean.json.DoFooBean;
@@ -29,7 +23,6 @@ import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.dialog.RunRecordDetailDialog;
-import com.test.lsm.ui.fragment.RunRecordDetailFragment;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;

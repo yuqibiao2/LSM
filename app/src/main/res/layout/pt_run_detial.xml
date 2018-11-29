@@ -8,6 +8,6 @@
         android:id="@+id/frg_tst"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="com.test.lsm.ui.fragment.RunRecordDetailFragment"/>
+        android:name="com.test.lsm.ui.fragment.care_group.MemLocationShowFragment"/>
 
 </LinearLayout>

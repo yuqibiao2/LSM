@@ -5,11 +5,16 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.test.lsm.R;
+import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
+import com.test.lsm.net.GlidUtils;
 import com.test.lsm.ui.fragment.care_group.CareGroupMemHRRecordFragment;
 import com.test.lsm.ui.fragment.care_group.CareGroupMemHRVFragment;
-import com.test.lsm.ui.fragment.care_group.CareGroupMemRunTraceFragment;
+import com.yyyu.baselibrary.ui.widget.RoundImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +36,21 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
     ViewPager vpCgMem;
     @BindView(R.id.ci_cg_mem)
     CircleIndicator ciCgMem;
+    @BindView(R.id.tv_user_name)
+    TextView tvUserName;
+    @BindView(R.id.tv_tel)
+    TextView tvTel;
+    @BindView(R.id.tv_hr)
+    TextView tvHr;
+    @BindView(R.id.tv_calorie)
+    TextView tvCalorie;
+    @BindView(R.id.tv_step)
+    TextView tvStep;
+    @BindView(R.id.riv_user_icon)
+    RoundImageView rivUserIcon;
 
     private List<Fragment> pageList;
+    private GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo;
 
 
     @Override
@@ -41,12 +59,20 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
     }
 
     @Override
+    public void beforeInit() {
+        super.beforeInit();
+        Intent intent = getIntent();
+        String memInfoJsonStr = intent.getStringExtra("memInfoJsonStr");
+        memInfo = new Gson().fromJson(memInfoJsonStr, GetMonitorGroupDetailReturn.DataBean.MemInfoListBean.class);
+    }
+
+    @Override
     protected void initView() {
         vpCgMem.setOffscreenPageLimit(3);
         pageList = new ArrayList<>();
         pageList.add(new CareGroupMemHRVFragment());
         pageList.add(new CareGroupMemHRRecordFragment());
-        pageList.add(new CareGroupMemRunTraceFragment());
+        //pageList.add(new CareGroupMemRunTraceFragment());
         vpCgMem.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -59,6 +85,13 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
             }
         });
         ciCgMem.setViewPager(vpCgMem);
+
+        GlidUtils.load(this , rivUserIcon , memInfo.getUserImage());
+        tvUserName.setText("" + memInfo.getUserName());
+        tvTel.setText("" + memInfo.getPhone());
+        tvHr.setText("" + memInfo.getHeartNum() + " bpm");
+        tvCalorie.setText("" + memInfo.getCalorieValue() + " 千卡");
+        tvStep.setText("" + memInfo.getStepNum() + " 步");
     }
 
     @Override
@@ -66,8 +99,13 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
 
     }
 
-    public static void startAction(Context context){
-        Intent intent = new Intent(context , CareGroupMemDetailActivity.class);
+    public void close(View view) {
+        finish();
+    }
+
+    public static void startAction(Context context, String memInfoJsonStr) {
+        Intent intent = new Intent(context, CareGroupMemDetailActivity.class);
+        intent.putExtra("memInfoJsonStr", memInfoJsonStr);
         context.startActivity(intent);
     }
 
