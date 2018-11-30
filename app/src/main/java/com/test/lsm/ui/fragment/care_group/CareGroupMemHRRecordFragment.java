@@ -18,6 +18,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
+import com.test.lsm.bean.json.GetMonitorGroupMemDetailReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.yyyu.baselibrary.utils.DimensChange;
@@ -76,14 +77,15 @@ public class CareGroupMemHRRecordFragment extends LsmBaseFragment {
     @Override
     protected void initData() {
         super.initData();
+    }
+
+    public void inflateLineChart(List<GetMonitorGroupMemDetailReturn.DataBean.HeartInfoListBean> mData){
+        if (mData.size()<=0) return;
         List<Entry> lineValues = new ArrayList<>();
-        for (int i = 0; i <200 ; i++) {
-            int random = new Random().nextInt(50);
-            lineValues.add(new Entry(i, 100+random));
+        for (int i = 0; i < mData.size(); i++) {
+            GetMonitorGroupMemDetailReturn.DataBean.HeartInfoListBean heartInfo = mData.get(i);
+            lineValues.add(new Entry(i, heartInfo.getHeartNum()));
         }
-
-
-
         CombinedData data = new CombinedData();
         LineDataSet lineDataSet;
         lineDataSet = new LineDataSet(lineValues, "测试数据1");
@@ -100,7 +102,6 @@ public class CareGroupMemHRRecordFragment extends LsmBaseFragment {
         data.setData(lineData);
         ccHt.setData(data);
         ccHt.setVisibleXRangeMaximum(50);
-
     }
 
     protected void initChart(CombinedChart mChart) {
@@ -158,13 +159,13 @@ public class CareGroupMemHRRecordFragment extends LsmBaseFragment {
         xAxis.setEnabled(true);
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
-        xAxis.setValueFormatter(new IAxisValueFormatter() {
+   /*     xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 int v = (int) (value * 5);
                 return ""+v;
             }
-        });
+        });*/
     }
 
 }

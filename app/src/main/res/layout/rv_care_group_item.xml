@@ -42,6 +42,7 @@
                 android:textSize="18sp" />
 
             <android.support.v7.widget.SwitchCompat
+                android:id="@+id/sc_watch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:trackTint="@color/colorAccent" />
@@ -63,7 +64,7 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="38dp"
                 android:layout_marginLeft="16dp"
                 android:background="@drawable/et_care_group"
                 android:paddingLeft="12dp"
@@ -79,6 +80,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_connect"
                 android:layout_width="60dp"
                 android:layout_height="35dp"
                 android:padding="0dp"
@@ -87,6 +89,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"

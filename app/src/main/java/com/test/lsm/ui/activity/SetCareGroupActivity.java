@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -35,6 +36,8 @@ public class SetCareGroupActivity extends LsmBaseActivity {
     RecyclerView rvCareGroup;
     @BindView(R.id.iv_add_care_group)
     ImageView ivAddCareGroup;
+    @BindView(R.id.sc_watch_all)
+    SwitchCompat scWatchAll;
 
     @Override
     public int getLayoutId() {
@@ -67,7 +70,17 @@ public class SetCareGroupActivity extends LsmBaseActivity {
 
     @Override
     protected void initListener() {
+        //全选
+        scWatchAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){//全选
 
+                }else{//全不选
+
+                }
+            }
+        });
     }
 
     public void back(View view) {

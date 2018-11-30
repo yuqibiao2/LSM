@@ -30,7 +30,7 @@
             android:textSize="17sp" />
 
         <android.support.v7.widget.SwitchCompat
-            android:id="@+id/sc_care_group"
+            android:id="@+id/sc_watch_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"

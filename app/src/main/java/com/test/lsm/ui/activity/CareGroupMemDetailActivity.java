@@ -6,15 +6,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.test.lsm.R;
 import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
+import com.test.lsm.bean.json.GetMonitorGroupMemDetailReturn;
+import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
+import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.fragment.care_group.CareGroupMemHRRecordFragment;
 import com.test.lsm.ui.fragment.care_group.CareGroupMemHRVFragment;
+import com.test.lsm.ui.fragment.care_group.CareGroupMemRunTraceFragment;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
+import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +54,15 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
     TextView tvStep;
     @BindView(R.id.riv_user_icon)
     RoundImageView rivUserIcon;
+    @BindView(R.id.pb_mem)
+    ProgressBar pbMem;
 
     private List<Fragment> pageList;
     private GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo;
+    private APIMethodManager apiMethodManager;
+    private CareGroupMemHRVFragment careGroupMemHRVFragment;
+    private CareGroupMemHRRecordFragment careGroupMemHRRecordFragment;
+    private CareGroupMemRunTraceFragment careGroupMemRunTraceFragment;
 
 
     @Override
@@ -61,6 +73,7 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
     @Override
     public void beforeInit() {
         super.beforeInit();
+        apiMethodManager = APIMethodManager.getInstance();
         Intent intent = getIntent();
         String memInfoJsonStr = intent.getStringExtra("memInfoJsonStr");
         memInfo = new Gson().fromJson(memInfoJsonStr, GetMonitorGroupDetailReturn.DataBean.MemInfoListBean.class);
@@ -70,9 +83,12 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
     protected void initView() {
         vpCgMem.setOffscreenPageLimit(3);
         pageList = new ArrayList<>();
-        pageList.add(new CareGroupMemHRVFragment());
-        pageList.add(new CareGroupMemHRRecordFragment());
-        //pageList.add(new CareGroupMemRunTraceFragment());
+        careGroupMemHRVFragment = new CareGroupMemHRVFragment();
+        careGroupMemHRRecordFragment = new CareGroupMemHRRecordFragment();
+        careGroupMemRunTraceFragment = new CareGroupMemRunTraceFragment();
+        pageList.add(careGroupMemHRVFragment);
+        pageList.add(careGroupMemHRRecordFragment);
+        pageList.add(careGroupMemRunTraceFragment);
         vpCgMem.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -86,7 +102,7 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
         });
         ciCgMem.setViewPager(vpCgMem);
 
-        GlidUtils.load(this , rivUserIcon , memInfo.getUserImage());
+        GlidUtils.load(this, rivUserIcon, memInfo.getUserImage());
         tvUserName.setText("" + memInfo.getUserName());
         tvTel.setText("" + memInfo.getPhone());
         tvHr.setText("" + memInfo.getHeartNum() + " bpm");
@@ -97,6 +113,36 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
     @Override
     protected void initListener() {
 
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+
+        apiMethodManager.getMonitorGroupMemDetail(provider, memInfo.getUserId(), new IRequestCallback<GetMonitorGroupMemDetailReturn>() {
+            @Override
+            public void onSuccess(GetMonitorGroupMemDetailReturn result) {
+                int code = result.getCode();
+                if (code == 200) {
+                    GetMonitorGroupMemDetailReturn.DataBean data = result.getData();
+                    GetMonitorGroupMemDetailReturn.DataBean.HrvInfoBean hrvInfo = data.getHrvInfo();
+                    careGroupMemHRVFragment.inflateHrv(hrvInfo);
+                    List<GetMonitorGroupMemDetailReturn.DataBean.HeartInfoListBean> heartInfoList = data.getHeartInfoList();
+                    careGroupMemHRRecordFragment.inflateLineChart(heartInfoList);
+                    GetMonitorGroupMemDetailReturn.DataBean.TraceInfoBean traceInfo = data.getTraceInfo();
+                    careGroupMemRunTraceFragment.inflateTraceInfo(traceInfo);
+                } else {
+                    MyToast.showLong(CareGroupMemDetailActivity.this, "" + result.getMsg());
+                }
+                pbMem.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                MyToast.showLong(CareGroupMemDetailActivity.this, "異常：" + throwable.getMessage());
+                pbMem.setVisibility(View.GONE);
+            }
+        });
     }
 
     public void close(View view) {

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/my_white"
     android:orientation="vertical">
 
     <ImageButton
@@ -12,112 +13,115 @@
         android:onClick="back"
         android:src="@mipmap/ic_back" />
 
-    <com.yyyu.baselibrary.ui.widget.BounceScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@mipmap/ic_info_afib" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Detected"
-                    android:textColor="#FFF13564"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="3dp"
-                    android:text="目前狀況"
-                    android:textColor="#FFF13564"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-        </RelativeLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:text="** 本檢測僅提供參考，請以醫院診斷為主。"
-            android:textColor="#FF4A4A4A"
-            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="8dp">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_weight="0"
-                android:src="@mipmap/ic_afib_scan" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/ic_info_afib" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_scan_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Detected"
+                        android:textColor="#FFF13564"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="3dp"
+                        android:text="目前狀況"
+                        android:textColor="#FFF13564"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:text="AFib 自動偵測"
-                android:textColor="#FFF13564"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="** 本檢測僅提供參考，請以醫院診斷為主。"
+                android:textColor="#FF4A4A4A"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="0"
+                    android:src="@mipmap/ic_afib_scan" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="AFib 自動偵測"
+                    android:textColor="#FFF13564"
+                    android:textSize="18sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/sc_auto_scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="72dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="5dp"
+                android:text="檢測紀錄"
+                android:textColor="#FF4A90E2"
                 android:textSize="18sp" />
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/sc_auto_scan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0" />
+            <!--<include layout="@layout/all_afib_item_top" />-->
+
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/rl_afib"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_afib"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#fff"
+                    android:overScrollMode="never" />
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+         <!--   <include layout="@layout/all_afib_item_bottom" />-->
+
         </LinearLayout>
-
-
-        <TextView
-            android:layout_width="72dp"
-            android:layout_height="25dp"
-            android:text="檢測紀錄"
-            android:textColor="#FF4A90E2"
-            android:layout_marginTop="5dp"
-            android:textSize="18sp" />
-
-        <include layout="@layout/all_afib_item_top"/>
-        <com.yyyu.baselibrary.ui.widget.AdapterLinearLayout
-            android:id="@+id/all_afib"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
-        <include layout="@layout/all_afib_item_bottom"/>
-
-    </LinearLayout>
-
-    </com.yyyu.baselibrary.ui.widget.BounceScrollView>
-
 
 
 </LinearLayout>

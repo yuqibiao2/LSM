@@ -72,7 +72,7 @@ public interface LsmApi {
     @POST("health/healthRecords")
     Observable<EmptyDataReturn> saveHealthRecords(@Body HealthRecordVo healthRecordVo);
 
-    @GET("/afib/afibExpRecords/users/{userId}")
+    @GET("afib/afibExpRecords/users/{userId}")
     Observable<GetAFibExpRecordReturn> getAfibExpRecords(@Path("userId") Integer userId ,
                                                          @Query("pageNum") Integer pageNum ,
                                                          @Query("pageSize") Integer pageSize);

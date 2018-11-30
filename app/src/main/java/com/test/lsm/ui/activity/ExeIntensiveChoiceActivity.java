@@ -26,6 +26,8 @@ import com.yyyu.baselibrary.utils.StatusBarCompat;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.test.lsm.utils.logic.HrvUtils.chgStatus1;
+
 /**
  * 功能：训练难度选择
  *
@@ -296,28 +298,5 @@ public class ExeIntensiveChoiceActivity extends LsmBaseActivity {
         intent.putExtra("ccType", ccType);
         intent.putExtra("bodyFitness", bodyFitness);
         context.startActivity(intent);
-    }
-
-    public void chgStatus1(View view, int status) {
-        switch (status) {
-            case 0:
-                view.setEnabled(false);
-                break;
-            case 1:
-                view.setBackgroundResource(R.mipmap.ic_bar11);
-                break;
-            case 2:
-                view.setBackgroundResource(R.mipmap.ic_bar12);
-                break;
-            case 3:
-                view.setBackgroundResource(R.mipmap.ic_bar13);
-                break;
-            case 4:
-                view.setBackgroundResource(R.mipmap.ic_bar14);
-                break;
-            case 5:
-                view.setBackgroundResource(R.mipmap.ic_bar15);
-                break;
-        }
     }
 }

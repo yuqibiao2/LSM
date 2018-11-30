@@ -1,6 +1,5 @@
 package com.test.lsm.ui.fragment.care_group;
 
-import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.baidu.mapapi.map.BaiduMap;
@@ -18,11 +17,8 @@ import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.test.lsm.R;
 import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
-import com.test.lsm.net.APIMethodManager;
-import com.test.lsm.ui.activity.CareGroupDetailActivity;
 import com.test.lsm.ui.activity.CareGroupMemDetailActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
-import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
 import java.util.List;

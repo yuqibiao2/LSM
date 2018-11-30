@@ -71,6 +71,12 @@ public class CheckBleIsConnectService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        isCheck = false;
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {

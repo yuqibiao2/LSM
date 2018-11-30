@@ -40,15 +40,15 @@ public class GetMonitorGroupMemDetailReturn {
     }
 
     public static class DataBean {
-        private String hrvInfo;
+        private HrvInfoBean hrvInfo;
         private TraceInfoBean traceInfo;
         private List<HeartInfoListBean> heartInfoList;
 
-        public String getHrvInfo() {
+        public HrvInfoBean getHrvInfo() {
             return hrvInfo;
         }
 
-        public void setHrvInfo(String hrvInfo) {
+        public void setHrvInfo(HrvInfoBean hrvInfo) {
             this.hrvInfo = hrvInfo;
         }
 
@@ -68,8 +68,64 @@ public class GetMonitorGroupMemDetailReturn {
             this.heartInfoList = heartInfoList;
         }
 
-        public static class TraceInfoBean {
+        public static class HrvInfoBean {
+            private int mindFitness;
+            private int bodyFitness;
+            private int moodStability;
+            private int stressTension;
+            private int mindFatigue;
+            private int bodyFatigue;
 
+            public int getMindFitness() {
+                return mindFitness;
+            }
+
+            public void setMindFitness(int mindFitness) {
+                this.mindFitness = mindFitness;
+            }
+
+            public int getBodyFitness() {
+                return bodyFitness;
+            }
+
+            public void setBodyFitness(int bodyFitness) {
+                this.bodyFitness = bodyFitness;
+            }
+
+            public int getMoodStability() {
+                return moodStability;
+            }
+
+            public void setMoodStability(int moodStability) {
+                this.moodStability = moodStability;
+            }
+
+            public int getStressTension() {
+                return stressTension;
+            }
+
+            public void setStressTension(int stressTension) {
+                this.stressTension = stressTension;
+            }
+
+            public int getMindFatigue() {
+                return mindFatigue;
+            }
+
+            public void setMindFatigue(int mindFatigue) {
+                this.mindFatigue = mindFatigue;
+            }
+
+            public int getBodyFatigue() {
+                return bodyFatigue;
+            }
+
+            public void setBodyFatigue(int bodyFatigue) {
+                this.bodyFatigue = bodyFatigue;
+            }
+        }
+
+        public static class TraceInfoBean {
             private double distance;
             private double stepSpeed;
             private int maxHeart;
@@ -127,7 +183,6 @@ public class GetMonitorGroupMemDetailReturn {
         }
 
         public static class HeartInfoListBean {
-
             private int heartNum;
 
             public int getHeartNum() {

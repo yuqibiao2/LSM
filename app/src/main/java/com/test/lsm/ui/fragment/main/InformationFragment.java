@@ -45,7 +45,11 @@ import com.test.lsm.bean.event.ECGChgEvent;
 import com.test.lsm.bean.event.HeartChgEvent;
 import com.test.lsm.bean.event.OnUserInfoChg;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
+import com.test.lsm.bean.event.SCAutoScanChgEvent;
 import com.test.lsm.bean.event.StepChgEvent;
+import com.test.lsm.bean.form.AFibExpRecordVo;
+import com.test.lsm.bean.json.EmptyDataReturn;
+import com.test.lsm.bean.json.GetAFibExpRecordReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.db.bean.Calorie;
 import com.test.lsm.db.bean.Step;
@@ -53,7 +57,10 @@ import com.test.lsm.db.service.CalorieService;
 import com.test.lsm.db.service.StepService;
 import com.test.lsm.db.service.inter.IStepService;
 import com.test.lsm.global.Constant;
+import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
+import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.ui.activity.AFibDetailActivity;
 import com.test.lsm.ui.activity.CareGroupChoiceActivity;
 import com.test.lsm.ui.activity.ECGShowActivity3;
 import com.test.lsm.ui.activity.SettingActivity;
@@ -67,6 +74,7 @@ import com.today.step.lib.TodayStepService;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
@@ -80,6 +88,8 @@ import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
+
+import static com.test.lsm.global.SpConstant.SC_AUTO_SCAN;
 
 /**
  * 功能：数据信息界面
@@ -331,6 +341,7 @@ public class InformationFragment extends LsmBaseFragment {
     private CalorieService calorieService;
 
     private float totalBleCalorie;
+    private UserLoginReturn.PdBean user;
 
     /**
      * 得到数据转成short
@@ -389,7 +400,7 @@ public class InformationFragment extends LsmBaseFragment {
         itemContainer.add(flAfib);
         itemContainer.add(flRec);
 
-        UserLoginReturn.PdBean user = application.getUser();
+        user = application.getUser();
         String userSex = user.getUSER_SEX();
         isGirl = userSex.equals("0");
         String userWeight = user.getUSER_WEIGHT();
@@ -413,6 +424,14 @@ public class InformationFragment extends LsmBaseFragment {
         srlInfo.setEnableLoadMore(false);
         String userImage = application.getUser().getUSER_IMAGE();
         GlidUtils.load(getContext(), rvUserIcon, userImage);
+        boolean isRecord = (boolean) MySPUtils.get(getContext() , SC_AUTO_SCAN , false);
+        if (isRecord){
+            tvAfibStatus.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
+            tvAfibStatus.setText("Detected");
+        }else{
+            tvAfibStatus.setTextColor(Color.parseColor("#9B9B9B"));
+            tvAfibStatus.setText("未開啓");
+        }
 
         //---蓝牙已连接（SplashActivity）
         if (application.isBleConnected()) {
@@ -458,6 +477,31 @@ public class InformationFragment extends LsmBaseFragment {
 
     @Override
     protected void initListener() {
+
+
+        //AFib异常监听
+        application.setOnGetBleDataValueListener(new MyApplication.OnGetBleDataValueListener() {
+            @Override
+            public void onGet(LsmBleData lsmBleData) {
+                if (isDestroy) return;
+                boolean isRecord = (boolean) MySPUtils.get(getContext(), SC_AUTO_SCAN, false);
+                double rriValue = lsmBleData.getRriValue();
+                boolean isExp = mVerifier.feedOneRRI(Double.valueOf(rriValue).intValue());
+                if (isExp && isRecord) {
+                    AFibExpRecordVo aFibExpRecord = new AFibExpRecordVo();
+                    aFibExpRecord.setUserId(aFibExpRecord.getUserId());
+                    aFibExpRecord.setExpInfo("AFib异常");
+                    APIMethodManager.getInstance().saveAfibExpRecords(provider, aFibExpRecord, new IRequestCallback<EmptyDataReturn>() {
+                        @Override
+                        public void onSuccess(EmptyDataReturn result) {
+                        }
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                        }
+                    });
+                }
+            }
+        });
 
         application.setOnHrAbnormalListener(new MyApplication.OnHrAbnormalListener() {
             @Override
@@ -879,4 +923,17 @@ public class InformationFragment extends LsmBaseFragment {
             GlidUtils.load(getContext(), rvUserIcon, userImage);
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onAutoScanChg(SCAutoScanChgEvent scanChgEvent){
+        boolean checked = scanChgEvent.isChecked();
+        if (checked){
+            tvAfibStatus.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
+            tvAfibStatus.setText("Detected");
+        }else{
+            tvAfibStatus.setTextColor(Color.parseColor("#9B9B9B"));
+            tvAfibStatus.setText("未開啓");
+        }
+    }
+
 }
