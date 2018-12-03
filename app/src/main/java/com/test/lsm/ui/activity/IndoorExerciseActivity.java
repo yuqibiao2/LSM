@@ -1,7 +1,6 @@
 package com.test.lsm.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,8 +34,8 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.UpdateIndoorRunDataEvent;
-import com.test.lsm.bean.form.UserCourseTimeVo;
-import com.test.lsm.bean.form.UserJoinCourseVo;
+import com.test.lsm.bean.vo.UserCourseTimeVo;
+import com.test.lsm.bean.vo.UserJoinCourseVo;
 import com.test.lsm.bean.json.GetCourseParams;
 import com.test.lsm.bean.json.ModifyScoreReturn;
 import com.test.lsm.bean.json.UserCourseTimeReturn;
@@ -51,14 +50,12 @@ import com.test.lsm.ui.fragment.indoor_run.IndoorRunHrFragment;
 import com.test.lsm.ui.fragment.indoor_run.IndoorRunHrvFragment;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.DimensChange;
-import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import de.greenrobot.event.EventBus;

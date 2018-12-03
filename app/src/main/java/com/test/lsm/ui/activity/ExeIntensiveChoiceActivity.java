@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
-import com.test.lsm.bean.form.UserJoinCourseVo;
+import com.test.lsm.bean.vo.UserJoinCourseVo;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.UserJoinCourseReturn;
 import com.test.lsm.global.SpConstant;

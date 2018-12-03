@@ -1,18 +1,15 @@
 package com.test.lsm.service;
 
-import android.app.Application;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.clj.fastble.BleManager;
-import com.clj.fastble.data.BleDevice;
 import com.test.lsm.MyApplication;
-import com.test.lsm.bean.form.QueryHRVInfo;
-import com.test.lsm.bean.form.SaveHeartByMinVo;
-import com.test.lsm.bean.form.SaveUserHRVVo;
-import com.test.lsm.bean.form.UserHealthInfo;
+import com.test.lsm.bean.vo.QueryHRVInfo;
+import com.test.lsm.bean.vo.SaveHeartByMinVo;
+import com.test.lsm.bean.vo.SaveUserHRVVo;
+import com.test.lsm.bean.vo.UserHealthInfo;
 import com.test.lsm.bean.json.GetActiveUser;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.json.SaveHeartByMin;

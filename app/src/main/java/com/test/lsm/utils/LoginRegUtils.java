@@ -8,7 +8,6 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
-import com.test.lsm.bean.form.UserRegVo;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.yyyu.baselibrary.utils.ActivityHolder;
 import com.yyyu.baselibrary.utils.FormValidationUtils;

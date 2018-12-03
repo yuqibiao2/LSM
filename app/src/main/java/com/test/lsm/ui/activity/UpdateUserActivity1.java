@@ -14,7 +14,7 @@ import android.widget.RadioGroup;
 import com.google.gson.Gson;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
-import com.test.lsm.bean.form.UserUpdateVo;
+import com.test.lsm.bean.vo.UserUpdateVo;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MySPUtils;

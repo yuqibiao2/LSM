@@ -1,4 +1,4 @@
-package com.test.lsm.bean.form;
+package com.test.lsm.bean.vo;
 
 import java.util.List;
 

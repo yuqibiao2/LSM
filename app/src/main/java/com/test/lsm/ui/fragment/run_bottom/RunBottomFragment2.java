@@ -7,12 +7,10 @@ import com.baidu.mapapi.model.LatLng;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.HeartChgEvent;
-import com.test.lsm.bean.event.RefreshHearthInfoEvent;
-import com.test.lsm.bean.event.RefreshRunHRVEvent;
 import com.test.lsm.bean.event.RunStartEvent;
 import com.test.lsm.bean.event.RunStopEvent;
 import com.test.lsm.bean.event.StepChgEvent;
-import com.test.lsm.bean.form.RunRecord;
+import com.test.lsm.bean.vo.RunRecord;
 import com.test.lsm.bean.json.SaveRunRecordReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
@@ -21,7 +19,6 @@ import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.test.lsm.utils.TimeUtils;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
-import com.yyyu.baselibrary.utils.MyToast;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 

@@ -139,8 +139,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                app:thumbTint="@color/white"
-                app:trackTint="#4A90E2"/>
+                android:buttonTint="#4A90E2"/>
 
         </LinearLayout>
 

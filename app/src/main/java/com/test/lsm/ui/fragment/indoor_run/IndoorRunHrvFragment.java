@@ -1,15 +1,13 @@
 package com.test.lsm.ui.fragment.indoor_run;
 
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.test.lsm.R;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
-import com.test.lsm.bean.form.QueryHRVInfo;
+import com.test.lsm.bean.vo.QueryHRVInfo;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
-import com.test.lsm.global.Constant;
 import com.test.lsm.global.SpConstant;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;

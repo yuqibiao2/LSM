@@ -1,8 +1,10 @@
 package com.test.lsm.net.api;
 
-import com.test.lsm.bean.form.AFibExpRecordVo;
-import com.test.lsm.bean.form.GetHeartChart;
-import com.test.lsm.bean.form.HealthRecordVo;
+import com.test.lsm.bean.json.ConnectMonitorReturn;
+import com.test.lsm.bean.vo.AFibExpRecordVo;
+import com.test.lsm.bean.vo.GetHeartChart;
+import com.test.lsm.bean.vo.GroupAttach;
+import com.test.lsm.bean.vo.HealthRecordVo;
 import com.test.lsm.bean.json.DoFooBean;
 import com.test.lsm.bean.json.EmptyDataReturn;
 import com.test.lsm.bean.json.GetAFibExpRecordReturn;
@@ -17,6 +19,7 @@ import com.test.lsm.bean.json.GetMonitorGroupMemDetailReturn;
 import com.test.lsm.bean.json.GetMonitorGroupReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
 import com.test.lsm.bean.json.GetMsgListReturn;
+import com.test.lsm.bean.json.GetUserMonitorsReturn;
 import com.test.lsm.bean.json.ModifyScoreReturn;
 import com.test.lsm.bean.json.QueryActivityGoodsReturn;
 import com.test.lsm.bean.json.QueryAmongReturn;
@@ -32,6 +35,7 @@ import com.test.lsm.bean.json.UserJoinCourseReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.json.UserRegReturn;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.http.Body;
@@ -39,6 +43,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -54,6 +59,15 @@ import rx.Observable;
  */
 
 public interface LsmApi {
+
+    @GET("monitor/users/{userId}/contacts/{monitorId}")
+    Observable<ConnectMonitorReturn>  connectMonitor(@Path("userId") Integer userId ,@Path("monitorId") String monitorId);
+
+    @PATCH("monitor/groupAttaches/status")
+    Observable<EmptyDataReturn> modifyGroupAttachStatus(@Body List<GroupAttach> groupAttachList);
+
+    @GET("monitor/users/{userId}/monitors")
+    Observable<GetUserMonitorsReturn> getMonitorsByUserId(@Path("userId") Integer userId);
 
     @GET("monitor/users/{userId}")
     Observable<GetMonitorGroupMemDetailReturn> getMonitorGroupMemDetail(@Path("userId") Integer userId);

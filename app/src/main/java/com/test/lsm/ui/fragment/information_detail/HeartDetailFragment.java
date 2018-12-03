@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
-import com.test.lsm.bean.form.QueryHRVInfo;
+import com.test.lsm.bean.vo.QueryHRVInfo;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.global.Constant;
 import com.test.lsm.global.SpConstant;

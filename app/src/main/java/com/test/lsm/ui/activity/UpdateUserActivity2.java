@@ -24,7 +24,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.OnUserInfoChg;
-import com.test.lsm.bean.form.UserUpdateVo;
+import com.test.lsm.bean.vo.UserUpdateVo;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.json.UserRegReturn;
 import com.test.lsm.net.APIMethodManager;

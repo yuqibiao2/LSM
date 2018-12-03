@@ -1,4 +1,4 @@
-package com.test.lsm.bean.form;
+package com.test.lsm.bean.vo;
 
 /**
  * 功能：
@@ -7,7 +7,9 @@ package com.test.lsm.bean.form;
  * @version 1.0
  * @date 2018/4/17
  */
-public class UserRegVo {
+public class UserUpdateVo {
+
+    private  Integer USER_ID;
     private String USERNAME;
     private String PASSWORD;
     private String PHONE;
@@ -17,9 +19,25 @@ public class UserRegVo {
     private String BIRTHDAY;
     private String URGENT_USER;
     private String URGENT_PHONE;
-    private String USER_IMAGE;
+    private String USER_IMAGE="";
+    private String HEALTH_PARAM;
 
 
+    public Integer getUSER_ID() {
+        return USER_ID;
+    }
+
+    public void setUSER_ID(Integer USER_ID) {
+        this.USER_ID = USER_ID;
+    }
+
+    public String getHEALTH_PARAM() {
+        return HEALTH_PARAM;
+    }
+
+    public void setHEALTH_PARAM(String HEALTH_PARAM) {
+        this.HEALTH_PARAM = HEALTH_PARAM;
+    }
 
     public String getUSERNAME() {
         return USERNAME;

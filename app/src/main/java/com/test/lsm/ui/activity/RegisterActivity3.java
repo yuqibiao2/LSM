@@ -24,7 +24,7 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.test.lsm.R;
-import com.test.lsm.bean.form.UserRegVo;
+import com.test.lsm.bean.vo.UserRegVo;
 import com.test.lsm.bean.json.UserRegReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;

@@ -12,7 +12,18 @@ import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.test.lsm.MyApplication;
 import com.test.lsm.R;
+import com.test.lsm.adapter.UserMonitorsAdapter;
+import com.test.lsm.bean.json.EmptyDataReturn;
+import com.test.lsm.bean.json.GetUserMonitorsReturn;
+import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.bean.vo.GroupAttach;
+import com.test.lsm.net.APIMethodManager;
+import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.ui.dialog.AddGroupAttachDialog;
+import com.yyyu.baselibrary.ui.widget.SwitchCompatWrapper;
+import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +41,18 @@ public class SetCareGroupActivity extends LsmBaseActivity {
 
     @BindView(R.id.ib_nav_back)
     ImageButton ibNavBack;
-    @BindView(R.id.sc_care_group)
-    SwitchCompat scCareGroup;
     @BindView(R.id.rv_care_group)
     RecyclerView rvCareGroup;
     @BindView(R.id.iv_add_care_group)
     ImageView ivAddCareGroup;
     @BindView(R.id.sc_watch_all)
     SwitchCompat scWatchAll;
+    private List<GetUserMonitorsReturn.DataBean.MonitorInfoListBean> monitorsList = new ArrayList<>();
+    private UserMonitorsAdapter userMonitorsAdapter;
+    private APIMethodManager apiMethodManager;
+    private UserLoginReturn.PdBean user;
+    private AddGroupAttachDialog addGroupAttachDialog;
+    private SwitchCompatWrapper switchCompatWrapper;
 
     @Override
     public int getLayoutId() {
@@ -45,40 +60,108 @@ public class SetCareGroupActivity extends LsmBaseActivity {
     }
 
     @Override
+    public void beforeInit() {
+        super.beforeInit();
+        MyApplication application = (MyApplication) getApplication();
+        user = application.getUser();
+        apiMethodManager = APIMethodManager.getInstance();
+        switchCompatWrapper = new SwitchCompatWrapper(scWatchAll);
+    }
+
+    @Override
     protected void initView() {
-
         rvCareGroup.setLayoutManager(new LinearLayoutManager(this));
-
-        List<String> fooList = new ArrayList<>();
-        fooList.add("1");
-        fooList.add("2");
-        fooList.add("3");
-        fooList.add("4");
-        fooList.add("5");
-        fooList.add("5");
-        fooList.add("5");
-        fooList.add("5");
-
-        rvCareGroup.setAdapter(new BaseQuickAdapter<String, BaseViewHolder>(R.layout.rv_care_group_item, fooList) {
-            @Override
-            protected void convert(BaseViewHolder helper, String item) {
-
-            }
-        });
-
+        userMonitorsAdapter = new UserMonitorsAdapter(R.layout.rv_care_group_item, monitorsList , provider);
+        rvCareGroup.setAdapter(userMonitorsAdapter);
     }
 
     @Override
     protected void initListener() {
+
+        ivAddCareGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addGroupAttachDialog = new AddGroupAttachDialog(SetCareGroupActivity.this, user.getUSER_ID());
+                addGroupAttachDialog.show();
+            }
+        });
+
         //全选
-        scWatchAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchCompatWrapper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){//全选
-
+                    switchAll(true , monitorsList);
                 }else{//全不选
-
+                    switchAll(false , monitorsList);
                 }
+            }
+        });
+    }
+
+    private void switchAll(boolean check , List<GetUserMonitorsReturn.DataBean.MonitorInfoListBean> monitorsList){
+        List<GroupAttach> groupAttachList = new ArrayList<>();
+        for (GetUserMonitorsReturn.DataBean.MonitorInfoListBean  dataBean : monitorsList){
+            GroupAttach groupAttach = new GroupAttach();
+            groupAttach.setAttachId(dataBean.getAttachId());
+            if (check){
+                groupAttach.setIsWatching("1");
+            }else{
+                groupAttach.setIsWatching("0");
+            }
+            groupAttachList.add(groupAttach);
+        }
+        apiMethodManager.modifyGroupAttachStatus(provider, groupAttachList, new IRequestCallback<EmptyDataReturn>() {
+            @Override
+            public void onSuccess(EmptyDataReturn result) {
+                int code = result.getCode();
+                if (code == 200){
+                    inflateData();
+                }else{
+                    MyToast.showLong(SetCareGroupActivity.this , ""+result.getMsg());
+                    switchCompatWrapper.setCheckedNotCallbackChgEvent(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                MyToast.showLong(SetCareGroupActivity.this , "异常："+throwable.getMessage());
+                switchCompatWrapper.setCheckedNotCallbackChgEvent(false);
+            }
+        });
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        inflateData();
+    }
+
+    public void inflateData(){
+        showLoadDialog();
+        apiMethodManager.getMonitorsByUserId(provider, user.getUSER_ID(), new IRequestCallback<GetUserMonitorsReturn>() {
+            @Override
+            public void onSuccess(GetUserMonitorsReturn result) {
+
+                int code = result.getCode();
+                if (code == 200){
+                    boolean isWatchAll = result.getData().isWatchAll();
+                    switchCompatWrapper.setCheckedNotCallbackChgEvent(isWatchAll);
+                    List<GetUserMonitorsReturn.DataBean.MonitorInfoListBean> monitorInfoList = result.getData().getMonitorInfoList();
+                    monitorsList.clear();
+                    monitorsList.addAll(monitorInfoList);
+                    userMonitorsAdapter.notifyDataSetChanged();
+                }else {
+                    MyToast.showLong(SetCareGroupActivity.this , ""+result.getMsg());
+                }
+
+                dismissLoadDialog();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                MyToast.showLong(SetCareGroupActivity.this , "异常："+throwable.getMessage());
+                dismissLoadDialog();
             }
         });
     }

@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.test.lsm.R;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
-import com.test.lsm.bean.form.QueryHRVInfo;
+import com.test.lsm.bean.vo.QueryHRVInfo;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.global.SpConstant;
 import com.test.lsm.net.APIMethodManager;

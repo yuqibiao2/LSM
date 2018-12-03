@@ -3,23 +3,16 @@ package com.test.lsm.ui.activity;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
-import com.clj.fastble.utils.HexUtil;
 import com.google.gson.Gson;
 import com.test.lsm.R;
-import com.test.lsm.bean.UserBean;
-import com.test.lsm.bean.form.UserRegVo;
-import com.yyyu.baselibrary.utils.MyLog;
-import com.yyyu.baselibrary.utils.MySPUtils;
+import com.test.lsm.bean.vo.UserRegVo;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.Calendar;

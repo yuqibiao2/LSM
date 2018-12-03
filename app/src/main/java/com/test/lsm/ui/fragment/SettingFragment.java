@@ -9,6 +9,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -32,12 +33,18 @@ import com.test.lsm.R;
 import com.test.lsm.adapter.BleDeviceAdapter2;
 import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.bean.event.OnUserInfoChg;
+import com.test.lsm.bean.json.EmptyDataReturn;
+import com.test.lsm.bean.json.GetUserMonitorsReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.bean.vo.GroupAttach;
+import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
+import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.SetCareGroupActivity;
 import com.test.lsm.ui.activity.UpdateUserActivity1;
 import com.test.lsm.utils.LoginRegUtils;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
+import com.yyyu.baselibrary.ui.widget.SwitchCompatWrapper;
 import com.yyyu.baselibrary.utils.MyInetntUtils;
 import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyToast;
@@ -107,6 +114,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
     SwitchCompat scCareGroup;
     @BindView(R.id.tv_to_care_group)
     TextView tvToCareGroup;
+
     private MyApplication application;
     private UserLoginReturn.PdBean user;
     private BleDeviceAdapter2 bleDeviceAdapter;
@@ -114,6 +122,8 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
     private BleManager bleManager;
 
     private boolean isDestroy = false;
+    private SwitchCompatWrapper switchCompatWrapper;
+    private List<GetUserMonitorsReturn.DataBean.MonitorInfoListBean> monitorInfoList;
 
     @Override
     public int getLayoutId() {
@@ -161,11 +171,12 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
         }
         srlBt.setEnableLoadMore(false);
         srlBt.setRefreshHeader(new MaterialHeader(getContext()));
-
-        infalteBleAdapter();
+        switchCompatWrapper = new SwitchCompatWrapper(scCareGroup);
+        scCareGroup.setEnabled(false);
+        inflateBleAdapter();
     }
 
-    private void infalteBleAdapter() {
+    private void inflateBleAdapter() {
         deviceList = BleManager.getInstance().getAllConnectedDevice();//已连接得ble设备
         bleDeviceAdapter = new BleDeviceAdapter2(R.layout.rv_item_bt_device, deviceList);
         rvBtDevice.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -175,6 +186,31 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
     @Override
     protected void initListener() {
 
+        //---設置監聽人開關
+        switchCompatWrapper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                List<GroupAttach> groupAttaches = new ArrayList<>();
+                if (isChecked) {//全部開啓
+                    for (GetUserMonitorsReturn.DataBean.MonitorInfoListBean monitorInfo : monitorInfoList) {
+                        GroupAttach groupAttach = new GroupAttach();
+                        groupAttach.setAttachId(monitorInfo.getAttachId());
+                        groupAttach.setIsWatching("1");
+                        groupAttaches.add(groupAttach);
+                    }
+                } else {//全部關閉
+                    for (GetUserMonitorsReturn.DataBean.MonitorInfoListBean monitorInfo : monitorInfoList) {
+                        GroupAttach groupAttach = new GroupAttach();
+                        groupAttach.setAttachId(monitorInfo.getAttachId());
+                        groupAttach.setIsWatching("0");
+                        groupAttaches.add(groupAttach);
+                    }
+                }
+                modifyUserMonitorsStatus(groupAttaches);
+            }
+        });
+
+        //---去設置監聽人界面
         tvToCareGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -263,6 +299,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
     @Override
     public void onResume() {
         super.onResume();
+        getUserMonitors();
     }
 
     @Override
@@ -280,6 +317,50 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
         isDestroy = true;
         EventBus.getDefault().unregister(this);
     }
+
+    public void getUserMonitors(){
+        APIMethodManager.getInstance()
+                .getMonitorsByUserId(provider, user.getUSER_ID(), new IRequestCallback<GetUserMonitorsReturn>() {
+            @Override
+            public void onSuccess(GetUserMonitorsReturn result) {
+
+                int code = result.getCode();
+                if (code == 200){
+                    boolean isWatchAll = result.getData().isWatchAll();
+                    switchCompatWrapper.setCheckedNotCallbackChgEvent(isWatchAll);
+                    monitorInfoList = result.getData().getMonitorInfoList();
+                    scCareGroup.setEnabled(true);
+                }else {
+                    MyToast.showLong(getContext() , ""+result.getMsg());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                MyToast.showLong(getContext() , "异常："+throwable.getMessage());
+            }
+        });
+    }
+
+    private void modifyUserMonitorsStatus(List<GroupAttach> groupAttaches) {
+        APIMethodManager.getInstance().modifyGroupAttachStatus(provider, groupAttaches, new IRequestCallback<EmptyDataReturn>() {
+            @Override
+            public void onSuccess(EmptyDataReturn result) {
+                int code = result.getCode();
+                if (code == 200){
+                    MyToast.showLong(getContext() , "修改成功");
+                }else {
+                    MyToast.showLong(getContext() , ""+result.getMsg());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                MyToast.showLong(getContext() , "异常："+throwable.getMessage());
+            }
+        });
+    }
+
 
     /**
      * 建立ble设备连接

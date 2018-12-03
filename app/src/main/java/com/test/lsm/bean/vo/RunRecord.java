@@ -1,6 +1,4 @@
-package com.test.lsm.bean.form;
-
-import android.content.Intent;
+package com.test.lsm.bean.vo;
 
 /**
  * 功能：

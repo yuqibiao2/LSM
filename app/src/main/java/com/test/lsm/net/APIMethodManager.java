@@ -2,19 +2,21 @@ package com.test.lsm.net;
 
 import android.text.TextUtils;
 
-import com.test.lsm.bean.form.AFibExpRecordVo;
-import com.test.lsm.bean.form.GetHeartChart;
-import com.test.lsm.bean.form.HealthRecordVo;
-import com.test.lsm.bean.form.QueryHRVInfo;
-import com.test.lsm.bean.form.QueryRunInfoVo;
-import com.test.lsm.bean.form.RunRecord;
-import com.test.lsm.bean.form.SaveHeartByMinVo;
-import com.test.lsm.bean.form.SaveUserHRVVo;
-import com.test.lsm.bean.form.UserCourseTimeVo;
-import com.test.lsm.bean.form.UserHealthInfo;
-import com.test.lsm.bean.form.UserJoinCourseVo;
-import com.test.lsm.bean.form.UserRegVo;
-import com.test.lsm.bean.form.UserUpdateVo;
+import com.test.lsm.bean.json.ConnectMonitorReturn;
+import com.test.lsm.bean.vo.AFibExpRecordVo;
+import com.test.lsm.bean.vo.GetHeartChart;
+import com.test.lsm.bean.vo.GroupAttach;
+import com.test.lsm.bean.vo.HealthRecordVo;
+import com.test.lsm.bean.vo.QueryHRVInfo;
+import com.test.lsm.bean.vo.QueryRunInfoVo;
+import com.test.lsm.bean.vo.RunRecord;
+import com.test.lsm.bean.vo.SaveHeartByMinVo;
+import com.test.lsm.bean.vo.SaveUserHRVVo;
+import com.test.lsm.bean.vo.UserCourseTimeVo;
+import com.test.lsm.bean.vo.UserHealthInfo;
+import com.test.lsm.bean.vo.UserJoinCourseVo;
+import com.test.lsm.bean.vo.UserRegVo;
+import com.test.lsm.bean.vo.UserUpdateVo;
 import com.test.lsm.bean.json.DoFooBean;
 import com.test.lsm.bean.json.EmptyDataReturn;
 import com.test.lsm.bean.json.GetAFibExpRecordReturn;
@@ -27,6 +29,7 @@ import com.test.lsm.bean.json.GetHealthRecordReturn;
 import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
 import com.test.lsm.bean.json.GetMonitorGroupMemDetailReturn;
 import com.test.lsm.bean.json.GetMonitorGroupReturn;
+import com.test.lsm.bean.json.GetUserMonitorsReturn;
 import com.test.lsm.bean.json.GetMsgDetail;
 import com.test.lsm.bean.json.GetMsgListReturn;
 import com.test.lsm.bean.json.GetUserInfoReturn;
@@ -49,11 +52,10 @@ import com.trello.rxlifecycle.android.ActivityEvent;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import de.greenrobot.event.Subscribe;
-import retrofit2.http.Field;
-import rx.Scheduler;
+import retrofit2.http.Path;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -87,6 +89,109 @@ public class APIMethodManager {
     }
 
     /**
+     * 连接监听人
+     *
+     */
+    public Subscription connectMonitor(
+                                       Integer userId,
+                                       String monitorId,
+                                       final IRequestCallback<ConnectMonitorReturn> callback) {
+
+        Subscription subscribe = lsmApi.connectMonitor(userId, monitorId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<ConnectMonitorReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(ConnectMonitorReturn connectMonitorReturn) {
+                        callback.onSuccess(connectMonitorReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 修改监听状态
+     *
+     * @param provider
+     * @param groupAttachList
+     * @param callback
+     * @return
+     */
+    public Subscription modifyGroupAttachStatus(LifecycleProvider<ActivityEvent> provider,
+                                                List<GroupAttach> groupAttachList,
+                                                final IRequestCallback<EmptyDataReturn> callback) {
+
+        Subscription subscribe = lsmApi.modifyGroupAttachStatus(groupAttachList)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<EmptyDataReturn>bindToLifecycle())
+                .subscribe(new Subscriber<EmptyDataReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(EmptyDataReturn emptyDataReturn) {
+                        callback.onSuccess(emptyDataReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 得到所有监听人
+     *
+     * @param provider
+     * @param userId
+     * @param callback
+     * @return
+     */
+    public Subscription getMonitorsByUserId(LifecycleProvider<ActivityEvent> provider,
+                                            Integer userId,
+                                            final IRequestCallback<GetUserMonitorsReturn> callback) {
+        Subscription subscribe = lsmApi.getMonitorsByUserId(userId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<GetUserMonitorsReturn>bindToLifecycle())
+                .subscribe(new Subscriber<GetUserMonitorsReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(GetUserMonitorsReturn getUserMonitorsReturn) {
+                        callback.onSuccess(getUserMonitorsReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
      * 得到群组成员的详细信息
      *
      * @param provider
@@ -95,8 +200,8 @@ public class APIMethodManager {
      * @return
      */
     public Subscription getMonitorGroupMemDetail(LifecycleProvider<ActivityEvent> provider,
-                                                 Integer userId ,
-                                                 final IRequestCallback<GetMonitorGroupMemDetailReturn> callback){
+                                                 Integer userId,
+                                                 final IRequestCallback<GetMonitorGroupMemDetailReturn> callback) {
         Subscription subscribe = lsmApi.getMonitorGroupMemDetail(userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -130,8 +235,8 @@ public class APIMethodManager {
      * @return
      */
     public Subscription getMonitorGroupDetail(LifecycleProvider<ActivityEvent> provider,
-                                              Long  groupId ,
-                                              final IRequestCallback<GetMonitorGroupDetailReturn> callback){
+                                              Long groupId,
+                                              final IRequestCallback<GetMonitorGroupDetailReturn> callback) {
         Subscription subscribe = lsmApi.getMonitorGroupDetail(groupId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -160,14 +265,14 @@ public class APIMethodManager {
      *
      * @param provider
      * @param userId
-     * @param status 1：开启  0：已关闭
+     * @param status   1：开启  0：已关闭
      * @param callback
      * @return
      */
     public Subscription getMonitorGroups(LifecycleProvider<ActivityEvent> provider,
-                                         Integer userId ,
+                                         Integer userId,
                                          Integer status,
-                                         final IRequestCallback<GetMonitorGroupReturn> callback){
+                                         final IRequestCallback<GetMonitorGroupReturn> callback) {
         Subscription subscribe = lsmApi.getMonitorGroups(userId, status)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -202,10 +307,10 @@ public class APIMethodManager {
      * @return
      */
     public Subscription getHealthRecords(LifecycleProvider<ActivityEvent> provider,
-                                         Integer userId ,
-                                         Integer pageNum ,
+                                         Integer userId,
+                                         Integer pageNum,
                                          Integer pageSize,
-                                         final IRequestCallback<GetHealthRecordReturn> callback){
+                                         final IRequestCallback<GetHealthRecordReturn> callback) {
         Subscription subscribe = lsmApi.getHealthRecords(userId, pageNum, pageSize)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -239,7 +344,7 @@ public class APIMethodManager {
      */
     public Subscription saveHealthRecords(LifecycleProvider<ActivityEvent> provider,
                                           HealthRecordVo healthRecordVo,
-                                          final IRequestCallback<EmptyDataReturn> callback){
+                                          final IRequestCallback<EmptyDataReturn> callback) {
         Subscription subscribe = lsmApi.saveHealthRecords(healthRecordVo)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -274,10 +379,10 @@ public class APIMethodManager {
      * @return
      */
     public Subscription getAfibExpRecords(LifecycleProvider<ActivityEvent> provider,
-                                          Integer userId ,
-                                          Integer pageNum ,
+                                          Integer userId,
+                                          Integer pageNum,
                                           Integer pageSize,
-                                          final IRequestCallback<GetAFibExpRecordReturn> callback){
+                                          final IRequestCallback<GetAFibExpRecordReturn> callback) {
         Subscription subscribe = lsmApi.getAfibExpRecords(userId, pageNum, pageSize)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -310,7 +415,7 @@ public class APIMethodManager {
      */
     public Subscription saveAfibExpRecords(LifecycleProvider<ActivityEvent> provider,
                                            AFibExpRecordVo aFibExpRecordVo,
-                                           final IRequestCallback<EmptyDataReturn> callback){
+                                           final IRequestCallback<EmptyDataReturn> callback) {
         Subscription subscribe = lsmApi.saveAfibExpRecords(aFibExpRecordVo)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -562,9 +667,9 @@ public class APIMethodManager {
      * @param callback
      * @return
      */
-    public Subscription getCourseParamByType(String courseType, Integer courseLevel,  Integer coachId, Integer ccType ,final IRequestCallback<GetCourseParams> callback) {
+    public Subscription getCourseParamByType(String courseType, Integer courseLevel, Integer coachId, Integer ccType, final IRequestCallback<GetCourseParams> callback) {
 
-        Subscription subscribe = lsmApi.getCourseParamsByType(courseType, courseLevel , coachId , ccType)
+        Subscription subscribe = lsmApi.getCourseParamsByType(courseType, courseLevel, coachId, ccType)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribe(new Subscriber<GetCourseParams>() {
                     @Override
@@ -1142,15 +1247,14 @@ public class APIMethodManager {
     }
 
     /**
-     *
      * 根据用户名（手机号）获取用户信息
      *
      * @param provider
-     * @param username  手机号
+     * @param username 手机号
      * @param callback
      * @return
      */
-    public Subscription getUserInfoByUsername(LifecycleProvider<ActivityEvent> provider, String username , final IRequestCallback<GetUserInfoReturn> callback) {
+    public Subscription getUserInfoByUsername(LifecycleProvider<ActivityEvent> provider, String username, final IRequestCallback<GetUserInfoReturn> callback) {
 
         Subscription subscribe = lsmApi.getAppuserByUm(username)
                 .subscribeOn(Schedulers.io())

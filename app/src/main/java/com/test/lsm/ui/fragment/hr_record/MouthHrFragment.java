@@ -9,7 +9,7 @@ import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.UpdateHrRecordEvent;
 import com.test.lsm.bean.event.UpdateMouthHrRecordEvent;
-import com.test.lsm.bean.form.GetHeartChart;
+import com.test.lsm.bean.vo.GetHeartChart;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;

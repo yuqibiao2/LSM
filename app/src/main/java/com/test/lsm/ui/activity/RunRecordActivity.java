@@ -17,7 +17,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.RunRecordAdapter2;
-import com.test.lsm.bean.form.QueryRunInfoVo;
+import com.test.lsm.bean.vo.QueryRunInfoVo;
 import com.test.lsm.bean.json.DoFooBean;
 import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.net.APIMethodManager;

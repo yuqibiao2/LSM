@@ -11,9 +11,13 @@
     app:cardCornerRadius="15dp"
     app:cardElevation="1dp">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -45,6 +49,7 @@
                 android:id="@+id/sc_watch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:buttonTint="@color/colorAccent"/>
         </LinearLayout>
 
@@ -69,7 +74,8 @@
                 android:layout_marginLeft="16dp"
                 android:background="@drawable/et_care_group"
                 android:paddingLeft="12dp"
-                android:text="0917789765"
+                android:text=""
+                android:hint="輸入監聽人手機號"
                 android:textColor="#4a90e2"
                 android:textSize="16sp" />
 
@@ -94,11 +100,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:text="廖傑西"
+                android:text=""
                 android:textColor="#FF4A90E2"
                 android:textSize="16sp" />
         </LinearLayout>
 
     </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>
