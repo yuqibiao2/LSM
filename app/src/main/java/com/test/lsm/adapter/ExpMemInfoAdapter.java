@@ -4,11 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.test.lsm.R;
 import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
+import com.test.lsm.net.GlidUtils;
 import com.yyyu.baselibrary.ui.widget.AdapterLinearLayout;
+import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 
 import java.util.Date;
@@ -49,6 +52,28 @@ public class ExpMemInfoAdapter extends AdapterLinearLayout.LinearAdapter{
         Date expDateTime = MyTimeUtils.parseDate(expDateTimeStr);
         String formatDateTime = MyTimeUtils.formatDateTime("hh:mm", expDateTime);
         tvTime.setText(formatDateTime+" "+MyTimeUtils.getDuringDay(expDateTime));
+        RoundImageView rivIcon = rootView.findViewById(R.id.riv_icon);
+        GlidUtils.load(mContext ,rivIcon ,  expMemInfo.getUserImage());
+        int icTag = R.mipmap.ic_mon_mark_blue;
+        switch (expMemInfo.getWatchingTag()){
+            case "1"://blue
+                icTag = R.mipmap.ic_mon_mark_blue;
+                break;
+            case "2"://green
+                icTag = R.mipmap.ic_mon_mark_green;
+                break;
+            case "3"://yellow
+                icTag = R.mipmap.ic_mon_mark_yellow;
+                break;
+            case "4"://purple
+                icTag = R.mipmap.ic_mon_mark_purple;
+                break;
+            case "5"://red
+                icTag =R.mipmap.ic_mon_mark_red;
+                break;
+        }
+        ImageView ivTag = rootView.findViewById(R.id.iv_tag);
+        ivTag.setImageResource(icTag);
         return rootView;
     }
 }

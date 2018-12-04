@@ -423,7 +423,7 @@ public class InformationFragment extends LsmBaseFragment {
         boolean isRecord = (boolean) MySPUtils.get(getContext() , SC_AUTO_SCAN , false);
         if (isRecord){
             tvAfibStatus.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
-            tvAfibStatus.setText("Detected");
+            tvAfibStatus.setText("Detecting");
         }else{
             tvAfibStatus.setTextColor(Color.parseColor("#9B9B9B"));
             tvAfibStatus.setText("未開啓");

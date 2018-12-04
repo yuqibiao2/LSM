@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -122,6 +124,20 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
 
     @Override
     protected void initListener() {
+
+        //---搜索
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    // 当按了搜索之后关闭软键盘
+                    MyKeyboardUtils.hidden(CareGroupDetailActivity.this);
+                    MyToast.showLong(CareGroupDetailActivity.this , "擴展中");
+                    return true;
+                }
+                return false;
+            }
+        });
 
         //---搜索展开
         ivSearchFold.setOnClickListener(new View.OnClickListener() {

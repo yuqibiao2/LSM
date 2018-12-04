@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -56,6 +57,8 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
     RoundImageView rivUserIcon;
     @BindView(R.id.pb_mem)
     ProgressBar pbMem;
+    @BindView(R.id.iv_tag)
+    ImageView ivTag;
 
     private List<Fragment> pageList;
     private GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo;
@@ -108,6 +111,26 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
         tvHr.setText("" + memInfo.getHeartNum() + " bpm");
         tvCalorie.setText("" + memInfo.getCalorieValue() + " 千卡");
         tvStep.setText("" + memInfo.getStepNum() + " 步");
+        String watchingTag = memInfo.getWatchingTag();
+        int icTag = R.mipmap.ic_mon_mark_blue;
+        switch (watchingTag){
+            case "1"://blue
+                icTag = R.mipmap.ic_mon_mark_blue;
+                break;
+            case "2"://green
+                icTag = R.mipmap.ic_mon_mark_green;
+                break;
+            case "3"://yellow
+                icTag = R.mipmap.ic_mon_mark_yellow;
+                break;
+            case "4"://purple
+                icTag = R.mipmap.ic_mon_mark_purple;
+                break;
+            case "5"://red
+                icTag =R.mipmap.ic_mon_mark_red;
+                break;
+        }
+        ivTag.setImageResource(icTag);
     }
 
     @Override

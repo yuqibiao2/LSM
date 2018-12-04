@@ -14,6 +14,7 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.LatLngBounds;
 import com.google.gson.Gson;
 import com.test.lsm.R;
 import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
@@ -90,8 +91,7 @@ public class MemLocationShowFragment extends LsmBaseFragment {
         mMemInfoList = memInfoList;
 
         List<OverlayOptions> options = new ArrayList<>();
-        double latSum = 0;
-        double lonSum = 0;
+        List<LatLng> latLngList  = new ArrayList<>();
 
         for (int i = 0; i < memInfoList.size(); i++) {
             GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo = memInfoList.get(i);
@@ -100,19 +100,17 @@ public class MemLocationShowFragment extends LsmBaseFragment {
             if (!TextUtils.isEmpty(lat) && !TextUtils.isEmpty(lon)){
                 Double latD = Double.valueOf(lat);
                 Double lonD = Double.valueOf(lon);
-                lonSum += lonD;
-                latSum += latD;
                 LatLng latLng = new LatLng( latD , lonD);
                 String watchingTag = memInfo.getWatchingTag();
                 OverlayOptions option = getOption(latLng, watchingTag , i);
                 options.add(option);
+                latLngList.add(latLng);
             }
         }
         //添加标注
         mBaiduMap.addOverlays(options);
-        //移动到中心点
-        LatLng target = new LatLng(latSum / options.size(), lonSum / options.size());
-        locateAndZoom(target);
+        //使所有坐标都在屏幕内显示
+        fitAndZoom(latLngList);
     }
 
     private OverlayOptions getOption(LatLng point , String watchingTag , Integer index){
@@ -146,33 +144,13 @@ public class MemLocationShowFragment extends LsmBaseFragment {
     @Override
     protected void initData() {
         super.initData();
-       /* List<LatLng> latLngs = new ArrayList<>();
-        latLngs.add(new LatLng(30.581781, 114.364397));
-        latLngs.add(new LatLng(30.580607, 114.365745));
-        latLngs.add(new LatLng(30.581291, 114.367281));
-        latLngs.add(new LatLng(30.58105, 114.36711));
-        latLngs.add(new LatLng(30.580941, 114.366419));
-        List<OverlayOptions> options = new ArrayList<>();
-        for (LatLng point : latLngs) {
-            BitmapDescriptor bitmap = BitmapDescriptorFactory
-                    .fromResource(R.mipmap.ic_me_history_finishpoint);
-            OverlayOptions option = new MarkerOptions()
-                    .position(point)
-                    .icon(bitmap);
-            options.add(option);
-        }
-        mBaiduMap.addOverlays(options);
-
-        double lanSum = 0;
-        double lonSum = 0;
-        for (LatLng latLng : latLngs) {
-            lanSum += latLng.latitude;
-            lonSum += latLng.longitude;
-        }
-        LatLng target = new LatLng(lanSum / latLngs.size(), lonSum / latLngs.size());
-        locateAndZoom(target);*/
     }
 
+    /**
+     * 定位到某一坐标
+     *
+     * @param ll
+     */
     private void locateAndZoom(LatLng ll) {
         MyLocationData locationData = new MyLocationData.Builder()
                 .accuracy(0)
@@ -184,6 +162,20 @@ public class MemLocationShowFragment extends LsmBaseFragment {
         MapStatus.Builder builder = new MapStatus.Builder();
         builder.target(ll).zoom(18);
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+    }
+
+    /**
+     *使所有坐标都在屏幕内显示
+     * @param latLngList
+     */
+    private void fitAndZoom(List<LatLng> latLngList){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for(LatLng latLng : latLngList){
+            builder = builder.include(latLng);
+        }
+        LatLngBounds latlngBounds = builder.build();
+        MapStatusUpdate u = MapStatusUpdateFactory.newLatLngBounds(latlngBounds,map_run.getWidth(),map_run.getHeight()/4*3);
+        mBaiduMap.animateMapStatus(u);
     }
 
 

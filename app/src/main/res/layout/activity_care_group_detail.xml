@@ -70,6 +70,8 @@
                     android:background="@drawable/ic_cg_search_bg"
                     android:drawablePadding="16dp"
                     android:drawableStart="@mipmap/ic_cg_search"
+                    android:imeOptions="actionSearch"
+                    android:singleLine="true"
                     android:hint="搜尋人員"
                     android:paddingLeft="26dp"
                     android:paddingRight="26dp"

@@ -8,15 +8,27 @@
 
     <LinearLayout
         android:layout_width="137dp"
-        android:layout_height="28dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
+        <RelativeLayout
+            android:layout_width="40dp"
+            android:layout_height="33dp">
         <com.yyyu.baselibrary.ui.widget.RoundImageView
+            android:id="@+id/riv_icon"
             android:layout_width="32dp"
             android:layout_height="33dp"
             android:scaleType="centerCrop"
             android:src="@mipmap/ic_user_df" />
+            <ImageView
+                android:id="@+id/iv_tag"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/ic_mon_mark_blue"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_user_name"

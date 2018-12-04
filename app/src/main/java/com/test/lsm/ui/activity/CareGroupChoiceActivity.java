@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -18,6 +21,7 @@ import com.test.lsm.bean.json.GetMonitorGroupReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
+import com.yyyu.baselibrary.utils.MyKeyboardUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
@@ -108,6 +112,20 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
 
     @Override
     protected void initListener() {
+
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    // 当按了搜索之后关闭软键盘
+                    MyKeyboardUtils.hidden(CareGroupChoiceActivity.this);
+                    MyToast.showLong(CareGroupChoiceActivity.this , "擴展中");
+                    rvCareGroup.smoothScrollToPosition(3);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         //---搜索展开
         ivSearchFold.setOnClickListener(new View.OnClickListener() {

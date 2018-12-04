@@ -87,7 +87,7 @@ public class AFibDetailActivity extends LsmBaseActivity {
         scAutoScan.setChecked(isRecord);
         if (isRecord){
             tvScanStatus.setTextColor(getResources().getColor(R.color.colorAccent));
-            tvScanStatus.setText("Detected");
+            tvScanStatus.setText("Detecting");
         }else{
             tvScanStatus.setTextColor(Color.parseColor("#9B9B9B"));
             tvScanStatus.setText("未開啓");
