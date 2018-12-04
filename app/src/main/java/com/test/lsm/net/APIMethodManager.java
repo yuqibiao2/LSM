@@ -10,7 +10,9 @@ import com.test.lsm.bean.vo.HealthRecordVo;
 import com.test.lsm.bean.vo.QueryHRVInfo;
 import com.test.lsm.bean.vo.QueryRunInfoVo;
 import com.test.lsm.bean.vo.RunRecord;
+import com.test.lsm.bean.vo.SaveCurrentHealthVo;
 import com.test.lsm.bean.vo.SaveHeartByMinVo;
+import com.test.lsm.bean.vo.SaveLocationVo;
 import com.test.lsm.bean.vo.SaveUserHRVVo;
 import com.test.lsm.bean.vo.UserCourseTimeVo;
 import com.test.lsm.bean.vo.UserHealthInfo;
@@ -86,6 +88,75 @@ public class APIMethodManager {
 
     public static APIMethodManager getInstance() {
         return SingletonHolder.INSTANCE;
+    }
+
+    /**
+     * 保存当前心跳、卡路里、步数
+     *
+     * @param healthVo
+     * @param callback
+     * @return
+     */
+    public Subscription saveCurrentHealthInfo(
+
+                                              SaveCurrentHealthVo healthVo ,
+                                            final IRequestCallback<EmptyDataReturn> callback){
+        Subscription subscribe = lsmApi.saveCurrentHealthInfo(healthVo)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<EmptyDataReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(EmptyDataReturn emptyDataReturn) {
+                        callback.onSuccess(emptyDataReturn);
+                    }
+                });
+
+        return subscribe;
+    }
+
+    /**
+     * 保存当前经纬度
+     *
+     * @param provider
+     * @param saveLocationVo
+     * @param callback
+     * @return
+     */
+    public Subscription saveCurrentLocation(LifecycleProvider<ActivityEvent> provider ,
+                                            SaveLocationVo saveLocationVo ,
+                                            final IRequestCallback<EmptyDataReturn> callback){
+        Subscription subscribe = lsmApi.saveCurrentLocation(saveLocationVo)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<EmptyDataReturn>bindToLifecycle())
+                .subscribe(new Subscriber<EmptyDataReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(EmptyDataReturn emptyDataReturn) {
+                        callback.onSuccess(emptyDataReturn);
+                    }
+                });
+
+        return subscribe;
     }
 
     /**

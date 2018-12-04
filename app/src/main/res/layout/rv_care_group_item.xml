@@ -45,7 +45,9 @@
                 android:id="@+id/sc_watch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="@color/colorAccent"/>
+                android:checked="true"
+                android:thumb="@drawable/switch_custom_thumb_selector"
+                app:track="@drawable/switch_custom_track_selector_red" />
         </LinearLayout>
 
         <LinearLayout

@@ -34,6 +34,8 @@ import com.test.lsm.bean.json.UserCourseTimeReturn;
 import com.test.lsm.bean.json.UserJoinCourseReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.json.UserRegReturn;
+import com.test.lsm.bean.vo.SaveCurrentHealthVo;
+import com.test.lsm.bean.vo.SaveLocationVo;
 
 import java.util.List;
 import java.util.Map;
@@ -59,6 +61,12 @@ import rx.Observable;
  */
 
 public interface LsmApi {
+
+    @POST("health/currentHealths")
+    Observable<EmptyDataReturn> saveCurrentHealthInfo(@Body SaveCurrentHealthVo healthVo);
+
+    @POST("location/userLocations")
+    Observable<EmptyDataReturn> saveCurrentLocation(@Body SaveLocationVo saveLocationVo);
 
     @GET("monitor/users/{userId}/contacts/{monitorId}")
     Observable<ConnectMonitorReturn>  connectMonitor(@Path("userId") Integer userId ,@Path("monitorId") String monitorId);

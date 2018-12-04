@@ -1,14 +1,14 @@
 package com.test.lsm.ui.activity;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -18,7 +18,6 @@ import com.test.lsm.bean.json.GetMonitorGroupReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
-import com.yyyu.baselibrary.utils.MyKeyboardUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
@@ -41,6 +40,12 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
     RecyclerView rvCareGroup;
     @BindView(R.id.et_search)
     EditText etSearch;
+    @BindView(R.id.ib_nav_back)
+    ImageButton ibNavBack;
+    @BindView(R.id.iv_search_fold)
+    ImageView ivSearchFold;
+    @BindView(R.id.rl_search_expand)
+    RelativeLayout rlSearchExpand;
     private BaseQuickAdapter<GetMonitorGroupReturn.DataBean, BaseViewHolder> adapter;
     private APIMethodManager apiMethodManager;
     private UserLoginReturn.PdBean user;
@@ -67,7 +72,7 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
         adapter = new BaseQuickAdapter<GetMonitorGroupReturn.DataBean, BaseViewHolder>(R.layout.rv_care_group_show_item, mData) {
             @Override
             protected void convert(BaseViewHolder helper, GetMonitorGroupReturn.DataBean item) {
-                helper.setText(R.id.tv_care_group_name , item.getGroupName());
+                helper.setText(R.id.tv_care_group_name, item.getGroupName());
             }
         };
         rvCareGroup.setAdapter(adapter);
@@ -82,19 +87,19 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
             @Override
             public void onSuccess(GetMonitorGroupReturn result) {
                 int code = result.getCode();
-                if (code==200){
+                if (code == 200) {
                     data = result.getData();
                     mData.addAll(data);
                     adapter.notifyDataSetChanged();
-                }else {
-                    MyToast.showLong(CareGroupChoiceActivity.this , "异常："+result.getMsg());
+                } else {
+                    MyToast.showLong(CareGroupChoiceActivity.this, "异常：" + result.getMsg());
                 }
                 dismissLoadDialog();
             }
 
             @Override
             public void onFailure(Throwable throwable) {
-                MyToast.showLong(CareGroupChoiceActivity.this , ""+throwable.getMessage());
+                MyToast.showLong(CareGroupChoiceActivity.this, "" + throwable.getMessage());
                 dismissLoadDialog();
             }
         });
@@ -104,18 +109,28 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
     @Override
     protected void initListener() {
 
-        //---搜索
+        //---搜索展开
+        ivSearchFold.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rlSearchExpand.setVisibility(View.VISIBLE);
+                ivSearchFold.setVisibility(View.GONE);
+            }
+        });
+
+        //---搜索折叠
         ibSearchEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                rlSearchExpand.setVisibility(View.GONE);
+                ivSearchFold.setVisibility(View.VISIBLE);
             }
         });
 
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                CareGroupDetailActivity.startAction(CareGroupChoiceActivity.this , data.get(position).getGroupId());
+                CareGroupDetailActivity.startAction(CareGroupChoiceActivity.this, data.get(position).getGroupId());
             }
         });
 

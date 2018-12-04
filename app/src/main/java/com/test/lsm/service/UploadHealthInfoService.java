@@ -6,7 +6,9 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.test.lsm.MyApplication;
+import com.test.lsm.bean.json.EmptyDataReturn;
 import com.test.lsm.bean.vo.QueryHRVInfo;
+import com.test.lsm.bean.vo.SaveCurrentHealthVo;
 import com.test.lsm.bean.vo.SaveHeartByMinVo;
 import com.test.lsm.bean.vo.SaveUserHRVVo;
 import com.test.lsm.bean.vo.UserHealthInfo;
@@ -66,8 +68,44 @@ public class UploadHealthInfoService extends Service {
         toUploadSpecified(phone);
         toUploadUsual();
         toUploadUserHRV();
+        toUploadCurrentHealthInfo();
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    /**
+     * 上传当前心跳值（10s钟上传一次）
+     *
+     */
+    private void toUploadCurrentHealthInfo() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                  while (isUpload){
+                      Thread.sleep(10*1000);
+                      SaveCurrentHealthVo healthVo = new SaveCurrentHealthVo();
+                      healthVo.setUserId(user_id);
+                      healthVo.setHeartNum( application.getHeartNum());
+                      healthVo.setCalorieValue(application.getCalorieValue());
+                      healthVo.setStepNum(application.getStepNum());
+                      apiMethodManager.saveCurrentHealthInfo(healthVo, new IRequestCallback<EmptyDataReturn>() {
+                          @Override
+                          public void onSuccess(EmptyDataReturn result) {
+
+                          }
+
+                          @Override
+                          public void onFailure(Throwable throwable) {
+
+                          }
+                      });
+                  }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     /**
@@ -160,7 +198,7 @@ public class UploadHealthInfoService extends Service {
             @Override
             public void run() {
                 try {
-                    while (true) {
+                    while (isUpload) {
                         Thread.sleep(60 * 1000);
                       /*  if (!application.isBleConnected()) {
                             continue;

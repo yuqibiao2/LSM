@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,8 +48,8 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
 
     @BindView(R.id.ib_search_enter)
     ImageButton ibSearchEnter;
-    @BindView(R.id.rl_search_show)
-    RelativeLayout rlSearchShow;
+    @BindView(R.id.rl_search_expand)
+    RelativeLayout rlSearchExpand;
     @BindView(R.id.rv_cg_detail_nor)
     RecyclerView rvCgDetailNor;
     @BindView(R.id.tv_mask)
@@ -61,6 +62,8 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     EditText etSearch;
     @BindView(R.id.fl_map)
     FrameLayout flMap;
+    @BindView(R.id.iv_search_fold)
+    ImageView ivSearchFold;
 
 
     private BaseQuickAdapter<GetMonitorGroupDetailReturn.DataBean.MemInfoListBean, BaseViewHolder> norMemAdapter;
@@ -97,7 +100,7 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
 
         //初始化地图展示fragment
         memLocationShowFragment = new MemLocationShowFragment();
-        replaceFrg(R.id.fl_map ,memLocationShowFragment );
+        replaceFrg(R.id.fl_map, memLocationShowFragment);
 
         header1 = LayoutInflater.from(this).inflate(R.layout.pt_gc_detail_rv_header1, null);
         View header2 = LayoutInflater.from(this).inflate(R.layout.pt_gc_detail_rv_header2, null);
@@ -120,11 +123,29 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     @Override
     protected void initListener() {
 
+        //---搜索展开
+        ivSearchFold.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rlSearchExpand.setVisibility(View.VISIBLE);
+                ivSearchFold.setVisibility(View.GONE);
+            }
+        });
+
+        //---搜索折叠
+        ibSearchEnter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rlSearchExpand.setVisibility(View.GONE);
+                ivSearchFold.setVisibility(View.VISIBLE);
+            }
+        });
+
         allExpMem.setOnItemClickListener(new AdapterLinearLayout.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 GetMonitorGroupDetailReturn.DataBean.ExpMemInfoListBean expMemInfo = expMemInfoList.get(position);
-                CareGroupMemDetailActivity.startAction(CareGroupDetailActivity.this , mGson.toJson(expMemInfo));
+                CareGroupMemDetailActivity.startAction(CareGroupDetailActivity.this, mGson.toJson(expMemInfo));
             }
         });
 
@@ -132,8 +153,8 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
         norMemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo= memInfoList.get(position);
-                CareGroupMemDetailActivity.startAction(CareGroupDetailActivity.this , mGson.toJson(memInfo));
+                GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo = memInfoList.get(position);
+                CareGroupMemDetailActivity.startAction(CareGroupDetailActivity.this, mGson.toJson(memInfo));
             }
         });
 
@@ -170,7 +191,7 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
             @Override
             public void onSuccess(GetMonitorGroupDetailReturn result) {
                 int code = result.getCode();
-                if (code == 200){
+                if (code == 200) {
                     GetMonitorGroupDetailReturn.DataBean data = result.getData();
                     memInfoList = data.getMemInfoList();
                     norMemInfoList.addAll(memInfoList);
@@ -179,15 +200,15 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
                     expMemInfoList = data.getExpMemInfoList();
                     expMemInfoAdapter = new ExpMemInfoAdapter(CareGroupDetailActivity.this, expMemInfoList);
                     allExpMem.setAdapter(expMemInfoAdapter);
-                }else{
-                    MyToast.showLong(CareGroupDetailActivity.this  , ""+result.getMsg());
+                } else {
+                    MyToast.showLong(CareGroupDetailActivity.this, "" + result.getMsg());
                 }
                 dismissLoadDialog();
             }
 
             @Override
             public void onFailure(Throwable throwable) {
-                MyToast.showLong(CareGroupDetailActivity.this , ""+throwable.getMessage());
+                MyToast.showLong(CareGroupDetailActivity.this, "" + throwable.getMessage());
                 dismissLoadDialog();
             }
         });
@@ -197,9 +218,9 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
         finish();
     }
 
-    public static void startAction(Context context , Long groupId) {
+    public static void startAction(Context context, Long groupId) {
         Intent intent = new Intent(context, CareGroupDetailActivity.class);
-        intent.putExtra("groupId" , groupId);
+        intent.putExtra("groupId", groupId);
         context.startActivity(intent);
     }
 

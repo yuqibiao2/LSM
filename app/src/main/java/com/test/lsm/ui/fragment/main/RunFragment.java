@@ -39,9 +39,12 @@ import com.test.lsm.bean.event.HeartChgEvent;
 import com.test.lsm.bean.event.OnUserInfoChg;
 import com.test.lsm.bean.event.RunStartEvent;
 import com.test.lsm.bean.event.RunStopEvent;
+import com.test.lsm.bean.json.EmptyDataReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.bean.vo.SaveLocationVo;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
+import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.RunRecordActivity;
 import com.test.lsm.ui.activity.SettingActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
@@ -51,6 +54,7 @@ import com.test.lsm.utils.map.MyOrientationListener;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.utils.DimensChange;
 import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -292,7 +296,6 @@ public class RunFragment extends LsmBaseFragment {
 
             @Override
             public void onMapStatusChangeStart(MapStatus arg0) {
-                // TODO Auto-generated method stub
 
             }
 
@@ -304,7 +307,6 @@ public class RunFragment extends LsmBaseFragment {
 
             @Override
             public void onMapStatusChange(MapStatus arg0) {
-                // TODO Auto-generated method stub
 
             }
         });
@@ -405,7 +407,7 @@ public class RunFragment extends LsmBaseFragment {
 
             points.add(ll);//如果要运动完成后画整个轨迹，位置点都在这个集合中
 
-            //MyToast.showShort(getContext(), "latitude：" + ll.latitude + "  longitude：" + ll.longitude);
+            MyToast.showShort(getContext(), "latitude：" + ll.latitude + "  longitude：" + ll.longitude);
 
             last = ll;
 
@@ -426,9 +428,13 @@ public class RunFragment extends LsmBaseFragment {
             mPolyline = (Polyline) mBaiduMap.addOverlay(ooPolyline);
          /*   distance = BaiduMapUtils.calcDistance(points);
             tv_run_distance.setText("" + BaiduMapUtils.resolveDistance(distance));*/
-        }
 
+         //上传当前经纬度
+            uploadCurrentLocation( last , "1");
+
+        }
     }
+
 
     private void locateAndZoom(final BDLocation location, LatLng ll) {
         locData = new MyLocationData.Builder().accuracy(0)
@@ -512,6 +518,8 @@ public class RunFragment extends LsmBaseFragment {
 
         showLoadingDialog();
         EventBus.getDefault().post(new RunStopEvent(points));
+        //上传经纬度
+        uploadCurrentLocation(last , "0");
         if (mLocationClient != null /*&& mLocationClient.isStarted()*/ && isRunning) {
             if (mLocationClient.isStarted()) {
                 mLocationClient.stop();
@@ -538,13 +546,30 @@ public class RunFragment extends LsmBaseFragment {
         isFirstLoc = true;
     }
 
+    /**
+     *保存当前位置
+     *
+     * @param last
+     * @param status 0：跑步结束  1：正在跑步
+     */
+    private void uploadCurrentLocation(LatLng last , String status) {
+        SaveLocationVo saveLocationVo = new SaveLocationVo();
+        saveLocationVo.setUserId(user.getUSER_ID());
+        saveLocationVo.setCurrentLat(last.latitude);
+        saveLocationVo.setCurrentLon(last.longitude);
+        saveLocationVo.setStatus(status);
+        APIMethodManager.getInstance()
+                .saveCurrentLocation(provider, saveLocationVo, new IRequestCallback<EmptyDataReturn>() {
+                    @Override
+                    public void onSuccess(EmptyDataReturn result) {
 
-    private void startLocation() {
+                    }
 
-    }
+                    @Override
+                    public void onFailure(Throwable throwable) {
 
-    private void stopLocation() {
-
+                    }
+                });
     }
 
     List<Integer> hrBuffer = new ArrayList<>();
