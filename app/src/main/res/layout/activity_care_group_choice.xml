@@ -42,6 +42,7 @@
         android:visibility="gone"
         android:layout_width="260dp"
         android:layout_height="80dp"
+        android:layout_marginTop="-20dp"
         android:layout_gravity="center">
 
         <EditText

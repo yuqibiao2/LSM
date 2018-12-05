@@ -20,9 +20,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.gson.Gson;
 import com.test.lsm.R;
+import com.test.lsm.adapter.ExpMemAdapter;
 import com.test.lsm.adapter.ExpMemInfoAdapter;
 import com.test.lsm.adapter.NorMemAdapter;
 import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
+import com.test.lsm.bean.json.GetMonitorGroupReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.fragment.care_group.MemLocationShowFragment;
@@ -66,6 +68,8 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     FrameLayout flMap;
     @BindView(R.id.iv_search_fold)
     ImageView ivSearchFold;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
 
 
     private BaseQuickAdapter<GetMonitorGroupDetailReturn.DataBean.MemInfoListBean, BaseViewHolder> norMemAdapter;
@@ -75,11 +79,13 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     private long groupId;
     private List<GetMonitorGroupDetailReturn.DataBean.MemInfoListBean> norMemInfoList;
     private MemLocationShowFragment memLocationShowFragment;
-    private AdapterLinearLayout allExpMem;
-    ExpMemInfoAdapter expMemInfoAdapter;
     private List<GetMonitorGroupDetailReturn.DataBean.MemInfoListBean> memInfoList;
-    private List<GetMonitorGroupDetailReturn.DataBean.ExpMemInfoListBean> expMemInfoList;
+    private List<GetMonitorGroupDetailReturn.DataBean.ExpMemInfoListBean> expMemInfoList = new ArrayList<>();
     private Gson mGson;
+    private String groupName;
+    private RecyclerView rvExpMem;
+    private ExpMemAdapter expMemAdapter;
+    private LinearLayoutManager expLayoutManager;
 
     @Override
     public int getLayoutId() {
@@ -90,7 +96,9 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     public void beforeInit() {
         super.beforeInit();
         mGson = new Gson();
-        groupId = getIntent().getLongExtra("groupId", -1);
+        Intent intent = getIntent();
+        groupId =intent.getLongExtra("groupId", -1);
+        groupName = intent.getStringExtra("groupName");
         apiMethodManager = APIMethodManager.getInstance();
         norMemInfoList = new ArrayList<>();
     }
@@ -99,6 +107,8 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     protected void initView() {
 
         MyKeyboardUtils.hidden(this);
+
+        tvTitle.setText(groupName);
 
         //初始化地图展示fragment
         memLocationShowFragment = new MemLocationShowFragment();
@@ -112,14 +122,18 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
         norMemAdapter.addHeaderView(header1);
         norMemAdapter.addHeaderView(header2);
         rvCgDetailNor.setAdapter(norMemAdapter);
-        allExpMem = header1.findViewById(R.id.all_cg_detail_exp);
-        LinearLayoutManager expLayoutManager = new LinearLayoutManager(this);
+        //allExpMem = header1.findViewById(R.id.all_cg_detail_exp);
+        rvExpMem = header1.findViewById(R.id.rv_exp_mem);
+        expLayoutManager = new LinearLayoutManager(this);
         expLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvExpMem.setLayoutManager(expLayoutManager);
+        expMemAdapter = new ExpMemAdapter(R.layout.rv_cg_detail_exp_item, expMemInfoList);
+        rvExpMem.setAdapter(expMemAdapter);
+
         int[] size = WindowUtils.getSize(this);
         llTop.measure(0, 0);
         int maxHeight = size[1] - llTop.getMeasuredHeight() - DimensChange.dp2px(this, 28);
         rlBottomSheet.getLayoutParams().height = maxHeight;
-
     }
 
     @Override
@@ -132,7 +146,10 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     // 当按了搜索之后关闭软键盘
                     MyKeyboardUtils.hidden(CareGroupDetailActivity.this);
-                    MyToast.showLong(CareGroupDetailActivity.this , "擴展中");
+                    String keyWord = v.getText().toString();
+                    locationAndReplaceKeyWord(keyWord  , norMemInfoList);
+                    locationAndReplaceKeyWordExp(keyWord  , expMemInfoList);
+                    //expLayoutManager.scrollToPosition(0);
                     return true;
                 }
                 return false;
@@ -157,10 +174,13 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
             }
         });
 
-        allExpMem.setOnItemClickListener(new AdapterLinearLayout.OnItemClickListener() {
+        expMemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 GetMonitorGroupDetailReturn.DataBean.ExpMemInfoListBean expMemInfo = expMemInfoList.get(position);
+                expMemInfo.setUserName(expMemInfo.getUserName()
+                        .replace("<font color = '#F13564'>", "")
+                        .replace("</font>" , ""));
                 CareGroupMemDetailActivity.startAction(CareGroupDetailActivity.this, mGson.toJson(expMemInfo));
             }
         });
@@ -170,6 +190,9 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo = memInfoList.get(position);
+                memInfo.setUserName(memInfo.getUserName()
+                        .replace("<font color = '#F13564'>", "")
+                        .replace("</font>" , ""));
                 CareGroupMemDetailActivity.startAction(CareGroupDetailActivity.this, mGson.toJson(memInfo));
             }
         });
@@ -195,8 +218,6 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
                 }
             }
         });
-
-
     }
 
     @Override
@@ -213,9 +234,9 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
                     norMemInfoList.addAll(memInfoList);
                     norMemAdapter.notifyDataSetChanged();
                     memLocationShowFragment.inflateMemInfo(memInfoList);
-                    expMemInfoList = data.getExpMemInfoList();
-                    expMemInfoAdapter = new ExpMemInfoAdapter(CareGroupDetailActivity.this, expMemInfoList);
-                    allExpMem.setAdapter(expMemInfoAdapter);
+                    List<GetMonitorGroupDetailReturn.DataBean.ExpMemInfoListBean> expData = data.getExpMemInfoList();
+                    expMemInfoList.addAll(expData);
+                    expMemAdapter.notifyDataSetChanged();
                 } else {
                     MyToast.showLong(CareGroupDetailActivity.this, "" + result.getMsg());
                 }
@@ -230,13 +251,85 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
         });
     }
 
+    /**
+     * 定位、替换关键词
+     *
+     * @param keyWord
+     * @param mData
+     */
+    private void locationAndReplaceKeyWord(String keyWord
+            , List<GetMonitorGroupDetailReturn.DataBean.MemInfoListBean> mData) {
+        int firstMatchIndex = -1;
+        //恢复所有颜色
+        for (int i = 0; i < mData.size(); i++) {
+            GetMonitorGroupDetailReturn.DataBean.MemInfoListBean dataBean = mData.get(i);
+            String groupName = dataBean.getUserName();
+            if (groupName.contains("</font>")){
+                String replace = groupName.replace("<font color = '#F13564'>", "")
+                        .replace("</font>" , "");
+                mData.get(i).setUserName(replace);
+            }
+        }
+        //替换关键词
+        for (int i = 0; i < mData.size(); i++) {
+            GetMonitorGroupDetailReturn.DataBean.MemInfoListBean dataBean = mData.get(i);
+            String groupName = dataBean.getUserName();
+            if (groupName.contains(keyWord)){
+                if (firstMatchIndex ==-1){
+                    firstMatchIndex = i;
+                }
+                String keyWordReplace ="<font color = '#F13564'>"+keyWord+"</font>";
+                String replacedGroupName = groupName.replace(keyWord, keyWordReplace);
+                mData.get(i).setUserName(replacedGroupName);
+            }
+        }
+        if (firstMatchIndex != -1){
+            rvCgDetailNor.smoothScrollToPosition(firstMatchIndex);
+            norMemAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void locationAndReplaceKeyWordExp(String keyWord
+            , List<GetMonitorGroupDetailReturn.DataBean.ExpMemInfoListBean> mData) {
+        int firstMatchIndex = -1;
+        //恢复所有颜色
+        for (int i = 0; i < mData.size(); i++) {
+            GetMonitorGroupDetailReturn.DataBean.MemInfoListBean dataBean = mData.get(i);
+            String groupName = dataBean.getUserName();
+            if (groupName.contains("</font>")){
+                String replace = groupName.replace("<font color = '#F13564'>", "")
+                        .replace("</font>" , "");
+                mData.get(i).setUserName(replace);
+            }
+        }
+        //替换关键词
+        for (int i = 0; i < mData.size(); i++) {
+            GetMonitorGroupDetailReturn.DataBean.MemInfoListBean dataBean = mData.get(i);
+            String groupName = dataBean.getUserName();
+            if (groupName.contains(keyWord)){
+                if (firstMatchIndex ==-1){
+                    firstMatchIndex = i;
+                }
+                String keyWordReplace ="<font color = '#F13564'>"+keyWord+"</font>";
+                String replacedGroupName = groupName.replace(keyWord, keyWordReplace);
+                mData.get(i).setUserName(replacedGroupName);
+            }
+        }
+        if (firstMatchIndex != -1){
+            expLayoutManager.scrollToPosition(firstMatchIndex);
+            expMemAdapter.notifyDataSetChanged();
+        }
+    }
+
+
     public void back(View view) {
         finish();
     }
 
-    public static void startAction(Context context, Long groupId) {
+    public static void startAction(Context context, Long groupId, String groupName) {
         Intent intent = new Intent(context, CareGroupDetailActivity.class);
         intent.putExtra("groupId", groupId);
+        intent.putExtra("groupName", groupName);
         context.startActivity(intent);
     }
 

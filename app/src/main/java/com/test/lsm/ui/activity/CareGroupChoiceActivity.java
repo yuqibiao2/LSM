@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -54,7 +55,6 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
     private APIMethodManager apiMethodManager;
     private UserLoginReturn.PdBean user;
     private List<GetMonitorGroupReturn.DataBean> mData;
-    private List<GetMonitorGroupReturn.DataBean> data;
 
     @Override
     public int getLayoutId() {
@@ -76,7 +76,7 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
         adapter = new BaseQuickAdapter<GetMonitorGroupReturn.DataBean, BaseViewHolder>(R.layout.rv_care_group_show_item, mData) {
             @Override
             protected void convert(BaseViewHolder helper, GetMonitorGroupReturn.DataBean item) {
-                helper.setText(R.id.tv_care_group_name, item.getGroupName());
+                helper.setText(R.id.tv_care_group_name, Html.fromHtml(item.getGroupName()));
             }
         };
         rvCareGroup.setAdapter(adapter);
@@ -92,7 +92,7 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
             public void onSuccess(GetMonitorGroupReturn result) {
                 int code = result.getCode();
                 if (code == 200) {
-                    data = result.getData();
+                    List<GetMonitorGroupReturn.DataBean> data = result.getData();
                     mData.addAll(data);
                     adapter.notifyDataSetChanged();
                 } else {
@@ -119,8 +119,8 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     // 当按了搜索之后关闭软键盘
                     MyKeyboardUtils.hidden(CareGroupChoiceActivity.this);
-                    MyToast.showLong(CareGroupChoiceActivity.this , "擴展中");
-                    rvCareGroup.smoothScrollToPosition(3);
+                    String keyWord = v.getText().toString();
+                    locationAndReplaceKeyWord(keyWord);
                     return true;
                 }
                 return false;
@@ -148,10 +148,53 @@ public class CareGroupChoiceActivity extends LsmBaseActivity {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                CareGroupDetailActivity.startAction(CareGroupChoiceActivity.this, data.get(position).getGroupId());
+                String groupName = mData
+                        .get(position).getGroupName()
+                        .replace("<font color = '#F13564'>", "")
+                        .replace("</font>" , "");;
+
+                CareGroupDetailActivity.startAction(CareGroupChoiceActivity.this,
+                        mData.get(position).getGroupId()
+                        ,groupName);
             }
         });
 
+    }
+
+    /**
+     * 定位、替换搜索关键词
+     *
+     * @param keyWord
+     */
+    private void locationAndReplaceKeyWord(String keyWord) {
+        int firstMatchIndex = -1;
+        //恢复所有颜色
+        for (int i = 0; i < mData.size(); i++) {
+            GetMonitorGroupReturn.DataBean dataBean = mData.get(i);
+            String groupName = dataBean.getGroupName();
+            if (groupName.contains("</font>")){
+                String replace = groupName.replace("<font color = '#F13564'>", "")
+                        .replace("</font>" , "");
+                mData.get(i).setGroupName(replace);
+            }
+        }
+        //替换关键词
+        for (int i = 0; i < mData.size(); i++) {
+            GetMonitorGroupReturn.DataBean dataBean = mData.get(i);
+            String groupName = dataBean.getGroupName();
+            if (groupName.contains(keyWord)){
+                if (firstMatchIndex ==-1){
+                    firstMatchIndex = i;
+                }
+                String keyWordReplace ="<font color = '#F13564'>"+keyWord+"</font>";
+                String replacedGroupName = groupName.replace(keyWord, keyWordReplace);
+                mData.get(i).setGroupName(replacedGroupName);
+            }
+        }
+        if (firstMatchIndex != -1){
+            rvCareGroup.smoothScrollToPosition(firstMatchIndex);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public void back(View view) {
