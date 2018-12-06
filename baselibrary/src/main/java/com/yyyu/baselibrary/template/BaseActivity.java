@@ -1,5 +1,7 @@
 package com.yyyu.baselibrary.template;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -139,12 +141,24 @@ public  abstract  class BaseActivity extends NaviAppCompatActivity {
         ft.commit();
     }
 
+    /**
+     *设置动画
+     */
     protected void setTransition() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setEnterTransition(new Fade());
             getWindow().setReturnTransition(new Fade());
             getWindow().setSharedElementReturnTransition(new ChangeBounds());
             getWindow().setSharedElementEnterTransition(new ChangeBounds());
+        }
+    }
+
+    /**
+     * 设置竖屏显示
+     */
+    protected  void setActPortrait(){
+        if(getResources().getConfiguration().orientation != Configuration.ORIENTATION_PORTRAIT){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
 

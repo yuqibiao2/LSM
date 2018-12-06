@@ -1,6 +1,5 @@
 package com.test.lsm.ui.dialog;
 
-import android.content.Context;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,7 +14,6 @@ import com.test.lsm.bean.json.ConnectMonitorReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.SetCareGroupActivity;
-import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyToast;
 import com.yyyu.baselibrary.utils.WindowUtils;
 
@@ -44,6 +42,8 @@ public class AddGroupAttachDialog extends LsmBaseDialog {
     final  SetCareGroupActivity mSetCareGroupActivity;
     private Integer mUserId;
 
+    private boolean isDestroy = false;
+
     public AddGroupAttachDialog(SetCareGroupActivity setCareGroupActivity, Integer userId) {
         super(setCareGroupActivity);
         this.mSetCareGroupActivity = setCareGroupActivity;
@@ -60,6 +60,7 @@ public class AddGroupAttachDialog extends LsmBaseDialog {
     @Override
     public void beforeInit() {
         super.beforeInit();
+        isDestroy = false;
         apiMethodManager = APIMethodManager.getInstance();
     }
 
@@ -98,15 +99,19 @@ public class AddGroupAttachDialog extends LsmBaseDialog {
                         } else {
                             MyToast.showLong(mContext, result.getMsg());
                         }
-                        pbAdd.setVisibility(View.GONE);
-                        btnConnect.setEnabled(true);
+                        if (!isDestroy){
+                            pbAdd.setVisibility(View.GONE);
+                            btnConnect.setEnabled(true);
+                        }
                     }
 
                     @Override
                     public void onFailure(Throwable throwable) {
                         MyToast.showLong(mContext, "异常：" + throwable.getMessage());
-                        pbAdd.setVisibility(View.GONE);
-                        btnConnect.setEnabled(true);
+                        if (isDestroy){
+                            pbAdd.setVisibility(View.GONE);
+                            btnConnect.setEnabled(true);
+                        }
                     }
                 });
 
@@ -117,6 +122,7 @@ public class AddGroupAttachDialog extends LsmBaseDialog {
 
     @Override
     public void onDetachedFromWindow() {
+        isDestroy = true;
         super.onDetachedFromWindow();
     }
 }

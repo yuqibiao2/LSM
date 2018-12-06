@@ -31,7 +31,7 @@ public class NorMemAdapter  extends BaseQuickAdapter<GetMonitorGroupDetailReturn
         helper.setText(R.id.tv_mem_tel , ""+item.getPhone());
         helper.setText(R.id.tv_mem_hr , ""+item.getHeartNum()+" bpm");
         helper.setText(R.id.tv_mem_calorie , ""+item.getCalorieValue()+" 千卡");
-        helper.setText(R.id.tv_mem_step , ""+item.getHeartNum()+" 步");
+        helper.setText(R.id.tv_mem_step , ""+item.getStepNum()+" 步");
         RoundImageView rivIcon = helper.getView(R.id.riv_icon);
         GlidUtils.load(mContext ,rivIcon ,  item.getUserImage());
         int icTag = R.mipmap.ic_mon_mark_blue;

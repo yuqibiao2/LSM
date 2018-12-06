@@ -90,7 +90,6 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     private RecyclerView rvExpMem;
     private ExpMemAdapter expMemAdapter;
     private LinearLayoutManager expLayoutManager;
-    private int currentMemIndex = -1;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -145,7 +144,7 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
 
         int[] size = WindowUtils.getSize(this);
         llTop.measure(0, 0);
-        int maxHeight = size[1] - llTop.getMeasuredHeight() - DimensChange.dp2px(this, 28);
+        int maxHeight = size[1] - llTop.getMeasuredHeight() - DimensChange.dp2px(this, 75);
         rlBottomSheet.getLayoutParams().height = maxHeight;
     }
 

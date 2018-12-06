@@ -1,7 +1,6 @@
 package com.test.lsm.ui.activity;
 
 import android.Manifest;
-import android.app.Application;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothGatt;
 import android.content.Context;
@@ -61,6 +60,8 @@ public abstract class LsmBaseActivity extends BaseActivity implements EasyPermis
     @Override
     public void beforeInit() {
         super.beforeInit();
+        //设置所有Activity竖屏
+        setActPortrait();
         mUnbind = ButterKnife.bind(this);
         loadingDialog = new LoadingDialog(this);
         if (setDefaultStatusBarCompat()) {
