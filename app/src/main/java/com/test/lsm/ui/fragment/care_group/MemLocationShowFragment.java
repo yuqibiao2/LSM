@@ -87,12 +87,10 @@ public class MemLocationShowFragment extends LsmBaseFragment {
     }
 
     public void inflateMemInfo(List<GetMonitorGroupDetailReturn.DataBean.MemInfoListBean> memInfoList){
-
+        mBaiduMap.clear();
         mMemInfoList = memInfoList;
-
         List<OverlayOptions> options = new ArrayList<>();
         List<LatLng> latLngList  = new ArrayList<>();
-
         for (int i = 0; i < memInfoList.size(); i++) {
             GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo = memInfoList.get(i);
             String lat = memInfo.getCurrentLat();

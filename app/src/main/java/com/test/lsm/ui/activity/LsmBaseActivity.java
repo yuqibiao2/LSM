@@ -90,6 +90,7 @@ public abstract class LsmBaseActivity extends BaseActivity implements EasyPermis
 
         });
 
+        //蓝牙断开重连
         BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
             @Override
             public void dismiss(BleDevice bleDevice) {

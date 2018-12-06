@@ -1,5 +1,6 @@
 package com.test.lsm.bean.json;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -40,9 +41,36 @@ public class GetMonitorGroupMemDetailReturn {
     }
 
     public static class DataBean {
+        private Integer heartNum;
+        private BigDecimal calorieValue;
+        private Integer stepNum;
         private HrvInfoBean hrvInfo;
         private TraceInfoBean traceInfo;
         private List<HeartInfoListBean> heartInfoList;
+
+        public Integer getHeartNum() {
+            return heartNum;
+        }
+
+        public void setHeartNum(Integer heartNum) {
+            this.heartNum = heartNum;
+        }
+
+        public BigDecimal getCalorieValue() {
+            return calorieValue;
+        }
+
+        public void setCalorieValue(BigDecimal calorieValue) {
+            this.calorieValue = calorieValue;
+        }
+
+        public Integer getStepNum() {
+            return stepNum;
+        }
+
+        public void setStepNum(Integer stepNum) {
+            this.stepNum = stepNum;
+        }
 
         public HrvInfoBean getHrvInfo() {
             return hrvInfo;

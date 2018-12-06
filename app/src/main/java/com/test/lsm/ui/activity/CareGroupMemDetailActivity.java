@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.test.lsm.R;
+import com.test.lsm.bean.event.UpdateMemData;
 import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
 import com.test.lsm.bean.json.GetMonitorGroupMemDetailReturn;
 import com.test.lsm.net.APIMethodManager;
@@ -27,6 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import de.greenrobot.event.ThreadMode;
 import me.relex.circleindicator.CircleIndicator;
 
 /**
@@ -67,7 +71,6 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
     private CareGroupMemHRRecordFragment careGroupMemHRRecordFragment;
     private CareGroupMemRunTraceFragment careGroupMemRunTraceFragment;
 
-
     @Override
     public int getLayoutId() {
         return R.layout.activity_care_group_mem_detail;
@@ -76,6 +79,7 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
     @Override
     public void beforeInit() {
         super.beforeInit();
+        EventBus.getDefault().register(this);
         apiMethodManager = APIMethodManager.getInstance();
         Intent intent = getIntent();
         String memInfoJsonStr = intent.getStringExtra("memInfoJsonStr");
@@ -108,9 +112,6 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
         GlidUtils.load(this, rivUserIcon, memInfo.getUserImage());
         tvUserName.setText("" + memInfo.getUserName());
         tvTel.setText("" + memInfo.getPhone());
-        tvHr.setText("" + memInfo.getHeartNum() + " bpm");
-        tvCalorie.setText("" + memInfo.getCalorieValue() + " 千卡");
-        tvStep.setText("" + memInfo.getStepNum() + " 步");
         String watchingTag = memInfo.getWatchingTag();
         int icTag = R.mipmap.ic_mon_mark_blue;
         switch (watchingTag){
@@ -141,8 +142,19 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
     @Override
     protected void initData() {
         super.initData();
+        inflateData();
+    }
 
-        apiMethodManager.getMonitorGroupMemDetail(provider, memInfo.getUserId(), new IRequestCallback<GetMonitorGroupMemDetailReturn>() {
+
+    private void inflateHeaderData(GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo) {
+        tvHr.setText("" + memInfo.getHeartNum() + " bpm");
+        tvCalorie.setText("" + memInfo.getCalorieValue() + " 千卡");
+        tvStep.setText("" + memInfo.getStepNum() + " 步");
+    }
+
+    private void inflateData(){
+        apiMethodManager.getMonitorGroupMemDetail(provider, memInfo.getUserId()
+                , new IRequestCallback<GetMonitorGroupMemDetailReturn>() {
             @Override
             public void onSuccess(GetMonitorGroupMemDetailReturn result) {
                 int code = result.getCode();
@@ -154,6 +166,11 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
                     careGroupMemHRRecordFragment.inflateLineChart(heartInfoList);
                     GetMonitorGroupMemDetailReturn.DataBean.TraceInfoBean traceInfo = data.getTraceInfo();
                     careGroupMemRunTraceFragment.inflateTraceInfo(traceInfo);
+                    GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo = new GetMonitorGroupDetailReturn.DataBean.MemInfoListBean();
+                    memInfo.setHeartNum(""+data.getHeartNum());
+                    memInfo.setCalorieValue(""+data.getCalorieValue());
+                    memInfo.setStepNum(""+data.getStepNum());
+                    inflateHeaderData(memInfo);
                 } else {
                     MyToast.showLong(CareGroupMemDetailActivity.this, "" + result.getMsg());
                 }
@@ -178,5 +195,14 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
         context.startActivity(intent);
     }
 
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void updateData(UpdateMemData updateMemData){
+        inflateData();
+    }
 
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 }

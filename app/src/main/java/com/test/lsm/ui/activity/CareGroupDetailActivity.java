@@ -2,6 +2,8 @@ package com.test.lsm.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -23,6 +25,7 @@ import com.test.lsm.R;
 import com.test.lsm.adapter.ExpMemAdapter;
 import com.test.lsm.adapter.ExpMemInfoAdapter;
 import com.test.lsm.adapter.NorMemAdapter;
+import com.test.lsm.bean.event.UpdateMemData;
 import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
 import com.test.lsm.bean.json.GetMonitorGroupReturn;
 import com.test.lsm.net.APIMethodManager;
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import de.greenrobot.event.EventBus;
 
 /**
  * 功能：关心群组详情
@@ -86,6 +90,15 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     private RecyclerView rvExpMem;
     private ExpMemAdapter expMemAdapter;
     private LinearLayoutManager expLayoutManager;
+    private int currentMemIndex = -1;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            getData();
+        }
+    };
 
     @Override
     public int getLayoutId() {
@@ -174,6 +187,7 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
             }
         });
 
+        //异常mem点击
         expMemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -224,7 +238,8 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     protected void initData() {
         super.initData();
         showLoadDialog();
-        apiMethodManager.getMonitorGroupDetail(provider, groupId, new IRequestCallback<GetMonitorGroupDetailReturn>() {
+        apiMethodManager.getMonitorGroupDetail(provider, groupId,
+                new IRequestCallback<GetMonitorGroupDetailReturn>() {
             @Override
             public void onSuccess(GetMonitorGroupDetailReturn result) {
                 int code = result.getCode();
@@ -237,6 +252,9 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
                     List<GetMonitorGroupDetailReturn.DataBean.ExpMemInfoListBean> expData = data.getExpMemInfoList();
                     expMemInfoList.addAll(expData);
                     expMemAdapter.notifyDataSetChanged();
+
+                    mHandler.sendEmptyMessageDelayed(0 , 10*1000);
+
                 } else {
                     MyToast.showLong(CareGroupDetailActivity.this, "" + result.getMsg());
                 }
@@ -250,6 +268,40 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
             }
         });
     }
+
+    private void getData(){
+        mHandler.sendEmptyMessageDelayed(0 , 10*1000);
+        //发送消息让CareGroupMemDetailActivity更新数据
+        EventBus.getDefault().post(new UpdateMemData());
+        apiMethodManager.getMonitorGroupDetail(provider, groupId,
+                new IRequestCallback<GetMonitorGroupDetailReturn>() {
+                    @Override
+                    public void onSuccess(GetMonitorGroupDetailReturn result) {
+                        int code = result.getCode();
+                        if (code == 200) {
+                            GetMonitorGroupDetailReturn.DataBean data = result.getData();
+                            memInfoList = data.getMemInfoList();
+                            norMemInfoList.clear();
+                            norMemInfoList.addAll(memInfoList);
+                            norMemAdapter.notifyDataSetChanged();
+                            //地图
+                            memLocationShowFragment.inflateMemInfo(memInfoList);
+                            List<GetMonitorGroupDetailReturn.DataBean.ExpMemInfoListBean> expData = data.getExpMemInfoList();
+                            expMemInfoList.clear();
+                            expMemInfoList.addAll(expData);
+                            expMemAdapter.notifyDataSetChanged();
+                        } else {
+                            MyToast.showLong(CareGroupDetailActivity.this, "" + result.getMsg());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        MyToast.showLong(CareGroupDetailActivity.this, "" + throwable.getMessage());
+                    }
+                });
+    }
+
 
     /**
      * 定位、替换关键词

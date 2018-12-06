@@ -66,7 +66,7 @@ public class CareGroupMemHRRecordFragment extends LsmBaseFragment {
 
     @Override
     protected void initView() {
-        initChart(ccHt);
+
     }
 
     @Override
@@ -80,6 +80,7 @@ public class CareGroupMemHRRecordFragment extends LsmBaseFragment {
     }
 
     public void inflateLineChart(List<GetMonitorGroupMemDetailReturn.DataBean.HeartInfoListBean> mData){
+        initChart(ccHt);
         if (mData.size()<=0) return;
         List<Entry> lineValues = new ArrayList<>();
         for (int i = 0; i < mData.size(); i++) {
