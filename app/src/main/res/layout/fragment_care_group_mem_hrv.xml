@@ -59,7 +59,7 @@
         <ImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@mipmap/ic_down_white" />
+            android:src="@mipmap/ic_emotion_white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="疲勞"
+            android:text="情緒"
             android:textColor="@color/my_white"
             android:textSize="16sp" />
 

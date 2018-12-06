@@ -119,7 +119,7 @@ public class UploadHealthInfoService extends Service {
             public void run() {
                 while (true){
                     try {
-                        Thread.sleep(10*60*1000);
+                        Thread.sleep(3*60*1000);
 
                         //rriBufferCircularFifoQueue<Long> rriBuffer = Constant.rriBuffer;
                         List<Integer> lastedUsefulRriList = Constant.lastedUsefulRriList;

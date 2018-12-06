@@ -50,10 +50,10 @@ public class CareGroupMemHRVFragment extends LsmBaseFragment {
     public void inflateHrv(GetMonitorGroupMemDetailReturn.DataBean.HrvInfoBean hrvInfo) {
         int bodyFatigue = hrvInfo.getBodyFatigue();
         HrvUtils.inflateBodyFitness(getContext() , bodyFatigue , ivPhysical , tvPhysical);
-        int bodyFitness = hrvInfo.getBodyFitness();
-        HrvUtils.inflateBodyFatigue(getContext() , bodyFitness , ivFatigue ,tvFatigue );
-        int moodStability = hrvInfo.getMindFitness();
-        HrvUtils.inflateMindFitness(getContext(), moodStability, ivPressure , tvPressure);
+        int moodStability = hrvInfo.getMoodStability();
+        HrvUtils.inflateMoodStability(getContext() , moodStability , ivFatigue ,tvFatigue );
+        int mindFitness = hrvInfo.getMindFitness();
+        HrvUtils.inflateMindFitness(getContext(), mindFitness, ivPressure , tvPressure);
     }
 
 }
