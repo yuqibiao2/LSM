@@ -1,7 +1,9 @@
 package com.test.lsm.ui.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -15,8 +17,10 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.UserMonitorsAdapter;
+import com.test.lsm.bean.json.DoFooBean;
 import com.test.lsm.bean.json.EmptyDataReturn;
 import com.test.lsm.bean.json.GetUserMonitorsReturn;
+import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.vo.GroupAttach;
 import com.test.lsm.net.APIMethodManager;
@@ -78,6 +82,33 @@ public class SetCareGroupActivity extends LsmBaseActivity {
     @Override
     protected void initListener() {
 
+        //---删除监听人
+        userMonitorsAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, final int position) {
+                new AlertDialog.Builder(SetCareGroupActivity.this)
+                        .setTitle(getStr(R.string.operate))
+                        .setMessage("確認要刪除該監聽人嗎？")
+                        .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialogInterface, int i) {
+                                long attachId = monitorsList.get(position).getAttachId();
+                                deleteListener(attachId);
+                            }
+                        })
+                        .setNegativeButton(getStr(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
+                return false;
+            }
+        });
+
+        //---添加监听人
         ivAddCareGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +166,26 @@ public class SetCareGroupActivity extends LsmBaseActivity {
     protected void initData() {
         super.initData();
         inflateData();
+    }
+
+    public void deleteListener(Long attachId){
+        apiMethodManager.deleteGroupAttach(provider, attachId, new IRequestCallback<EmptyDataReturn>() {
+            @Override
+            public void onSuccess(EmptyDataReturn result) {
+                int code = result.getCode();
+                if (code == 200){
+                    inflateData();
+                }else{
+                    MyToast.showLong(SetCareGroupActivity.this , "删除失败"+result.getMsg());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                MyToast.showLong(SetCareGroupActivity.this , "删除失败"+throwable.getMessage());
+            }
+        });
+
     }
 
     public void inflateData(){

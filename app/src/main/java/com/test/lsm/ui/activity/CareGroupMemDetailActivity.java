@@ -22,6 +22,7 @@ import com.test.lsm.ui.fragment.care_group.CareGroupMemHRRecordFragment;
 import com.test.lsm.ui.fragment.care_group.CareGroupMemHRVFragment;
 import com.test.lsm.ui.fragment.care_group.CareGroupMemRunTraceFragment;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
+import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
@@ -167,9 +168,9 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
                     GetMonitorGroupMemDetailReturn.DataBean.TraceInfoBean traceInfo = data.getTraceInfo();
                     careGroupMemRunTraceFragment.inflateTraceInfo(traceInfo);
                     GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo = new GetMonitorGroupDetailReturn.DataBean.MemInfoListBean();
-                    memInfo.setHeartNum(""+data.getHeartNum());
-                    memInfo.setCalorieValue(""+data.getCalorieValue());
-                    memInfo.setStepNum(""+data.getStepNum());
+                    memInfo.setHeartNum(data.getHeartNum());
+                    memInfo.setCalorieValue(data.getCalorieValue());
+                    memInfo.setStepNum(data.getStepNum());
                     inflateHeaderData(memInfo);
                 } else {
                     MyToast.showLong(CareGroupMemDetailActivity.this, "" + result.getMsg());
@@ -179,6 +180,7 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
 
             @Override
             public void onFailure(Throwable throwable) {
+                throwable.printStackTrace();
                 MyToast.showLong(CareGroupMemDetailActivity.this, "異常：" + throwable.getMessage());
                 pbMem.setVisibility(View.GONE);
             }

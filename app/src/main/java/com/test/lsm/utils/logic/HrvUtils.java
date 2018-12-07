@@ -17,6 +17,37 @@ import com.test.lsm.R;
 public class HrvUtils {
 
     /**
+     * stressTension
+     *
+     * @param context
+     * @param stressTension
+     * @param ivIcon
+     * @param tvTip
+     */
+    public static void inflateStressTension(Context context, int stressTension, ImageView ivIcon, TextView tvTip){
+        if (stressTension <= -30) {//过渡低落
+            chgStatus1(ivIcon, 1);
+            tvTip.setText(context.getResources().getString(R.string.stress_level_1));
+        } else if (stressTension <= -10) {//低落
+            chgStatus1(ivIcon, 2);
+            tvTip.setText(context.getResources().getString(R.string.stress_level_2));
+        } else if (stressTension <= 10) {//良好
+            chgStatus1(ivIcon, 3);
+            tvTip.setText(context.getResources().getString(R.string.stress_level_3));
+        } else if (stressTension <= 30) {//兴奋
+            chgStatus1(ivIcon, 4);
+            tvTip.setText(context.getResources().getString(R.string.stress_level_4));
+        } else if (stressTension <= 50) {//过渡兴奋
+            chgStatus1(ivIcon, 5);
+            tvTip.setText(context.getResources().getString(R.string.stress_level_5));
+        } else {
+            chgStatus2(ivIcon, 5);
+            tvTip.setText(context.getResources().getString(R.string.stress_level_5));
+        }
+    }
+
+
+    /**
      * bodyFatigue
      *
      * @param context

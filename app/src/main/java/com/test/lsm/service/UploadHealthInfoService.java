@@ -158,7 +158,7 @@ public class UploadHealthInfoService extends Service {
                                     saveUserHRVVo.setSTRESSTENSION(""+hrvIndexBean.getStressTension());
                                     saveUserHRVVo.setMOODSTABILITY(""+hrvIndexBean.getMoodStability());
                                     saveUserHRVVo.setMINDFITNESS(""+hrvIndexBean.getMindFitness());
-                                    saveUserHRVVo.setMINDFATIGUE(""+hrvIndexBean.getBodyFatigue());
+                                    saveUserHRVVo.setMINDFATIGUE(""+hrvIndexBean.getMindFatigue());
 
                                     apiMethodManager.saveUserHRV(saveUserHRVVo, new IRequestCallback<SaveUserHRV>() {
                                         @Override

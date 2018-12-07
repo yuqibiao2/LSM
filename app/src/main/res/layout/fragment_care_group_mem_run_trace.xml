@@ -5,9 +5,20 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="260dp"
+        android:layout_height="160dp">
     <com.baidu.mapapi.map.MapView
         android:id="@+id/map_run"
         android:layout_width="260dp"
         android:layout_height="160dp" />
+        <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#FFD900"
+            android:text="暫時未獲取到數據"/>
+    </RelativeLayout>
 
 </LinearLayout>

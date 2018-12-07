@@ -69,7 +69,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_fatigue"
+                android:id="@+id/tv_mood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -78,7 +78,7 @@
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/iv_fatigue"
+                android:id="@+id/iv_mood"
                 android:layout_width="150dp"
                 android:layout_height="15dp"
                 android:background="@mipmap/ic_bar13" />

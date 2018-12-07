@@ -860,7 +860,7 @@ public class InformationFragment extends LsmBaseFragment {
                                     public void onNotifySuccess() {
                                         MyLog.d(TAG, "AA71通知开始成功===============");
                                         //发送通知读取电量
-                                        mHandler.sendEmptyMessageDelayed(BATTERY_CODE, 10 * 1000);
+                                        mHandler.sendEmptyMessageDelayed(BATTERY_CODE, 5*60 * 1000);
                                     }
 
                                     @Override

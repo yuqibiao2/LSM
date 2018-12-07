@@ -23,10 +23,10 @@ public class CareGroupMemHRVFragment extends LsmBaseFragment {
     TextView tvPhysical;
     @BindView(R.id.iv_physical)
     ImageView ivPhysical;
-    @BindView(R.id.tv_fatigue)
-    TextView tvFatigue;
-    @BindView(R.id.iv_fatigue)
-    ImageView ivFatigue;
+    @BindView(R.id.tv_mood)
+    TextView tvMood;
+    @BindView(R.id.iv_mood)
+    ImageView ivMood;
     @BindView(R.id.tv_pressure)
     TextView tvPressure;
     @BindView(R.id.iv_pressure)
@@ -48,10 +48,13 @@ public class CareGroupMemHRVFragment extends LsmBaseFragment {
     }
 
     public void inflateHrv(GetMonitorGroupMemDetailReturn.DataBean.HrvInfoBean hrvInfo) {
-        int bodyFatigue = hrvInfo.getBodyFatigue();
-        HrvUtils.inflateBodyFitness(getContext() , bodyFatigue , ivPhysical , tvPhysical);
+        //---体力状态
+        int bodyFitness = hrvInfo.getBodyFitness();
+        HrvUtils.inflateBodyFitness(getContext() , bodyFitness , ivPhysical , tvPhysical);
+        //---情绪
         int moodStability = hrvInfo.getMoodStability();
-        HrvUtils.inflateMoodStability(getContext() , moodStability , ivFatigue ,tvFatigue );
+        HrvUtils.inflateMoodStability(getContext() , moodStability , ivMood, tvMood);
+        //---压力
         int mindFitness = hrvInfo.getMindFitness();
         HrvUtils.inflateMindFitness(getContext(), mindFitness, ivPressure , tvPressure);
     }

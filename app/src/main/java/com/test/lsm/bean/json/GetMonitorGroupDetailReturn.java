@@ -118,11 +118,11 @@ public class GetMonitorGroupDetailReturn {
             private String userName;
             private String phone;
             private String userImage;
-            private String heartNum;
-            private String calorieValue;
-            private String stepNum;
-            private String currentLon;
-            private String currentLat;
+            private Integer heartNum;
+            private Double calorieValue;
+            private Integer stepNum;
+            private Double currentLon;
+            private Double currentLat;
             private String watchingTag;
 
             public int getUserId() {
@@ -157,43 +157,43 @@ public class GetMonitorGroupDetailReturn {
                 this.userImage = userImage;
             }
 
-            public String getHeartNum() {
+            public Integer getHeartNum() {
                 return heartNum;
             }
 
-            public void setHeartNum(String heartNum) {
+            public void setHeartNum(Integer heartNum) {
                 this.heartNum = heartNum;
             }
 
-            public String getCalorieValue() {
+            public Double getCalorieValue() {
                 return calorieValue;
             }
 
-            public void setCalorieValue(String calorieValue) {
+            public void setCalorieValue(Double calorieValue) {
                 this.calorieValue = calorieValue;
             }
 
-            public String getStepNum() {
+            public Integer getStepNum() {
                 return stepNum;
             }
 
-            public void setStepNum(String stepNum) {
+            public void setStepNum(Integer stepNum) {
                 this.stepNum = stepNum;
             }
 
-            public String getCurrentLon() {
+            public Double getCurrentLon() {
                 return currentLon;
             }
 
-            public void setCurrentLon(String currentLon) {
+            public void setCurrentLon(Double currentLon) {
                 this.currentLon = currentLon;
             }
 
-            public String getCurrentLat() {
+            public Double getCurrentLat() {
                 return currentLat;
             }
 
-            public void setCurrentLat(String currentLat) {
+            public void setCurrentLat(Double currentLat) {
                 this.currentLat = currentLat;
             }
 

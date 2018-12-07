@@ -93,8 +93,8 @@ public class MemLocationShowFragment extends LsmBaseFragment {
         List<LatLng> latLngList  = new ArrayList<>();
         for (int i = 0; i < memInfoList.size(); i++) {
             GetMonitorGroupDetailReturn.DataBean.MemInfoListBean memInfo = memInfoList.get(i);
-            String lat = memInfo.getCurrentLat();
-            String lon = memInfo.getCurrentLon();
+            String lat = ""+memInfo.getCurrentLat();
+            String lon = ""+memInfo.getCurrentLon();
             if (!TextUtils.isEmpty(lat) && !TextUtils.isEmpty(lon)){
                 Double latD = Double.valueOf(lat);
                 Double lonD = Double.valueOf(lon);

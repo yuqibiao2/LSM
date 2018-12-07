@@ -18,6 +18,7 @@ import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.HrRecordActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
+import com.test.lsm.utils.logic.HrvUtils;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
@@ -190,97 +191,16 @@ public class HeartDetailFragment extends LsmBaseFragment {
         //---体力状态
         Integer bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());
         Constant.lastedBodyFitness = bodyFitness;
-        if (bodyFitness >= 30) {
-            chgStatus1(ivPhysical, 5);
-            tvPhysical.setText(getStr(R.string.physical_level5));
-        } else if (bodyFitness >= 10) {
-            chgStatus1(ivPhysical, 4);
-            tvPhysical.setText(getStr(R.string.physical_level4));
-        } else if (bodyFitness >= -10) {
-            chgStatus1(ivPhysical, 3);
-            tvPhysical.setText(getStr(R.string.physical_level3));
-        } else if (bodyFitness >= -30) {
-            chgStatus1(ivPhysical, 2);
-            tvPhysical.setText(getStr(R.string.physical_level2));
-        } else if (bodyFitness >= -50) {
-            chgStatus1(ivPhysical, 1);
-            tvPhysical.setText(getStr(R.string.physical_level1));
-        } else {
-            chgStatus1(ivPhysical, 1);
-            tvPhysical.setText(getStr(R.string.physical_level1));
-        }
-
+        HrvUtils.inflateBodyFitness(getContext() , bodyFitness , ivPhysical , tvPhysical);
         //---脑力
         int mindFitness = Integer.parseInt(hrvIndexBean.getMindFitness());
-        if (mindFitness >= 30) {
-            chgStatus1(ivMental, 5);
-            tvMental.setText(getStr(R.string.fitness_level5));
-        } else if (mindFitness >= 10) {
-            chgStatus1(ivMental, 4);
-            tvMental.setText(getStr(R.string.fitness_level4));
-        } else if (mindFitness >= -10) {
-            chgStatus1(ivMental, 3);
-            tvMental.setText(getStr(R.string.fitness_level3));
-        } else if (mindFitness >= -30) {
-            chgStatus1(ivMental, 2);
-            tvMental.setText(getStr(R.string.fitness_level2));
-        } else if (mindFitness >= -50) {
-            chgStatus1(ivMental, 1);
-            tvMental.setText(getStr(R.string.fitness_level1));
-        } else {
-            chgStatus1(ivMental, 1);
-            tvMental.setText(getStr(R.string.fitness_level1));
-        }
-
+        HrvUtils.inflateMindFitness(getContext() , mindFitness , ivMental , tvMental);
         //---压力
         Integer stress = Integer.parseInt(hrvIndexBean.getStressTension());
-        if (stress <= -30) {//过渡低落
-            chgStatus1(ivPressure, 1);
-            tvPressure.setText(getStr(R.string.stress_level_1));
-        } else if (stress <= -10) {//低落
-            chgStatus1(ivPressure, 2);
-            tvPressure.setText(getStr(R.string.stress_level_2));
-        } else if (stress <= 10) {//良好
-            chgStatus1(ivPressure, 3);
-            tvPressure.setText(getStr(R.string.stress_level_3));
-        } else if (stress <= 30) {//兴奋
-            chgStatus1(ivPressure, 4);
-            tvPressure.setText(getStr(R.string.stress_level_4));
-        } else if (stress <= 50) {//过渡兴奋
-            chgStatus1(ivPressure, 5);
-            tvPressure.setText(getStr(R.string.stress_level_5));
-        } else {
-            chgStatus2(ivPressure, 5);
-            tvPressure.setText(getStr(R.string.stress_level_5));
-        }
-
+        HrvUtils.inflateStressTension(getContext() , stress , ivPressure , tvPressure);
         //---情绪
         Integer mood = Integer.parseInt(hrvIndexBean.getMoodStability());
-        if (mood <= -30) {//过渡松散
-            tvEmotion.setText(getStr(R.string.mood_level1));
-            chgStatus1(ivEmotion, 1);
-            ivPressureIcon.setImageResource(R.mipmap.ic_emotion1);
-        } else if (mood <= -10) {//松散
-            tvEmotion.setText(getStr(R.string.mood_level2));
-            chgStatus1(ivEmotion, 2);
-            ivPressureIcon.setImageResource(R.mipmap.ic_emotion2);
-        } else if (mood <= 10) {//正常
-            chgStatus1(ivEmotion, 3);
-            tvEmotion.setText(getStr(R.string.mood_level3));
-            ivPressureIcon.setImageResource(R.mipmap.ic_emotion3);
-        } else if (mood <= 30) {//紧张
-            tvEmotion.setText(getStr(R.string.mood_level4));
-            chgStatus1(ivEmotion, 4);
-            ivPressureIcon.setImageResource(R.mipmap.ic_emotion4);
-        } else if (mood <= 50) {//过渡紧张
-            tvEmotion.setText(getStr(R.string.mood_level5));
-            chgStatus1(ivEmotion, 5);
-            ivPressureIcon.setImageResource(R.mipmap.ic_emotion5);
-        } else {
-            chgStatus1(ivEmotion, 5);
-            tvEmotion.setText(getStr(R.string.mood_level5));
-            ivPressureIcon.setImageResource(R.mipmap.ic_emotion5);
-        }
+        HrvUtils.inflateMoodStability(getContext() , mood , ivEmotion , tvEmotion);
     }
 
     private void updateHrValue() {
@@ -299,52 +219,6 @@ public class HeartDetailFragment extends LsmBaseFragment {
         }
         tvAvgHr.setText("平均心率                " + avgHr + " bpm");
         tvMaxHr.setText("最大心率                " + maxHr + " bpm");
-    }
-
-    public void chgStatus1(View view, int status) {
-        switch (status) {
-            case 0:
-                view.setEnabled(false);
-                break;
-            case 1:
-                view.setBackgroundResource(R.mipmap.ic_bar11);
-                break;
-            case 2:
-                view.setBackgroundResource(R.mipmap.ic_bar12);
-                break;
-            case 3:
-                view.setBackgroundResource(R.mipmap.ic_bar13);
-                break;
-            case 4:
-                view.setBackgroundResource(R.mipmap.ic_bar14);
-                break;
-            case 5:
-                view.setBackgroundResource(R.mipmap.ic_bar15);
-                break;
-        }
-    }
-
-    public void chgStatus2(View view, int status) {
-        switch (status) {
-            case 0:
-                view.setEnabled(false);
-                break;
-            case 1:
-                view.setBackgroundResource(R.mipmap.ic_bar21);
-                break;
-            case 2:
-                view.setBackgroundResource(R.mipmap.ic_bar22);
-                break;
-            case 3:
-                view.setBackgroundResource(R.mipmap.ic_bar23);
-                break;
-            case 4:
-                view.setBackgroundResource(R.mipmap.ic_bar24);
-                break;
-            case 5:
-                view.setBackgroundResource(R.mipmap.ic_bar25);
-                break;
-        }
     }
 
     @Override

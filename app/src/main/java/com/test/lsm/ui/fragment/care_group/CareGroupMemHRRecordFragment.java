@@ -126,18 +126,18 @@ public class CareGroupMemHRRecordFragment extends LsmBaseFragment {
         rightAxis.setDrawAxisLine(false);
         rightAxis.setDrawLabels(true);
         rightAxis.setTextColor(Color.WHITE);
-        rightAxis.setAxisMinimum(50);
-        rightAxis.setAxisMaximum(100);
+     /*   rightAxis.setAxisMinimum(50);
+        rightAxis.setAxisMaximum(100);*/
         rightAxis.setSpaceTop(0);
         rightAxis.setSpaceBottom(0);
         rightAxis.setLabelCount(6, true);
-        rightAxis.setValueFormatter(new IAxisValueFormatter() {
+        /*rightAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 int i = new Float(value).intValue();
                 return i+" %";
             }
-        });
+        });*/
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
@@ -145,8 +145,8 @@ public class CareGroupMemHRRecordFragment extends LsmBaseFragment {
         leftAxis.setDrawLabels(true);
         leftAxis.setDrawGridLines(true);
         leftAxis.setTextColor(Color.WHITE);
-        leftAxis.setAxisMaximum(maxBaseHr);
-        leftAxis.setAxisMinimum(maxBaseHr * 0.5f);
+/*        leftAxis.setAxisMaximum(maxBaseHr);
+        leftAxis.setAxisMinimum(maxBaseHr * 0.5f);*/
         leftAxis.setSpaceTop(0);
         leftAxis.setSpaceBottom(0);
         leftAxis.setLabelCount(6, true);

@@ -42,7 +42,7 @@ public class GetMonitorGroupMemDetailReturn {
 
     public static class DataBean {
         private Integer heartNum;
-        private BigDecimal calorieValue;
+        private Double calorieValue;
         private Integer stepNum;
         private HrvInfoBean hrvInfo;
         private TraceInfoBean traceInfo;
@@ -52,15 +52,15 @@ public class GetMonitorGroupMemDetailReturn {
             return heartNum;
         }
 
+        public Double getCalorieValue() {
+            return calorieValue;
+        }
+
         public void setHeartNum(Integer heartNum) {
             this.heartNum = heartNum;
         }
 
-        public BigDecimal getCalorieValue() {
-            return calorieValue;
-        }
-
-        public void setCalorieValue(BigDecimal calorieValue) {
+        public void setCalorieValue(Double calorieValue) {
             this.calorieValue = calorieValue;
         }
 

@@ -91,6 +91,40 @@ public class APIMethodManager {
     }
 
     /**
+     * 删除监听人
+     *
+     * @param provider
+     * @param attachId
+     * @param callback
+     * @return
+     */
+    public Subscription deleteGroupAttach(LifecycleProvider<ActivityEvent> provider ,
+                                          @Path("attachId") Long attachId , final IRequestCallback<EmptyDataReturn> callback){
+        Subscription subscribe = lsmApi.deleteGroupAttach(attachId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(provider.<EmptyDataReturn>bindToLifecycle())
+                .subscribe(new Subscriber<EmptyDataReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(EmptyDataReturn emptyDataReturn) {
+                        callback.onSuccess(emptyDataReturn);
+                    }
+                });
+
+        return  subscribe;
+    }
+
+    /**
      * 保存当前心跳、卡路里、步数
      *
      * @param healthVo
@@ -98,7 +132,6 @@ public class APIMethodManager {
      * @return
      */
     public Subscription saveCurrentHealthInfo(
-
                                               SaveCurrentHealthVo healthVo ,
                                             final IRequestCallback<EmptyDataReturn> callback){
         Subscription subscribe = lsmApi.saveCurrentHealthInfo(healthVo)

@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -61,6 +62,9 @@ import rx.Observable;
  */
 
 public interface LsmApi {
+
+    @DELETE("monitor/groupAttaches/{attachId}")
+    Observable<EmptyDataReturn> deleteGroupAttach(@Path("attachId") Long attachId);
 
     @POST("health/currentHealths")
     Observable<EmptyDataReturn> saveCurrentHealthInfo(@Body SaveCurrentHealthVo healthVo);

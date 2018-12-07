@@ -1,43 +1,30 @@
 package com.test.lsm.ui.fragment.care_group;
 
-import android.graphics.Color;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.Polyline;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.utils.CoordinateConverter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.test.lsm.R;
-import com.test.lsm.bean.json.GetHealthInfoDtlReturn;
 import com.test.lsm.bean.json.GetMonitorGroupMemDetailReturn;
-import com.test.lsm.global.Const;
 import com.test.lsm.net.APIMethodManager;
-import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
-import com.yyyu.baselibrary.utils.MyLog;
-import com.yyyu.baselibrary.utils.MyToast;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -55,6 +42,8 @@ public class CareGroupMemRunTraceFragment extends LsmBaseFragment {
 
     @BindView(R.id.map_run)
     MapView map_run;
+    @BindView(R.id.tv_empty)
+    TextView tvEmpty;
 
 
     private BaiduMap mBaiduMap;
@@ -114,14 +103,22 @@ public class CareGroupMemRunTraceFragment extends LsmBaseFragment {
         super.initData();
     }
 
-    public void inflateTraceInfo(GetMonitorGroupMemDetailReturn.DataBean.TraceInfoBean traceInfo){
+    public void inflateTraceInfo(GetMonitorGroupMemDetailReturn.DataBean.TraceInfoBean traceInfo) {
 
         String coordinateInfo = traceInfo.getCoordinateInfo();
-        if (TextUtils.isEmpty(coordinateInfo)) return;
+        if (TextUtils.isEmpty(coordinateInfo)) {
+            map_run.setVisibility(View.GONE);
+            tvEmpty.setVisibility(View.VISIBLE);
+            return;
+        }
+        if (map_run.getVisibility()== View.GONE){
+            map_run.setVisibility(View.VISIBLE);
+        }
+        tvEmpty.setVisibility(View.GONE);
         Type type = new TypeToken<List<LatLng>>() {
         }.getType();
         List<LatLng> latLngs = mGson.fromJson(coordinateInfo, type);
-        if (latLngs.size()>2){
+        if (latLngs.size() > 2) {
             MarkerOptions oStart = new MarkerOptions();//地图标记覆盖物参数配置类
             oStart.position(latLngs.get(0));//覆盖物位置点，第一个点为起点
             oStart.icon(startBD);//设置覆盖物图片
