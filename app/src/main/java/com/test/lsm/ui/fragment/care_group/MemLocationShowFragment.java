@@ -1,6 +1,10 @@
 package com.test.lsm.ui.fragment.care_group;
 
+import android.graphics.Color;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -18,8 +22,10 @@ import com.baidu.mapapi.model.LatLngBounds;
 import com.google.gson.Gson;
 import com.test.lsm.R;
 import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
+import com.test.lsm.net.GlidUtils;
 import com.test.lsm.ui.activity.CareGroupMemDetailActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
+import com.yyyu.baselibrary.ui.widget.RoundImageView2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +106,7 @@ public class MemLocationShowFragment extends LsmBaseFragment {
                 Double lonD = Double.valueOf(lon);
                 LatLng latLng = new LatLng( latD , lonD);
                 String watchingTag = memInfo.getWatchingTag();
-                OverlayOptions option = getOption(latLng, watchingTag , i);
+                OverlayOptions option = getOption(latLng, watchingTag , i , memInfo.getUserImage());
                 options.add(option);
                 latLngList.add(latLng);
             }
@@ -111,31 +117,35 @@ public class MemLocationShowFragment extends LsmBaseFragment {
         fitAndZoom(latLngList);
     }
 
-    private OverlayOptions getOption(LatLng point , String watchingTag , Integer index){
+    private OverlayOptions getOption(LatLng point , String watchingTag , Integer index , String userIconPath){
 
-        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.ic_mon_mark_blue);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.pt_marker_view, null);
+        RoundImageView2 ivUserIcon = view.findViewById(R.id.iv_marker_user_icon);
+        int color = Color.parseColor("#4A90E2");
+        GlidUtils.load(getContext() , ivUserIcon , userIconPath);
         switch (watchingTag){
             case "1"://blue
-                bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.ic_mon_mark_blue);
+                color = Color.parseColor("#4A90E2");
                 break;
             case "2"://green
-                bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.ic_mon_mark_green);
+                color = Color.parseColor("#7ED321");
                 break;
             case "3"://yellow
-                bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.ic_mon_mark_yellow);
+                color = Color.parseColor("#F1A322");
                 break;
             case "4"://purple
-                bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.ic_mon_mark_purple);
+                color = Color.parseColor("#BD10E0");
                 break;
             case "5"://red
-                bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.ic_mon_mark_red);
+                color = Color.parseColor("#C12337");
                 break;
         }
+        ivUserIcon.setmBorderOutsideColor(color);
+        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromView(view);
         OverlayOptions option = new MarkerOptions()
                 .position(point)
-                .icon(bitmap)
+                .icon(bitmapDescriptor)
                 .zIndex(index);
-
         return option;
     }
 

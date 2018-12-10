@@ -31,6 +31,8 @@ public class CareGroupMemHRVFragment extends LsmBaseFragment {
     TextView tvPressure;
     @BindView(R.id.iv_pressure)
     ImageView ivPressure;
+    @BindView(R.id.iv_pressure_icon)
+    ImageView ivPressureIcon;
 
     @Override
     public int getLayoutId() {
@@ -50,13 +52,30 @@ public class CareGroupMemHRVFragment extends LsmBaseFragment {
     public void inflateHrv(GetMonitorGroupMemDetailReturn.DataBean.HrvInfoBean hrvInfo) {
         //---体力状态
         int bodyFitness = hrvInfo.getBodyFitness();
-        HrvUtils.inflateBodyFitness(getContext() , bodyFitness , ivPhysical , tvPhysical);
+        HrvUtils.inflateBodyFitness(getContext(), bodyFitness, ivPhysical, tvPhysical);
         //---情绪
         int moodStability = hrvInfo.getMoodStability();
-        HrvUtils.inflateMoodStability(getContext() , moodStability , ivMood, tvMood);
+        int moodStatus = HrvUtils.inflateMoodStability(getContext(), moodStability, ivMood, tvMood);
+        switch (moodStatus) {
+            case 1:
+                ivPressureIcon.setImageResource(R.mipmap.ic_emotion_w1);
+                break;
+            case 2:
+                ivPressureIcon.setImageResource(R.mipmap.ic_emotion_w2);
+                break;
+            case 3:
+                ivPressureIcon.setImageResource(R.mipmap.ic_emotion_w3);
+                break;
+            case 4:
+                ivPressureIcon.setImageResource(R.mipmap.ic_emotion_w4);
+                break;
+            case 5:
+                ivPressureIcon.setImageResource(R.mipmap.ic_emotion_w5);
+                break;
+        }
         //---压力
-        int mindFitness = hrvInfo.getMindFitness();
-        HrvUtils.inflateMindFitness(getContext(), mindFitness, ivPressure , tvPressure);
+        int stressTension = hrvInfo.getStressTension();
+        HrvUtils.inflateStressTension(getContext(), stressTension, ivPressure, tvPressure);
     }
 
 }

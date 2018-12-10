@@ -65,9 +65,9 @@ public class UploadHealthInfoService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        toUploadSpecified(phone);
+        //toUploadSpecified(phone);
         toUploadUsual();
-        toUploadUserHRV();
+        //toUploadUserHRV();
         toUploadCurrentHealthInfo();
 
         return super.onStartCommand(intent, flags, startId);
@@ -117,7 +117,7 @@ public class UploadHealthInfoService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true){
+                while (isUpload){
                     try {
                         Thread.sleep(3*60*1000);
 
@@ -140,40 +140,7 @@ public class UploadHealthInfoService extends Service {
                         apiMethodManager.getHRVInfo(hrvInfo, new IRequestCallback<GetHRVInfoReturn>() {
                             @Override
                             public void onSuccess(GetHRVInfoReturn result) {
-                                List<GetHRVInfoReturn.HRVIndexBean> hrvIndex = result.getHRVIndex();
-                                if (hrvIndex != null && hrvIndex.size() > 0) {
-                                    GetHRVInfoReturn.HRVIndexBean hrvIndexBean = hrvIndex.get(0);
-                                    //---体力状态
-                                    Integer bodyFitness = Integer.parseInt(hrvIndexBean.getBodyFitness());
-                                    //---身体疲劳
-                                    Integer bodyFatigue = Integer.parseInt(hrvIndexBean.getBodyFatigue());
-                                    //---压力紧张
-                                    Integer stressTension = Integer.parseInt(hrvIndexBean.getStressTension());
-                                    //---心情稳定
-                                    Integer moodStability = Integer.parseInt(hrvIndexBean.getMoodStability());
-                                    SaveUserHRVVo saveUserHRVVo = new SaveUserHRVVo();
-                                    saveUserHRVVo.setUserId(user_id);
-                                    saveUserHRVVo.setBODYFITNESS(""+hrvIndexBean.getBodyFitness());
-                                    saveUserHRVVo.setBODYFATIGUE(""+hrvIndexBean.getBodyFatigue());
-                                    saveUserHRVVo.setSTRESSTENSION(""+hrvIndexBean.getStressTension());
-                                    saveUserHRVVo.setMOODSTABILITY(""+hrvIndexBean.getMoodStability());
-                                    saveUserHRVVo.setMINDFITNESS(""+hrvIndexBean.getMindFitness());
-                                    saveUserHRVVo.setMINDFATIGUE(""+hrvIndexBean.getMindFatigue());
-
-                                    apiMethodManager.saveUserHRV(saveUserHRVVo, new IRequestCallback<SaveUserHRV>() {
-                                        @Override
-                                        public void onSuccess(SaveUserHRV result) {
-                                            String code = result.getResult();
-                                            MyLog.e(TAG , "==code="+code);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Throwable throwable) {
-                                            MyLog.e(TAG , ""+throwable.getMessage());
-                                        }
-                                    });
-
-                                }
+                                uploadHrv(result);
                             }
 
                             @Override
@@ -188,6 +155,35 @@ public class UploadHealthInfoService extends Service {
             }
         }).start();
 
+    }
+
+    private void uploadHrv(GetHRVInfoReturn result) {
+        List<GetHRVInfoReturn.HRVIndexBean> hrvIndex = result.getHRVIndex();
+        if (hrvIndex != null && hrvIndex.size() > 0) {
+            GetHRVInfoReturn.HRVIndexBean hrvIndexBean = hrvIndex.get(0);
+            SaveUserHRVVo saveUserHRVVo = new SaveUserHRVVo();
+            saveUserHRVVo.setUserId(user_id);
+            saveUserHRVVo.setBODYFITNESS(""+hrvIndexBean.getBodyFitness());
+            saveUserHRVVo.setBODYFATIGUE(""+hrvIndexBean.getBodyFatigue());
+            saveUserHRVVo.setSTRESSTENSION(""+hrvIndexBean.getStressTension());
+            saveUserHRVVo.setMOODSTABILITY(""+hrvIndexBean.getMoodStability());
+            saveUserHRVVo.setMINDFITNESS(""+hrvIndexBean.getMindFitness());
+            saveUserHRVVo.setMINDFATIGUE(""+hrvIndexBean.getMindFatigue());
+
+            apiMethodManager.saveUserHRV(saveUserHRVVo, new IRequestCallback<SaveUserHRV>() {
+                @Override
+                public void onSuccess(SaveUserHRV result) {
+                    String code = result.getResult();
+                    MyLog.e(TAG , "==code="+code);
+                }
+
+                @Override
+                public void onFailure(Throwable throwable) {
+                    MyLog.e(TAG , ""+throwable.getMessage());
+                }
+            });
+
+        }
     }
 
     /**

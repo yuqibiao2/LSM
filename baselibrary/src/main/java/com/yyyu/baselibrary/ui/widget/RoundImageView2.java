@@ -16,8 +16,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import com.yyyu.baselibrary.R;
 
@@ -27,7 +27,7 @@ import com.yyyu.baselibrary.R;
  * 设置颜色在xml布局文件中由自定义属性配置参数指定
  */
 
-public class RoundImageView2 extends ImageView {
+public class RoundImageView2 extends AppCompatImageView {
 
 	private int mBorderThickness = 0;
 
@@ -179,6 +179,15 @@ public class RoundImageView2 extends ImageView {
 		canvas.drawBitmap(roundBitmap, defaultWidth / 2 - radius, defaultHeight
 				/ 2 - radius, null);
 
+	}
+
+	public int getmBorderOutsideColor() {
+		return mBorderOutsideColor;
+	}
+
+	public void setmBorderOutsideColor(int mBorderOutsideColor) {
+		this.mBorderOutsideColor = mBorderOutsideColor;
+		invalidate();
 	}
 
 	/**

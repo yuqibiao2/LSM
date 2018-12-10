@@ -357,6 +357,9 @@ public class RunFragment extends LsmBaseFragment {
             mBaiduMap.setMyLocationData(data);
             mLocationClient.stop();
             mLocationClient.unRegisterLocationListener(initLocationListener);
+            //上传当前经纬度
+            last =new LatLng(location.getLatitude(), location.getLongitude());
+            uploadCurrentLocation(last, "1");
         }
     }
 
@@ -429,8 +432,8 @@ public class RunFragment extends LsmBaseFragment {
          /*   distance = BaiduMapUtils.calcDistance(points);
             tv_run_distance.setText("" + BaiduMapUtils.resolveDistance(distance));*/
 
-         //上传当前经纬度
-            uploadCurrentLocation( last , "1");
+            //上传当前经纬度
+            uploadCurrentLocation(last, "1");
 
         }
     }

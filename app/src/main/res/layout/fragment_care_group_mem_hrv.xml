@@ -57,6 +57,7 @@
         android:layout_marginTop="8dp">
 
         <ImageView
+            android:id="@+id/iv_pressure_icon"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:src="@mipmap/ic_emotion_white" />

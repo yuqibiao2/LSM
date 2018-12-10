@@ -85,25 +85,34 @@ public class HrvUtils {
      * @param ivIcon
      * @param tvTip
      */
-    public static  void inflateMoodStability(Context context, int moodStability, ImageView ivIcon, TextView tvTip){
+    public static int  inflateMoodStability(Context context,
+                                             int moodStability,
+                                             ImageView ivIcon,
+                                             TextView tvTip){
         if (moodStability <= -30) {//过渡松散
             tvTip.setText(context.getResources().getString(R.string.mood_level1));
             chgStatus1(ivIcon, 1);
+            return 1;
         } else if (moodStability <= -10) {//松散
             tvTip.setText(context.getResources().getString(R.string.mood_level2));
             chgStatus1(ivIcon, 2);
+            return 2;
         } else if (moodStability <= 10) {//正常
             tvTip.setText(context.getResources().getString(R.string.mood_level3));
             chgStatus1(ivIcon, 3);
+            return 3;
         } else if (moodStability <= 30) {//紧张
             tvTip.setText(context.getResources().getString(R.string.mood_level4));
             chgStatus1(ivIcon, 4);
+            return 4;
         } else if (moodStability <= 50) {//过渡紧张
             tvTip.setText(context.getResources().getString(R.string.mood_level5));
             chgStatus1(ivIcon, 5);
+            return 5;
         } else {
             tvTip.setText(context.getResources().getString(R.string.mood_level5));
             chgStatus1(ivIcon, 5);
+            return 5;
         }
     }
 
@@ -149,22 +158,22 @@ public class HrvUtils {
     public static void inflateBodyFitness(Context context, int bodyFitness, ImageView ivIcon, TextView tvTip) {
         if (bodyFitness >= 30) {
             chgStatus1(ivIcon, 5);
-            tvTip.setText(context.getResources().getString(R.string.fitness_level5));
+            tvTip.setText(context.getResources().getString(R.string.physical_level5));
         } else if (bodyFitness >= 10) {
             chgStatus1(ivIcon, 4);
-            tvTip.setText(context.getResources().getString(R.string.fitness_level4));
+            tvTip.setText(context.getResources().getString(R.string.physical_level4));
         } else if (bodyFitness >= -10) {
             chgStatus1(ivIcon, 3);
-            tvTip.setText(context.getResources().getString(R.string.fitness_level3));
+            tvTip.setText(context.getResources().getString(R.string.physical_level3));
         } else if (bodyFitness >= -30) {
             chgStatus1(ivIcon, 2);
-            tvTip.setText(context.getResources().getString(R.string.fitness_level2));
+            tvTip.setText(context.getResources().getString(R.string.physical_level2));
         } else if (bodyFitness >= -50) {
             chgStatus1(ivIcon, 1);
-            tvTip.setText(context.getResources().getString(R.string.fitness_level1));
+            tvTip.setText(context.getResources().getString(R.string.physical_level1));
         } else {
             chgStatus1(ivIcon, 1);
-            tvTip.setText(context.getResources().getString(R.string.fitness_level1));
+            tvTip.setText(context.getResources().getString(R.string.physical_level1));
         }
     }
 
