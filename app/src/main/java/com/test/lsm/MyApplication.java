@@ -14,6 +14,9 @@ import com.test.lsm.db.DaoMaster;
 import com.test.lsm.db.DaoSession;
 import com.today.step.lib.TodayStepManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.jpush.android.api.JPushInterface;
 import io.fabric.sdk.android.Fabric;
 
@@ -107,10 +110,10 @@ public class MyApplication extends MultiDexApplication {
     }
 
     //---得到心跳值得回调
-    public OnGetHrValueListener mOnGetHrValueListener;
+    public List<OnGetHrValueListener> mOnGetHrValueListenerHolder = new ArrayList<>();
 
     public void setOnGetHrValueListener(OnGetHrValueListener onGetHrValueListener){
-        this.mOnGetHrValueListener = onGetHrValueListener;
+        mOnGetHrValueListenerHolder.add(onGetHrValueListener);
     }
 
     public interface OnGetHrValueListener{

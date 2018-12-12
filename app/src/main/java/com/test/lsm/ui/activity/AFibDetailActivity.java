@@ -19,7 +19,6 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.singularwings.rrislib.RRIsVerifier;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.AFibExpRecordAdapter;
@@ -28,6 +27,7 @@ import com.test.lsm.bean.event.SCAutoScanChgEvent;
 import com.test.lsm.bean.json.GetAFibExpRecordReturn;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.utils.logic.RRIsVerifier;
 import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 

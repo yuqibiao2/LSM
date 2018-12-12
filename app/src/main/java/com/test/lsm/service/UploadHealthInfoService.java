@@ -18,6 +18,7 @@ import com.test.lsm.bean.json.SaveHeartByMin;
 import com.test.lsm.bean.json.SaveUserHRV;
 import com.test.lsm.bean.json.SaveUserHealthInfoReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.global.Config;
 import com.test.lsm.global.Constant;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
@@ -83,7 +84,7 @@ public class UploadHealthInfoService extends Service {
             public void run() {
                 try {
                   while (isUpload){
-                      Thread.sleep(10*1000);
+                      Thread.sleep(Config.UPLOAD_CUR_HEALTH_INTERVAL);
                       SaveCurrentHealthVo healthVo = new SaveCurrentHealthVo();
                       healthVo.setUserId(user_id);
                       healthVo.setHeartNum( application.getHeartNum());

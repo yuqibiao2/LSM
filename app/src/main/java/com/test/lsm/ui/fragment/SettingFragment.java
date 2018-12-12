@@ -46,6 +46,7 @@ import com.test.lsm.utils.LoginRegUtils;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.ui.widget.SwitchCompatWrapper;
 import com.yyyu.baselibrary.utils.MyInetntUtils;
+import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
@@ -252,12 +253,12 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
 
         bleDeviceAdapter.setOnDeviceConnectListener(new BleDeviceAdapter2.OnDeviceConnectListener() {
             @Override
-            public void toConnect(BleDevice bleDevice, SwitchCompat switchCompat) {
+            public void toConnect(BleDevice bleDevice, SwitchCompatWrapper switchCompat) {
                 connect(bleDevice, switchCompat);
             }
 
             @Override
-            public void toDisConnect(BleDevice bleDevice, SwitchCompat switchCompat) {
+            public void toDisConnect(BleDevice bleDevice, SwitchCompatWrapper switchCompat) {
                 bleManager.disconnect(bleDevice);
             }
         });
@@ -367,7 +368,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
      *
      * @param bleDevice
      */
-    private void connect(final BleDevice bleDevice, final SwitchCompat switchCompat) {
+    private void connect(final BleDevice bleDevice, final SwitchCompatWrapper switchCompat) {
 
         BleManager.getInstance().connectWrapper(bleDevice, new BleGattCallback() {
             @Override
@@ -377,7 +378,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
             @Override
             public void onConnectFail(BleException exception) {
                 showToast("连接失败");
-                switchCompat.setChecked(false);
+                switchCompat.setCheckedNotCallbackChgEvent(false);
             }
 
             @Override
@@ -389,7 +390,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
 
             @Override
             public void onDisConnected(boolean isActiveDisConnected, BleDevice bleDevice, BluetoothGatt gatt, int status) {
-                switchCompat.setChecked(false);
+                switchCompat.setCheckedNotCallbackChgEvent(false);
                 showToast("取消了连接");
             }
         });

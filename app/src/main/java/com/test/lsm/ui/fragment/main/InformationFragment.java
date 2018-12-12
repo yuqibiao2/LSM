@@ -31,7 +31,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.singularwings.rrislib.RRIsVerifier;
 import com.swm.algorithm.Algorithm;
 import com.swm.algorithm.support.IirFilter;
 import com.swm.algorithm.support.heat.SwmQuantityOfHeat;
@@ -47,9 +46,9 @@ import com.test.lsm.bean.event.OnUserInfoChg;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
 import com.test.lsm.bean.event.SCAutoScanChgEvent;
 import com.test.lsm.bean.event.StepChgEvent;
-import com.test.lsm.bean.vo.AFibExpRecordVo;
 import com.test.lsm.bean.json.EmptyDataReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.bean.vo.AFibExpRecordVo;
 import com.test.lsm.db.bean.Calorie;
 import com.test.lsm.db.bean.Step;
 import com.test.lsm.db.service.CalorieService;
@@ -63,8 +62,8 @@ import com.test.lsm.ui.activity.CareGroupChoiceActivity;
 import com.test.lsm.ui.activity.ECGShowActivity3;
 import com.test.lsm.ui.activity.SettingActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
-import com.test.lsm.utils.AlgorithmWrapper;
 import com.test.lsm.utils.bt.ble.BleBTUtils;
+import com.test.lsm.utils.logic.RRIsVerifier;
 import com.today.step.lib.ISportStepInterface;
 import com.today.step.lib.SportStepJsonUtils;
 import com.today.step.lib.TodayStepService;
@@ -222,7 +221,6 @@ public class InformationFragment extends LsmBaseFragment {
                     //MyLog.e(TAG , "RRIH==============="+Integer.parseInt(RRIStrH , 16));
                     MyLog.e(TAG, "RRI===============" + Integer.parseInt(RRIStr, 16));
 
-                    AlgorithmWrapper.startRRI();
 
                     int heartNum = Integer.parseInt(hrStr, 16);
                     double rriValue = Integer.parseInt(RRIStr, 16);
@@ -237,8 +235,10 @@ public class InformationFragment extends LsmBaseFragment {
                     //获取到HR值
                     if (displayHR >= 0 && hrAbNormal==0) {
                         //得到心跳值得回调
-                        if (application.mOnGetHrValueListener != null) {
-                            application.mOnGetHrValueListener.onGet(displayHR);
+                        if (application.mOnGetHrValueListenerHolder.size()>0) {
+                            for (MyApplication.OnGetHrValueListener onGetHrValueListener :application.mOnGetHrValueListenerHolder){
+                                onGetHrValueListener.onGet(displayHR);
+                            }
                         }
                         Constant.oneMinHeart.add(displayHR);
                         Constant.hrBuffer.add(displayHR);

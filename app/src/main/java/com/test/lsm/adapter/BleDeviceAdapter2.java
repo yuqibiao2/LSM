@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.data.BleDevice;
 import com.test.lsm.R;
+import com.yyyu.baselibrary.ui.widget.SwitchCompatWrapper;
 
 import java.util.List;
 
@@ -24,7 +25,6 @@ import java.util.List;
  */
 public class BleDeviceAdapter2 extends BaseQuickAdapter<BleDevice, BaseViewHolder> {
 
-    private SwitchCompat scDevice;
     private final BleManager bleManager;
 
     public BleDeviceAdapter2(int layoutResId, @Nullable List<BleDevice> data) {
@@ -44,20 +44,21 @@ public class BleDeviceAdapter2 extends BaseQuickAdapter<BleDevice, BaseViewHolde
         }
         helper.setText(R.id.tv_bt_name, item.getName());
         helper.setText(R.id.tv_bt_mac, item.getMac());
-        scDevice = helper.getView(R.id.sc_device);
+        final SwitchCompat scDevice = helper.getView(R.id.sc_device);
+        final SwitchCompatWrapper switchCompatWrapper = new SwitchCompatWrapper(scDevice);
         if (bleManager.isConnected(item)){
-            scDevice.setChecked(true);
+            switchCompatWrapper.setCheckedNotCallbackChgEvent(true);
         }
-        scDevice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchCompatWrapper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {// 连接
                     if (!bleManager.isConnected(item)){
-                        mOnDeviceConnectListener.toConnect(item , scDevice);
+                        mOnDeviceConnectListener.toConnect(item , switchCompatWrapper);
                     }
                 } else {//取消连接
                     if (bleManager.isConnected(item)){
-                        mOnDeviceConnectListener.toDisConnect(item , scDevice);
+                        mOnDeviceConnectListener.toDisConnect(item , switchCompatWrapper);
                     }
                 }
             }
@@ -72,9 +73,9 @@ public class BleDeviceAdapter2 extends BaseQuickAdapter<BleDevice, BaseViewHolde
 
     public interface OnDeviceConnectListener {
 
-        void toConnect(BleDevice bleDevice, SwitchCompat switchCompat);
+        void toConnect(BleDevice bleDevice, SwitchCompatWrapper switchCompat);
 
-        void toDisConnect(BleDevice bleDevice , SwitchCompat switchCompat);
+        void toDisConnect(BleDevice bleDevice , SwitchCompatWrapper switchCompat);
 
     }
 

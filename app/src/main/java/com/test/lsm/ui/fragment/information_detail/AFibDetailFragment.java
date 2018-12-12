@@ -8,27 +8,24 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.singularwings.rrislib.RRIsVerifier;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.LsmBleData;
 import com.test.lsm.bean.event.SCAutoScanChgEvent;
 import com.test.lsm.bean.json.GetAFibExpRecordReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
-import com.test.lsm.db.bean.AFibExpRecord;
 import com.test.lsm.db.service.AFibExpRecordService;
 import com.test.lsm.db.service.inter.IAFibExpRecordService;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.AFibDetailActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
-import com.test.lsm.utils.TimeUtils;
+import com.test.lsm.utils.logic.RRIsVerifier;
 import com.yyyu.baselibrary.ui.widget.AdapterLinearLayout;
 import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

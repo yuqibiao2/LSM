@@ -590,6 +590,12 @@ public class RunFragment extends LsmBaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        map_run.onResume();
+    }
+
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isResumed()){
@@ -600,7 +606,7 @@ public class RunFragment extends LsmBaseFragment {
     }
     @Override
     public void onPause() {
-        //map_run.onPause();
+        map_run.onPause();
         super.onPause();
     }
 

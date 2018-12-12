@@ -51,11 +51,6 @@ public abstract class LsmBaseActivity extends BaseActivity implements EasyPermis
 
     private Unbinder mUnbind;
     private LoadingDialog loadingDialog;
-    BleBtDeviceDisconnectDialog bleBtDeviceDisconnectDialog;
-
-    //---蓝牙重连次数
-    public static  int RETRY_TIME= 50;
-    public static int bleRetryTime= RETRY_TIME;
 
     @Override
     public void beforeInit() {
@@ -91,15 +86,12 @@ public abstract class LsmBaseActivity extends BaseActivity implements EasyPermis
 
         });
 
-        //蓝牙断开重连
+        //---蓝牙断开提示框
         BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
             @Override
-            public void dismiss(BleDevice bleDevice) {
-                if (!BleBtDeviceDisconnectDialog.isShow && MyActUtils.isTopAct(LsmBaseActivity.this)) {
-                    bleRetryTime= RETRY_TIME;
-                    retryConnect(bleDevice);
-                    bleBtDeviceDisconnectDialog = new BleBtDeviceDisconnectDialog(LsmBaseActivity.this);
-                    bleBtDeviceDisconnectDialog.show();
+            public void dismiss(BleDevice device) {
+                if (MyActUtils.isTopAct(LsmBaseActivity.this)){
+                    BleBtDeviceDisconnectActivity.startAction(LsmBaseActivity.this);
                 }
             }
         });
@@ -118,43 +110,6 @@ public abstract class LsmBaseActivity extends BaseActivity implements EasyPermis
             mUnbind.unbind();
         }
         dismissLoadDialog();
-    }
-
-    private void retryConnect(BleDevice bleDevice) {
-        bleRetryTime--;
-        final MyApplication application = (MyApplication) getApplication();
-        String mac = bleDevice.getMac();
-        String connectDeviceMac = BleBTUtils.getConnectDevice(LsmBaseActivity.this);
-        if (!TextUtils.isEmpty(mac) && mac.equals(connectDeviceMac)) {//已经配对过的设备
-            BleManager.getInstance().connectWrapper(bleDevice, new BleGattCallback() {
-                @Override
-                public void onStartConnect() {
-                }
-
-                @Override
-                public void onConnectFail(BleException exception) {
-                    BleDevice currentBleDevice = application.getCurrentBleDevice();
-                    if (currentBleDevice != null && bleRetryTime>0) {
-                        retryConnect(currentBleDevice);
-                    }
-                    MyLog.e(TAG, "onConnectFail===" + exception.getDescription());
-                    MyToast.showShort(LsmBaseActivity.this, "连接失败" + exception.getDescription());
-                }
-
-                @Override
-                public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
-                    application.setCurrentBleDevice(bleDevice);
-                    bleBtDeviceDisconnectDialog.dismiss();
-                    EventBus.getDefault().post(new BleConnectMessage(1, bleDevice));
-                    MyLog.d(TAG, "onConnectSuccess===");
-                }
-
-                @Override
-                public void onDisConnected(boolean isActiveDisConnected, BleDevice bleDevice, BluetoothGatt gatt, int status) {
-                    MyLog.d(TAG, "onDisConnected===");
-                }
-            });
-        }
     }
 
 

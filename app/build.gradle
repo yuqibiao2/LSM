@@ -80,7 +80,7 @@ android {
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api(name: 'algorithm-release', ext: 'aar')
-    api(name: 'rrislib-release', ext: 'aar')
+   /* api(name: 'rrislib-release', ext: 'aar')*/
     api 'com.android.support.constraint:constraint-layout:1.1.0'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -98,7 +98,9 @@ dependencies {
     /*api 'com.github.PhilJay:MPAndroidChart:v3.0.3'*/
     api project(':MPChartLib')
     api project(':jpush')
-    api project(':LsmAlgorithm')
+
+    /*api project(':LsmAlgorithm')*/
+    api 'org.apache.commons:commons-collections4:4.1'
   /*  debugCompile project(path: ':LsmAlgorithm', configuration: 'debug')
     releaseCompile project(path: ':LsmAlgorithm', configuration: 'release')*/
 

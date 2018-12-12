@@ -34,6 +34,7 @@ import com.clj.fastble.scan.BleScanRuleConfig;
 import com.clj.fastble.scan.BleScanner;
 import com.clj.fastble.utils.BleLog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -309,7 +310,8 @@ public class BleManager {
             @Override
             public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 bleGattCallback.onConnectSuccess(bleDevice , gatt , status);
-                if (mOnConnectSuccess!=null){
+                if (mOnConnectSuccessHolder.size()>0){
+                    for (OnConnectSuccess mOnConnectSuccess :mOnConnectSuccessHolder)
                     mOnConnectSuccess.onSuccess(bleDevice);
                 }
             }
@@ -317,32 +319,42 @@ public class BleManager {
             @Override
             public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
                 bleGattCallback.onDisConnected(isActiveDisConnected , device , gatt , status);
-                if (mOnConnectDismiss!=null){
-                    mOnConnectDismiss.dismiss(device);
+                if (mOnConnectDismissHolder.size()>0){
+                    for (OnConnectDismiss onConnectDismiss : mOnConnectDismissHolder){
+                        onConnectDismiss.dismiss(device);
+                    }
                 }
             }
         });
     }
 
 
-    private OnConnectDismiss mOnConnectDismiss;
+    private List<OnConnectDismiss> mOnConnectDismissHolder = new ArrayList<>();
 
     public void  setOnConnectDismissListener(OnConnectDismiss onConnectDismiss){
-        this.mOnConnectDismiss = onConnectDismiss;
+        mOnConnectDismissHolder.add(onConnectDismiss) ;
     }
 
     public interface OnConnectDismiss{
         void dismiss(BleDevice device);
     }
 
-    private OnConnectSuccess mOnConnectSuccess;
+    public void removeConnectDismissListener(OnConnectDismiss onConnectDismiss){
+        mOnConnectDismissHolder.remove(onConnectDismiss) ;
+    }
+
+    private List<OnConnectSuccess> mOnConnectSuccessHolder = new ArrayList<>();
 
     public void setOnConnectSuccessListener(OnConnectSuccess onConnectSuccess){
-        this.mOnConnectSuccess = onConnectSuccess;
+        mOnConnectSuccessHolder.add(onConnectSuccess);
     }
 
     public interface  OnConnectSuccess{
         void onSuccess(BleDevice device);
+    }
+
+    public void removeConnectSuccessListener(OnConnectSuccess onConnectSuccess){
+        mOnConnectSuccessHolder.remove(onConnectSuccess);
     }
 
     /**

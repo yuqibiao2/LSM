@@ -43,7 +43,7 @@ public class CheckBleIsConnectService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        new Thread(new Runnable() {
+/*        new Thread(new Runnable() {
             @Override
             public void run() {
                 while (isCheck) {
@@ -66,10 +66,14 @@ public class CheckBleIsConnectService extends Service {
                     }
                 }
             }
-        }).start();
+        }).start();*/
 
         return super.onStartCommand(intent, flags, startId);
     }
+
+
+
+
 
     @Override
     public void onDestroy() {

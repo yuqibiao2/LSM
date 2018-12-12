@@ -1,11 +1,14 @@
 package com.test.lsm.ui.activity;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothGatt;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,6 +16,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +30,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.clj.fastble.BleManager;
+import com.clj.fastble.callback.BleGattCallback;
+import com.clj.fastble.data.BleDevice;
+import com.clj.fastble.exception.BleException;
 import com.example.jpushdemo.ExampleUtil;
 import com.example.jpushdemo.LocalBroadcastManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.MenuAdapter;
+import com.test.lsm.bean.BleConnectMessage;
 import com.test.lsm.bean.MenuItem;
+import com.test.lsm.global.Config;
 import com.test.lsm.service.UploadHealthInfoService;
 import com.test.lsm.ui.dialog.BleBTDeviceScanDialog;
 import com.test.lsm.ui.dialog.DeviceInformationDialog;
@@ -41,8 +51,11 @@ import com.test.lsm.ui.fragment.main.InformationFragment;
 import com.test.lsm.ui.fragment.main.RunFragment;
 import com.test.lsm.ui.fragment.main.TodayFragment;
 import com.test.lsm.utils.LoginRegUtils;
+import com.test.lsm.utils.bt.ble.BleBTUtils;
 import com.yyyu.baselibrary.ui.widget.CommonPopupWindow;
 import com.yyyu.baselibrary.utils.DimensChange;
+import com.yyyu.baselibrary.utils.MyActUtils;
+import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
@@ -52,6 +65,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 /**
  * 功能：首页
@@ -96,6 +110,16 @@ public class MainActivity extends LsmBaseActivity {
     private Intent uploadHealthInfoIntent;
     private MyApplication application;
     private BleBTDeviceScanDialog bleBTDeviceScanDialog;
+    private BleManager.OnConnectDismiss onConnectDismiss;
+
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            retryConnect();
+        }
+    };
 
     @Override
     public int getLayoutId() {
@@ -212,6 +236,13 @@ public class MainActivity extends LsmBaseActivity {
     @Override
     protected void initListener() {
 
+        BleManager.getInstance().setOnConnectDismissListener(onConnectDismiss = new BleManager.OnConnectDismiss() {
+            @Override
+            public void dismiss(BleDevice device) {
+                mHandler.sendEmptyMessageDelayed(0 , Config.BLE_RETRY_INTERVAL);
+            }
+        });
+
         rgBottom.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int radioId) {
@@ -238,50 +269,7 @@ public class MainActivity extends LsmBaseActivity {
             }
         });
 
-
-      /*  BleManager.getInstance().setOnConnectDismissListener(new BleManager.OnConnectDismiss() {
-            @Override
-            public void dismiss(BleDevice bleDevice) {
-                retryConnect(bleDevice);
-            }
-        });*/
-
     }
-
-/*    private void retryConnect(BleDevice bleDevice) {
-        String mac = bleDevice.getMac();
-        String connectDeviceMac = BleBTUtils.getConnectDevice(MainActivity.this);
-        if (!TextUtils.isEmpty(mac) && mac.equals(connectDeviceMac)) {//已经配对过的设备
-            BleManager.getInstance().connectWrapper(bleDevice, new BleGattCallback() {
-                @Override
-                public void onStartConnect() {
-                    MyLog.d(TAG, "onStartConnect===");
-                }
-
-                @Override
-                public void onConnectFail(BleException exception) {
-                    BleDevice currentBleDevice = application.getCurrentBleDevice();
-                    if (currentBleDevice != null) {
-                        retryConnect(currentBleDevice);
-                    }
-                    MyLog.e(TAG, "onConnectFail===" + exception.getDescription());
-                    MyToast.showShort(MainActivity.this, "连接失败" + exception.getDescription());
-                }
-
-                @Override
-                public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
-                    application.setCurrentBleDevice(bleDevice);
-                    EventBus.getDefault().post(new BleConnectMessage(1, bleDevice));
-                    MyLog.d(TAG, "onConnectSuccess===");
-                }
-
-                @Override
-                public void onDisConnected(boolean isActiveDisConnected, BleDevice bleDevice, BluetoothGatt gatt, int status) {
-                    MyLog.d(TAG, "onDisConnected===");
-                }
-            });
-        }
-    }*/
 
     @Override
     protected void afterInit() {
@@ -290,6 +278,42 @@ public class MainActivity extends LsmBaseActivity {
         startService(uploadHealthInfoIntent);
 
         registerMessageReceiver();
+    }
+
+
+    private void retryConnect() {
+        BleDevice bleDevice = application.getCurrentBleDevice();
+        if (bleDevice == null){
+            return;
+        }
+        String mac = bleDevice.getMac();
+        String connectDeviceMac = BleBTUtils.getConnectDevice(MainActivity.this);
+        if (!TextUtils.isEmpty(mac) && mac.equals(connectDeviceMac)) {//已经配对过的设备
+            BleManager.getInstance().connectWrapper(bleDevice, new BleGattCallback() {
+                @Override
+                public void onStartConnect() {
+                }
+
+                @Override
+                public void onConnectFail(BleException exception) {
+                    mHandler.sendEmptyMessageDelayed(0 ,  Config.BLE_RETRY_INTERVAL);
+                    MyLog.e(TAG, "onConnectFail===" + exception.getDescription());
+                    //MyToast.showShort(MainActivity.this, "蓝牙连接失败" + exception.getDescription());
+                }
+
+                @Override
+                public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                    application.setCurrentBleDevice(bleDevice);
+                    EventBus.getDefault().post(new BleConnectMessage(1, bleDevice));
+                    MyActUtils.finishAct(BleBtDeviceDisconnectActivity.class);
+                }
+
+                @Override
+                public void onDisConnected(boolean isActiveDisConnected, BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                    MyLog.d(TAG, "onDisConnected===");
+                }
+            });
+        }
     }
 
     public void switchMenu(View view) {
@@ -394,6 +418,8 @@ public class MainActivity extends LsmBaseActivity {
         stopService(uploadHealthInfoIntent);
         //断开蓝牙设备
         // BleManager.getInstance().disconnect(application.getCurrentBleDevice());
+        //移除监听
+        BleManager.getInstance().removeConnectDismissListener(onConnectDismiss);
     }
 
     public static void startAction(Activity activity) {

@@ -26,6 +26,7 @@ import com.test.lsm.adapter.ExpMemAdapter;
 import com.test.lsm.adapter.NorMemAdapter;
 import com.test.lsm.bean.event.UpdateMemData;
 import com.test.lsm.bean.json.GetMonitorGroupDetailReturn;
+import com.test.lsm.global.Config;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.fragment.care_group.MemLocationShowFragment;
@@ -266,7 +267,7 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
     }
 
     private void getData(){
-        mHandler.sendEmptyMessageDelayed(0 , 10*1000);
+        mHandler.sendEmptyMessageDelayed(0 , Config.MONITOR_REFRESH_INTERVAL);
         //发送消息让CareGroupMemDetailActivity更新数据
         EventBus.getDefault().post(new UpdateMemData());
         apiMethodManager.getMonitorGroupDetail(provider, groupId,
