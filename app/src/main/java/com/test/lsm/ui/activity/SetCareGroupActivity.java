@@ -27,6 +27,7 @@ import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.dialog.AddGroupAttachDialog;
 import com.yyyu.baselibrary.ui.widget.SwitchCompatWrapper;
+import com.yyyu.baselibrary.utils.MyKeyboardUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ public class SetCareGroupActivity extends LsmBaseActivity {
         rvCareGroup.setLayoutManager(new LinearLayoutManager(this));
         userMonitorsAdapter = new UserMonitorsAdapter(R.layout.rv_care_group_item, monitorsList , provider);
         rvCareGroup.setAdapter(userMonitorsAdapter);
+
     }
 
     @Override

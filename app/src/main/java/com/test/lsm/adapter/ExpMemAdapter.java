@@ -33,16 +33,21 @@ public class ExpMemAdapter extends BaseQuickAdapter<GetMonitorGroupDetailReturn.
     @Override
     protected void convert(BaseViewHolder helper, GetMonitorGroupDetailReturn.DataBean.ExpMemInfoListBean expMemInfo) {
         TextView tvUserName = helper.getView(R.id.tv_user_name);
-        TextView tvHr = helper.getView(R.id.tv_hr);
+        TextView tvContent = helper.getView(R.id.tv_hr);
+        TextView tvDate = helper.getView(R.id.tv_date);
         TextView tvTime =helper.getView(R.id.tv_time);
+        ImageView ivExpIcon = helper.getView(R.id.iv_exp_icon);
         tvUserName.setText(Html.fromHtml(expMemInfo.getUserName()));
-        tvHr.setText(""+expMemInfo.getHeartNum()+" bpm");
+        tvContent.setText(expMemInfo.getExpContent());
         String expDateTimeStr = expMemInfo.getExpDateTime();
         Date expDateTime = MyTimeUtils.parseDate(expDateTimeStr);
-        String formatDateTime = MyTimeUtils.formatDateTime("hh:mm", expDateTime);
-        tvTime.setText(formatDateTime+" "+MyTimeUtils.getDuringDay(expDateTime));
+        String formatDate = MyTimeUtils.formatDateTime("MM/DD", expDateTime);
+        tvDate.setText(formatDate);
+        String formatTime = MyTimeUtils.formatDateTime("hh:mm", expDateTime);
+        tvTime.setText(formatTime+" "+MyTimeUtils.getDuringDay(expDateTime));
         RoundImageView rivIcon =  helper.getView(R.id.riv_icon);
         GlidUtils.load(mContext ,rivIcon ,  expMemInfo.getUserImage());
+        GlidUtils.load(mContext , ivExpIcon , expMemInfo.getExpIcon());
         int icTag = R.mipmap.ic_mon_mark_blue;
         switch (expMemInfo.getWatchingTag()){
             case "1"://blue

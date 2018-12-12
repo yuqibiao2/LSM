@@ -59,7 +59,7 @@
                 android:layout_marginTop="5dp"
                 android:drawablePadding="3dp"
                 android:drawableStart="@mipmap/ic_cg_phone"
-                android:text="0921233879"
+                android:text=""
                 android:textColor="#FFFFFFFF"
                 android:textSize="18sp" />
         </LinearLayout>

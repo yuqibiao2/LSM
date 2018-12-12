@@ -6,8 +6,8 @@
     android:orientation="horizontal">
     <com.yyyu.baselibrary.ui.widget.RoundImageView2
         android:id="@+id/iv_marker_user_icon"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         app:border_thickness = "2dp"
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_user_df"/>

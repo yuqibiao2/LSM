@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -22,7 +23,7 @@ import com.test.lsm.ui.fragment.care_group.CareGroupMemHRRecordFragment;
 import com.test.lsm.ui.fragment.care_group.CareGroupMemHRVFragment;
 import com.test.lsm.ui.fragment.care_group.CareGroupMemRunTraceFragment;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
-import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MyInetntUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
@@ -137,7 +138,16 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
 
     @Override
     protected void initListener() {
-
+        //拨打电话
+        tvTel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tel = tvTel.getText().toString();
+                if (!TextUtils.isEmpty(tel)){
+                    MyInetntUtils.toCall(CareGroupMemDetailActivity.this , tel );
+                }
+            }
+        });
     }
 
     @Override
