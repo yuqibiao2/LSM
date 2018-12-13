@@ -49,6 +49,7 @@ import com.test.lsm.bean.event.StepChgEvent;
 import com.test.lsm.bean.json.EmptyDataReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.vo.AFibExpRecordVo;
+import com.test.lsm.bean.vo.MonitorExpMsgVo;
 import com.test.lsm.db.bean.Calorie;
 import com.test.lsm.db.bean.Step;
 import com.test.lsm.db.service.CalorieService;
@@ -63,6 +64,8 @@ import com.test.lsm.ui.activity.ECGShowActivity3;
 import com.test.lsm.ui.activity.SettingActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.test.lsm.utils.bt.ble.BleBTUtils;
+import com.test.lsm.utils.logic.JudgeHrExpUtils;
+import com.test.lsm.utils.logic.MonitorExpMsgFactory;
 import com.test.lsm.utils.logic.RRIsVerifier;
 import com.today.step.lib.ISportStepInterface;
 import com.today.step.lib.SportStepJsonUtils;
@@ -188,11 +191,11 @@ public class InformationFragment extends LsmBaseFragment {
 
     private List<Integer> rriList = new ArrayList<>();
 
-    private boolean isHandBatteryService = false;
-
     private IirFilter iirFilter = Algorithm.newIirFilterInstance();
 
     private RRIsVerifier mVerifier = new RRIsVerifier();
+
+    private boolean isUploadExpMsg2 = false;
 
 
     private Handler mHandler = new Handler(new Handler.Callback() {
@@ -249,7 +252,22 @@ public class InformationFragment extends LsmBaseFragment {
                             tvHeartNum.setTextSize(16);
                             tvHrBpm.setVisibility(View.GONE);
                             tvHeartNum.setText("請確認裝置是否配戴正確");
+                            //---上傳設備佩戴不正確異常信息
+                            if (!isUploadExpMsg2){
+                                MonitorExpMsgVo expMsg2 = MonitorExpMsgFactory.getInstance().createExpMsg2(user.getUSER_ID());
+                                APIMethodManager.getInstance().uploadMonitorExpMsg(provider, expMsg2, new IRequestCallback<EmptyDataReturn>() {
+                                    @Override
+                                    public void onSuccess(EmptyDataReturn result) {
+                                        isUploadExpMsg2 = true;
+                                    }
+                                    @Override
+                                    public void onFailure(Throwable throwable) {
+
+                                    }
+                                });
+                            }
                         } else {
+                            isUploadExpMsg2 = false;
                             tvHeartNum.setTextColor(Color.parseColor("#000000"));
                             tvHeartNum.setTextSize(30);
                             tvHrBpm.setVisibility(View.VISIBLE);
@@ -474,6 +492,24 @@ public class InformationFragment extends LsmBaseFragment {
     @Override
     protected void initListener() {
 
+        //獲取心跳值回調
+        application.setOnGetHrValueListener(new MyApplication.OnGetHrValueListener() {
+            @Override
+            public void onGet(int hrValue) {
+                //---上傳心跳指異常訊息
+                if (JudgeHrExpUtils.isExp(hrValue)){
+                    MonitorExpMsgVo expMsg1 = MonitorExpMsgFactory.getInstance().createExpMsg1(user.getUSER_ID(), hrValue);
+                    APIMethodManager.getInstance().uploadMonitorExpMsg(provider, expMsg1, new IRequestCallback<EmptyDataReturn>() {
+                        @Override
+                        public void onSuccess(EmptyDataReturn result) {
+                        }
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                        }
+                    });
+                }
+            }
+        });
 
         //AFib异常监听
         application.setOnGetBleDataValueListener(new MyApplication.OnGetBleDataValueListener() {
@@ -499,6 +535,7 @@ public class InformationFragment extends LsmBaseFragment {
             }
         });
 
+        //--裝置佩戴異常
         application.setOnHrAbnormalListener(new MyApplication.OnHrAbnormalListener() {
             @Override
             public void onExp(String tip) {

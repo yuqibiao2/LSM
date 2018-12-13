@@ -9,9 +9,14 @@ import android.widget.TextView;
 
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
+import com.test.lsm.bean.json.EmptyDataReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.bean.vo.MonitorExpMsgVo;
+import com.test.lsm.net.APIMethodManager;
+import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.utils.logic.MonitorExpMsgFactory;
 import com.yyyu.baselibrary.utils.DimensChange;
-import com.yyyu.baselibrary.utils.MyInetntUtils;
+import com.yyyu.baselibrary.utils.MyIntentUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import butterknife.BindView;
@@ -31,7 +36,7 @@ public class EmergencyContactDialog extends LsmBaseDialog {
     @BindView(R.id.tv_yes)
     TextView tvYes;
 
-    public  static  boolean isShow = false;
+    public static boolean isShow = false;
 
     private Context mContext;
 
@@ -68,7 +73,17 @@ public class EmergencyContactDialog extends LsmBaseDialog {
                     UserLoginReturn.PdBean user = application.getUser();
                     if (user != null && !TextUtils.isEmpty(user.getURGENT_PHONE())) {
                         dismiss();
-                        MyInetntUtils.toCall(mContext, user.getURGENT_PHONE());
+                        MonitorExpMsgVo expMsg5 = MonitorExpMsgFactory.getInstance().createExpMsg5(user.getUSER_ID());
+                        APIMethodManager.getInstance().uploadMonitorExpMsg(null, expMsg5, new IRequestCallback<EmptyDataReturn>() {
+                            @Override
+                            public void onSuccess(EmptyDataReturn result) {
+                            }
+
+                            @Override
+                            public void onFailure(Throwable throwable) {
+                            }
+                        });
+                        MyIntentUtils.toCall(mContext, user.getURGENT_PHONE());
                     }
                 } else {
                     MyToast.showLong(mContext, "沒有撥打電話權限");
@@ -85,7 +100,7 @@ public class EmergencyContactDialog extends LsmBaseDialog {
 
     @Override
     public void dismiss() {
-        if (isShow){
+        if (isShow) {
             super.dismiss();
         }
         isShow = false;
@@ -93,7 +108,7 @@ public class EmergencyContactDialog extends LsmBaseDialog {
 
     @Override
     public void show() {
-        if (!isShow){
+        if (!isShow) {
             super.show();
         }
         isShow = true;

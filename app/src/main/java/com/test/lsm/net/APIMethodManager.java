@@ -7,6 +7,7 @@ import com.test.lsm.bean.vo.AFibExpRecordVo;
 import com.test.lsm.bean.vo.GetHeartChart;
 import com.test.lsm.bean.vo.GroupAttach;
 import com.test.lsm.bean.vo.HealthRecordVo;
+import com.test.lsm.bean.vo.MonitorExpMsgVo;
 import com.test.lsm.bean.vo.QueryHRVInfo;
 import com.test.lsm.bean.vo.QueryRunInfoVo;
 import com.test.lsm.bean.vo.RunRecord;
@@ -58,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.http.Path;
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -91,6 +93,44 @@ public class APIMethodManager {
     }
 
     /**
+     * 上传监控异常讯息
+     *
+     * @param provider
+     * @param monitorExpMsgVo
+     * @param callback
+     * @return
+     */
+    public Subscription uploadMonitorExpMsg(LifecycleProvider<ActivityEvent> provider,
+                                            MonitorExpMsgVo monitorExpMsgVo,
+                                            final IRequestCallback<EmptyDataReturn> callback) {
+        Observable<EmptyDataReturn> observable = lsmApi.uploadMonitorExpMsg(monitorExpMsgVo)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+        if (provider != null) {
+            observable.compose(provider.<EmptyDataReturn>bindToLifecycle());
+        }
+        Subscription subscribe = observable.subscribe(new Subscriber<EmptyDataReturn>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                callback.onFailure(e);
+            }
+
+            @Override
+            public void onNext(EmptyDataReturn emptyDataReturn) {
+                callback.onSuccess(emptyDataReturn);
+            }
+        });
+
+        return subscribe;
+    }
+
+
+    /**
      * 删除监听人
      *
      * @param provider
@@ -99,7 +139,8 @@ public class APIMethodManager {
      * @return
      */
     public Subscription deleteGroupAttach(LifecycleProvider<ActivityEvent> provider ,
-                                          @Path("attachId") Long attachId , final IRequestCallback<EmptyDataReturn> callback){
+                                          Long attachId ,
+                                          final IRequestCallback<EmptyDataReturn> callback){
         Subscription subscribe = lsmApi.deleteGroupAttach(attachId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

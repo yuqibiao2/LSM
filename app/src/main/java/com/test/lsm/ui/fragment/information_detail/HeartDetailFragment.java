@@ -10,8 +10,10 @@ import com.google.gson.Gson;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.bean.event.RefreshHearthInfoEvent;
+import com.test.lsm.bean.json.EmptyDataReturn;
 import com.test.lsm.bean.json.SaveUserHRV;
 import com.test.lsm.bean.json.UserLoginReturn;
+import com.test.lsm.bean.vo.MonitorExpMsgVo;
 import com.test.lsm.bean.vo.QueryHRVInfo;
 import com.test.lsm.bean.json.GetHRVInfoReturn;
 import com.test.lsm.bean.vo.SaveUserHRVVo;
@@ -22,6 +24,7 @@ import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.HrRecordActivity;
 import com.test.lsm.ui.fragment.LsmBaseFragment;
 import com.test.lsm.utils.logic.HrvUtils;
+import com.test.lsm.utils.logic.MonitorExpMsgFactory;
 import com.yyyu.baselibrary.utils.MyLog;
 import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyTimeUtils;
@@ -181,9 +184,11 @@ public class HeartDetailFragment extends LsmBaseFragment {
                     MySPUtils.put(getContext(), SpConstant.HRV_INFO, hrvIndexBeanJsonStr);
                     MySPUtils.put(getContext(), LASTED_HRV_UPDATE_TIME, currentDateTime);
                     updateHrvValue(hrvIndexBean);
+                    //--上传HRV值
+                    uploadHrv(hrvIndexBean);
+                    //--判斷HRV異常
+                    judgeHrvExp(hrvIndexBean);
                 }
-                //--上传HRV值
-                uploadHrv(result);
             }
 
             @Override
@@ -195,37 +200,70 @@ public class HeartDetailFragment extends LsmBaseFragment {
     }
 
     /**
+     * -判斷HRV異常
+     *
+     * @param hrvIndexBean
+     */
+    private void judgeHrvExp(GetHRVInfoReturn.HRVIndexBean hrvIndexBean) {
+        String bodyFitness = hrvIndexBean.getBodyFitness();//體力
+        String bodyFatigue = hrvIndexBean.getBodyFatigue();//疲勞
+        if (!TextUtils.isEmpty(bodyFitness)){
+            int i = Integer.parseInt(bodyFitness);
+            if (i>-50 && i<-30){
+                MonitorExpMsgVo expMsg3 = MonitorExpMsgFactory.getInstance().createExpMsg3(user.getUSER_ID());
+                uploadExpMsg(expMsg3);
+            }
+        }
+        if (!TextUtils.isEmpty(bodyFatigue)){
+            int i = Integer.parseInt(bodyFatigue);
+            if (i>0 && i<20){
+                MonitorExpMsgVo expMsg4 = MonitorExpMsgFactory.getInstance().createExpMsg4(user.getUSER_ID());
+                uploadExpMsg(expMsg4);
+            }
+        }
+    }
+
+    private void uploadExpMsg(MonitorExpMsgVo expMsg4) {
+        APIMethodManager.getInstance().uploadMonitorExpMsg(provider, expMsg4, new IRequestCallback<EmptyDataReturn>() {
+            @Override
+            public void onSuccess(EmptyDataReturn result) {
+
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
+    }
+
+    /**
      * 上传HRV值到服务器
      *
-     * @param result
+     * @param hrvIndexBean
      */
-    private void uploadHrv(GetHRVInfoReturn result) {
-        List<GetHRVInfoReturn.HRVIndexBean> hrvIndex = result.getHRVIndex();
-        if (hrvIndex != null && hrvIndex.size() > 0) {
-            GetHRVInfoReturn.HRVIndexBean hrvIndexBean = hrvIndex.get(0);
-            SaveUserHRVVo saveUserHRVVo = new SaveUserHRVVo();
-            saveUserHRVVo.setUserId(user.getUSER_ID());
-            saveUserHRVVo.setBODYFITNESS(""+hrvIndexBean.getBodyFitness());
-            saveUserHRVVo.setBODYFATIGUE(""+hrvIndexBean.getBodyFatigue());
-            saveUserHRVVo.setSTRESSTENSION(""+hrvIndexBean.getStressTension());
-            saveUserHRVVo.setMOODSTABILITY(""+hrvIndexBean.getMoodStability());
-            saveUserHRVVo.setMINDFITNESS(""+hrvIndexBean.getMindFitness());
-            saveUserHRVVo.setMINDFATIGUE(""+hrvIndexBean.getMindFatigue());
+    private void uploadHrv( GetHRVInfoReturn.HRVIndexBean hrvIndexBean) {
+        SaveUserHRVVo saveUserHRVVo = new SaveUserHRVVo();
+        saveUserHRVVo.setUserId(user.getUSER_ID());
+        saveUserHRVVo.setBODYFITNESS(""+hrvIndexBean.getBodyFitness());
+        saveUserHRVVo.setBODYFATIGUE(""+hrvIndexBean.getBodyFatigue());
+        saveUserHRVVo.setSTRESSTENSION(""+hrvIndexBean.getStressTension());
+        saveUserHRVVo.setMOODSTABILITY(""+hrvIndexBean.getMoodStability());
+        saveUserHRVVo.setMINDFITNESS(""+hrvIndexBean.getMindFitness());
+        saveUserHRVVo.setMINDFATIGUE(""+hrvIndexBean.getMindFatigue());
 
-            apiMethodManager.saveUserHRV(saveUserHRVVo, new IRequestCallback<SaveUserHRV>() {
-                @Override
-                public void onSuccess(SaveUserHRV result) {
-                    String code = result.getResult();
-                    MyLog.e(TAG , "==code="+code);
-                }
+        apiMethodManager.saveUserHRV(saveUserHRVVo, new IRequestCallback<SaveUserHRV>() {
+            @Override
+            public void onSuccess(SaveUserHRV result) {
+                String code = result.getResult();
+                MyLog.e(TAG , "==code="+code);
+            }
 
-                @Override
-                public void onFailure(Throwable throwable) {
-                    MyLog.e(TAG , ""+throwable.getMessage());
-                }
-            });
-
-        }
+            @Override
+            public void onFailure(Throwable throwable) {
+                MyLog.e(TAG , ""+throwable.getMessage());
+            }
+        });
     }
 
     private void updateHrvValue(GetHRVInfoReturn.HRVIndexBean hrvIndexBean) {

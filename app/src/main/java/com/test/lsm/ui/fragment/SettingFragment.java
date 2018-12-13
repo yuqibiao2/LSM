@@ -37,16 +37,17 @@ import com.test.lsm.bean.json.EmptyDataReturn;
 import com.test.lsm.bean.json.GetUserMonitorsReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.vo.GroupAttach;
+import com.test.lsm.bean.vo.MonitorExpMsgVo;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.activity.SetCareGroupActivity;
 import com.test.lsm.ui.activity.UpdateUserActivity1;
 import com.test.lsm.utils.LoginRegUtils;
+import com.test.lsm.utils.logic.MonitorExpMsgFactory;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
 import com.yyyu.baselibrary.ui.widget.SwitchCompatWrapper;
-import com.yyyu.baselibrary.utils.MyInetntUtils;
-import com.yyyu.baselibrary.utils.MyLog;
+import com.yyyu.baselibrary.utils.MyIntentUtils;
 import com.yyyu.baselibrary.utils.MySPUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
@@ -276,7 +277,16 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
 
                 String[] perms = {Manifest.permission.CALL_PHONE};
                 if (EasyPermissions.hasPermissions(getContext(), perms)) {
-                    MyInetntUtils.toCall(getContext(), tvUrgentTel.getText().toString());
+                    MyIntentUtils.toCall(getContext(), tvUrgentTel.getText().toString());
+                    MonitorExpMsgVo expMsg5 = MonitorExpMsgFactory.getInstance().createExpMsg5(user.getUSER_ID());
+                    APIMethodManager.getInstance().uploadMonitorExpMsg(provider, expMsg5, new IRequestCallback<EmptyDataReturn>() {
+                        @Override
+                        public void onSuccess(EmptyDataReturn result) {
+                        }
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                        }
+                    });
                 } else {
                     EasyPermissions.requestPermissions(getActivity(),
                             "缺少撥打電話權限，是否開啓？",

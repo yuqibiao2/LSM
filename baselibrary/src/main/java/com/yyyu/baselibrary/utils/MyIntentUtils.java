@@ -13,7 +13,7 @@ import android.support.v7.app.AlertDialog;
  * @version 1.0
  * @date 2018/6/11
  */
-public class MyInetntUtils {
+public class MyIntentUtils {
 
 
     public static void toCall(Context context , String tel ){

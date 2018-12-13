@@ -23,7 +23,7 @@ import com.test.lsm.ui.fragment.care_group.CareGroupMemHRRecordFragment;
 import com.test.lsm.ui.fragment.care_group.CareGroupMemHRVFragment;
 import com.test.lsm.ui.fragment.care_group.CareGroupMemRunTraceFragment;
 import com.yyyu.baselibrary.ui.widget.RoundImageView;
-import com.yyyu.baselibrary.utils.MyInetntUtils;
+import com.yyyu.baselibrary.utils.MyIntentUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
@@ -144,7 +144,7 @@ public class CareGroupMemDetailActivity extends LsmBaseActivity {
             public void onClick(View v) {
                 String tel = tvTel.getText().toString();
                 if (!TextUtils.isEmpty(tel)){
-                    MyInetntUtils.toCall(CareGroupMemDetailActivity.this , tel );
+                    MyIntentUtils.toCall(CareGroupMemDetailActivity.this , tel );
                 }
             }
         });

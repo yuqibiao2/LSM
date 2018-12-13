@@ -41,13 +41,13 @@ public class ExpMemAdapter extends BaseQuickAdapter<GetMonitorGroupDetailReturn.
         tvContent.setText(expMemInfo.getExpContent());
         String expDateTimeStr = expMemInfo.getExpDateTime();
         Date expDateTime = MyTimeUtils.parseDate(expDateTimeStr);
-        String formatDate = MyTimeUtils.formatDateTime("MM/DD", expDateTime);
+        String formatDate = MyTimeUtils.formatDateTime("MM/dd", expDateTime);
         tvDate.setText(formatDate);
         String formatTime = MyTimeUtils.formatDateTime("hh:mm", expDateTime);
         tvTime.setText(formatTime+" "+MyTimeUtils.getDuringDay(expDateTime));
         RoundImageView rivIcon =  helper.getView(R.id.riv_icon);
         GlidUtils.load(mContext ,rivIcon ,  expMemInfo.getUserImage());
-        GlidUtils.load(mContext , ivExpIcon , expMemInfo.getExpIcon());
+        GlidUtils.load(mContext , ivExpIcon , expMemInfo.getMsgIcon());
         int icTag = R.mipmap.ic_mon_mark_blue;
         switch (expMemInfo.getWatchingTag()){
             case "1"://blue

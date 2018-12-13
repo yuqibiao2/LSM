@@ -208,17 +208,17 @@ public class GetMonitorGroupDetailReturn {
 
         public static class ExpMemInfoListBean extends MemInfoListBean{
 
-            private String expIcon;
+            private String msgIcon;
             private String expTitle;
             private String expContent;
             private String expDateTime;
 
-            public String getExpIcon() {
-                return expIcon;
+            public String getMsgIcon() {
+                return msgIcon;
             }
 
-            public void setExpIcon(String expIcon) {
-                this.expIcon = expIcon;
+            public void setMsgIcon(String msgIcon) {
+                this.msgIcon = msgIcon;
             }
 
             public String getExpTitle() {

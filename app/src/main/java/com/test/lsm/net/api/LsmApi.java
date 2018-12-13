@@ -34,6 +34,7 @@ import com.test.lsm.bean.json.UserCourseTimeReturn;
 import com.test.lsm.bean.json.UserJoinCourseReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.json.UserRegReturn;
+import com.test.lsm.bean.vo.MonitorExpMsgVo;
 import com.test.lsm.bean.vo.SaveCurrentHealthVo;
 import com.test.lsm.bean.vo.SaveLocationVo;
 
@@ -62,6 +63,9 @@ import rx.Observable;
  */
 
 public interface LsmApi {
+
+    @POST("monitor/expMsg")
+    Observable<EmptyDataReturn> uploadMonitorExpMsg(@Body MonitorExpMsgVo monitorExpMsgVo);
 
     @DELETE("monitor/groupAttaches/{attachId}")
     Observable<EmptyDataReturn> deleteGroupAttach(@Path("attachId") Long attachId);
