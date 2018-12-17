@@ -377,6 +377,7 @@ public class CareGroupDetailActivity extends LsmBaseActivity {
 
     public static void startAction(Context context, Long groupId, String groupName) {
         Intent intent = new Intent(context, CareGroupDetailActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("groupId", groupId);
         intent.putExtra("groupName", groupName);
         context.startActivity(intent);

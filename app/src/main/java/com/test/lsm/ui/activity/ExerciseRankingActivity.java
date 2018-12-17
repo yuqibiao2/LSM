@@ -202,6 +202,7 @@ public class ExerciseRankingActivity extends LsmBaseActivity {
 
     public static void startAction(Context context) {
         Intent intent = new Intent(context, ExerciseRankingActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }
 

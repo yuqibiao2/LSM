@@ -296,9 +296,12 @@ public class MainActivity extends LsmBaseActivity {
 
                 @Override
                 public void onConnectFail(BleException exception) {
-                    mHandler.sendEmptyMessageDelayed(0 ,  Config.BLE_RETRY_INTERVAL);
-                    MyLog.e(TAG, "onConnectFail===" + exception.getDescription());
-                    //MyToast.showShort(MainActivity.this, "蓝牙连接失败" + exception.getDescription());
+                    if (Config.bleRetryTime > 0){
+                        mHandler.sendEmptyMessageDelayed(0 ,  Config.BLE_RETRY_INTERVAL);
+                    }
+                    Config.bleRetryTime-- ;
+                    //MyLog.e(TAG, "onConnectFail===" + exception.getDescription());
+                    MyToast.showShort(MainActivity.this, "自動連接藍牙裝置失敗" + exception.getDescription());
                 }
 
                 @Override

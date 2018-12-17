@@ -18,7 +18,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:onClick="back"
-            android:padding="15dp"
+            android:padding="8dp"
             android:src="@mipmap/ic_back" />
 
 

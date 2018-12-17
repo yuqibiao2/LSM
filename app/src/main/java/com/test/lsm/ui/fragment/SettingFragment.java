@@ -38,6 +38,7 @@ import com.test.lsm.bean.json.GetUserMonitorsReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.vo.GroupAttach;
 import com.test.lsm.bean.vo.MonitorExpMsgVo;
+import com.test.lsm.global.Config;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.GlidUtils;
 import com.test.lsm.net.IRequestCallback;
@@ -394,6 +395,7 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
             @Override
             public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 showToast("连接成功");
+                Config.bleRetryTime = Config.BLE_RETRY_TIME_UPPER;
                 application.setCurrentBleDevice(bleDevice);
                 EventBus.getDefault().post(new BleConnectMessage(1, bleDevice));
             }
