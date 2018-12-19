@@ -130,7 +130,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="是否同意讓關心您的人觀看訊息"
+                android:text="是否同意讓所有關心您的人觀看訊息"
                 android:textColor="#FF4A4A4A"
                 android:textSize="16sp" />
 

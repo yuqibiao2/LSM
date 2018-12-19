@@ -12,6 +12,7 @@ import com.test.lsm.bean.json.GetUserMonitorsReturn;
 import com.test.lsm.bean.vo.GroupAttach;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
+import com.test.lsm.ui.activity.SetCareGroupActivity;
 import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.yyyu.baselibrary.ui.widget.SwitchCompatWrapper;
@@ -29,10 +30,12 @@ import java.util.List;
  */
 public class UserMonitorsAdapter extends BaseQuickAdapter<GetUserMonitorsReturn.DataBean.MonitorInfoListBean, BaseViewHolder> {
 
+    private SetCareGroupActivity mSetCareGroupActivity;
     LifecycleProvider<ActivityEvent> mProvider;
 
-    public UserMonitorsAdapter(int layoutResId, @Nullable List<GetUserMonitorsReturn.DataBean.MonitorInfoListBean> data  , LifecycleProvider<ActivityEvent> provider) {
+    public UserMonitorsAdapter(SetCareGroupActivity setCareGroupActivity , int layoutResId, @Nullable List<GetUserMonitorsReturn.DataBean.MonitorInfoListBean> data  , LifecycleProvider<ActivityEvent> provider) {
         super(layoutResId, data);
+        this.mSetCareGroupActivity = setCareGroupActivity;
         this.mProvider = provider;
     }
 
@@ -76,6 +79,7 @@ public class UserMonitorsAdapter extends BaseQuickAdapter<GetUserMonitorsReturn.
                 int code = result.getCode();
                 if (code == 200){
                     MyToast.showLong(mContext , "修改成功");
+                    mSetCareGroupActivity.inflateData();
                 }else {
                     MyToast.showLong(mContext , ""+result.getMsg());
                 }

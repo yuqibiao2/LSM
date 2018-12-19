@@ -338,8 +338,8 @@ public class SettingFragment extends LsmBaseFragment implements EasyPermissions.
 
                 int code = result.getCode();
                 if (code == 200){
-                    boolean isWatchAll = result.getData().isWatchAll();
-                    switchCompatWrapper.setCheckedNotCallbackChgEvent(isWatchAll);
+                    boolean hasWatch = result.getData().isHasWatch();
+                    switchCompatWrapper.setCheckedNotCallbackChgEvent(hasWatch);
                     monitorInfoList = result.getData().getMonitorInfoList();
                     scCareGroup.setEnabled(true);
                 }else {

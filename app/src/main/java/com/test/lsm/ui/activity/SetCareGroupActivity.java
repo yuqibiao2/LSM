@@ -13,21 +13,17 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.test.lsm.MyApplication;
 import com.test.lsm.R;
 import com.test.lsm.adapter.UserMonitorsAdapter;
-import com.test.lsm.bean.json.DoFooBean;
 import com.test.lsm.bean.json.EmptyDataReturn;
 import com.test.lsm.bean.json.GetUserMonitorsReturn;
-import com.test.lsm.bean.json.QueryUserRunInfoReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.vo.GroupAttach;
 import com.test.lsm.net.APIMethodManager;
 import com.test.lsm.net.IRequestCallback;
 import com.test.lsm.ui.dialog.AddGroupAttachDialog;
 import com.yyyu.baselibrary.ui.widget.SwitchCompatWrapper;
-import com.yyyu.baselibrary.utils.MyKeyboardUtils;
 import com.yyyu.baselibrary.utils.MyToast;
 
 import java.util.ArrayList;
@@ -76,7 +72,7 @@ public class SetCareGroupActivity extends LsmBaseActivity {
     @Override
     protected void initView() {
         rvCareGroup.setLayoutManager(new LinearLayoutManager(this));
-        userMonitorsAdapter = new UserMonitorsAdapter(R.layout.rv_care_group_item, monitorsList , provider);
+        userMonitorsAdapter = new UserMonitorsAdapter(this , R.layout.rv_care_group_item, monitorsList , provider);
         rvCareGroup.setAdapter(userMonitorsAdapter);
 
     }

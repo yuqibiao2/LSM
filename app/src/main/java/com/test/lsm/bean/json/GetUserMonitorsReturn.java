@@ -43,6 +43,7 @@ public class GetUserMonitorsReturn {
     public static class DataBean {
 
         private boolean watchAll;
+        private  boolean hasWatch;
         private List<MonitorInfoListBean> monitorInfoList;
 
         public boolean isWatchAll() {
@@ -51,6 +52,14 @@ public class GetUserMonitorsReturn {
 
         public void setWatchAll(boolean watchAll) {
             this.watchAll = watchAll;
+        }
+
+        public boolean isHasWatch() {
+            return hasWatch;
+        }
+
+        public void setHasWatch(boolean hasWatch) {
+            this.hasWatch = hasWatch;
         }
 
         public List<MonitorInfoListBean> getMonitorInfoList() {

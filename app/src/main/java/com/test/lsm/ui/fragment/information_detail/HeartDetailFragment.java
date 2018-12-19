@@ -209,7 +209,7 @@ public class HeartDetailFragment extends LsmBaseFragment {
         String bodyFatigue = hrvIndexBean.getBodyFatigue();//疲勞
         if (!TextUtils.isEmpty(bodyFitness)){
             int i = Integer.parseInt(bodyFitness);
-            if (i>-50 && i<-30){
+            if (i<-30){//体力极低
                 MonitorExpMsgVo expMsg3 = MonitorExpMsgFactory.getInstance().createExpMsg3(user.getUSER_ID());
                 uploadExpMsg(expMsg3);
             }
