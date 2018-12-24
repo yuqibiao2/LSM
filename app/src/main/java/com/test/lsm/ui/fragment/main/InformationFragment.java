@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -47,6 +48,7 @@ import com.test.lsm.bean.event.RefreshHearthInfoEvent;
 import com.test.lsm.bean.event.SCAutoScanChgEvent;
 import com.test.lsm.bean.event.StepChgEvent;
 import com.test.lsm.bean.json.EmptyDataReturn;
+import com.test.lsm.bean.json.GetMonitorGroupReturn;
 import com.test.lsm.bean.json.UserLoginReturn;
 import com.test.lsm.bean.vo.AFibExpRecordVo;
 import com.test.lsm.bean.vo.MonitorExpMsgVo;
@@ -548,11 +550,14 @@ public class InformationFragment extends LsmBaseFragment {
             }
         });
 
+        //刷新
         srlInfo.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 mAct.unbindService(stepServiceConnect);
-                initStepCount();
+               /* initStepCount();
+                initGroupNum();*/
+               initData();
                 srlInfo.finishRefresh(2000);
             }
         });
@@ -648,6 +653,40 @@ public class InformationFragment extends LsmBaseFragment {
     protected void initData() {
         super.initData();
         initStepCount();
+        initGroupNum();
+    }
+
+    private void initGroupNum() {
+
+        APIMethodManager.getInstance()
+                .getMonitorGroups(provider, user.getUSER_ID(),
+                        1,
+                        new IRequestCallback<GetMonitorGroupReturn>() {
+            @Override
+            public void onSuccess(GetMonitorGroupReturn result) {
+                int code = result.getCode();
+                if (code == 200) {
+                    List<GetMonitorGroupReturn.DataBean> data = result.getData();
+                    if (data!=null && data.size()>0){
+                        tvGroupStatus.setText(""+data.size()+"組");
+                        tvGroupStatus.setTextColor(getResources().getColor(R.color.my_blue));
+                        TextPaint paint = tvGroupStatus.getPaint();
+                        paint.setFakeBoldText(true);
+                    }else{
+                        tvGroupStatus.setText("無群組");
+                        tvGroupStatus.setTextColor(getResources().getColor(R.color.tx_gray));
+                        TextPaint paint = tvGroupStatus.getPaint();
+                        paint.setFakeBoldText(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+        });
+
     }
 
     @OnClick({
