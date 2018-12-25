@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -43,6 +42,7 @@ public class MemLocationShowFragment extends LsmBaseFragment {
 
 
     private BaiduMap mBaiduMap;
+    private boolean isFitAndZoomOnce = true;
 
     @Override
     public int getLayoutId() {
@@ -53,6 +53,7 @@ public class MemLocationShowFragment extends LsmBaseFragment {
     public void beforeInit() {
         super.beforeInit();
         mGson = new Gson();
+        isFitAndZoomOnce = true;
     }
 
     @Override
@@ -93,7 +94,7 @@ public class MemLocationShowFragment extends LsmBaseFragment {
     }
 
     public void inflateMemInfo(List<GetMonitorGroupDetailReturn.DataBean.MemInfoListBean> memInfoList){
-        mBaiduMap.clear();
+        mBaiduMap.clear();//移除所有标注
         mMemInfoList = memInfoList;
         List<OverlayOptions> options = new ArrayList<>();
         List<LatLng> latLngList  = new ArrayList<>();
@@ -114,7 +115,10 @@ public class MemLocationShowFragment extends LsmBaseFragment {
         //添加标注
         mBaiduMap.addOverlays(options);
         //使所有坐标都在屏幕内显示
-        fitAndZoom(latLngList);
+        if (isFitAndZoomOnce){
+            fitAndZoom(latLngList);
+            isFitAndZoomOnce = false;
+        }
     }
 
     private OverlayOptions getOption(LatLng point , String watchingTag , Integer index , String userIconPath){
