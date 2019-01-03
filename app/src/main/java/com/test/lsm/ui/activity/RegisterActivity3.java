@@ -197,7 +197,7 @@ public class RegisterActivity3 extends LsmBaseActivity {
 
     @OnClick(R.id.tv_to_finished)
     public void toFinished() {
-        String linkman = tvLinkman.getText().toString();
+        String linkman = tvCstName.getText().toString();
         String username = etUsername.getText().toString();
         if (TextUtils.isEmpty(username)) {
             MyToast.showLong(this, getStr(R.string.fill_in_username));

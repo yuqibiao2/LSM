@@ -32,8 +32,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIFactory {
 
+    public static  final String TEST_BASE_URL = "http://120.79.4.250:8080/lsm/appuser/";//阿里云测试库
+    public static  final String PRO_BASE_URL = "http://lsm.mycgb.cn/appuser/";//正式库
+
     //云端测试库dev:http://120.79.4.250:8080/lsm/appuser  pro: http://lsm.mycgb.cn/appuser/
-    public static final String BASE_URL = "http://120.79.4.250:8080/lsm/appuser/";
+    public static final String BASE_URL = PRO_BASE_URL;
 
     private static final int DEFAULT_TIMEOUT = 1;
 

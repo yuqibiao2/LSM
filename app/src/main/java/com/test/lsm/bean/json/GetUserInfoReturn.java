@@ -10,7 +10,7 @@ package com.test.lsm.bean.json;
 public class GetUserInfoReturn {
 
     private String result;
-    private PdBean pd;
+    //private PdBean pd;
 
     public String getResult() {
         return result;
@@ -20,13 +20,13 @@ public class GetUserInfoReturn {
         this.result = result;
     }
 
-    public PdBean getPd() {
+  /*  public PdBean getPd() {
         return pd;
     }
 
     public void setPd(PdBean pd) {
         this.pd = pd;
-    }
+    }*/
 
     public static class PdBean {
 

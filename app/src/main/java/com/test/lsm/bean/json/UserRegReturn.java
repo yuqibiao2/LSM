@@ -10,7 +10,7 @@ package com.test.lsm.bean.json;
 public class UserRegReturn {
 
     private String result;
-    private UserLoginReturn.PdBean pd;
+    private UserLoginReturn.PdBean pd = new UserLoginReturn.PdBean();
 
     public String getResult() {
         return result;
